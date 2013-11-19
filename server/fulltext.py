@@ -27,15 +27,13 @@ def index():
     parser = MultifieldParser(["code","name","area","type"], ix.schema)
     query = request.POST.get('fulltext').strip()
     select = request.POST.get('type').strip()
-    status = request.POST.get('invalid')
-    print status, "status"
+    status = request.POST.get('valid')
+    print status
     if status == None:
-      status = u"Valid"
-    print status, "status2"
-    
-    query = query + " type:" + select + " status:" + status # change status from id tu text
+      status = "0"
+    advance_query = query + " type:" + select + " status:" + status # change status from id tu text
     print query
-    myquery = parser.parse(query)
+    myquery = parser.parse(advance_query)
         
     results = searcher.search(myquery, limit = 600)
     
