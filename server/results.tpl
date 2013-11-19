@@ -5,7 +5,7 @@ Number of results : {{num_results}}
 <a href= / >Back to the new query</a>
 
 %for r in result:
-	<ul><b>CODE: {{r['code']}}</b>, with name: {{r['name']}}
+	<ul><b>EPSG:{{r['code']}}</b> , with name: {{r['name']}}
 		<ul>
 			<li>
 				Area of use: {{r['area']}}
