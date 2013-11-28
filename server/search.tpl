@@ -1,24 +1,67 @@
-
+<html>
 <html>
 <head>
-	<title>epsg.io</title>
+	<title>EPSG.io - Coordinate systems for spatial reference worldwide</title>
 
 </head>
 <body>
-<h1>TRY TO FIND YOUR PROJECTION</h1>
-<form action= "/epsg" method="post">
-Query on EPSG (code, name, type, area): <input type="text" name="fulltext"><br>
-<input type="submit" value="submit">
-<input type="checkbox" value="1" name="valid" checked>
-<select name="type">
-	<option value = "*">All</option>
+	<table>
+	<tr><td><h1>EPSG.io</h1></td> <td>&nbsp; &nbsp; &nbsp; &nbsp; </td><td><h2>Coordinate systems for spatial reference worldwide</h2> </td> </tr>
 	
-	<option value = "projected">Projected</option>
-	<option value = '"geographic 2D"'>Geographic 2D</option>
-	<option value = '"geographic 3D"'>Geographic 3D</option>
-	<option value = "geocentric">Geocentric</option>
+	</table>
+
+<form action= "/" method="get">
+<table>
+<tr bgcolor = #94B8FF> <td height="50"><input type="text" name="q" placeholder="country, code or name of a coordinate system" style="width: 300px"/>
+	<input type="submit" value="search">
+	<input type="checkbox" value="0" name="valid" checked> Only Valid
+	<select name="kind">
+			<option value = "CRS-*"selected>Coordinate reference systems</option>
+
+			<option value = "CRS-projected" >&nbsp; &nbsp; Projected</option>
+			<option value = "CRS-geo*" >&nbsp; &nbsp; Geodetic</option>
+			
+			<option value = '"CRS-geographic2D"'> &nbsp; &nbsp; &nbsp; Geographic 2D</option>
+			<option value = '"CRS-geographic3D"'> &nbsp; &nbsp; &nbsp; Geographic 3D</option>
+			<option value = "CRS-geocentric"> &nbsp; &nbsp; &nbsp; Geocentric</option>
+			<option value = "CRS-vertical">&nbsp; &nbsp; Vertical</option>
+			<option value = "CRS-engineering">&nbsp; &nbsp; Engineering</option>
+			<option value = "CRS-compound">&nbsp; &nbsp; Compound</option>
+
+			<option value = "Datum-*">Datum</option>			
+			<option value = "Datum-vertical">&nbsp; &nbsp; Vertical</option>
+			<option value = "Datum-engineering">&nbsp; &nbsp; Engineering</option>
+			<option value = "Datum-geodetic">&nbsp; &nbsp; Geodetic</option>
+
+			<option value = "Ellipsoid">Ellipsoid</option>
+			<option value = '"Prime meridian"'>Prime meridian</option>
+			<option value = "Method">Method</option>
+			
+			<option value = "CoordSys-*"> Coordinate systems </option>
+			<option value = '"CoordSys-vertical"'>&nbsp; &nbsp; Vertical</option>
+			<option value = "CoordSys-spherical">&nbsp; &nbsp; Spherical</option>
+			<option value = "CoordSys-Cartesian">&nbsp; &nbsp; Cartesian</option>
+			<option value = "CoordSys-ellipsoidal">&nbsp; &nbsp; Ellipsoidal</option>
+	
+			<option value = "Axis"> Axis </option>
+			<option value = "Area"> Area </option>
+			
+			<option value = "Measure-*">Measure</option>			
+			<option value = "Measure-angle">&nbsp; &nbsp; Angle</option>
+			<option value = "Measure-scale">&nbsp; &nbsp; Scale</option>
+			<option value = "Measure-length">&nbsp; &nbsp; Length</option>
+		 	<option value = "*"> In all categories </option>
 		
-</select>
+		 
+		 
+		</select>	
+</tr>
+</table>
+</br>
+
+
+
+
 </form>
 </body>
 </html>
