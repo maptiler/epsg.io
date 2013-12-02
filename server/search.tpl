@@ -1,18 +1,20 @@
 <html>
 <html>
 <head>
+	
 	<title>EPSG.io - Coordinate systems for spatial reference worldwide</title>
 
 </head>
 <body>
-	<table>
-	<tr><td><h1>EPSG.io</h1></td> <td>&nbsp; &nbsp; &nbsp; &nbsp; </td><td><h2>Coordinate systems for spatial reference worldwide</h2> </td> </tr>
 	
-	</table>
+	<a href=/about>About</a>
+	<h1>EPSG.io</h1>
+	<h2>Coordinate systems for spatial reference worldwide</h2>
 
 <form action= "/" method="get">
-<table>
-<tr bgcolor = #94B8FF> <td height="50"><input type="text" name="q" placeholder="country, code or name of a coordinate system" style="width: 300px"/>
+
+	<input type="text" name="q" placeholder="country, code or name of a coordinate system" style="width: 300px"/>
+	
 	<input type="submit" value="search">
 	<input type="checkbox" value="0" name="valid" checked> Only Valid
 	<select name="kind">
@@ -54,10 +56,8 @@
 		
 		 
 		 
-		</select>	
-</tr>
-</table>
-</br>
+		</select>
+
 
 
 
