@@ -3,57 +3,53 @@
 	<title>EPSG.io - Coordinate systems for spatial reference worldwide</title>
 
 </head>
-<body><h1>EPSG.io</h1> <h2>Coordinate systems for spatial reference worldwide</h2>
-</br>
+
+<body>
+% found = "False"
+{{q}}
+<a href=/about>About</a> &nbsp; &nbsp; <a href=/>Search</a>
+<h1>EPSG.io</h1>
+<h2>Coordinate systems for spatial reference worldwide</h2>
+
 Number of results : {{num_results}}
 </br>
-<a href= / >Back to the new query</a>
-</br>
-</br>
 %for key, value in groups.iteritems(): 
+	<li>
 	%if status == None:
-	<li>Group: <a href= /?q={{query}}&kind="{{key}}" >{{key}}</a> : {{value}}</li>
+		<a href= /?q={{url_query}}&kind="{{key}}" >{{key}}</a> : {{value}}
 	%else:
-	<li>Group: <a href= /?q={{query}}&valid={{status}}&kind="{{key}}" >{{key}}</a> : {{value}}</li>
+		<a href= /?q={{url_query}}&valid={{status}}&kind="{{key}}" >{{key}}</a> : {{value}}
 	%end
-
+	</li>
 %end
 
 %for r in result:
-	<ul><h2>EPSG:{{r['code']}} &nbsp;&nbsp; {{r['name']}}</h2>
-		<ul>
-			%if r['code_trans'] != 0:
-			<li>
-				
-					<h3>Transformation: EPSG:{{r['code_trans']}} &nbsp;&nbsp; {{r['trans']}}</h3>
-					<ul>
-						Remarks: {{r['trans_remarks']}}
-					</ul>
-				%else:
-					%pass
-			</li>
-			%end	
-			
-			<li>
-				<h4>Area of use: {{r['area']}} </h4>
-			</li>
-
-			<li>
-			%if r['primary'] == 0:
-				<a href= /{{r['code']}}-{{r['code_trans']}}/ >Detail information</a>
-			%else:
-				<a href= /{{r['code']}}/ >Detail information</a>
+	<ul>
+		<b> <a href="/{{r['link']}}/">{{r['r']['name']}} 
+			%if r['r']['alt_name']:
+				({{r['r']['alt_name'][0]}})
 			%end
-				
-			</li>
+		</a></b>
+		</br>
+		EPSG:{{r['r']['code']}}
+	
+		%if r['r']['code_trans'] != 0 and r['r']['primary'] == 1:
+			with transformation: {{r['r']['code_trans']}} (default)
+		%elif r['r']['code_trans'] == 0 and r['r']['primary'] == 1:
+			(default)
+		%elif r['r']['code_trans'] != 0:
+			with transformation: {{r['r']['code_trans']}}
 
-			
-		</ul>	
+		%end
+		</br>
+		%if r['r']['area']:
+			%if r['r']['accuracy'] == "":
+				<b>Area of use: {{r['r']['area']}} (accuracy: unknown)</b>
+			%else:	
+				<b>Area of use: {{r['r']['area']}} (accuracy: {{r['r']['accuracy']}})</b>
+			%end
+		%end	
 	</ul>
 %end
-
-<hr>
-
-
 </body>
 </html>
