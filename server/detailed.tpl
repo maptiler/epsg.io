@@ -11,15 +11,14 @@
 
 <h2>Find coordinate systems for spatial reference worldwide</h2>
 <hr>
-{{item}}
 <h3>{{item[0]['kind']}}<h3>
-<h1>EPSG:{{item[0]['code']}} {{item[0]['name']}} {{item[0]['alt_name']}}</h1>
+<h1>EPSG:{{item[0]['code']}} {{item[0]['name']}} ({{item[0]['alt_name']}})</h1>
 <!-- Not show number of results if it just one-->
 %if num_results != 1:
 	<b>Transformation</b> ({{num_results}})
 	%for r in trans:
 		%if r['me'] == 1:
-			<li> {{r['area']}}
+			<li> {{r['area_trans']}}
 			%if 'accuracy' in r:
 				, accuracy {{r['accuracy']}}
 			%end
@@ -28,19 +27,16 @@
 				code {{r['code_trans']}} 
 			%end
 			
-			%if r['trans_alt_name']:
-				({{r['trans_alt_name'][0]}})
-			%end
+
 
 			
 			{{r['default']}}
 			
 			</li>
-		%else:
-			<li><a href="/{{r['link']}}/">{{r['area']}}, accuracy {{r['accuracy']}} code {{r['code_trans']}} 
-				%if r['trans_alt_name']:
-				 	({{r['trans_alt_name'][0]}})
-				%end
+		%elif r['me'] == 0:
+			<li><a href="/{{r['link']}}/" title = "{{r['trans_remarks']}}">{{r['area_trans']}}, accuracy {{r['accuracy']}} 
+				 code {{r['code_trans']}} 
+
 
 				{{r['default']}}
 				 </a></li>
@@ -49,7 +45,7 @@
 %end
 </br>
 <li>Scope: {{item[0]['scope']}}</li>
-<li>Area of use: <a href="{{url_area}}">{{item[0]['area']}}</a></li>
+<li>Area of use: <a href="{{r['url_area']}}">{{item[0]['area']}}</a></li>
 <li>Remarks: {{item[0]['remarks']}}</li>
 <li>Information source: {{item[0]['information_source']}}</li>
 <li>Revision date: {{item[0]['revision_date']}}</li>

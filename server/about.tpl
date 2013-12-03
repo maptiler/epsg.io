@@ -1,0 +1,23 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+   "http://www.w3.org/TR/html4/loose.dtd">
+
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>about</title>
+	<meta name="generator" content="TextMate http://macromates.com/">
+	<meta name="author" content="Tomas Pohanka">
+	<!-- Date: 2013-11-28 -->
+</head>
+<body>
+<a href=/>Search</a>
+<h1>EPSG.io</h1>
+<h2>Coordinate systems for spatial reference worldwide</h2>
+<hr>	
+<h1><span>Lorem Ipsum</span></h1>
+
+	<h4>"Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit..."</h4>
+	<h5>"Nikdo nemiluje bolest samu, nevyhledává ji, ani ji nechce získat, proto&#382;e bolest..."</h5>
+	<div><div class="lc"><h2 class="what"><span>Co je Lorem Ipsum?</span></h2><p><strong>Lorem Ipsum</strong> je demonstrativní výpl&#328;ový text pou&#382;ívaný v tiska&#345;ském a kniha&#345;ském pr&#367;myslu. Lorem Ipsum je pova&#382;ováno za standard v této oblasti u&#382; od za&#269;átku 16. století, kdy dnes neznámý tiska&#345; vzal kusy textu a na jejich základ&#283; vytvo&#345;il speciální vzorovou knihu. Jeho odkaz nevydr&#382;el pouze p&#283;t století, on p&#345;e&#382;il i nástup elektronické sazby v podstat&#283; beze zm&#283;ny. Nejvíce popularizováno bylo Lorem Ipsum v &#353;edesátých letech 20. století, kdy byly vydávány speciální vzorníky s jeho pasá&#382;emi a pozd&#283;ji pak díky po&#269;íta&#269;ovým DTP program&#367;m jako Aldus PageMaker.</p></div><div class="rc"><h2 class="why"><span>Pro&#269; ho pou&#382;íváme?</span></h2><p>Je obecn&#283; známou v&#283;cí, &#382;e &#269;lov&#283;k bývá p&#345;i zkoumání grafického návrhu rozptylován okolním textem, pokud mu dává n&#283;jaký smysl. Úkolem Lorem Ipsum je pak nahradit klasický smysluplný text vhodnou bezvýznamovou alternativou s relativn&#283; b&#283;&#382;ným rozlo&#382;ením slov. To jej d&#283;lá narozdíl od opakujícího se "Tady bude text. Tady bude text..." mnohem více &#269;iteln&#283;j&#353;ím. V dne&#353;ní dob&#283; je Lorem Ipsum pou&#382;íváno spoustou DTP balík&#367; a webových editor&#367; coby výchozí model výpl&#328;ového textu. Ostatn&#283; si zkuste zadat frázi "lorem ipsum" do vyhledava&#269;e a sami uvidíte. B&#283;hem let se objevily r&#367;zné varianty a odvozeniny od klasického Lorem Ipsum, n&#283;kdy náhodou, n&#283;kdy ú&#269;eln&#283; (nap&#345;. pro pobavení &#269;tená&#345;e).</p></div></div>&nbsp;<div style="clear:both;"><div class="lc"><h2 class="where"><span>Odkud pochází?</span></h2><p>Navzdory v&#353;eobecnému p&#345;esv&#283;d&#269;ení Lorem Ipsum není náhodný text. Jeho p&#367;vod má ko&#345;eny v klasické latinské literatu&#345;e z roku 45 p&#345;ed Kristem, co&#382; znamená, &#382;e je více jak 2000 let staré. Richard McClintock, profesor latiny na univerzit&#283; Hampden-Sydney stát Virginia, který se zabýval tém&#283;&#345; neznámými latinskými slovy, odhalil prap&#367;vod slova consectetur z pasá&#382;e Lorem Ipsum. Nejstar&#353;ím dílem, v n&#283;m&#382; se pasá&#382;e Lorem Ipsum pou&#382;ívají, je Cicerova kniha z roku 45 p&#345;ed Kristem s názvem "De Finibus Bonurum et Malorum" (O koncích dobra a zla), konkrétn&#283; jde pak o kapitoly 1.10.32 a 1.10.33. Tato kniha byla nejvíce známá v dob&#283; renesance, jeliko&#382; pojednávala o etice. Úvodní &#345;ádky Lorem Ipsum, "Lorem ipsum dolor sit amet...", pocházejí z kapitoly 1.10.32 z uvedené knihy.</p><p>Klasické pasá&#382;e Lorem Ipsum z 16. století jsou reprodukovány ní&#382;e. Kapitoly 1.10.32 a 1.10.33 z "De Finibus Bonorum et Malorum" od Cicera najdete v p&#367;vodní podob&#283; dopln&#283;né o anglický p&#345;eklad z roku 1914 od H. Rackhama.</p></div><div class="rc"><h2 class="getsome"><span>Kde ho mohu získat?</span></h2><p>Existuje mnoho variant s pasá&#382;emi Lorem Ipsum, nicmén&#283; valná v&#283;t&#353;ina trpí neduhy v podob&#283; snahy o vtipný text &#269;i pou&#382;ití naprosto náhodných slov, co&#382; nevypadá zrovna uv&#283;&#345;iteln&#283;. Pokud plánujete pou&#382;ít pasá&#382; z Lorem Ipsum, m&#283;li byste mít jistotu, &#382;e v textu nebude nic, co by jej mohlo naru&#353;ovat. V&#353;echny generátory Lorem Ipsum na internetu mají tendenci opakovat kusy textu podle pot&#345;eby, díky &#269;emu&#382; je tento prvním pravým generátorem svého druhu. Pou&#382;ívá toti&#382; slovník více jak 200 latinských slov, která jsou kombinována do v&#283;t tak, aby text vypadal rozumn&#283;. Vzniklý text je potom prostý opakujících se pasá&#382;í, vlo&#382;eného humoru nebo zkomolenin vzniklých z &#269;ísel a jiných znak&#367;.</p>
+</body>
+</html>

@@ -5,8 +5,6 @@
 </head>
 
 <body>
-% found = "False"
-{{q}}
 <a href=/about>About</a> &nbsp; &nbsp; <a href=/>Search</a>
 <h1>EPSG.io</h1>
 <h2>Coordinate systems for spatial reference worldwide</h2>
@@ -27,7 +25,7 @@ Number of results : {{num_results}}
 	<ul>
 		<b> <a href="/{{r['link']}}/">{{r['r']['name']}} 
 			%if r['r']['alt_name']:
-				({{r['r']['alt_name'][0]}})
+				({{r['r']['alt_name']}})
 			%end
 		</a></b>
 		</br>

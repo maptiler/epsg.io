@@ -16,7 +16,7 @@
 	<input type="text" name="q" placeholder="country, code or name of a coordinate system" style="width: 300px"/>
 	
 	<input type="submit" value="search">
-	<input type="checkbox" value="0" name="valid" checked> Only Valid
+	<input type="checkbox" value="0" name="valid" checked> Valid
 	<select name="kind">
 			<option value = "CRS-*"selected>Coordinate reference systems</option>
 
