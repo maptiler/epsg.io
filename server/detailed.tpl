@@ -1,81 +1,114 @@
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-	<title>Find coordinate systems for spatial reference worldwide</title>
+	<link rel="stylesheet" type="text/css" href="/css/style.css">
+
+	<title>{{title}}</title>
 
 </head>
 <body>
 
-<a href=/about>About</a> &nbsp; &nbsp; <a href=/>Search</a>
+<div id ="searchabout"><a href=/about>About</a> &nbsp; &nbsp; <a href=/>Search</a></div>
 
 <h1>EPSG.io</h1>
 
 <h2>Find coordinate systems for spatial reference worldwide</h2>
 <hr>
-<h3>{{item[0]['kind']}}<h3>
-<h1>EPSG:{{item[0]['code']}} {{item[0]['name']}} ({{item[0]['alt_name']}})</h1>
-<!-- Not show number of results if it just one-->
-%if num_results != 1:
-	<b>Transformation</b> ({{num_results}})
-	%for r in trans:
-		%if r['me'] == 1:
+<h3>{{item['kind']}}</h3>
+<div id="topic">EPSG:{{item['code']}} {{item['name']}} </div>
+</br
+
+<b>Transformation</b> ({{num_results}})
+%for r in trans:
+	%if r['link'] == "" and r['status'] == item['status']:
+		<div id="me">
+			</br>
 			<li> {{r['area_trans']}}
-			%if 'accuracy' in r:
-				, accuracy {{r['accuracy']}}
-			%end
 		
-			%if r['code_trans'] != 0:
-				code {{r['code_trans']}} 
-			%end
-			
-
-
-			
-			{{r['default']}}
-			
-			</li>
-		%elif r['me'] == 0:
-			<li><a href="/{{r['link']}}/" title = "{{r['trans_remarks']}}">{{r['area_trans']}}, accuracy {{r['accuracy']}} 
-				 code {{r['code_trans']}} 
-
-
-				{{r['default']}}
-				 </a></li>
+		%if 'accuracy' in r:
+			, accuracy {{r['accuracy']}}
 		%end
+		
+		%if r['code_trans'] != 0:
+			code {{r['code_trans']}} 
+		%end
+		%if r['default']== True:
+			DEFAULT
+		%end
+			</li>
+		</div>
+		
+		
+		</br></br>
+		
+	
+		
+	%elif r['status'] == item['status']:
+		<li><a href="/{{r['link']}}/" title = "{{r['trans_remarks']}}">{{r['area_trans']}}, accuracy 
+			{{r['accuracy']}} code {{r['code_trans']}} 
+			%if r['default'] == True:
+				DEFAULT
+			%end
+			</a>
+			</br></br>
+		</li>
 	%end
 %end
+
 </br>
-<li>Scope: {{item[0]['scope']}}</li>
-<li>Area of use: <a href="{{r['url_area']}}">{{item[0]['area']}}</a></li>
-<li>Remarks: {{item[0]['remarks']}}</li>
-<li>Information source: {{item[0]['information_source']}}</li>
-<li>Revision date: {{item[0]['revision_date']}}</li>
-%if 'method' in item:
-	<li>Method: {{item[0]['method']}}</li>
+
+
+For transformation: {{item['code_trans']}}
+
+<li>Method: <a href="{{url_method}}">{{item['method']}}</a></li>
+<li>Remarks: {{item['trans_remarks']}}</li>
+<li>Area of use: <a href="{{url_area_trans}}">{{item['area_trans']}}</a></li>
+
+%if item['concatop']:
+	<li>steps of transformation : {{item['concatop'][0]}}</li>
+%end
+%if 'datum_code' in item:
+	<li>Datum: <a href="/{{item['datum_code']}}-datum/">{{item['datum_code']}}-datum</a>
+%end
+</br>
+</br>
+For EPSG: {{item['code']}}
+<li>Scope: {{item['scope']}}</li>
+<li>Area of use: <a href="{{url_area}}">{{item['area']}}</a></li>
+<li>Remarks: {{item['remarks']}}</li>
+<li>Information source: {{item['information_source']}}</li>
+<li>Revision date: {{item['revision_date']}}</li>
+%if "children_code" in item:
+	%if item['children_code']:
+		<li>Coordinate system: <a href="/{{item['children_code']}}-coordsys/">{{item['children_code']}}</a></li>
+	%end
 %end
 
-%if item[0]['concatop']:
-	<li>steps of transformation : {{item[0]['concatop'][0]}}</li>
+<div id="formats">
+%if item['wkt']:
+
+<ul>
+	%for f in formats:
+	<li><a href="{{url_format}}/{{f}}">{{f}}</a></li>
+	%end
+</ul>
+
+
+</div>
+{{!export}}
+%end
+%if item['bbox']:
+
+<div id=image>
+<img src="/css/crosshair.png" id="crosshair" alt=""/>
+<img src="https://maps.googleapis.com/maps/api/staticmap?size=235x190&scale=2&sensor=false&visual_refresh=true&center={{center[0]}},{{center[1]}}&path=color:0xff0000ff|fillcolor:0xff000022|weight:2|{{g_coords}}" alt="SimpleMap" height="190" width="235">
+</div>
+<li>center coords for wgs = {{center[0]}}, {{center[1]}}</li>
+%if trans_coords:
+	<li>center coords for EPSG:{{item['code']}} with EPSG:{{item['code_trans']}} transformation  = {{trans_coords[0]}}, {{trans_coords[1]}}, {{trans_coords[2]}}</li>
+%end
 %end
 
-%if 'datum_code' in item[0]:
-	<li>Datum: <a href="/{{item[0]['datum_code']}}-datum/">{{item[0]['datum_code']}}-datum</a>
-%end
-
-%if item[0]['uom_code']:
-	<li>Unit: <a href="/{{item[0]['uom_code']}}-units/">{{item[0]['uom']}}</a></li>
-%end
-
-%if item[0]['children_code']:
-	<li>Coordinate system: <a href="/{{item[0]['children_code']}}-coordsys/">{{item[0]['children_code']}}</a></li>
-	
-
-%if item[0]['wkt'] != "":
-	<ul>
-		<li><a href="/{{item[0]['code']}}-{{item[0]['code_trans']}}/prettywkt">PrettyWKT</a>
-		<li><a href="/{{item[0]['code']}}-{{item[0]['code_trans']}}/esriwkt">ESRI WKT</a>
-		<li><a href="/{{item[0]['code']}}-{{item[0]['code_trans']}}/proj4">Proj4</a>
-	</ul>
-%end
-		
 </body>
 </html>
