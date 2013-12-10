@@ -105,26 +105,36 @@ def index():
       statquery = query + " kind:*" + " deprecated:1"
     """
     deprecated = 0
-    status = 1
 
     if "deprecated:1" in query:
      deprecated = 1
-     status = 0
+     statquery = re.sub(r'deprecated:1','deprecated:0',query)
+     statquery = re.sub(r'kind:([\*\w-]+)',"kind:*",query) 
+        
+    elif "deprecated:0" in query:
+      statquery = re.sub(r'deprecated:0','deprecated:1',query)
+      statquery = re.sub(r'kind:([\*\w-]+)',"kind:*",query) 
+      
     if not "deprecated" in query:
      query = query + " deprecated:0"
+     statquery = re.sub(r'deprecated:0','deprecated:1',query)
+     statquery = re.sub(r'kind:([\*\w-]+)',"kind:*",query) 
+     
 
     if not "kind" in query:
       query = query + " kind:*"
-
-    delete_kind = re.sub("kind:([\w-]+)","",query)
-    catquery = delete_kind +" kind:*"
-    print query
-    delete_deprecated = re.sub("deprecated:[\d]","",query)
-    statquery = delete_deprecated + " deprecated:"+ str(status)
+      catquery = query + " kind=*"
+      statquery = statquery + " kind:*"
+    
+    catquery = re.sub(r'kind:([\*\w-]+)',"kind:*",query)
+    print statquery
+    
+    
     kind = ""
-    p = re.search("kind:([\w-]+)",query)
-    if p:
-      kind = p.group()
+    p = re.findall(r'kind:([\*\w-]+)',query)
+    kind = p[0]
+    print "kind"
+    print kind
 
     
     
@@ -184,11 +194,11 @@ def index():
     #groups = categories.groups("kind")
     #status_groups = status_group.groups("status")
     elapsed = (time.clock() - start)
-    print elapsed
+    #print elapsed
     groups = res_facets.groups("kind")
-    print groups
+    #print groups
     status_groups = res_facetss.groups("deprecated")
-    print status_groups
+    #print status_groups
     num_results = len(results) #results.estimated_length()
     
 
@@ -214,7 +224,7 @@ def index(id):
      def final(self, searcher, docnum, score):
        
        popularity = (searcher.stored_fields(docnum).get("popularity"))
-       print score, popularity
+       #print score, popularity
        return score * popularity
   
   ix = open_dir(INDEX)
@@ -232,13 +242,13 @@ def index(id):
     myquery = parser.parse(query)
     
     results = searcher.search(myquery, limit=None) #default limit is 10 , reverse = True
-    print results
+    #print results
     item = ""
     trans = []
     num_results = 0
         
     for r in results:
-      print r
+      #print r
       if code_trans == str(0) and r['primary']==1:
         code_trans = r['code_trans']
      
@@ -264,7 +274,7 @@ def index(id):
         'default':default})
       num_results = len(trans)
     
-    print item
+    #print item
     url_method = "/?q=" + urllib.quote_plus(item['method'].encode('utf-8')) + " deprecated=0 kind:METHOD"
     title = item['kind'] + ":" + item['code']
     center = 0,0
@@ -371,7 +381,7 @@ def index(id):
 
 @route('/<id:re:[\d]+(-[\d]+)?>/<format>')
 def index(id, format):
-  print id
+  #print id
   ix = open_dir(INDEX)
   result = []
   export = ""
@@ -465,15 +475,28 @@ def index(id):
   ix = open_dir(INDEX)
   result = []
   try:
-    coord_lat,coord_lon = request.GET.get('wgs').strip().split(' ')
+    wgs = request.GET.get('wgs')
+    w = re.findall(r'(-?\d+\.?\d*)',wgs)
+
+    coord_lat = float(w[0])
+    coord_lon = float(w[1])
+
   except:
-    coord_lat = ""
-    coord_lon = ""
+    coord_lat = None
+    coord_lon = None
+
+  
+  
   try:
-    coord_lat_other,coord_lon_other = request.GET.get('other').strip().split(' ')
+    other = request.GET.get('other')
+    o = re.findall(r'(-?\d+\.?\d*)',other)
+
+    coord_lat_other = float(o[0])
+
+    coord_lon_other = float(o[1])
   except:
-    coord_lat_other = ""
-    coord_lon_other = ""
+    coord_lat_other = None
+    coord_lon_other = None
   
   with ix.searcher(closereader=False) as searcher:
     parser = MultifieldParser(["code","code_trans"], ix.schema)
@@ -491,12 +514,12 @@ def index(id):
 
     wgs = osr.SpatialReference()
     wgs.ImportFromEPSG(4326)
-    if coord_lat:
+    if coord_lat != None:
       xform = osr.CoordinateTransformation(wgs, ref)
-      trans_wgs = xform.TransformPoint(float(coord_lat), float(coord_lon))
-    elif coord_lat_other:
+      trans_wgs = xform.TransformPoint(coord_lat, coord_lon)
+    elif coord_lat_other != None:
       xform = osr.CoordinateTransformation(ref, wgs)
-      trans_other = xform.TransformPoint(float(coord_lat_other), float(coord_lon_other))
+      trans_other = xform.TransformPoint(coord_lat_other, coord_lon_other)
       
   
   return template ('coordinates', trans_wgs=trans_wgs, trans_other=trans_other, result=result,coord_lat=coord_lat,coord_lon=coord_lon,coord_lat_other=coord_lat_other,coord_lon_other=coord_lon_other)
