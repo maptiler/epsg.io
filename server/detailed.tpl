@@ -9,7 +9,7 @@
 </head>
 <body>
 
-<div id ="searchabout"><a href=/about>About</a> &nbsp; &nbsp; <a href=/>Search</a></div>
+<div id ="mysearchabout"><a href=/about>About</a> &nbsp; &nbsp; <a href=/>Search</a></div>
 
 <h1>EPSG.io</h1>
 
@@ -17,63 +17,66 @@
 <hr>
 <h3>{{item['kind']}}</h3>
 <div id="topic">EPSG:{{item['code']}} {{item['name']}} </div>
-</br
+</br>
 
-<b>Transformation</b> ({{num_results}})
+
+% i = 0
 %for r in trans:
-	%if r['link'] == "" and r['status'] == item['status']:
+	%if r['link'] == "" and r['status'] == item['status'] and r['area_trans']:
+		<b>Transformation</b>
 		<div id="me">
 			</br>
 			<li> {{r['area_trans']}}
 		
-		%if 'accuracy' in r:
+		%if r['accuracy']:
 			, accuracy {{r['accuracy']}}
 		%end
 		
 		%if r['code_trans'] != 0:
 			code {{r['code_trans']}} 
 		%end
-		%if r['default']== True:
+		%if r['default'] == True:
 			DEFAULT
 		%end
+		% i +=1
 			</li>
 		</div>
-		
-		
 		</br></br>
 		
-	
-		
-	%elif r['status'] == item['status']:
+	%elif r['status'] == item['status'] and r['area_trans']:
 		<li><a href="/{{r['link']}}/" title = "{{r['trans_remarks']}}">{{r['area_trans']}}, accuracy 
 			{{r['accuracy']}} code {{r['code_trans']}} 
 			%if r['default'] == True:
 				DEFAULT
 			%end
 			</a>
+			%i+=1
 			</br></br>
 		</li>
+
+	%end
+
+%end
+%if i !=0:
+</br>
+Count of transformations: {{i}}
+</br>
+	<b>Information about transformation: {{item['code_trans']}}</b>
+
+	<li>Method: <a href="{{url_method}}">{{item['method']}}</a></li>
+	<li>Remarks: {{item['trans_remarks']}}</li>
+	<li>Area of use: <a href="{{url_area_trans}}">{{item['area_trans']}}</a></li>
+
+	%if item['concatop']:
+	<li>steps of transformation : {{item['concatop'][0]}}</li>
 	%end
 %end
 
-</br>
 
 
-For transformation: {{item['code_trans']}}
-
-<li>Method: <a href="{{url_method}}">{{item['method']}}</a></li>
-<li>Remarks: {{item['trans_remarks']}}</li>
-<li>Area of use: <a href="{{url_area_trans}}">{{item['area_trans']}}</a></li>
-
-%if item['concatop']:
-	<li>steps of transformation : {{item['concatop'][0]}}</li>
-%end
-%if 'datum_code' in item:
-	<li>Datum: <a href="/{{item['datum_code']}}-datum/">{{item['datum_code']}}-datum</a>
-%end
 </br>
 </br>
-For EPSG: {{item['code']}}
+<b>Information about EPSG: {{item['code']}}</b>
 <li>Scope: {{item['scope']}}</li>
 <li>Area of use: <a href="{{url_area}}">{{item['area']}}</a></li>
 <li>Remarks: {{item['remarks']}}</li>
@@ -84,20 +87,40 @@ For EPSG: {{item['code']}}
 		<li>Coordinate system: <a href="/{{item['children_code']}}-coordsys/">{{item['children_code']}}</a></li>
 	%end
 %end
+%if 'source_geogcrs' in item:
+%if item['source_geogcrs']:
+ 	<li>Geodetic coordinate reference system: <a href="/{{item['source_geogcrs']}}/">{{item['source_geogcrs']}}</a></li>
 
+%end
+%end
+%if 'datum_code' in item:
+	<li>Datum: <a href="/{{item['datum_code']}}-datum/">{{item['datum_code']}}-datum</a></li>
+%end
 <div id="formats">
 %if item['wkt']:
 
-<ul>
-	%for f in formats:
-	<li><a href="{{url_format}}/{{f}}">{{f}}</a></li>
-	%end
-</ul>
+
+	<li><a href="{{url_format}}/prettywkt">PrettyWKT</a></li>
+	<li><a href="{{url_format}}/html">Human-readable PrettyWKT</a></li>
+	<li><a href="{{url_format}}/esriwkt">ESRI WKT</a></li>
+	<li><a href="{{url_format}}/prj">Download file {{item['code']}}.prj</a></li>
+	<li><a href="{{url_format}}/proj4">PROJ.4</a></li>
+	<li><a href="{{url_format}}/gml">OGC GML</a></li>
+	<li><a href="{{url_format}}/geoserver">GeoServer</a></li>
+	<li><a href="{{url_format}}/mapfile">MAPfile</a></li>
+	<li><a href="{{url_format}}/mapserverpython">MapSever - Python</a></li>
+	<li><a href="{{url_format}}/mapnik">mapnik</a></li>
+	<li><a href="{{url_format}}/mapnikpython">mapnik - Python</a></li>
+	<li><a href="{{url_format}}/postgis">PostGIS</a></li>
+	<li><a href="{{url_format}}/json">JSON</a></li>
+	<li><a href="{{url_format}}/ogcwkt">OGC WKT</a></li>
+	<li><a href="{{url_format}}/usgs">USGS</a></li>
 
 
-</div>
-{{!export}}
+	</div>
+	{{!export}}
 %end
+
 %if item['bbox']:
 
 <div id=image>
@@ -110,5 +133,17 @@ For EPSG: {{item['code']}}
 %end
 %end
 
+%if item['wkt'] and item['bbox'] and trans_coords:
+
+<form action= "/{{item['code']}}-{{item['code_trans']}}/coordinates/" method="get">
+  		<input type="text" name="wgs" placeholder="{{center[0]}} {{center[1]}}" style="width: 200px"/>
+		<input type="submit" value="Submit form">
+</form>
+
+<form action= "/{{item['code']}}-{{item['code_trans']}}/coordinates/" method="get">
+  		<input type="text" name="other" placeholder="{{trans_coords[0]}} {{trans_coords[1]}}" style="width: 200px"/>
+		<input type="submit" value="Submit form">
+</form>
+%end
 </body>
 </html>
