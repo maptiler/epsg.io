@@ -17,7 +17,18 @@ from pprint import pprint
 from whoosh import fields, columns
 from whoosh.analysis import StemmingAnalyzer
 
-
+KEYWORD = {
+  'vertical' : "VERTCRS",
+  'geocentric' : "GCENCRS",
+  'engineering' : "ENGCRS",
+  'geographic 3D' : "GEOG3DCRS",
+  'geographic 2D' : "GEOGCRS",
+  'compound' : "COMPOUNDCRS",
+  'projected' : "PROJCRS",
+  'angle' : "ANGUNIT",
+  'scale' : "SCALEUNIT",
+  'length' : "LENUNIT"
+}
 ###############################################################################
 print "INICIALIZING"
 ###############################################################################
@@ -37,7 +48,7 @@ class EPSGSchema(SchemaClass):
   code_trans = NUMERIC(stored = True, sortable = True, field_boost = 5.0)
   name = TEXT(stored = True, sortable=True, spelling=True, field_boost=3.0, analyzer=StemmingAnalyzer()) # Name "WGS 84" #coord_ref_sys_name
   alt_name = TEXT (stored = True)
-  kind = ID(stored = True) # "ProjectedCRS" | "GeodeticCRS" #coord_ref_sys_kind
+  kind = TEXT(stored = True, sortable=True) # "ProjectedCRS" | "GeodeticCRS" #coord_ref_sys_kind
   area = TEXT(stored = True, sortable=True, spelling=True) #epsg_area/area_of_use
   area_trans = TEXT(stored = True, sortable=True, spelling=True)
   deprecated = BOOLEAN(stored = True) # "1 = Valid", "0 - Invalid"
@@ -59,7 +70,7 @@ class EPSGSchema(SchemaClass):
   revision_date = STORED # revision_date
 
   # Advanced with additional types such as "Elipsoid" | "Area" | ...
-  datum_code = STORED 
+  datum_code = NUMERIC(stored=True) 
   source_geogcrs = STORED
   children_code = STORED
   data_source = STORED
@@ -126,16 +137,25 @@ for code, name, scope, remarks, information_source, revision_date,datum_ref_sys_
   for alt_name, object_code in cur.fetchall():
     pass
   
+  datum_code = 0
+  # Get Datum code from source geogcs
+  cur.execute('SELECT source_geogcrs_code, datum_code FROM epsg_coordinatereferencesystem WHERE coord_ref_sys_code = %s', (source_geogcrs_code,))
+  for source_geogcrs, datum_code in cur.fetchall():
+    pass
+    
   popularity = 1.0
   deprecated = int(deprecated)
   code = str(code).decode('utf-8')
+  
+  if KEYWORD.has_key(coord_ref_sys_kind):
+    kind = KEYWORD[coord_ref_sys_kind]
   
   doc = {
     'code': code,
     'code_trans' : 0,
     'name': name,
     'alt_name' : alt_name,
-    'kind': u"CRS-" + coord_ref_sys_kind.replace(" ", ""),
+    'kind': u"CRS-" + kind,
     'area': area,
     'deprecated': deprecated,
     'popularity': popularity,
@@ -150,7 +170,7 @@ for code, name, scope, remarks, information_source, revision_date,datum_ref_sys_
     'remarks': remarks,
     'information_source': information_source,
     'revision_date': revision_date,
-    'datum_code' : datum_ref_sys_code,
+    'datum_code' : datum_code,
     'source_geogcrs': source_geogcrs_code,
     'children_code' : coord_sys_code,
     'data_source' : data_source,
@@ -298,7 +318,7 @@ for code, name, kind, ellipsoid_code, area_code,scope,remarks,information_source
           'code_trans' : 0,
           'name': name,
           'alt_name' : alt_name,
-          'kind': u"Datum-" + kind,
+          'kind': u"DATUM",
           'area': area,
           'deprecated': deprecated,
           'popularity': 1.0,
@@ -378,7 +398,7 @@ for code, name, uom_code,remarks,information_source,revision_date,data_source, d
     'uom_code' : uom_code,
     'uom' : unit_name,
     'target_uom': u"",
-    'kind': u"Ellipsoid",
+    'kind': u"ELLIPSOID",
     'popularity': 1.0,
     'children_code' : 0,
     'data_source' : data_source,
@@ -432,7 +452,7 @@ for code, name, greenwich_longitude, uom_code,remarks,information_source,revisio
     'uom_code' : uom_code,
     'uom' : unit_name,
     'target_uom': u"",
-    'kind': u"Primemeridian",
+    'kind': u"PRIMEM",
     'popularity': 1.0,
     'children_code' : 0,
     'data_source' : data_source,
@@ -492,7 +512,7 @@ for code, name, reverse, remarks, information_source, revision_date, data_source
     'uom_code' : 0,
     'uom' : u"",
     'target_uom': u"",
-    'kind': u"Method",
+    'kind': u"METHOD",
     'popularity': 1.0,
     'children_code' : 0,
     'data_source' : data_source,
@@ -547,7 +567,7 @@ for code, name, kind, remarks, information_source, revision_date, data_source, d
     'uom_code' : 0,
     'uom' : u"",
     'target_uom': u"",
-    'kind': u"CoordSys-" + kind,
+    'kind': u"CS",
     'popularity': 1.0,
     'children_code' : axis_code,
     'data_source' : data_source,
@@ -601,7 +621,7 @@ for code, sys_code, orientation, abbreviation, uom_code, order, axis_name, descr
     'uom_code' : uom_code,
     'uom' : unit_name,
     'target_uom': u"",
-    'kind': u"Axis",
+    'kind': u"AXIS",
     'popularity': 1.0,
     'children_code' : sys_code, #for connect to coordinate system
     'data_source' : data_source,
@@ -640,6 +660,8 @@ for code, name, area,area_south_bound_lat,area_north_bound_lat,area_west_bound_l
   cur.execute('SELECT alias, alias_code FROM epsg_alias WHERE object_table_name = %s and object_code = %s', ("epsg_area", code, ))
   for alt_name, alias_code in cur.fetchall():
     pass
+    
+
   doc = {
     'code': code + u"-area",
     'code_trans' : 0,
@@ -661,7 +683,7 @@ for code, name, area,area_south_bound_lat,area_north_bound_lat,area_west_bound_l
     'uom_code' : 0,
     'uom' : u"",
     'target_uom': u"",
-    'kind': u"Area",
+    'kind': u"AREA",
     'popularity': 1.0,
     'children_code' : 0,
     'data_source' : data_source,
@@ -697,7 +719,9 @@ for code, name, kind, target_uom, remarks, information_source, data_source, revi
   cur.execute('SELECT alias, alias_code FROM epsg_alias WHERE object_table_name = %s and object_code = %s', ("epsg_unitofmeasure", code, ))
   for alt_name, alias_code in cur.fetchall():
     pass
-    
+  
+  if KEYWORD.has_key(kind):
+    kind = KEYWORD[kind]
   doc = {
     'code': code + u"-units",
     'code_trans' : 0,
@@ -719,7 +743,7 @@ for code, name, kind, target_uom, remarks, information_source, data_source, revi
     'uom_code' : 0,
     'uom' : u"",
     'target_uom': target_uom,
-    'kind': u"Measure-" + kind,
+    'kind': u"UNIT-" + kind,
     'popularity': 1.0,
     'children_code' : 0,
     'data_source' : data_source,
