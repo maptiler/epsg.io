@@ -18,12 +18,16 @@
 <h3>{{item['kind']}}</h3>
 <div id="topic">EPSG:{{item['code']}} {{item['name']}} </div>
 </br>
+%if trans:
+	<b>Transformation</b>
+%end
 
-
+</br>
+</br>
 % i = 0
 %for r in trans:
-	%if r['link'] == "" and r['status'] == item['status'] and r['area_trans']:
-		<b>Transformation</b>
+	%if r['link'] == "" and r['deprecated'] == item['deprecated'] and r['area_trans']:
+		
 		<div id="me">
 			</br>
 			<li> {{r['area_trans']}}
@@ -43,7 +47,7 @@
 		</div>
 		</br></br>
 		
-	%elif r['status'] == item['status'] and r['area_trans']:
+	%elif r['deprecated'] == item['deprecated'] and r['area_trans']:
 		<li><a href="/{{r['link']}}/" title = "{{r['trans_remarks']}}">{{r['area_trans']}}, accuracy 
 			{{r['accuracy']}} code {{r['code_trans']}} 
 			%if r['default'] == True:
@@ -93,7 +97,7 @@ Count of transformations: {{i}}
 
 %end
 %end
-%if 'datum_code' in item:
+%if item['datum_code'] != 0 :
 	<li>Datum: <a href="/{{item['datum_code']}}-datum/">{{item['datum_code']}}-datum</a></li>
 %end
 <div id="formats">

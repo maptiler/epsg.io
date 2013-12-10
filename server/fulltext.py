@@ -89,47 +89,71 @@ def index():
     parser.add_plugin(qparser.FuzzyTermPlugin()) #jtss~ #jtks~2 #page 40
     query = request.GET.get('q') # p43 - 1.9 The default query language
     #query = query.replace("EPSG::","").replace("EPSG:","").replace("::"," ").replace("."," ").replace(":"," ").replace("-"," ").replace(",,"," ").replace(","," ").replace("   "," ").replace("  ", " ")
-    select = request.GET.get('kind')
-    status = request.GET.get('valid')
+    #select = request.GET.get('kind')
+    #status = request.GET.get('valid')
 
-    
+    """
     if status == None or status == "1":
-      advance_query = query + " kind:" + select + " status:1" #only invalid
-      catquery = query + " kind:*" + " status:1"
+      advance_query = query + " kind:" + select + " deprecated:1" #only invalid
+      catquery = query + " kind:*" + " deprecated:1"
       
       # able to show number of opposite results group by status
-      statquery = query + " kind:*" + " status:0"
+      statquery = query + " kind:*" + " deprecated:0"
     else:
-      advance_query = query + " kind:" + select + " status:" + status # only valid
-      catquery = query + " kind:*" + " status:0"
-      statquery = query + " kind:*" + " status:1"
-     
+      advance_query = query + " kind:" + select + " deprecated:" + status # only valid
+      catquery = query + " kind:*" + " deprecated:0"
+      statquery = query + " kind:*" + " deprecated:1"
+    """
+    deprecated = 0
+    status = 1
 
+    if "deprecated:1" in query:
+     deprecated = 1
+     status = 0
+    if not "deprecated" in query:
+     query = query + " deprecated:0"
+
+    if not "kind" in query:
+      query = query + " kind:*"
+
+    delete_kind = re.sub("kind:([\w-]+)","",query)
+    catquery = delete_kind +" kind:*"
+    print query
+    delete_deprecated = re.sub("deprecated:[\d]","",query)
+    statquery = delete_deprecated + " deprecated:"+ str(status)
+    kind = ""
+    p = re.search("kind:([\w-]+)",query)
+    if p:
+      kind = p.group()
+
+    
+    
+    only_query = query.split(' ')[:1]
+    url_only_query = urllib2.quote(only_query[0])
+    
    # if query != "":
   #    query = query + "~"
 
     #pagenum = int(1)
-    #pagelen = int(10)
+    # = int(10)
     pagenum = int(request.GET.get("page",1))
-    pagelen = int(request.GET.get("perpage",10))
+    #pagelen = int(request.GET.get("perpage",10))
     
     
-    myquery = parser.parse(advance_query)
+    myquery = parser.parse(query)
+
     mycatquery = parser.parse(catquery)
     mystatquery = parser.parse(statquery)
-    
     url_query = urllib2.quote(query)
     
     facets = sorting.Facets()
     facets.add_field("kind",maptype=sorting.Count)
-    facets.add_field("status",maptype=sorting.Count)
+    facets.add_field("deprecated",maptype=sorting.Count)
     
     start = time.clock()
 #####    # first method for all 2.2s
     res_facets = searcher.search(mycatquery , limit = 1, groupedby="kind",scored=False,sortedby=None,maptype=sorting.Count)   # ,limit = 50
-    print res_facets
-    res_facetss = searcher.search(mystatquery , limit = 1, groupedby="status",scored=False,sortedby=None,maptype=sorting.Count)   # ,limit = 50
-    print res_facetss
+    res_facetss = searcher.search(mystatquery , limit = 1, groupedby="deprecated",scored=False,sortedby=None,maptype=sorting.Count)   # ,limit = 50
     
 #####   # second method    for all 11s
     #uc = collectors.UnlimitedCollector()
@@ -150,8 +174,8 @@ def index():
 
 #### results of documents
 
-    results = searcher.search_page(myquery, pagenum, pagelen)
-    print results
+    results = searcher.search_page(myquery, pagenum, pagelen=10)
+    #print results
     #print("Showing results %d-%d of %d" % (results.offset +1, results.offset + results.pagelen + 1, len(results))) 
     #categories = searcher.search(mycatquery, groupedby="kind" ,maptype=sorting.Count)   # ,limit = 50
     #print categories
@@ -162,9 +186,9 @@ def index():
     elapsed = (time.clock() - start)
     print elapsed
     groups = res_facets.groups("kind")
-    #print groups
-    status_groups = res_facetss.groups("status")
-    #print status_groups
+    print groups
+    status_groups = res_facetss.groups("deprecated")
+    print status_groups
     num_results = len(results) #results.estimated_length()
     
 
@@ -180,7 +204,7 @@ def index():
       result.append({'r':r, 'link':link})
       
         
-  return template('results',result=result,res_facets=res_facets, groups = groups,num_results=num_results,url_query=url_query,status=status,category=select,status_groups=status_groups, query=query,pagenum=pagenum,pagelen=pagelen,elapsed=elapsed)
+  return template('results',result=result,res_facets=res_facets, groups = groups, num_results=num_results, url_query=url_query, status_groups=status_groups, query=query, url_only_query=url_only_query, pagenum=pagenum,elapsed=elapsed,deprecated=deprecated,kind=kind)#,,,,pagelen=pagelen
 
 
 @route('/<id:re:[\d]+(-[\d]+)?>/')
@@ -204,17 +228,17 @@ def index(id):
     parser = MultifieldParser(["code","code_trans"], ix.schema)
     
     code, code_trans = (id+'-0').split('-')[:2]
-    query = "code:" + code + " kind:CRS-*" 
+    query = "code:" + code
     myquery = parser.parse(query)
     
     results = searcher.search(myquery, limit=None) #default limit is 10 , reverse = True
-    
+    print results
     item = ""
     trans = []
     num_results = 0
         
     for r in results:
-     
+      print r
       if code_trans == str(0) and r['primary']==1:
         code_trans = r['code_trans']
      
@@ -224,7 +248,6 @@ def index(id):
       if r['code_trans'] == int(code_trans):  
         item = r
         link = ""
-        status = r['status']
         url_format = "/"+code+"-"+str(code_trans)
         
       
@@ -233,16 +256,16 @@ def index(id):
 
       trans.append({
         'link':link,
-        'status':r['status'],
+        'deprecated':r['deprecated'],
         'area_trans':r['area_trans'],
         'accuracy':r['accuracy'],
         'code_trans':r['code_trans'],
         'trans_remarks':r['trans_remarks'],
         'default':default})
       num_results = len(trans)
-        
     
-    url_method = "/?q=" + urllib.quote_plus(item['method'].encode('utf-8')) + "&valid=0&kind=Method"
+    print item
+    url_method = "/?q=" + urllib.quote_plus(item['method'].encode('utf-8')) + " deprecated=0 kind:METHOD"
     title = item['kind'] + ":" + item['code']
     center = 0,0
     g_coords = ""
