@@ -45,11 +45,11 @@ Results in other categories:
 
 %for key,value in status_groups.iteritems():
 <li>
-%if key == "f":
-	<a href="/?q={{url_only_query}} deprecated:0 {{kind}}">Show valid</a> : {{value}}
+%if key == "t":
+	<a href="/?q={{url_only_query}} deprecated:0 kind:{{kind}}">Show valid</a> : {{value}}
 	
-%elif key == "t":
-	<a href="/?q={{url_only_query}} deprecated:1 {{kind}}">Show deprecated</a> : {{value}}
+%elif key == "f":
+	<a href="/?q={{url_only_query}} deprecated:1 kind:{{kind}}">Show deprecated</a> : {{value}}
 
 </li>
 
