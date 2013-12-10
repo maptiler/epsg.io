@@ -9,7 +9,7 @@
 </head>
 <body>
 
-	<div id ="searchabout"><a href=/about>About</a> &nbsp; &nbsp; <a href=/>Search</a></div>
+	<div id ="mysearchabout"><a href=/about>About</a> &nbsp; &nbsp; <a href=/>Search</a></div>
 
 	<h1>EPSG.io</h1>
 
