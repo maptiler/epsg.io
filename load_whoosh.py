@@ -40,7 +40,7 @@ class EPSGSchema(SchemaClass):
   kind = ID(stored = True) # "ProjectedCRS" | "GeodeticCRS" #coord_ref_sys_kind
   area = TEXT(stored = True, sortable=True, spelling=True) #epsg_area/area_of_use
   area_trans = TEXT(stored = True, sortable=True, spelling=True)
-  status = BOOLEAN(stored = True) # "1 = Valid", "0 - Invalid"
+  deprecated = BOOLEAN(stored = True) # "1 = Valid", "0 - Invalid"
   popularity = STORED  # number [0..1] - our featured = 1
 
   # Description of used transformation - "", "Czech republic (accuracy 1 meter)"
@@ -60,6 +60,7 @@ class EPSGSchema(SchemaClass):
 
   # Advanced with additional types such as "Elipsoid" | "Area" | ...
   datum_code = STORED 
+  source_geogcrs = STORED
   children_code = STORED
   data_source = STORED
   uom = STORED
@@ -99,7 +100,7 @@ ix = create_in(INDEX, EPSGSchema)
 print " - SELECT EPSG FROM COORDINATE REFERENCE SYSTEM AND TRANSFORMATION"
 ###############################################################################
 
-cur.execute('SELECT coord_ref_sys_code, coord_ref_sys_name,crs_scope, remarks, information_source, revision_date,datum_code, area_of_use_code,coord_ref_sys_kind,deprecated,source_geogcrs_code,data_source,coord_sys_code  FROM epsg_coordinatereferencesystem ') # WHERE coord_ref_sys_code > 5513 and coord_ref_sys_code < 5600'
+cur.execute('SELECT coord_ref_sys_code, coord_ref_sys_name,crs_scope, remarks, information_source, revision_date, datum_code, area_of_use_code,coord_ref_sys_kind,deprecated,source_geogcrs_code,data_source,coord_sys_code  FROM epsg_coordinatereferencesystem WHERE coord_ref_sys_code > 5513 and coord_ref_sys_code < 5600 or coord_ref_sys_code = 4156 ') # WHERE coord_ref_sys_code > 5513 and coord_ref_sys_code < 5600'
 for code, name, scope, remarks, information_source, revision_date,datum_ref_sys_code, area_code, coord_ref_sys_kind, deprecated, source_geogcrs_code,data_source,coord_sys_code in cur.fetchall():
   
   try:
@@ -126,7 +127,7 @@ for code, name, scope, remarks, information_source, revision_date,datum_ref_sys_
     pass
   
   popularity = 1.0
-  status = int(deprecated)
+  deprecated = int(deprecated)
   code = str(code).decode('utf-8')
   
   doc = {
@@ -136,7 +137,7 @@ for code, name, scope, remarks, information_source, revision_date,datum_ref_sys_
     'alt_name' : alt_name,
     'kind': u"CRS-" + coord_ref_sys_kind.replace(" ", ""),
     'area': area,
-    'status': status,
+    'deprecated': deprecated,
     'popularity': popularity,
     'trans' : u"",
     'trans_alt_name' : u"",
@@ -150,6 +151,7 @@ for code, name, scope, remarks, information_source, revision_date,datum_ref_sys_
     'information_source': information_source,
     'revision_date': revision_date,
     'datum_code' : datum_ref_sys_code,
+    'source_geogcrs': source_geogcrs_code,
     'children_code' : coord_sys_code,
     'data_source' : data_source,
     'uom_code' : 0,
@@ -177,7 +179,7 @@ for code, name, scope, remarks, information_source, revision_date,datum_ref_sys_
   towgs84_original = ref.GetTOWGS84()
   
   if len(towgs84) != 0:
-    for op_code, op_accuracy,coord_op_type, deprecated, coord_op_scope, remarks, information_source, revision_date,uom_code, coord_op_method_code, area, area_north_bound_lat, area_west_bound_lon, area_south_bound_lat, area_east_bound_lon in towgs84:
+    for op_code, op_accuracy,coord_op_type, opdeprecated, coord_op_scope, remarks, information_source, revision_date,uom_code, coord_op_method_code, area, area_north_bound_lat, area_west_bound_lon, area_south_bound_lat, area_east_bound_lon in towgs84:
       cur.execute('SELECT parameter_value, param_value_file_ref FROM epsg_coordoperationparamvalue WHERE coord_op_code = %s', (op_code, ))
       values = cur.fetchall()
       if len(values) == 7:
@@ -198,7 +200,7 @@ for code, name, scope, remarks, information_source, revision_date,datum_ref_sys_
 
           
           
-    for op_code, op_accuracy, coord_op_type, deprecated, coord_op_scope, remarks, information_source, revision_date,uom_code,coord_op_method_code, area, area_north_bound_lat, area_west_bound_lon, area_south_bound_lat, area_east_bound_lon in towgs84:
+    for op_code, op_accuracy, coord_op_type, opdeprecated, coord_op_scope, remarks, information_source, revision_date,uom_code,coord_op_method_code, area, area_north_bound_lat, area_west_bound_lon, area_south_bound_lat, area_east_bound_lon in towgs84:
       popularity_accuracy = 0.0
       bbox = area_north_bound_lat,area_west_bound_lon,area_south_bound_lat,area_east_bound_lon
       
@@ -258,7 +260,7 @@ for code, name, scope, remarks, information_source, revision_date,datum_ref_sys_
       doc['code_trans'] = op_code  
       doc['popularity'] = popularity + popularity_trans + popularity_accuracy
       doc['trans'] = trans
-      doc['status'] = int(status or deprecated)
+      doc['deprecated'] = int(deprecated or opdeprecated)
       doc['bbox'] = bbox
       # WRITE INTO WHOOSH!
       with ix.writer() as writer:
@@ -298,7 +300,7 @@ for code, name, kind, ellipsoid_code, area_code,scope,remarks,information_source
           'alt_name' : alt_name,
           'kind': u"Datum-" + kind,
           'area': area,
-          'status': deprecated,
+          'deprecated': deprecated,
           'popularity': 1.0,
           'trans' : u"",
           'trans_alt_name' : u"",
@@ -369,7 +371,7 @@ for code, name, uom_code,remarks,information_source,revision_date,data_source, d
     'accuracy' : u"",
     'information_source': information_source,
     'revision_date': revision_date,
-    'status': int(deprecated),
+    'deprecated': int(deprecated),
     'trans' : u"",
     'trans_alt_name' : u"",
     'datum_code' : 0,
@@ -423,7 +425,7 @@ for code, name, greenwich_longitude, uom_code,remarks,information_source,revisio
     'accuracy' : u"",
     'information_source': information_source,
     'revision_date': revision_date,
-    'status': int(deprecated),
+    'deprecated': int(deprecated),
     'trans' : u"",
     'trans_alt_name' : u"",
     'datum_code' : 0,
@@ -483,7 +485,7 @@ for code, name, reverse, remarks, information_source, revision_date, data_source
     'accuracy' : u"",
     'information_source': information_source,
     'revision_date': revision_date,
-    'status': int(deprecated),
+    'deprecated': int(deprecated),
     'trans' : u"",
     'trans_alt_name' : u"",
     'datum_code' : 0,
@@ -538,7 +540,7 @@ for code, name, kind, remarks, information_source, revision_date, data_source, d
     'accuracy' : u"",
     'information_source': information_source,
     'revision_date': revision_date,
-    'status': int(deprecated),
+    'deprecated': int(deprecated),
     'trans' : u"",
     'trans_alt_name' : u"",
     'datum_code' : 0,
@@ -592,7 +594,7 @@ for code, sys_code, orientation, abbreviation, uom_code, order, axis_name, descr
     'accuracy' : u"",
     'information_source': information_source,
     'revision_date': revision_date,
-    'status': int(deprecated),
+    'deprecated': int(deprecated),
     'trans' : u"",
     'trans_alt_name' : u"",
     'datum_code' : 0,
@@ -630,7 +632,7 @@ for code, sys_code, orientation, abbreviation, uom_code, order, axis_name, descr
 print " - SELECT EPSG FROM AREA"
 ###############################################################################
 
-cur.execute('SELECT area_code, area_name, area_of_use, area_south_bound_lat, area_north_bound_lat, area_west_bound_lon, area_east_bound_lon, area_polygon_file_ref, remarks,information_source,data_source,revision_date,deprecated FROM epsg_area') # LIMIT 10
+cur.execute('SELECT area_code, area_name, area_of_use, area_south_bound_lat, area_north_bound_lat, area_west_bound_lon, area_east_bound_lon, area_polygon_file_ref, remarks,information_source,data_source,revision_date,deprecated FROM epsg_area LIMIT 10') # LIMIT 10
 for code, name, area,area_south_bound_lat,area_north_bound_lat,area_west_bound_lon,area_east_bound_lon,area_polygon_file_ref,remarks,information_source,data_source,revision_date, deprecated in cur.fetchall():
   code = str(code)
   bbox = area_north_bound_lat,area_west_bound_lon,area_south_bound_lat,area_east_bound_lon
@@ -652,7 +654,7 @@ for code, name, area,area_south_bound_lat,area_north_bound_lat,area_west_bound_l
     'accuracy' : u"",
     'information_source': information_source,
     'revision_date': revision_date,
-    'status': int(deprecated),
+    'deprecated': int(deprecated),
     'trans' : u"",
     'trans_alt_name' : u"",
     'datum_code' : 0,
@@ -710,7 +712,7 @@ for code, name, kind, target_uom, remarks, information_source, data_source, revi
     'accuracy' : u"",
     'information_source': information_source,
     'revision_date': revision_date,
-    'status': int(deprecated),
+    'deprecated': int(deprecated),
     'trans' : u"",
     'trans_alt_name' : u"",
     'datum_code' : 0,
