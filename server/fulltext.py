@@ -15,7 +15,7 @@ from whoosh.index import create_in, open_dir
 from whoosh.fields import *
 from whoosh.qparser import QueryParser, MultifieldParser
 from whoosh.query import *
-from whoosh import sorting, qparser, scoring,index, highlight
+from whoosh import sorting, qparser, scoring,index, highlight,sorting,collectors
 import re
 from pprint import pprint
 
@@ -25,6 +25,8 @@ from pygments import highlight
 from pygments.formatters import HtmlFormatter
 
 from osgeo import osr
+
+import time
 
 
 class WKTLexer(RegexLexer):
@@ -89,6 +91,7 @@ def index():
     #query = query.replace("EPSG::","").replace("EPSG:","").replace("::"," ").replace("."," ").replace(":"," ").replace("-"," ").replace(",,"," ").replace(","," ").replace("   "," ").replace("  ", " ")
     select = request.GET.get('kind')
     status = request.GET.get('valid')
+
     
     if status == None or status == "1":
       advance_query = query + " kind:" + select + " status:1" #only invalid
@@ -98,28 +101,72 @@ def index():
       statquery = query + " kind:*" + " status:0"
     else:
       advance_query = query + " kind:" + select + " status:" + status # only valid
-      catquery = query + " kind:*" + " status:" + status
+      catquery = query + " kind:*" + " status:0"
       statquery = query + " kind:*" + " status:1"
-      
-      
-    
+     
+
    # if query != "":
   #    query = query + "~"
-      
+
+    #pagenum = int(1)
+    #pagelen = int(10)
+    pagenum = int(request.GET.get("page",1))
+    pagelen = int(request.GET.get("perpage",10))
+    
+    
     myquery = parser.parse(advance_query)
     mycatquery = parser.parse(catquery)
     mystatquery = parser.parse(statquery)
     
     url_query = urllib2.quote(query)
+    
+    facets = sorting.Facets()
+    facets.add_field("kind",maptype=sorting.Count)
+    facets.add_field("status",maptype=sorting.Count)
+    
+    start = time.clock()
+#####    # first method for all 2.2s
+    res_facets = searcher.search(mycatquery , limit = 1, groupedby="kind",scored=False,sortedby=None,maptype=sorting.Count)   # ,limit = 50
+    print res_facets
+    res_facetss = searcher.search(mystatquery , limit = 1, groupedby="status",scored=False,sortedby=None,maptype=sorting.Count)   # ,limit = 50
+    print res_facetss
+    
+#####   # second method    for all 11s
+    #uc = collectors.UnlimitedCollector()
+    #fc = collectors.FacetCollector(uc, facets)
+    #res_facets = searcher.search_with_collector(mycatquery, fc)
+    #print(fc.facetmaps)
 
-    results = searcher.search(myquery , limit = None)   # ,limit = 50
-    categories = searcher.search(mycatquery, groupedby="kind" ,maptype=sorting.Count)   # ,limit = 50
-    status_group = searcher.search(mystatquery, groupedby="status" ,maptype=sorting.Count)   # ,limit = 50
+####    # third method for all 11s
+    #uc = collectors.TopCollector(limit=50000)
+    #fc = collectors.FacetCollector(uc, facets)
+    #res_facets = searcher.search_with_collector(mycatquery, fc)
+    #print(fc.facetmaps)
+####    # fourth method
+
+
+
     
-    groups = categories.groups("kind")
-    status_groups = status_group.groups("status")
+
+#### results of documents
+
+    results = searcher.search_page(myquery, pagenum, pagelen)
+    print results
+    #print("Showing results %d-%d of %d" % (results.offset +1, results.offset + results.pagelen + 1, len(results))) 
+    #categories = searcher.search(mycatquery, groupedby="kind" ,maptype=sorting.Count)   # ,limit = 50
+    #print categories
+    #status_group = searcher.search(mystatquery, groupedby="status" ,maptype=sorting.Count)   # ,limit = 50
+    #print status_group
+    #groups = categories.groups("kind")
+    #status_groups = status_group.groups("status")
+    elapsed = (time.clock() - start)
+    print elapsed
+    groups = res_facets.groups("kind")
+    #print groups
+    status_groups = res_facetss.groups("status")
+    #print status_groups
+    num_results = len(results) #results.estimated_length()
     
-    num_results = len(results)
 
 #    print results
     for r in results: #[:20]
@@ -133,7 +180,7 @@ def index():
       result.append({'r':r, 'link':link})
       
         
-  return template('results',result=result, groups = groups,num_results=num_results,url_query=url_query,status=status,category=select,status_groups=status_groups)
+  return template('results',result=result,res_facets=res_facets, groups = groups,num_results=num_results,url_query=url_query,status=status,category=select,status_groups=status_groups, query=query,pagenum=pagenum,pagelen=pagelen,elapsed=elapsed)
 
 
 @route('/<id:re:[\d]+(-[\d]+)?>/')
@@ -165,9 +212,7 @@ def index(id):
     item = ""
     trans = []
     num_results = 0
-
-    formats = ["prettywkt","esriwkt","proj4","html","gml","usgs","mapfile","mapnik","mapserverpython","mapnikpython","geoserver","postgis","json","prj","ogcwkt"]
-    
+        
     for r in results:
      
       if code_trans == str(0) and r['primary']==1:
@@ -201,19 +246,19 @@ def index(id):
     title = item['kind'] + ":" + item['code']
     center = 0,0
     g_coords = ""
-    print item['bbox']
+    #print item['bbox']
     if item['bbox']:
         #(51.05, 12.09, 47.74, 22.56)
       center = ((item['bbox'][0] - item['bbox'][2])/2.0)+item['bbox'][2],((item['bbox'][3] - item['bbox'][1])/2.0)+item['bbox'][1]
       g_coords = str(item['bbox'][2]) + "," + str(item['bbox'][1]) + "|" + str(item['bbox'][0]) + "," + str(item['bbox'][1]) + "|" + str(item['bbox'][0]) + "," + str(item['bbox'][3]) + "|" + str(item['bbox'][2]) + "," + str(item['bbox'][3]) + "|" + str(item['bbox'][2]) + "," + str(item['bbox'][1])
-      print center
-      print item['bbox'][0]
-      print item['bbox'][2]
-      print ((item['bbox'][0] - item['bbox'][2])/2.0)+item['bbox'][2]
+      #print center
+      #print item['bbox'][0]
+      #print item['bbox'][2]
+      #print ((item['bbox'][0] - item['bbox'][2])/2.0)+item['bbox'][2]
       
-      print item['bbox'][1]
-      print item['bbox'][3]
-      print ((item['bbox'][3] - item['bbox'][1])/2.0)+item['bbox'][1]
+     # print item['bbox'][1]
+     # print item['bbox'][3]
+     # print ((item['bbox'][3] - item['bbox'][1])/2.0)+item['bbox'][1]
     url_area = area_to_url(item['area'])
     url_area_trans = area_to_url(item['area_trans'])
     
@@ -232,8 +277,8 @@ def index(id):
       
       wgs = osr.SpatialReference()
       wgs.ImportFromEPSG(4326)
-      print ref, type(ref)
-      xform = osr.CoordinateTransformation(ref, wgs)
+     # print ref, type(ref)
+      xform = osr.CoordinateTransformation(wgs,ref)
       
       
       #print center[0], type(center[0]), center[1], type(center[1])
@@ -244,7 +289,7 @@ def index(id):
         
       export = highlight(ref.ExportToPrettyWkt(), WKTLexer(), HtmlFormatter(cssclass='syntax',nobackground=True))
        
-  return template('detailed', item=item, trans=trans, num_results=num_results, url_method=url_method, title=title, url_format=url_format, formats=formats, export=export, url_area_trans=url_area_trans, url_area=url_area, center=center, g_coords=g_coords,trans_coords=trans_coords )  
+  return template('detailed', item=item, trans=trans, num_results=num_results, url_method=url_method, title=title, url_format=url_format, export=export, url_area_trans=url_area_trans, url_area=url_area, center=center, g_coords=g_coords,trans_coords=trans_coords )  
 
 
 @route('/<id:re:[\d]+(-[\w]+)>/')
@@ -303,7 +348,7 @@ def index(id):
 
 @route('/<id:re:[\d]+(-[\d]+)?>/<format>')
 def index(id, format):
-  
+  print id
   ix = open_dir(INDEX)
   result = []
   export = ""
@@ -338,37 +383,30 @@ def index(id, format):
     elif format == 'html':
       out = ref.ExportToPrettyWkt()
       export = highlight(out, WKTLexer(), HtmlFormatter(cssclass='syntax',nobackground=True))
-      
       response.content_type = 'text/html; charset=UTF-8'
       return template('export', export = export,code=code)
-      
     elif format == 'gml':
       export = ref.ExportToXML()
       ct = "text/gml" 
-      
     elif format == 'usgs':
       export = str(ref.ExportToUSGS())
     elif format == 'mapfile':
       export = 'PROJECTION\n\t'+'\n\t'.join(['"'+l.lstrip('+')+'"' for l in ref.ExportToProj4().split()])+'\nEND' ### CSS: white-space: pre-wrap
-       
-    
     elif format == 'mapnik': 
       proj4 = ref.ExportToProj4().strip()
       export = '<?xml version="1.0" encoding="utf-8"?>\n<Map srs="%s">\n\t<Layer srs="%s">\n\t</Layer>\n</Map>' % (proj4,proj4)
       ct = "application/xml" 
-      
     elif format == 'mapserverpython':
       wkt = ref.ExportToWkt()
-      export = "from mapscript import mapObj,layerObj\nwkt = '''%s'''\nm = mapObj('')\nm.setWKTProjection(wkt)\nlyr = layerObj(m)\nlyr.setWKTProjection(wkt)" % (wkt)
+      export = "wkt = '''%s'''\nm = mapObj('')\nm.setWKTProjection(wkt)\nlyr = layerObj(m)\nlyr.setWKTProjection(wkt)" % (wkt) #from mapscript import mapObj,layerObj\n
     elif format == 'mapnikpython': 
       proj4 = ref.ExportToProj4().strip()
-      export = "from mapnik import Map, Layer\nproj4 = '%s'\nm = Map(256,256,proj4)\nlyr = Layer('Name',proj4)" % (proj4)
+      export = "proj4 = '%s'\nm = Map(256,256,proj4)\nlyr = Layer('Name',proj4)" % (proj4) #from mapnik import Map, Layer\n
     elif format == 'geoserver':
-      export = "# put this custom projection in the 'user_projections' file inside the GEOSERVER_DATA_DIR '\n' # You can further work with your projections via the web admin tool.\n%s=%s" % (code,ref.ExportToWkt())
+      export = "%s=%s" % (code,ref.ExportToWkt()) # put this custom projection in the 'user_projections' file inside the GEOSERVER_DATA_DIR '\n' # You can further work with your projections via the web admin tool.\n
       # we'll assume Geotools has this SRS...
     elif format == 'postgis':                                              
       export = 'INSERT into spatial_ref_sys (srid, auth_name, auth_srid, proj4text, srtext) values ( %s, \'%s\', %s, \'%s\', \'%s\');' % (code, type, code, ref.ExportToProj4(), ref.ExportToWkt())                                                  
-      
     elif format == 'json':
       if ref.IsGeographic():
         code = ref.GetAuthorityCode("GEOGCS")
@@ -379,7 +417,6 @@ def index(id, format):
         export['type'] = 'EPSG'
       export['properties'] = {'code':code}
       ct = "application/json" 
-    
     elif format == 'prj':
       ref.MorphToESRI()
       export = ref.ExportToWkt()
@@ -397,6 +434,49 @@ def index():
 @route('/css/<filename>')
 def server_static(filename):
     return static_file(filename, root='./css/')
+
+    
+@route('/<id:re:[\d]+(-[\d]+)?>/coordinates/')
+def index(id):
+  
+  ix = open_dir(INDEX)
+  result = []
+  try:
+    coord_lat,coord_lon = request.GET.get('wgs').strip().split(' ')
+  except:
+    coord_lat = ""
+    coord_lon = ""
+  try:
+    coord_lat_other,coord_lon_other = request.GET.get('other').strip().split(' ')
+  except:
+    coord_lat_other = ""
+    coord_lon_other = ""
+  
+  with ix.searcher(closereader=False) as searcher:
+    parser = MultifieldParser(["code","code_trans"], ix.schema)
+
+    code, code_trans = (id+'-0').split('-')[:2]
+    query = "code:"+ code +" code_trans:" + code_trans
+    myquery = parser.parse(query)
+    result = searcher.search(myquery)[0]
+    trans_wgs = "" 
+    trans_other = ""
+    from osgeo import gdal, osr, ogr
+    ref = osr.SpatialReference()
+
+    ref.ImportFromWkt(result['wkt'].encode('utf-8'))
+
+    wgs = osr.SpatialReference()
+    wgs.ImportFromEPSG(4326)
+    if coord_lat:
+      xform = osr.CoordinateTransformation(wgs, ref)
+      trans_wgs = xform.TransformPoint(float(coord_lat), float(coord_lon))
+    elif coord_lat_other:
+      xform = osr.CoordinateTransformation(ref, wgs)
+      trans_other = xform.TransformPoint(float(coord_lat_other), float(coord_lon_other))
+      
+  
+  return template ('coordinates', trans_wgs=trans_wgs, trans_other=trans_other, result=result,coord_lat=coord_lat,coord_lon=coord_lon,coord_lat_other=coord_lat_other,coord_lon_other=coord_lon_other)
 
 run(host='0.0.0.0', port=82)
   
