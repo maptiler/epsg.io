@@ -8,15 +8,27 @@
 </head>
 
 <body>
-<div id ="searchabout"><a href=/about>About</a> &nbsp; &nbsp; <a href=/>Search</a></div>
+<div id ="mysearchabout"><a href=/about>About</a> &nbsp; &nbsp; <a href=/>Search</a></div>
 <h1>EPSG.io</h1>
 <h2>Coordinate systems for spatial reference worldwide</h2>
 
-</br>
+<form action= "/" method="get">
+  		<div id="mysearchbox"><input type="text" name="q" placeholder="country, code or name of a coordinate system" style="width: 300px" value="{{query}}"/></div>
+		<input type="checkbox" value="0" name="valid" checked> Valid
+		<select name="kind">
+				<option value = "CRS-*"selected>Coordinate reference systems</option>
+		</select>
+	<input type="text" name="page" value = "{{pagenum}}">
+	<input type="text" name="perpage" value = "{{pagelen}}">
+  <input type="submit" value="Submit form">
+</form>
+
 %if status == "1":
-	Found {{num_results}} deprecated records in category {{category}}
+	Found {{num_results}} deprecated records in category {{category}} 
+	, ({{res_facets.runtime}} seconds)
 %else:	
 Found {{num_results}} valid records in category {{category}}
+, ({{elapsed}} seconds)
 %end
 
 <div id="category">
@@ -34,7 +46,6 @@ Results in other categories:
 	</li>	
 %end
 <hr>
-%#only valid(invalid) show number of opposite results
 %for key,value in status_groups.iteritems():
 <li>
 %if key == "f":
