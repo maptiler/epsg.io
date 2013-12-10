@@ -140,13 +140,13 @@ Count of transformations: {{i}}
 %if item['wkt'] and item['bbox'] and trans_coords:
 
 <form action= "/{{item['code']}}-{{item['code_trans']}}/coordinates/" method="get">
-  		<input type="text" name="wgs" placeholder="{{center[0]}} {{center[1]}}" style="width: 200px"/>
-		<input type="submit" value="Submit form">
+  	from WGS84 to {{item['name']}} <input type="text" name="wgs" placeholder="{{center[0]}} {{center[1]}}" style="width: 200px"/>
+		<input type="submit" value="TRANSFORM">
 </form>
 
 <form action= "/{{item['code']}}-{{item['code_trans']}}/coordinates/" method="get">
-  		<input type="text" name="other" placeholder="{{trans_coords[0]}} {{trans_coords[1]}}" style="width: 200px"/>
-		<input type="submit" value="Submit form">
+  	from {{item['name']}} to WGS84 <input type="text" name="other" placeholder="{{trans_coords[0]}} {{trans_coords[1]}}" style="width: 200px"/>
+		<input type="submit" value="TRANSFORM">
 </form>
 %end
 </body>
