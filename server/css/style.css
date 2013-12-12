@@ -3,17 +3,20 @@
   margin-left: auto;
   margin-right: auto;
   border-left-width: 0px;
-   border-bottom-width: 2px; 
-   border-right-width: 0px; 
-   border-top-width: 2px; 
-   width: 40%; 
-   border-style: solid;
-   font-size: 11px;
-   margin-bottom: 10px;
-   margin-top: 10px;
-   padding: 10px;
-   background: #9BCDFF;}
-  
+  border-bottom-width: 2px; 
+  border-right-width: 0px; 
+  border-top-width: 2px; 
+  width: 35%; 
+  border-style: solid;
+  font-size: 11px;
+  margin-bottom: 1px;
+  margin-top: 10px;
+  padding: 10px;
+  background: #9BCDFF;}
+
+#search{
+  position:relative; left:45%;}
+
 #image{
 width:235px; height:190px;
 display: block;
@@ -30,7 +33,14 @@ color:orange;
 text-align:center;
 font-size:40px;
 }
-#topic{color:green;
+h2{
+  text-align:center;
+  
+}
+#topic{
+  margin-left: auto;
+  margin-right: auto;
+  color:green;
   text-align:center;
   font-size:30px;
   font-weight:bold;
