@@ -14,44 +14,35 @@
 
 <form action= "/" method="get">
   		<div id="mysearchbox"><input type="text" name="q" placeholder="country, code or name of a coordinate system" style="width: 300px" value="{{query}}"/></div>
-
-	<input type="text" name="page" value = "{{pagenum}}">
-  <input type="submit" value="Submit form">
+  <input type="submit" value="SEARCH">
 </form>
 
 
 %if deprecated == 1:
-	Found {{num_results}} deprecated records in {{kind}}, ({{res_facets.runtime}} seconds)
+	Found {{num_results}} deprecated records in , ({{res_facets.runtime}} seconds)
 %else:	
-Found {{num_results}} valid records in {{kind}}, ({{elapsed}} seconds)
+Found {{num_results}} valid records in , ({{elapsed}} seconds)
 %end
 
 
 <div id="category">
 Results in other categories:
 <ul>
-%for key,value in sorted(groups.iteritems()):	
-	<li>
-	%if deprecated == 0:
-		<a href="/?q={{url_only_query}} deprecated:0 kind:{{key}}" >{{key}}</a> : 
-		 {{value}}
-
-	%elif deprecated == 1:
-		<a href="/?q={{url_only_query}} deprecated:1 kind:{{key}}" >{{key}}</a> : {{value}}
-	%end
-	</li>	
+%for i in range(0,24):
+%if facets_list[i][3] != 0:
+	<li><a href="{{facets_list[i][4]}}">{{!facets_list[i][2]}}</a> : {{facets_list[i][3]}}</li>
 %end
+%end
+
 <hr>
 
 %for key,value in status_groups.iteritems():
 <li>
-%if key == "t":
-	<a href="/?q={{url_only_query}} deprecated:0 kind:{{kind}}">Show valid</a> : {{value}}
+%if key == "f":
+	<a href="{{url_facet_statquery}}">Show valid</a> : {{value}}</li>
 	
-%elif key == "f":
-	<a href="/?q={{url_only_query}} deprecated:1 kind:{{kind}}">Show deprecated</a> : {{value}}
-
-</li>
+%elif key == "t":
+	<a href="{{url_facet_statquery}}">Show deprecated</a> : {{value}}</li>
 
 %end
 </ul>
@@ -87,5 +78,33 @@ Results in other categories:
 </br>
 </br>	
 %end
+
+
+
+%if pagemax<=10:
+		%for i in range(1,pagemax+1):
+		<a href="/?q={{query}}&page={{i}}">{{i}}</a>
+		%end
+%else:
+	%if pagenum<=5:
+		%for i in range(1,11):
+		<a href="/?q={{query}}&page={{i}}">{{i}}</a>
+		%end
+	%elif int(pagemax)>int(pagenum)+5:
+		%for i in range(int(pagenum)-5,int(pagenum)+6):
+			<a href="/?q={{query}}&page={{i}}">{{i}}</a>
+		%end
+	%elif int(pagemax)<=int(pagenum)+5:
+		%for i in range(int(pagenum)-5,pagemax+1):
+			<a href="/?q={{query}}&page={{i}}">{{i}}</a>
+		%end
+	
+	%end
+%end
+</br>
+</br>
+Total pages: {{pagemax}}
+
+
 </body>
 </html>
