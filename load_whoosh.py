@@ -25,9 +25,9 @@ kind_list = {
   'geographic 2D' : "CRS-GEOGCRS",
   'compound' : "CRS-COMPOUNDCRS",
   'projected' : "CRS-PROJCRS",
-  'angle' : "UNIT-ANGUNIT",
-  'scale' : "UNIT-SCALEUNIT",
-  'length' : "UNIT-LENUNIT",
+  'UNIT-angle' : "UNIT-ANGUNIT",
+  'UNIT-scale' : "UNIT-SCALEUNIT",
+  'UNIT-length' : "UNIT-LENUNIT",
   'DATUM-vertical' : "DATUM-VERTDAT",
   'DATUM-engineering' : "DATUM-ENGDAT",
   'DATUM-geodetic' : "DATUM-GEODDAT",
@@ -35,10 +35,10 @@ kind_list = {
   'PRIMEM' : "PRIMEM",
   'METHOD' : "METHOD",
   'CS' : "CS",
-  'CoordSys-vertical' : "CS-VERTCS",
-  'CoordSys-spherical' : "CS-SPHERCS",
-	'CoordSys-Cartesian' : "CS-CARTESCS",
-	'CoordSys-ellipsoidal':"CS-ELLIPCS",
+  'CS-vertical' : "CS-VERTCS",
+  'CS-spherical' : "CS-SPHERCS",
+	'CS-Cartesian' : "CS-CARTESCS",
+	'CS-ellipsoidal':"CS-ELLIPCS",
   'AXIS' : "AXIS",
   'AREA' : "AREA"
 }
@@ -208,7 +208,7 @@ for code, name, scope, remarks, information_source, revision_date,datum_code, ar
   op_code_original = 0
   op_code_trans = {}
   towgs84_original = ref.GetTOWGS84()
-  
+  transformations = []
   if len(towgs84) != 0:
     for op_code, op_accuracy,coord_op_type, opdeprecated, coord_op_scope, remarks, information_source, revision_date,uom_code, coord_op_method_code, area, area_north_bound_lat, area_west_bound_lon, area_south_bound_lat, area_east_bound_lon in towgs84:
       cur.execute('SELECT parameter_value, param_value_file_ref FROM epsg_coordoperationparamvalue WHERE coord_op_code = %s', (op_code, ))
@@ -229,7 +229,7 @@ for code, name, scope, remarks, information_source, revision_date,datum_code, ar
         op_code_original = op_code
         #print "ORIGINAL",code, op_code_original
 
-          
+      transformations.append(op_code)
           
     for op_code, op_accuracy, coord_op_type, opdeprecated, coord_op_scope, remarks, information_source, revision_date,uom_code,coord_op_method_code, area, area_north_bound_lat, area_west_bound_lon, area_south_bound_lat, area_east_bound_lon in towgs84:
       popularity_accuracy = 0.0
@@ -248,18 +248,14 @@ for code, name, scope, remarks, information_source, revision_date,datum_code, ar
       if (values != (0,0,0,0,0,0,0) and type(values) == tuple):
         ref.SetTOWGS84(*values)
       elif type(values) == str:
-        print "nadgrids", op_code
         pass
         # TODO: NADGRIDS: WKT PROJ EXTENSION[] with +nadgrids http://www.spatialreference.org/ref/sr-org/6/prettywkt/
         # read by ref.GetAttrValue('EXTENSION',1)
       else:
         popularity_trans = 0.0
 
-      if op_code == op_code_original:
-        #doc['code'] = code
-        doc['wkt'] = text
-        popularity_trans = 3.0
-        doc['primary'] = 1
+
+      """
       else:
         doc['wkt'] = ref.ExportToWkt().decode('utf-8')
         # doc['scope'] = coord_op_scope
@@ -268,7 +264,7 @@ for code, name, scope, remarks, information_source, revision_date,datum_code, ar
         
         # doc['information_source'] = information_source
         # doc['revision_date'] = revision_date
-      
+      """
       doc['method'] = u""
       cur.execute('SELECT coord_op_method_code,coord_op_method_name FROM epsg_coordoperationmethod WHERE coord_op_method_code = %s', (coord_op_method_code,))
       for method_code, method_name in cur.fetchall():
@@ -295,9 +291,15 @@ for code, name, scope, remarks, information_source, revision_date,datum_code, ar
       doc['bbox'] = bbox
       doc['tgrams'] = area.lower() 
       # WRITE INTO WHOOSH!
-      with ix.writer() as writer:
-        writer.add_document(**doc)
       
+      if op_code == op_code_original:
+        #doc['code'] = code
+        doc['wkt'] = text
+        popularity_trans = 3.0
+        doc['primary'] = 1
+        doc['children_code'] = transformations
+        with ix.writer() as writer:
+          writer.add_document(**doc)
   else:
     #print code, "without transformation"
     with ix.writer() as writer:
@@ -738,10 +740,8 @@ for code, name, kind, target_uom, remarks, information_source, data_source, revi
   cur.execute('SELECT alias, alias_code FROM epsg_alias WHERE object_table_name = %s and object_code = %s', ("epsg_unitofmeasure", code, ))
   for alt_name, alias_code in cur.fetchall():
     pass
-    kind = kind_list[u"CS-"+kind]
+  kind = kind_list[u"UNIT-"+kind].decode('utf-8')
   
-  if kind_list.has_key(kind):
-    kind = kind_list[kind].decode('utf-8')
   doc = {
     'code': code + u"-units",
     'code_trans' : 0,
