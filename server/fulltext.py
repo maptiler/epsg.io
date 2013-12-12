@@ -4,24 +4,31 @@
 """
 INDEX = "../index"
 
-ALL_TYPES = {
-  'CRS-VERTCRS' : "CRS-VERTCRS",
-  'CRS-GCENCRS' : "CRS-GCENCRS",
-  'CRS-ENGCRS' : "CRS-ENGCRS",
-  'CRS-GEOG3DCRS' : "CRS-GEOG3DCRS",
-  'CRS-GEOGCRS' : "CRS-GEOGCRS",
-  'CRS-COMPOUNDCRS' : "CRS-COMPOUNDCRS",
-  'CRS-PROJCRS' : "CRS-PROJCRS",
-  'UNIT-ANGUNIT' : "UNIT-ANGUNIT",
-  'UNIT-SCALEUNI' : "UNIT-SCALEUNIT",
-  'UNIT-LENUNIT' : "UNIT-LENUNIT",
-  'DATUM' : "DATUM",
-  'ELLIPSOID' : "ELLIPSOID",
-  'PRIMEM' : "PRIMEM",
-  'METHOD' : "METHOD",
-  'CS' : "CS",
-  'AXIS' : "AXIS",
-  'AREA' : "AREA"
+facets_index = {'CRS' :0,
+  'CRS-PROJCRS':1,
+  'CRS-GEOGCRS':2,
+  'CRS-GCENCRS':3,
+  'CRS-VERTCRS':4,
+  'CRS-ENGCRS':5,
+  'CRS-COMPOUNDCRS':6,
+  'DATUM':7,
+  'DATUM-VERTDAT':8,
+  'DATUM-ENGDAT':9,
+  'DATUM-GEODDAT':10,
+  'ELLIPSOID':11,
+  'PRIMEM':12,
+  'METHOD':13,
+  'CS':14,
+  'CS-VERTCS':15,
+  'CS-SPHERCS':16,
+  'CS-CARTESCS':17,
+  'CS-ELLIPCS':18,
+  'AXIS':19,
+  'AREA':20,
+  'UNIT':21,
+  'UNIT-ANGUNIT':22,
+  'UNIT-SCALEUNIT':23,
+  'UNIT-LENUNIT':24
 }
 facets_list = [
   ['CRS','CRS','Coordinate reference systems',0,'http://'],
@@ -50,11 +57,12 @@ facets_list = [
   ['UNIT-SCALEUNIT','SCALEUNIT','&nbsp; &nbsp; Scale',0,'http://'],
   ['UNIT-LENUNIT','LENUNIT','&nbsp; &nbsp; Length',0,'http://'],
 ]
+
 # Index to the facets_list above - manual update on change!
 f_crs_index = 0
-f_datum_index = 6
-f_cs_index = 13
-f_unit_index = 20
+f_datum_index = 7
+f_cs_index = 14
+f_unit_index = 21
 
 from bottle import route, run, template, request, response,static_file
 import urllib2
@@ -106,7 +114,7 @@ def getQueryParam(q, param):
 
 def getVerboseQuery(q):
   verboseq = setQueryParam(q, 'deprecated', getQueryParam(q,'deprecated'), True)
-  verboseq = setQueryParam(q, 'kind', getQueryParam(q,'kind'), True)
+  verboseq = setQueryParam(verboseq, 'kind', getQueryParam(verboseq,'kind'), True)
   return verboseq
 
 def setQueryParam(q, param, value='', verbose=False):
@@ -171,7 +179,7 @@ def area_to_url(area):
 
 @route('/',method="GET")
 def index():
-  
+
   # Front page without parameters
   if (len(request.GET.keys()) == 0):
     print len(request.GET.keys())
@@ -192,7 +200,7 @@ def index():
     parser = MultifieldParser(["tgrams","code","name","trans","code_trans","kind","area","alt_name","wkt"], ix.schema) #,"wkt"
     query = request.GET.get('q') # p43 - 1.9 The default query language
     pagenum = int(request.GET.get("page",1))
-
+    print pagenum
     kind = getQueryParam(query, 'kind')
     deprecated = getQueryParam(query, 'deprecated')
     
@@ -211,29 +219,34 @@ def index():
 
     catquery = setQueryParam(query,'kind','*')
     #print catquery, 'catquery'
-    
     myquery = parser.parse(getVerboseQuery(query))
     mycatquery = parser.parse(getVerboseQuery(catquery))
     mystatquery = parser.parse(getVerboseQuery(statquery))
     #print mystatquery
     #facets = sorting.Facets()
-    #facets.add_field("kind",maptype=sorting.Count)
-    #facets.add_field("deprecated",maptype=sorting.Count)
-    
+    #facets.add_field("kind",maptype=sorting.Count)#,allow_overlap=False
+    #facets.add_field("deprecated",maptype=sorting.Count)#,allow_overlap=False
+
     start = time.clock()
 #####    # first method for all 2.2s
-    res_facets = searcher.search(mycatquery , limit = 1, groupedby="kind",scored=False,sortedby=None,maptype=sorting.Count)   # ,limit = 50
-    res_facetss = searcher.search(mystatquery , limit = 1, groupedby="deprecated",scored=False,sortedby=None,maptype=sorting.Count)   # ,limit = 50  
-
+    res_facets = searcher.search(mycatquery , groupedby='kind',scored=False,sortedby=None,maptype=sorting.Count)   # ,limit = 50
+    res_facetss = searcher.search(mystatquery , groupedby="deprecated",scored=False,sortedby=None,maptype=sorting.Count)   # ,limit = 50  
+    elapsed = (time.clock() - start)
+    print elapsed , 'facets'
 #### results of documents
-    pagelen = 10
-    results = searcher.search_page(myquery, pagenum, pagelen)
+    start = time.clock()
+    
+    pagelen =10 
+    #results = searcher.search_page(myquery, pagenum, pagelen, terms=True)
+    results = searcher.search(myquery, limit = None) #(pagenum*pagelen)
+    elapsed = (time.clock() - start)
+    print elapsed, "results"
+
     
     
     groups = res_facets.groups("kind")
     status_groups = res_facetss.groups("deprecated")
-    print status_groups, 'status_groups'
-    num_results = len(results) #results.estimated_length()
+    #num_results = len(results) #results.estimated_length()
     
     for r in results: #[:20]
       if r['primary'] == 0 and r['code_trans'] !=0:
@@ -244,61 +257,72 @@ def index():
 
       
       result.append({'r':r, 'link':link})
-    elapsed = (time.clock() - start)
-    
+
     # TODO REPLACE with verbose
     #statquery = setQueryParam(statquery, ' kind', getQueryParam(query,'kind'),True)  
     #print statquery,'statquery3'      
-
+    
     # set all to zero
     for i in range(0,len(facets_list)):
       facets_list[i][3] = 0
-    
+      
     query_kind_index = None
     # update facets counters
+    
     for key,value in groups.iteritems():
-      # num_results
-      if kind == facets_list[i][1]:
-
-        query_kind_index = i
+        
       # standard kinds
       for i in range(0,len(facets_list)):
         if facets_list[i][0] == key:
           facets_list[i][3] = int(value)
           catquery = setQueryParam(catquery, 'kind', facets_list[i][1])
           facets_list[i][4] = "/?q=" + urllib2.quote(catquery)
+          # num_results
+          if kind == facets_list[i][1]:
+            query_kind_index = i
+
       # sum kinds
       if key.startswith('CRS-'):
         facets_list[f_crs_index][3] += int(value)
         catquery = setQueryParam(catquery, 'kind', facets_list[f_crs_index][1])
         facets_list[f_crs_index][4] = "/?q=" + urllib2.quote(catquery)
+        #query_kind_index = f_crs_index
       if key.startswith('DATUM-'):
         facets_list[f_datum_index][3] += int(value)
         catquery = setQueryParam(catquery, 'kind', facets_list[f_datum_index][1])
         facets_list[f_datum_index][4] = "/?q=" + urllib2.quote(catquery)
+        #query_kind_index = f_datum_index
+        
       if key.startswith('CS-'):
         facets_list[f_cs_index][3] += int(value)
         catquery = setQueryParam(catquery, 'kind', facets_list[f_cs_index][1])
         facets_list[f_cs_index][4] = "/?q=" + urllib2.quote(catquery)
+        #query_kind_index = f_cs_index
+        
       if key.startswith('UNIT-'):
         facets_list[f_unit_index][3] += int(value)
         catquery = setQueryParam(catquery, 'kind', facets_list[f_unit_index][1])
         facets_list[f_unit_index][4] = "/?q=" + urllib2.quote(catquery)
-      
+        #query_kind_index = f_unit_index
+        
+            
+
 
 
       
     # num_results update by kind for all records from facet
+    num_results = 0
+    print query_kind_index
     try:
       num_results = facets_list[query_kind_index][3]
     except: # unknown kind: in query
       pass
+      print 'neni query_kind_index'
     query = setQueryParam(query,'kind',kind)
     query = setQueryParam(query,'deprecated',deprecated)
     
     pagemax = round((num_results/10.0) + 0.5)
-    
-    
+
     
     
   return template('results',result=result,facets_list=facets_list,res_facets=res_facets, groups = groups, num_results=num_results, url_facet_statquery=url_facet_statquery, status_groups=status_groups, query=query, pagenum=int(pagenum),elapsed=elapsed,deprecated=deprecated,kind=kind,pagemax=int(pagemax))
@@ -361,8 +385,9 @@ def index(id):
         'trans_remarks':r['trans_remarks'],
         'default':default})
       num_results = len(trans)
-    
+      print r['code_trans'], r['deprecated']
     #print item
+    print item['code_trans'],item['deprecated']
     
     url_method = "/?q=" + urllib.quote_plus((item['method']+ ' kind:METHOD').encode('utf-8'))
     title = item['kind'] + ":" + item['code']
