@@ -17,17 +17,30 @@ from pprint import pprint
 from whoosh import fields, columns
 from whoosh.analysis import StemmingAnalyzer
 
-KEYWORD = {
-  'vertical' : "VERTCRS",
-  'geocentric' : "GCENCRS",
-  'engineering' : "ENGCRS",
-  'geographic 3D' : "GEOG3DCRS",
-  'geographic 2D' : "GEOGCRS",
-  'compound' : "COMPOUNDCRS",
-  'projected' : "PROJCRS",
-  'angle' : "ANGUNIT",
-  'scale' : "SCALEUNIT",
-  'length' : "LENUNIT"
+kind_list = {
+  'vertical' : "CRS-VERTCRS",
+  'geocentric' : "CRS-GCENCRS",
+  'engineering' : "CRS-ENGCRS",
+  'geographic 3D' : "CRS-GEOG3DCRS",
+  'geographic 2D' : "CRS-GEOGCRS",
+  'compound' : "CRS-COMPOUNDCRS",
+  'projected' : "CRS-PROJCRS",
+  'angle' : "UNIT-ANGUNIT",
+  'scale' : "UNIT-SCALEUNIT",
+  'length' : "UNIT-LENUNIT",
+  'DATUM-vertical' : "DATUM-VERTDAT",
+  'DATUM-engineering' : "DATUM-ENGDAT",
+  'DATUM-geodetic' : "DATUM-GEODDAT",
+  'ELLIPSOID' : "ELLIPSOID",
+  'PRIMEM' : "PRIMEM",
+  'METHOD' : "METHOD",
+  'CS' : "CS",
+  'CoordSys-vertical' : "CS-VERTCS",
+  'CoordSys-spherical' : "CS-SPHERCS",
+	'CoordSys-Cartesian' : "CS-CARTESCS",
+	'CoordSys-ellipsoidal':"CS-ELLIPCS",
+  'AXIS' : "AXIS",
+  'AREA' : "AREA"
 }
 ###############################################################################
 print "INICIALIZING"
@@ -111,8 +124,8 @@ ix = create_in(INDEX, EPSGSchema)
 print " - SELECT EPSG FROM COORDINATE REFERENCE SYSTEM AND TRANSFORMATION"
 ###############################################################################
 
-cur.execute('SELECT coord_ref_sys_code, coord_ref_sys_name,crs_scope, remarks, information_source, revision_date, datum_code, area_of_use_code,coord_ref_sys_kind,deprecated,source_geogcrs_code,data_source,coord_sys_code  FROM epsg_coordinatereferencesystem WHERE coord_ref_sys_code > 5513 and coord_ref_sys_code < 5600 or coord_ref_sys_code = 4156 ') # WHERE coord_ref_sys_code > 5513 and coord_ref_sys_code < 5600'
-for code, name, scope, remarks, information_source, revision_date,datum_ref_sys_code, area_code, coord_ref_sys_kind, deprecated, source_geogcrs_code,data_source,coord_sys_code in cur.fetchall():
+cur.execute('SELECT coord_ref_sys_code, coord_ref_sys_name,crs_scope, remarks, information_source, revision_date, datum_code, area_of_use_code,coord_ref_sys_kind,deprecated,source_geogcrs_code,data_source,coord_sys_code  FROM epsg_coordinatereferencesystem') #  WHERE coord_ref_sys_code > 5513 and coord_ref_sys_code < 5600 or coord_ref_sys_code = 4156  #WHERE coord_ref_sys_code > 5513 and coord_ref_sys_code < 5600'
+for code, name, scope, remarks, information_source, revision_date,datum_code, area_code, coord_ref_sys_kind, deprecated, source_geogcrs_code,data_source,coord_sys_code in cur.fetchall():
   
   try:
     name = name.encode('LATIN1').decode('utf-8')
@@ -137,7 +150,6 @@ for code, name, scope, remarks, information_source, revision_date,datum_ref_sys_
   for alt_name, object_code in cur.fetchall():
     pass
   
-  datum_code = 0
   # Get Datum code from source geogcs
   cur.execute('SELECT source_geogcrs_code, datum_code FROM epsg_coordinatereferencesystem WHERE coord_ref_sys_code = %s', (source_geogcrs_code,))
   for source_geogcrs, datum_code in cur.fetchall():
@@ -147,15 +159,14 @@ for code, name, scope, remarks, information_source, revision_date,datum_ref_sys_
   deprecated = int(deprecated)
   code = str(code).decode('utf-8')
   
-  if KEYWORD.has_key(coord_ref_sys_kind):
-    kind = KEYWORD[coord_ref_sys_kind]
-  
+  if kind_list.has_key(coord_ref_sys_kind):
+    kind = kind_list[coord_ref_sys_kind].decode('utf-8')
   doc = {
     'code': code,
     'code_trans' : 0,
     'name': name,
     'alt_name' : alt_name,
-    'kind': u"CRS-" + kind,
+    'kind': kind,
     'area': area,
     'deprecated': deprecated,
     'popularity': popularity,
@@ -188,7 +199,7 @@ for code, name, scope, remarks, information_source, revision_date,datum_ref_sys_
     'order' : u"",
     'description':u"",
     'primary' : 0,
-    'tgrams':str(code.lower())+" "+name.lower()+" "+area.lower()
+    'tgrams':name.lower()+" "+area.lower()
     }  
 
 # transofrmation to wgs84
@@ -282,6 +293,7 @@ for code, name, scope, remarks, information_source, revision_date,datum_ref_sys_
       doc['trans'] = trans
       doc['deprecated'] = int(deprecated or opdeprecated)
       doc['bbox'] = bbox
+      doc['tgrams'] = area.lower() 
       # WRITE INTO WHOOSH!
       with ix.writer() as writer:
         writer.add_document(**doc)
@@ -298,6 +310,8 @@ prime_meridian_code = 0
 cur.execute('SELECT datum_code, datum_name, datum_type, ellipsoid_code, area_of_use_code, datum_scope, remarks, information_source, revision_date, data_source, deprecated, prime_meridian_code  FROM epsg_datum') #  LIMIT 10
 for code, name, kind, ellipsoid_code, area_code,scope,remarks,information_source,revision_date,data_source, deprecated, prime_meridian_code in cur.fetchall():
   code = str(code)
+    
+  kind = kind_list[u"DATUM-"+kind].decode('utf-8')
   
   #if not prime_meridian_code:
   #  prime_meridian_code = 0
@@ -318,7 +332,7 @@ for code, name, kind, ellipsoid_code, area_code,scope,remarks,information_source
           'code_trans' : 0,
           'name': name,
           'alt_name' : alt_name,
-          'kind': u"DATUM",
+          'kind': kind,
           'area': area,
           'deprecated': deprecated,
           'popularity': 1.0,
@@ -349,7 +363,7 @@ for code, name, kind, ellipsoid_code, area_code,scope,remarks,information_source
           'order' : u"",
           'description':u"",
           'primary' : 1,
-          'tgrams':name
+          'tgrams': name.lower() 
           
           
           
@@ -413,7 +427,7 @@ for code, name, uom_code,remarks,information_source,revision_date,data_source, d
     'order' : u"",
     'description':u"",
     'primary' : 1,
-    'tgrams':name    
+    'tgrams': name.lower()     
     }
     
   with ix.writer() as writer:
@@ -467,7 +481,7 @@ for code, name, greenwich_longitude, uom_code,remarks,information_source,revisio
     'order' : u"",
     'description':u"",
     'primary' : 1,
-    'tgrams':name      
+    'tgrams': name.lower()       
     
     
 
@@ -527,7 +541,7 @@ for code, name, reverse, remarks, information_source, revision_date, data_source
     'order' : u"",
     'description':u"",
     'primary' : 1,
-    'tgrams':name      
+    'tgrams': name.lower()       
     
     
 
@@ -546,6 +560,11 @@ for code, name, kind, remarks, information_source, revision_date, data_source, d
   cur.execute('SELECT coord_axis_code,coord_axis_name_code FROM epsg_coordinateaxis WHERE coord_sys_code = %s', (code,))
   for axis_codes,axis_name in cur.fetchall():
     axis_code.append(axis_codes)
+  
+  kind = kind_list["CS-"+kind].decode('utf-8')
+  
+  
+  
   doc = {
     'code': code + u"-coordsys",
     'code_trans' : 0,
@@ -567,7 +586,7 @@ for code, name, kind, remarks, information_source, revision_date, data_source, d
     'uom_code' : 0,
     'uom' : u"",
     'target_uom': u"",
-    'kind': u"CS",
+    'kind': kind,
     'popularity': 1.0,
     'children_code' : axis_code,
     'data_source' : data_source,
@@ -582,7 +601,7 @@ for code, name, kind, remarks, information_source, revision_date, data_source, d
     'order' : u"",
     'description':u"",
     'primary' : 1,
-    'tgrams':name      
+    'tgrams': name.lower()       
 
     }
     
@@ -636,7 +655,7 @@ for code, sys_code, orientation, abbreviation, uom_code, order, axis_name, descr
     'order' : order,
     'description': description,
     'primary' : 1,
-    'tgrams':name      
+    'tgrams': name.lower()       
     
 
     }
@@ -652,7 +671,7 @@ for code, sys_code, orientation, abbreviation, uom_code, order, axis_name, descr
 print " - SELECT EPSG FROM AREA"
 ###############################################################################
 
-cur.execute('SELECT area_code, area_name, area_of_use, area_south_bound_lat, area_north_bound_lat, area_west_bound_lon, area_east_bound_lon, area_polygon_file_ref, remarks,information_source,data_source,revision_date,deprecated FROM epsg_area LIMIT 10') # LIMIT 10
+cur.execute('SELECT area_code, area_name, area_of_use, area_south_bound_lat, area_north_bound_lat, area_west_bound_lon, area_east_bound_lon, area_polygon_file_ref, remarks,information_source,data_source,revision_date,deprecated FROM epsg_area') # LIMIT 10
 for code, name, area,area_south_bound_lat,area_north_bound_lat,area_west_bound_lon,area_east_bound_lon,area_polygon_file_ref,remarks,information_source,data_source,revision_date, deprecated in cur.fetchall():
   code = str(code)
   bbox = area_north_bound_lat,area_west_bound_lon,area_south_bound_lat,area_east_bound_lon
@@ -698,7 +717,7 @@ for code, name, area,area_south_bound_lat,area_north_bound_lat,area_west_bound_l
     'order' : u"",
     'description': u"",
     'primary' : 1,
-    'tgrams':name  
+    'tgrams': name.lower()    
     }
 
 
@@ -719,9 +738,10 @@ for code, name, kind, target_uom, remarks, information_source, data_source, revi
   cur.execute('SELECT alias, alias_code FROM epsg_alias WHERE object_table_name = %s and object_code = %s', ("epsg_unitofmeasure", code, ))
   for alt_name, alias_code in cur.fetchall():
     pass
+    kind = kind_list[u"CS-"+kind]
   
-  if KEYWORD.has_key(kind):
-    kind = KEYWORD[kind]
+  if kind_list.has_key(kind):
+    kind = kind_list[kind].decode('utf-8')
   doc = {
     'code': code + u"-units",
     'code_trans' : 0,
@@ -743,7 +763,7 @@ for code, name, kind, target_uom, remarks, information_source, data_source, revi
     'uom_code' : 0,
     'uom' : u"",
     'target_uom': target_uom,
-    'kind': u"UNIT-" + kind,
+    'kind': kind,
     'popularity': 1.0,
     'children_code' : 0,
     'data_source' : data_source,
@@ -758,7 +778,7 @@ for code, name, kind, target_uom, remarks, information_source, data_source, revi
     'order' : u"",
     'description': u"",
     'primary' : 1,
-    'tgrams':str(code.lower()) +" "+ name.lower()    
+    'tgrams':name.lower()    
     }
     
 
