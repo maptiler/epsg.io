@@ -18,7 +18,7 @@
 <h3>{{item['kind']}}</h3>
 <div id="topic">EPSG:{{item['code']}} {{item['name']}} </div>
 </br>
-%if trans:
+%if default_trans:
 	<b>Transformation</b>
 %end
 
@@ -65,14 +65,14 @@
 </br>
 Count of transformations: {{i}}
 </br>
-	<b>Information about transformation: {{item['code_trans']}}</b>
+	<b>Information about transformation: {{default_trans['code']}}</b>
 
-	<li>Method: <a href="{{url_method}}">{{item['method']}}</a></li>
-	<li>Remarks: {{item['trans_remarks']}}</li>
-	<li>Area of use: <a href="{{url_area_trans}}">{{item['area_trans']}}</a></li>
+	<li>Method: <a href="{{url_method}}">{{default_trans['method']}}</a></li>
+	<li>Remarks: {{default_trans['remarks']}}</li>
+	<li>Area of use: <a href="{{url_area_trans}}">{{default_trans['area']}}</a></li>
 
 	%if item['concatop']:
-	<li>steps of transformation : {{item['concatop'][0]}}</li>
+	<li>steps of transformation : {{default_trans['concatop'][0]}}</li>
 	%end
 %end
 
@@ -86,23 +86,23 @@ Count of transformations: {{i}}
 <li>Remarks: {{item['remarks']}}</li>
 <li>Information source: {{item['information_source']}}</li>
 <li>Revision date: {{item['revision_date']}}</li>
-%if "children_code" in item:
-	%if item['children_code']:
-		<li>Coordinate system: <a href="/{{item['children_code']}}-coordsys/">{{item['children_code']}}</a></li>
-	%end
-%end
+
+
+
 %if 'source_geogcrs' in item:
 %if item['source_geogcrs']:
  	<li>Geodetic coordinate reference system: <a href="/{{item['source_geogcrs']}}/">{{item['source_geogcrs']}}</a></li>
 
 %end
 %end
-%if item['datum_code'] != 0 :
-	<li>Datum: <a href="/{{item['datum_code']}}-datum/">{{item['datum_code']}}-datum</a></li>
+%if 'datum_code' in item:
+	%if item['datum_code'] != 0 :
+		<li>Datum: <a href="/{{item['datum_code']}}-datum/">{{item['datum_code']}}-datum</a></li>
+	%end
 %end
-<div id="formats">
-%if item['wkt']:
 
+%if wkt:
+<div id="formats">
 
 	<li><a href="{{url_format}}/prettywkt">PrettyWKT</a></li>
 	<li><a href="{{url_format}}/html">Human-readable PrettyWKT</a></li>
@@ -139,12 +139,12 @@ Count of transformations: {{i}}
 
 %if item['wkt'] and item['bbox'] and trans_coords:
 
-<form action= "/{{item['code']}}-{{item['code_trans']}}/coordinates/" method="get">
+<form action= "/{{item['code']}}-{{default_trans['code']}}/coordinates/" method="get">
   	from WGS84 to {{item['name']}} <input type="text" name="wgs" placeholder="{{center[0]}} {{center[1]}}" style="width: 200px"/>
 		<input type="submit" value="TRANSFORM">
 </form>
 
-<form action= "/{{item['code']}}-{{item['code_trans']}}/coordinates/" method="get">
+<form action= "/{{item['code']}}-{{default_trans['code']}}/coordinates/" method="get">
   	from {{item['name']}} to WGS84 <input type="text" name="other" placeholder="{{trans_coords[0]}} {{trans_coords[1]}}" style="width: 200px"/>
 		<input type="submit" value="TRANSFORM">
 </form>
