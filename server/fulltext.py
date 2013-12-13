@@ -3,7 +3,7 @@
 """
 """
 INDEX = "../index"
-
+"""
 facets_index = {'CRS' :0,
   'CRS-PROJCRS':1,
   'CRS-GEOGCRS':2,
@@ -30,6 +30,7 @@ facets_index = {'CRS' :0,
   'UNIT-SCALEUNIT':23,
   'UNIT-LENUNIT':24
 }
+"""
 facets_list = [
   ['CRS','CRS','Coordinate reference systems',0,'http://'],
   ['CRS-PROJCRS','PROJCRS','&nbsp; &nbsp; Projected',0,'http://'],
@@ -37,7 +38,11 @@ facets_list = [
   ['CRS-GCENCRS','GCENCRS','&nbsp; &nbsp; Geocentric',0,'http://'],
   ['CRS-VERTCRS','VERTCRS','&nbsp; &nbsp; Vertical',0,'http://'],
   ['CRS-ENGCRS','ENGCRS','&nbsp; &nbsp; Engineering',0,'http://'],
-  ['CRS-COMPOUNDCRS','COMPOUNDCRS','&nbsp; &nbsp; Compound',0,'http://'],
+  ['CRS-COMPOUNDCRS','COMPOUNDCRS','&nbsp; &nbsp; Compound',0,'http://'], 
+  ['COORDOP','COORDOP','Operation',0,'http://'],
+  ['COORDOP-COPTRANS','COPTRANS','&nbsp; &nbsp; Transformation',0,'http://'],
+  ['COORDOP-COPCONOP','COPCONOP','&nbsp; &nbsp; Compound',0,'http://'],
+  ['COORDOP-COPCON','COPCON','&nbsp; &nbsp; Conversion',0,'http://'],
   ['DATUM','DATUM','Datum',0,'http://'],
   ['DATUM-VERTDAT','VERTDAT','&nbsp; &nbsp; Vertical',0,'http://'],
   ['DATUM-ENGDAT','ENGDAT','&nbsp; &nbsp; Engineering',0,'http://'],
@@ -60,9 +65,10 @@ facets_list = [
 
 # Index to the facets_list above - manual update on change!
 f_crs_index = 0
-f_datum_index = 7
-f_cs_index = 14
-f_unit_index = 21
+f_op_index = 7
+f_datum_index = 11
+f_cs_index = 18
+f_unit_index = 25
 
 from bottle import route, run, template, request, response,static_file
 import urllib2
@@ -236,7 +242,7 @@ def index():
 #### results of documents
     start = time.clock()
     
-    pagelen =10 
+    
     #results = searcher.search_page(myquery, pagenum, pagelen, terms=True)
     results = searcher.search(myquery, limit = None) #(pagenum*pagelen)
     elapsed = (time.clock() - start)
@@ -246,17 +252,22 @@ def index():
     
     groups = res_facets.groups("kind")
     status_groups = res_facetss.groups("deprecated")
-    #num_results = len(results) #results.estimated_length()
     
-    for r in results: #[:20]
-      if r['primary'] == 0 and r['code_trans'] !=0:
-        link = str(r['code']) + "-" + str(r['code_trans'])
+    pagelen = 10
+    maxdoc = pagelen*pagenum
     
-      elif r['primary'] == 1 or r['code_trans'] == 0:
-        link = str(r['code'])
-
-      
+    for r in results[(maxdoc-pagelen):maxdoc]: #
+      #if r['primary'] == 0 and r['code_trans'] !=0:
+      #  link = str(r['code']) + "-" + str(r['code_trans'])
+  #  
+      #elif r['primary'] == 1 or r['code_trans'] == 0:
+      link = str(r['code'])
+     
       result.append({'r':r, 'link':link})
+    
+    num_results = len(results) #results.estimated_length()
+ 
+    pagemax = round((num_results/10.0) + 0.5)
 
     # TODO REPLACE with verbose
     #statquery = setQueryParam(statquery, ' kind', getQueryParam(query,'kind'),True)  
@@ -304,6 +315,10 @@ def index():
         catquery = setQueryParam(catquery, 'kind', facets_list[f_unit_index][1])
         facets_list[f_unit_index][4] = "/?q=" + urllib2.quote(catquery)
         #query_kind_index = f_unit_index
+      if key.startswith('COORDOP-'):
+        facets_list[f_op_index][3] += int(value)
+        catquery = setQueryParam(catquery, 'kind', facets_list[f_op_index][1])
+        facets_list[f_op_index][4] = "/?q=" + urllib2.quote(catquery)
         
             
 
@@ -311,17 +326,16 @@ def index():
 
       
     # num_results update by kind for all records from facet
-    num_results = 0
-    print query_kind_index
-    try:
-      num_results = facets_list[query_kind_index][3]
-    except: # unknown kind: in query
-      pass
-      print 'neni query_kind_index'
+    #num_results = 0
+    #print query_kind_index
+    #try:
+    #  num_results = facets_list[query_kind_index][3]
+    #except: # unknown kind: in query
+    #  pass
+    #  print 'neni query_kind_index'
     query = setQueryParam(query,'kind',kind)
     query = setQueryParam(query,'deprecated',deprecated)
     
-    pagemax = round((num_results/10.0) + 0.5)
 
     
     
@@ -355,88 +369,132 @@ def index(id):
     
     results = searcher.search(myquery, limit=None) #default limit is 10 , reverse = True
     #print results
-    item = ""
+    item = None
     trans = []
     num_results = 0
-        
+    url_trans = []
+    trans_item = []
+    wkt = None
+    default_trans = ""
+    url_method = ""
+    url_format = ""
+    export = ""
+    url_area_trans = ""
+    url_area = ""
+    g_coords = ""
+    center = 0,0
+    trans_coords = ""
+    """
+    start = time.clock()
+    parser = QueryParser("code_trans", ix.schema) #,"wkt"
+    myquery = parser.parse(code_trans)
+    defulttransform = searcher.search(myquery, limit = 1,scored=False,sortedby=None) #(pagenum*pagelen)
+    elapsed = (time.clock() - start)
+    print elapsed , 'trans'
+    print defulttransform
+    """
+    
     for r in results:
-      #print r
+      item = r
+      title = item['kind'] + ":" + item['code']
+      url_area = area_to_url(item['area'])
+      
+      
+      print r['trans']
       if code_trans == str(0) and r['primary']==1:
         code_trans = r['code_trans']
-     
-      default = False
-      if r['primary']==1: default = True
       
-      if r['code_trans'] == int(code_trans):  
-        item = r
-        link = ""
-        url_format = "/"+code+"-"+str(code_trans)
-        
+      if code_trans != 0:
+        for code_transformation in r['trans']:
+          #query = "code:" + str(code_transformation)
+          parser = MultifieldParser(["code","kind"], ix.schema)
+          query = "code:"+str(code_transformation)
+          myquery = parser.parse(query)
+          transformation = searcher.search(myquery, limit=None)
+          for hit in transformation:
+            trans_item.append(hit)
+            
+            if hit['code'] == int(code_trans):  
+              link = ""
+            else:
+              link = str(r['code']) + u"-" + str(hit['code'])
+            
+            default = False
+            if r['code_trans']== hit['code']: 
+              default = True
+            print default
+            trans.append({
+            'link':link,
+            'code':hit['code'],
+            'deprecated':hit['deprecated'],
+            'area_trans':hit['area'],
+            'accuracy':hit['accuracy'],
+            'code_trans':hit['code'],
+            'trans_remarks':hit['remarks'],
+            'default':default})
+                
+      default_trans = ''
+      for i in range(0,len(trans_item)):
+        if str(code_trans) == str(trans_item[i]['code']):
+          print 'yes'
+          default_trans = trans_item[i] #information about 
+      if trans_item:
+        url_format = "/"+str(item['code'])+"-"+str(default_trans['code'])
       
+        values = default_trans['wkt']
+        num =[]
+        w = re.findall(r'(-?\d+\.?\d*)',values)
+      
+        for n in w:
+          num.append(float(n))
+        values = tuple(num)     
+
+        if int(r['code_trans']) != int(default_trans['code']):
+          if (values != (0,0,0,0,0,0,0) and type(values) == tuple):
+            ref = osr.SpatialReference()
+            ref.ImportFromEPSG(int(r['code']))
+            ref.SetTOWGS84(*values) 
+            wkt = ref.ExportToWkt().decode('utf-8')
+        else: 
+          wkt = r['wkt']
       else:
-        link = str(r['code']) + u"-" + str(r['code_trans'])
-
-      trans.append({
-        'link':link,
-        'deprecated':r['deprecated'],
-        'area_trans':r['area_trans'],
-        'accuracy':r['accuracy'],
-        'code_trans':r['code_trans'],
-        'trans_remarks':r['trans_remarks'],
-        'default':default})
-      num_results = len(trans)
-      print r['code_trans'], r['deprecated']
-    #print item
-    print item['code_trans'],item['deprecated']
-    
-    url_method = "/?q=" + urllib.quote_plus((item['method']+ ' kind:METHOD').encode('utf-8'))
-    title = item['kind'] + ":" + item['code']
-    center = 0,0
-    g_coords = ""
-    #print item['bbox']
-    if item['bbox']:
-        #(51.05, 12.09, 47.74, 22.56)
-      center = ((item['bbox'][0] - item['bbox'][2])/2.0)+item['bbox'][2],((item['bbox'][3] - item['bbox'][1])/2.0)+item['bbox'][1]
-      g_coords = str(item['bbox'][2]) + "," + str(item['bbox'][1]) + "|" + str(item['bbox'][0]) + "," + str(item['bbox'][1]) + "|" + str(item['bbox'][0]) + "," + str(item['bbox'][3]) + "|" + str(item['bbox'][2]) + "," + str(item['bbox'][3]) + "|" + str(item['bbox'][2]) + "," + str(item['bbox'][1])
-      #print center
-      #print item['bbox'][0]
-      #print item['bbox'][2]
-      #print ((item['bbox'][0] - item['bbox'][2])/2.0)+item['bbox'][2]
-      
-     # print item['bbox'][1]
-     # print item['bbox'][3]
-     # print ((item['bbox'][3] - item['bbox'][1])/2.0)+item['bbox'][1]
-    url_area = area_to_url(item['area'])
-    url_area_trans = area_to_url(item['area_trans'])
-    
-    trans_coords = "" 
-    if item['wkt'] != None:
-
-      #print '!!!!%s!!!!' % item['wkt'], type(item['wkt'])
-
-      ref = osr.SpatialReference()
-      #ref.ImportFromEPSG(5513)
-      ref.ImportFromWkt(item['wkt'].encode('utf-8'))
-      #ref.ImportFromEPSG(5514)
-      #ref.SetAuthority("PROJCS","EPSG","5514")
-      #ref.SetFromUserInput(item['wkt'].encode('utf-8'))
-      
-      
-      wgs = osr.SpatialReference()
-      wgs.ImportFromEPSG(4326)
-     # print ref, type(ref)
-      xform = osr.CoordinateTransformation(wgs,ref)
-      
-      
-      #print center[0], type(center[0]), center[1], type(center[1])
-      try:
-        trans_coords = xform.TransformPoint(center[0], center[1])
-      except:
-        trans_coords = "" 
+        center = ((item['bbox'][0] - item['bbox'][2])/2.0)+item['bbox'][2],((item['bbox'][3] - item['bbox'][1])/2.0)+item['bbox'][1]
+        g_coords = str(item['bbox'][2]) + "," + str(item['bbox'][1]) + "|" + str(item['bbox'][0]) + "," + str(item['bbox'][1]) + "|" + str(item['bbox'][0]) + "," + str(item['bbox'][3]) + "|" + str(item['bbox'][2]) + "," + str(item['bbox'][3]) + "|" + str(item['bbox'][2]) + "," + str(item['bbox'][1])
         
-      export = highlight(ref.ExportToPrettyWkt(), WKTLexer(), HtmlFormatter(cssclass='syntax',nobackground=True))
+    if wkt:    
+      url_method ="/?q=" + urllib.quote_plus((default_trans['method']+ ' kind:METHOD').encode('utf-8'))
+      center = 0,0
+      g_coords = ""
+      if default_trans['bbox']:
+          #(51.05, 12.09, 47.74, 22.56)
+        center = ((default_trans['bbox'][0] - default_trans['bbox'][2])/2.0)+default_trans['bbox'][2],((default_trans['bbox'][3] - default_trans['bbox'][1])/2.0)+default_trans['bbox'][1]
+        g_coords = str(default_trans['bbox'][2]) + "," + str(default_trans['bbox'][1]) + "|" + str(default_trans['bbox'][0]) + "," + str(default_trans['bbox'][1]) + "|" + str(default_trans['bbox'][0]) + "," + str(default_trans['bbox'][3]) + "|" + str(default_trans['bbox'][2]) + "," + str(default_trans['bbox'][3]) + "|" + str(default_trans['bbox'][2]) + "," + str(default_trans['bbox'][1])
+
+      url_area_trans = area_to_url(default_trans['area'])
+    
+      trans_coords = "" 
+      if wkt != None:
+        ref = osr.SpatialReference()
+        #ref.ImportFromEPSG(5513)
+        ref.ImportFromWkt(wkt.encode('utf-8'))
+        #ref.ImportFromEPSG(5514)
+        #ref.SetAuthority("PROJCS","EPSG","5514")
+        #ref.SetFromUserInput(item['wkt'].encode('utf-8'))
+      
+        wgs = osr.SpatialReference()
+        wgs.ImportFromEPSG(4326)
+        xform = osr.CoordinateTransformation(wgs,ref)
+      
+      
+        #print center[0], type(center[0]), center[1], type(center[1])
+        try:
+          trans_coords = xform.TransformPoint(center[0], center[1])
+        except:
+          trans_coords = "" 
+        
+        export = highlight(ref.ExportToPrettyWkt(), WKTLexer(), HtmlFormatter(cssclass='syntax',nobackground=True))
        
-  return template('detailed', item=item, trans=trans, num_results=num_results, url_method=url_method, title=title, url_format=url_format, export=export, url_area_trans=url_area_trans, url_area=url_area, center=center, g_coords=g_coords,trans_coords=trans_coords )  
+  return template('detailed', item=item, trans=trans,default_trans=default_trans, num_results=num_results, url_method=url_method, title=title, url_format=url_format, export=export, url_area_trans=url_area_trans, url_area=url_area, center=center, g_coords=g_coords, trans_coords=trans_coords,wkt=wkt )  
 
 
 @route('/<id:re:[\d]+(-[\w]+)>/')
@@ -499,19 +557,44 @@ def index(id, format):
   ix = open_dir(INDEX)
   result = []
   export = ""
-
+  from osgeo import gdal, osr, ogr
+  ref = osr.SpatialReference()
   with ix.searcher(closereader=False) as searcher:
-    parser = MultifieldParser(["code","code_trans"], ix.schema)
+    parser = QueryParser("code", ix.schema)
 
     code, code_trans = (id+'-0').split('-')[:2]
-    query = "code:"+ code +" code_trans:" + code_trans
-    myquery = parser.parse(query)
-    result = searcher.search(myquery)[0]
-    type = "EPSG"
     
-    from osgeo import gdal, osr, ogr
-    ref = osr.SpatialReference()
-    ref.ImportFromWkt(result['wkt'])
+    code_query = parser.parse(code)
+    code_result = searcher.search(code_query, sortedby=False,scored=False)
+    
+    trans_query = parser.parse(code_trans)
+    trans_result = searcher.search(trans_query,sortedby=False,scored=False)
+    for t in trans_result:
+      values = t['wkt']
+      tcode = t['code']
+    for r in code_result:
+      code_trans = r['code_trans']
+      rwkt = r['wkt']
+      rcode = r['code']
+
+    w = re.findall(r'(-?\d+\.?\d*)',values)
+    num =[]
+    for n in w:
+      num.append(float(n))
+    values = tuple(num)
+
+    if int(code_trans) != int(tcode):
+      if (values != (0,0,0,0,0,0,0) and type(values) == tuple):
+        ref.ImportFromEPSG(int(rcode))
+        ref.SetTOWGS84(*values) 
+        wkt = ref.ExportToWkt().decode('utf-8')
+    else: 
+      wkt = rwkt
+  
+    
+    
+    
+    ref.ImportFromWkt(wkt)
 
 
     ct = "text/plain" 
@@ -531,7 +614,7 @@ def index(id, format):
       out = ref.ExportToPrettyWkt()
       export = highlight(out, WKTLexer(), HtmlFormatter(cssclass='syntax',nobackground=True))
       response.content_type = 'text/html; charset=UTF-8'
-      return template('export', export = export,code=code)
+      return template('export', export = export, code=rcode)
     elif format == 'gml':
       export = ref.ExportToXML()
       ct = "text/gml" 
@@ -544,8 +627,8 @@ def index(id, format):
       export = '<?xml version="1.0" encoding="utf-8"?>\n<Map srs="%s">\n\t<Layer srs="%s">\n\t</Layer>\n</Map>' % (proj4,proj4)
       ct = "application/xml" 
     elif format == 'mapserverpython':
-      wkt = ref.ExportToWkt()
-      export = "wkt = '''%s'''\nm = mapObj('')\nm.setWKTProjection(wkt)\nlyr = layerObj(m)\nlyr.setWKTProjection(wkt)" % (wkt) #from mapscript import mapObj,layerObj\n
+      mswkt = ref.ExportToWkt()
+      export = "wkt = '''%s'''\nm = mapObj('')\nm.setWKTProjection(wkt)\nlyr = layerObj(m)\nlyr.setWKTProjection(mswkt)" % (mswkt) #from mapscript import mapObj,layerObj\n
     elif format == 'mapnikpython': 
       proj4 = ref.ExportToProj4().strip()
       export = "proj4 = '%s'\nm = Map(256,256,proj4)\nlyr = Layer('Name',proj4)" % (proj4) #from mapnik import Map, Layer\n
@@ -553,7 +636,7 @@ def index(id, format):
       export = "%s=%s" % (code,ref.ExportToWkt()) # put this custom projection in the 'user_projections' file inside the GEOSERVER_DATA_DIR '\n' # You can further work with your projections via the web admin tool.\n
       # we'll assume Geotools has this SRS...
     elif format == 'postgis':                                              
-      export = 'INSERT into spatial_ref_sys (srid, auth_name, auth_srid, proj4text, srtext) values ( %s, \'%s\', %s, \'%s\', \'%s\');' % (code, type, code, ref.ExportToProj4(), ref.ExportToWkt())                                                  
+      export = 'INSERT into spatial_ref_sys (srid, auth_name, auth_srid, proj4text, srtext) values ( %s, \'%s\', %s, \'%s\', \'%s\');' % (rcode, "EPSG", rcode, ref.ExportToProj4(), ref.ExportToWkt())                                                  
     elif format == 'json':
       if ref.IsGeographic():
         code = ref.GetAuthorityCode("GEOGCS")
@@ -567,7 +650,7 @@ def index(id, format):
     elif format == 'prj':
       ref.MorphToESRI()
       export = ref.ExportToWkt()
-      response['Content-disposition'] = "attachment; filename=%s.prj" % code 
+      response['Content-disposition'] = "attachment; filename=%s.prj" % rcode 
     elif format == 'ogcwkt':
       export = ref.ExportToWkt()
   
@@ -612,22 +695,58 @@ def index(id):
     coord_lat_other = None
     coord_lon_other = None
   
+  
   with ix.searcher(closereader=False) as searcher:
-    parser = MultifieldParser(["code","code_trans"], ix.schema)
+    parser = QueryParser("code", ix.schema)
 
     code, code_trans = (id+'-0').split('-')[:2]
-    query = "code:"+ code +" code_trans:" + code_trans
-    myquery = parser.parse(query)
-    result = searcher.search(myquery)[0]
+
+    type = "EPSG"
+
+    code_query = parser.parse(code)
+    code_result = searcher.search(code_query, sortedby=False,scored=False)
+    #print code_result[0]
+    trans_query = parser.parse(code_trans)
+    trans_result = searcher.search(trans_query,sortedby=False,scored=False)
+    
+    for t in trans_result:
+      #print t
+      values = t['wkt']
+      tcode = t['code']
+
+    for r in code_result:
+      code_trans = r['code_trans']
+      rwkt = r['wkt']
+      rcode = r['code']
+      rname = r['name']
+
+    w = re.findall(r'(-?\d+\.?\d*)',values)
+    num =[]
+    for n in w:
+      num.append(float(n))
+    values = tuple(num)     
+
+    if int(code_trans) != int(tcode):
+      if (values != (0,0,0,0,0,0,0) and type(values) == tuple):
+        ref = osr.SpatialReference()
+        ref.ImportFromEPSG(int(rcode))
+        ref.SetTOWGS84(*values) 
+        wkt = ref.ExportToWkt().decode('utf-8')
+    else: 
+      wkt = rwkt
+      
+      
     trans_wgs = "" 
     trans_other = ""
+    
     from osgeo import gdal, osr, ogr
+    
     ref = osr.SpatialReference()
-
-    ref.ImportFromWkt(result['wkt'].encode('utf-8'))
+    ref.ImportFromWkt(wkt.encode('utf-8'))
 
     wgs = osr.SpatialReference()
     wgs.ImportFromEPSG(4326)
+    
     if coord_lat != None:
       xform = osr.CoordinateTransformation(wgs, ref)
       trans_wgs = xform.TransformPoint(coord_lat, coord_lon)
@@ -636,7 +755,7 @@ def index(id):
       trans_other = xform.TransformPoint(coord_lat_other, coord_lon_other)
       
   
-  return template ('coordinates', trans_wgs=trans_wgs, trans_other=trans_other, result=result,coord_lat=coord_lat,coord_lon=coord_lon,coord_lat_other=coord_lat_other,coord_lon_other=coord_lon_other)
+  return template ('coordinates', trans_wgs=trans_wgs, trans_other=trans_other, result=code_result[0],coord_lat=coord_lat,coord_lon=coord_lon,coord_lat_other=coord_lat_other,coord_lon_other=coord_lon_other)
 
 if __name__ == "__main__":
   #run(host='0.0.0.0', port=82)
