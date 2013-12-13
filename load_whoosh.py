@@ -25,6 +25,9 @@ kind_list = {
   'geographic 2D' : "CRS-GEOGCRS",
   'compound' : "CRS-COMPOUNDCRS",
   'projected' : "CRS-PROJCRS",
+  'transformation':  "COORDOP-COPTRANS",
+  'concatenated operation' : "COORDOP-COPCONOP",
+  'conversion' : "COORDOP-COPCON",            
   'UNIT-angle' : "UNIT-ANGUNIT",
   'UNIT-scale' : "UNIT-SCALEUNIT",
   'UNIT-length' : "UNIT-LENUNIT",
@@ -68,7 +71,7 @@ class EPSGSchema(SchemaClass):
   popularity = STORED  # number [0..1] - our featured = 1
 
   # Description of used transformation - "", "Czech republic (accuracy 1 meter)"
-  trans = TEXT(stored = True, sortable=True, spelling=True, field_boost=3.0, analyzer=StemmingAnalyzer()) # area of used towgs transformation + (accuracy) else ""
+  trans = NUMERIC(stored = True) # area of used towgs transformation + (accuracy) else ""
   trans_alt_name = TEXT(stored = True)
   trans_remarks = STORED
   accuracy = STORED
@@ -85,6 +88,7 @@ class EPSGSchema(SchemaClass):
   # Advanced with additional types such as "Elipsoid" | "Area" | ...
   datum_code = NUMERIC(stored=True) 
   source_geogcrs = STORED
+  target_crs = STORED
   children_code = STORED
   data_source = STORED
   uom = STORED
@@ -124,7 +128,7 @@ ix = create_in(INDEX, EPSGSchema)
 print " - SELECT EPSG FROM COORDINATE REFERENCE SYSTEM AND TRANSFORMATION"
 ###############################################################################
 
-cur.execute('SELECT coord_ref_sys_code, coord_ref_sys_name,crs_scope, remarks, information_source, revision_date, datum_code, area_of_use_code,coord_ref_sys_kind,deprecated,source_geogcrs_code,data_source,coord_sys_code  FROM epsg_coordinatereferencesystem') #  WHERE coord_ref_sys_code > 5513 and coord_ref_sys_code < 5600 or coord_ref_sys_code = 4156  #WHERE coord_ref_sys_code > 5513 and coord_ref_sys_code < 5600'
+cur.execute('SELECT coord_ref_sys_code, coord_ref_sys_name,crs_scope, remarks, information_source, revision_date, datum_code, area_of_use_code,coord_ref_sys_kind,deprecated,source_geogcrs_code,data_source,coord_sys_code  FROM epsg_coordinatereferencesystem WHERE coord_ref_sys_code > 5000 and coord_ref_sys_code < 5600 or coord_ref_sys_code = 4156 ') #  WHERE coord_ref_sys_code > 5513 and coord_ref_sys_code < 5600 or coord_ref_sys_code = 4156  #WHERE coord_ref_sys_code > 5513 and coord_ref_sys_code < 5600'
 for code, name, scope, remarks, information_source, revision_date,datum_code, area_code, coord_ref_sys_kind, deprecated, source_geogcrs_code,data_source,coord_sys_code in cur.fetchall():
   
   try:
@@ -221,95 +225,146 @@ for code, name, scope, remarks, information_source, revision_date,datum_code, ar
         v = values[0][1] # nadgrid file
       else:
         v=0
-        #print op_code, "not has towgs84"
-    
+        #  if (values != (0,0,0,0,0,0,0) and type(values) == tuple):
+        #    ref.SetTOWGS84(*values)
+        #  elif type(values) == str:
+        #   pass
+        #    # TODO: NADGRIDS: WKT PROJ EXTENSION[] with +nadgrids http://www.spatialreference.org/ref/sr-org/6/prettywkt/
+        #    # read by ref.GetAttrValue('EXTENSION',1)
+        #  else:
+        #    popularity_trans = 0.0
+        
       #print op_code, values
+      
+      if op_accuracy == None or op_accuracy == 0.0:
+        op_accuracy = u'unknown'
+        popularity_acc = -1
+      else:
+        popularity_acc = 1
+        
       op_code_trans[op_code] = v
       if towgs84_original == v:
         op_code_original = op_code
-        #print "ORIGINAL",code, op_code_original
-
-      transformations.append(op_code)
-          
-    for op_code, op_accuracy, coord_op_type, opdeprecated, coord_op_scope, remarks, information_source, revision_date,uom_code,coord_op_method_code, area, area_north_bound_lat, area_west_bound_lon, area_south_bound_lat, area_east_bound_lon in towgs84:
-      popularity_accuracy = 0.0
-      bbox = area_north_bound_lat,area_west_bound_lon,area_south_bound_lat,area_east_bound_lon
-      
-      if op_accuracy == None or op_accuracy == 0.0:
-        trans = area + u" "+ u"(unknown accuracy)"
-        doc['accuracy'] = u'unknown'
-      else:
-        popularity_accuracy = 1.0 / op_accuracy
-        trans = area + u" " + str(op_accuracy) + u"m accuracy"
+        doc['area_trans'] = area
         doc['accuracy'] = op_accuracy
-    
-      values = op_code_trans[op_code]
-      popularity_trans = 0.5
-      if (values != (0,0,0,0,0,0,0) and type(values) == tuple):
-        ref.SetTOWGS84(*values)
-      elif type(values) == str:
-        pass
-        # TODO: NADGRIDS: WKT PROJ EXTENSION[] with +nadgrids http://www.spatialreference.org/ref/sr-org/6/prettywkt/
-        # read by ref.GetAttrValue('EXTENSION',1)
-      else:
-        popularity_trans = 0.0
-
-
-      """
-      else:
-        doc['wkt'] = ref.ExportToWkt().decode('utf-8')
-        # doc['scope'] = coord_op_scope
-        doc['trans_remarks'] = remarks
-        doc['primary'] = 0
-        
-        # doc['information_source'] = information_source
-        # doc['revision_date'] = revision_date
-      """
-      doc['method'] = u""
-      cur.execute('SELECT coord_op_method_code,coord_op_method_name FROM epsg_coordoperationmethod WHERE coord_op_method_code = %s', (coord_op_method_code,))
-      for method_code, method_name in cur.fetchall():
-        doc['method'] = method_name
-      
-      cur.execute('SELECT alias FROM epsg_alias WHERE object_table_name = %s and object_code = %s', ("epsg_coordoperation", op_code, ))
-      for alt_name in cur.fetchall():
-        doc['trans_alt_name'] = alt_name
-        
-      if coord_op_type == "concatenated operation":
-        cur.execute('SELECT single_operation_code,op_path_step FROM epsg_coordoperationpath WHERE concat_operation_code = %s ', (op_code,))
-        step_codes = []
-        for single_op, step in cur.fetchall():
-          step_codes.append(single_op)
-        doc['concatop'] = step_codes, # STEP [1235,5678,4234] , codes of transformation
-        
-      if doc['wkt'] == "" or doc['wkt'] == None:
-        popularity = 0.0 
-      doc['area_trans'] = area
-      doc['code_trans'] = op_code  
-      doc['popularity'] = popularity + popularity_trans + popularity_accuracy
-      doc['trans'] = trans
-      doc['deprecated'] = int(deprecated or opdeprecated)
-      doc['bbox'] = bbox
-      doc['tgrams'] = area.lower() 
-      # WRITE INTO WHOOSH!
-      
-      if op_code == op_code_original:
-        #doc['code'] = code
         doc['wkt'] = text
-        popularity_trans = 3.0
         doc['primary'] = 1
-        doc['children_code'] = transformations
-        with ix.writer() as writer:
-          writer.add_document(**doc)
+        doc['code_trans'] = op_code
+        doc['popularity'] = 5 + popularity_acc
+        
+        
+        
+        #print "ORIGINAL",code, op_code_original
+      
+      transformations.append(op_code)
+    if op_code == op_code_original:    
+      doc['trans'] = transformations
+      with ix.writer() as writer:
+        writer.add_document(**doc)
+    else:
+      # CRS has transformation to wgs84, but any transformation is not default 
+      doc['trans'] = transformations
+      doc['primary'] = 0
+      doc['popularity'] = 2 
+      with ix.writer() as writer:
+        writer.add_document(**doc)
   else:
     #print code, "without transformation"
+    doc['popularity'] = 1
     with ix.writer() as writer:
       writer.add_document(**doc)
+
+###############################################################################
+print " - SELECT EPSG FROM OPERATIONS"
+###############################################################################
+cur.execute('SELECT epsg_coordoperation.coord_op_code,epsg_coordoperation.coord_op_name,epsg_coordoperation.coord_op_accuracy, epsg_coordoperation.coord_op_type,epsg_coordoperation.source_crs_code,epsg_coordoperation.target_crs_code, epsg_coordoperation.deprecated, epsg_coordoperation.coord_op_scope, epsg_coordoperation.remarks, epsg_coordoperation.information_source, epsg_coordoperation.revision_date, epsg_coordoperation.uom_code_source_coord_diff,epsg_coordoperation.coord_op_method_code, epsg_area.area_of_use, epsg_area.area_north_bound_lat, epsg_area.area_west_bound_lon, epsg_area.area_south_bound_lat, epsg_area.area_east_bound_lon FROM epsg_coordoperation LEFT JOIN epsg_area ON area_of_use_code = area_code WHERE coord_op_code > 1620 and coord_op_code < 1800 or coord_op_code=15965  ')
+for op_code,op_name, op_accuracy, coord_op_type, source_crs, target_crs, deprecated, scope, remarks, information_source, revision_date, uom_code, method, area, area_north_bound_lat, area_west_bound_lon, area_south_bound_lat, area_east_bound_lon in cur.fetchall():
+  op_code = str(op_code).decode('utf-8')
+  
+  kind = kind_list[coord_op_type].decode('utf-8')
+  bbox = area_north_bound_lat,area_west_bound_lon,area_south_bound_lat,area_east_bound_lon
+  
+  if op_accuracy == None or op_accuracy == 0.0:
+    op_accuracy = u'unknown'  
+      
+  uom_name = u""
+  uom_code = 0
+  cur.execute('SELECT unit_of_meas_name, uom_code FROM epsg_unitofmeasure WHERE uom_code = %s ', (uom_code, ))
+  for uom_name, uom_code in cur.fetchall():
+    pass
     
+  step_codes = []
+  if coord_op_type == "concatenated operation":
+    cur.execute('SELECT single_operation_code,op_path_step FROM epsg_coordoperationpath WHERE concat_operation_code = %s ', (op_code,))
+    for single_op, step in cur.fetchall():
+      step_codes.append(single_op)
+    doc['concatop'] = step_codes, # STEP [1235,5678,4234] , codes of transformation
+  
+  cur.execute('SELECT coord_op_method_code,coord_op_method_name FROM epsg_coordoperationmethod WHERE coord_op_method_code = %s', (coord_op_method_code,))
+  for method_code, method_name in cur.fetchall():
+    pass
+  
+  cur.execute('SELECT parameter_value, param_value_file_ref FROM epsg_coordoperationparamvalue WHERE coord_op_code = %s', (op_code, ))
+  values = cur.fetchall()
+  if len(values) == 7:
+    v = tuple( map(lambda x: float(x[0]), values) ) # tuple of 7 floats
+  elif len(values) == 3:
+    v = tuple( map(lambda x: float(x[0]), values) + [0]*4 ) # tuple of 3+4 floats
+  elif len(values) == 1 and values[0][1] != '': 
+    v = values[0][1] # nadgrid file
+  else:
+    v=0
+  text = str(v).decode('utf-8')
+  print text 
+  doc = {
+    'code': op_code,
+    'code_trans' : 0,
+    'name': op_name,
+    'alt_name' : u"",
+    'kind': kind,
+    'area': area,
+    'deprecated': deprecated,
+    'popularity': 1,
+    'trans' : u"",
+    'trans_alt_name' : u"",
+    'trans_remarks': u"",
+    'area_trans' : u"",
+    'accuracy' : op_accuracy,
+    'wkt': text,
+    'bbox': bbox,
+    'scope': scope,
+    'remarks': remarks,
+    'information_source': information_source,
+    'revision_date': revision_date,
+    'datum_code' : 0,
+    'source_geogcrs': source_crs,
+    'target_crs' : target_crs,
+    'children_code' : 0,
+    'data_source' : data_source,
+    'uom_code' : uom_code,
+    'uom' : uom_name,
+    'target_uom': u"",
+    'prime_meridian' : 0,
+    'greenwich_longitude' : 0,
+    'concatop' : step_codes,
+    'method' : method_name,
+    'files' : u"",
+    'reverse' : 0,
+    'orientation' : u"",
+    'abbreviation' : u"",
+    'order' : u"",
+    'description':u"",
+    'primary' : 0,
+    'tgrams':name.lower()+" "+area.lower()
+    }
+  with ix.writer() as writer:
+    writer.add_document(**doc)
+
 ###############################################################################
 print " - SELECT EPSG FROM DATUM"
 ###############################################################################
 prime_meridian_code = 0
-cur.execute('SELECT datum_code, datum_name, datum_type, ellipsoid_code, area_of_use_code, datum_scope, remarks, information_source, revision_date, data_source, deprecated, prime_meridian_code  FROM epsg_datum') #  LIMIT 10
+cur.execute('SELECT datum_code, datum_name, datum_type, ellipsoid_code, area_of_use_code, datum_scope, remarks, information_source, revision_date, data_source, deprecated, prime_meridian_code  FROM epsg_datum LIMIT 50') #  LIMIT 10
 for code, name, kind, ellipsoid_code, area_code,scope,remarks,information_source,revision_date,data_source, deprecated, prime_meridian_code in cur.fetchall():
   code = str(code)
     
@@ -381,7 +436,7 @@ for code, name, kind, ellipsoid_code, area_code,scope,remarks,information_source
 print " - SELECT EPSG FROM ELLIPSOID"
 ###############################################################################
 
-cur.execute('SELECT ellipsoid_code, ellipsoid_name, uom_code, remarks, information_source, revision_date, data_source, deprecated FROM epsg_ellipsoid') #  LIMIT 10
+cur.execute('SELECT ellipsoid_code, ellipsoid_name, uom_code, remarks, information_source, revision_date, data_source, deprecated FROM epsg_ellipsoid LIMIT 50') #  LIMIT 10
 for code, name, uom_code,remarks,information_source,revision_date,data_source, deprecated in cur.fetchall():
   code = str(code)
   
@@ -439,7 +494,7 @@ for code, name, uom_code,remarks,information_source,revision_date,data_source, d
 print " - SELECT EPSG FROM PRIME MERIDIAN"
 ###############################################################################
 
-cur.execute('SELECT prime_meridian_code, prime_meridian_name,greenwich_longitude, uom_code, remarks, information_source, revision_date, data_source, deprecated FROM epsg_primemeridian') # LIMIT 10
+cur.execute('SELECT prime_meridian_code, prime_meridian_name,greenwich_longitude, uom_code, remarks, information_source, revision_date, data_source, deprecated FROM epsg_primemeridian LIMIT 50') # LIMIT 10
 for code, name, greenwich_longitude, uom_code,remarks,information_source,revision_date,data_source, deprecated in cur.fetchall():
   code = str(code)
 
@@ -497,7 +552,7 @@ for code, name, greenwich_longitude, uom_code,remarks,information_source,revisio
 print " - SELECT EPSG FROM METHOD"
 ###############################################################################
 
-cur.execute('SELECT coord_op_method_code, coord_op_method_name,reverse_op, remarks, information_source, revision_date, data_source, deprecated FROM epsg_coordoperationmethod') # LIMIT 10
+cur.execute('SELECT coord_op_method_code, coord_op_method_name,reverse_op, remarks, information_source, revision_date, data_source, deprecated FROM epsg_coordoperationmethod LIMIT 50') # LIMIT 10
 for code, name, reverse, remarks, information_source, revision_date, data_source, deprecated in cur.fetchall():
   code = str(code)
 
@@ -555,7 +610,7 @@ for code, name, reverse, remarks, information_source, revision_date, data_source
 print " - SELECT EPSG FROM COORDINATE SYSTEMS"
 ###############################################################################
 
-cur.execute('SELECT coord_sys_code, coord_sys_name, coord_sys_type, remarks, information_source, revision_date, data_source, deprecated FROM epsg_coordinatesystem') # LIMIT 10
+cur.execute('SELECT coord_sys_code, coord_sys_name, coord_sys_type, remarks, information_source, revision_date, data_source, deprecated FROM epsg_coordinatesystem LIMIT 50') # LIMIT 10
 for code, name, kind, remarks, information_source, revision_date, data_source, deprecated in cur.fetchall():
   code = str(code)
   axis_code = []
@@ -614,7 +669,7 @@ for code, name, kind, remarks, information_source, revision_date, data_source, d
 print " - SELECT EPSG FROM COORDINATE AXIS"
 ###############################################################################
 
-cur.execute('SELECT epsg_coordinateaxis.coord_axis_code, epsg_coordinateaxis.coord_sys_code, epsg_coordinateaxis.coord_axis_orientation, epsg_coordinateaxis.coord_axis_abbreviation, epsg_coordinateaxis.uom_code, epsg_coordinateaxis.coord_axis_order, epsg_coordinateaxisname.coord_axis_name, epsg_coordinateaxisname.description, epsg_coordinateaxisname.remarks, epsg_coordinateaxisname.information_source, epsg_coordinateaxisname.data_source, epsg_coordinateaxisname.revision_date, epsg_coordinateaxisname.deprecated FROM epsg_coordinateaxis LEFT JOIN epsg_coordinateaxisname ON epsg_coordinateaxis.coord_axis_name_code=epsg_coordinateaxisname.coord_axis_name_code') # LIMIT 10 
+cur.execute('SELECT epsg_coordinateaxis.coord_axis_code, epsg_coordinateaxis.coord_sys_code, epsg_coordinateaxis.coord_axis_orientation, epsg_coordinateaxis.coord_axis_abbreviation, epsg_coordinateaxis.uom_code, epsg_coordinateaxis.coord_axis_order, epsg_coordinateaxisname.coord_axis_name, epsg_coordinateaxisname.description, epsg_coordinateaxisname.remarks, epsg_coordinateaxisname.information_source, epsg_coordinateaxisname.data_source, epsg_coordinateaxisname.revision_date, epsg_coordinateaxisname.deprecated FROM epsg_coordinateaxis LEFT JOIN epsg_coordinateaxisname ON epsg_coordinateaxis.coord_axis_name_code=epsg_coordinateaxisname.coord_axis_name_code LIMIT 50') # LIMIT 10 
 for code, sys_code, orientation, abbreviation, uom_code, order, axis_name, description, remarks, information_source, data_source, revision_date, deprecated  in cur.fetchall():
   code = str(code)
   cur.execute('SELECT unit_of_meas_name,uom_code FROM epsg_unitofmeasure WHERE uom_code = %s ', (uom_code, ))
@@ -673,7 +728,7 @@ for code, sys_code, orientation, abbreviation, uom_code, order, axis_name, descr
 print " - SELECT EPSG FROM AREA"
 ###############################################################################
 
-cur.execute('SELECT area_code, area_name, area_of_use, area_south_bound_lat, area_north_bound_lat, area_west_bound_lon, area_east_bound_lon, area_polygon_file_ref, remarks,information_source,data_source,revision_date,deprecated FROM epsg_area') # LIMIT 10
+cur.execute('SELECT area_code, area_name, area_of_use, area_south_bound_lat, area_north_bound_lat, area_west_bound_lon, area_east_bound_lon, area_polygon_file_ref, remarks,information_source,data_source,revision_date,deprecated FROM epsg_area LIMIT 50') # LIMIT 10
 for code, name, area,area_south_bound_lat,area_north_bound_lat,area_west_bound_lon,area_east_bound_lon,area_polygon_file_ref,remarks,information_source,data_source,revision_date, deprecated in cur.fetchall():
   code = str(code)
   bbox = area_north_bound_lat,area_west_bound_lon,area_south_bound_lat,area_east_bound_lon
@@ -733,7 +788,7 @@ for code, name, area,area_south_bound_lat,area_north_bound_lat,area_west_bound_l
 print " - SELECT EPSG FROM UNIT OF MEASURE"
 ###############################################################################
 
-cur.execute('SELECT uom_code, unit_of_meas_name, unit_of_meas_type, target_uom_code, remarks, information_source, data_source, revision_date, deprecated FROM epsg_unitofmeasure') #  LIMIT 10
+cur.execute('SELECT uom_code, unit_of_meas_name, unit_of_meas_type, target_uom_code, remarks, information_source, data_source, revision_date, deprecated FROM epsg_unitofmeasure LIMIT 50') #  LIMIT 10
 for code, name, kind, target_uom, remarks, information_source, data_source, revision_date, deprecated in cur.fetchall():
   code = str(code)
   
