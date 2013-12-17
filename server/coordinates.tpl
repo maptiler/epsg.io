@@ -13,28 +13,28 @@
 <h2>Coordinate systems for spatial reference worldwide</h2>
 
 </br>
-<form action= "/{{result['code']}}-{{result['code_trans']}}/coordinates/" method="get">
-From WGS84 to {{result['name']}} <input type="text" name="wgs" placeholder="{{coord_lat}} {{coord_lon}}" style="width: 200px" value="{{coord_lat}} {{coord_lon}}"/>
+<form action= "/{{url_coords}}/coordinates/" method="get">
+From WGS84 to {{resultcrs['name']}} <input type="text" name="wgs" placeholder="{{coord_lat}} {{coord_lon}}" style="width: 200px" value="{{coord_lat}} {{coord_lon}}"/>
 		<input type="submit" value="Transform coordinates">
 </form>
 
 </br>
 </br>
 
-<form action= "/{{result['code']}}-{{result['code_trans']}}/coordinates/" method="get">
-From {{result['name']}} to WGS84	<input type="text" name="other" placeholder="{{coord_lat_other}} {{coord_lon_other}}" style="width: 200px" value="{{coord_lat_other}} {{coord_lon_other}}"/>
+<form action= "/{{url_coords}}/coordinates/" method="get">
+From {{resultcrs['name']}} to WGS84	<input type="text" name="other" placeholder="{{coord_lat_other}} {{coord_lon_other}}" style="width: 200px" value="{{coord_lat_other}} {{coord_lon_other}}"/>
 		<input type="submit" value="Transform coordinates">
 </form>
 </br>
 </br>
 %if trans_wgs:
-	transformation from wgs to {{result['name']}} = {{trans_wgs[0]}}, {{trans_wgs[1]}}, {{trans_wgs[2]}}</li>
+	transformation from wgs to {{resultcrs['name']}} = {{trans_wgs[0]}}, {{trans_wgs[1]}}, {{trans_wgs[2]}}</li>
 	<div id=image>
 	<img src="/css/crosshair.png" id="crosshair" alt=""/>
 	<img src="https://maps.googleapis.com/maps/api/staticmap?size=235x190&scale=2&zoom=10&sensor=false&visual_refresh=true&center={{coord_lat}},{{coord_lon}}&path=color:0xff0000ff|fillcolor:0xff000022|weight:2" alt="SimpleMap" height="190" width="235">
 	</div>
 %elif trans_other:
-	transformation from {{result['name']}} to wgs= {{trans_other[0]}}, {{trans_other[1]}}, {{trans_other[2]}}</li>
+	transformation from {{resultcrs['name']}} to wgs= {{trans_other[0]}}, {{trans_other[1]}}, {{trans_other[2]}}</li>
 	<div id=image>
 	<img src="/css/crosshair.png" id="crosshair" alt=""/>
 	<img src="https://maps.googleapis.com/maps/api/staticmap?size=235x190&scale=2&zoom=10&sensor=false&visual_refresh=true&center={{trans_other[0]}},{{trans_other[1]}}&path=color:0xff0000ff|fillcolor:0xff000022|weight:2" alt="SimpleMap" height="190" width="235">
@@ -44,6 +44,6 @@ From {{result['name']}} to WGS84	<input type="text" name="other" placeholder="{{
 %end
 </br>
 </br>
-<a href="/{{result['code']}}-{{result['code_trans']}}/">Back to detail </a>
+<a href="/{{url_coords}}/">Back to detail </a>
 </body>
 </html>
