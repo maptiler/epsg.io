@@ -19,18 +19,18 @@
 
 
 %if deprecated == 1:
-	Found {{num_results}} deprecated records in , ({{res_facets.runtime}} seconds)
+	Found {{num_results}} deprecated records ({{elapsed}} seconds)
 %else:	
-Found {{num_results}} valid records in , ({{elapsed}} seconds)
+Found {{num_results}} valid records ({{elapsed}} seconds)
 %end
 
 
 <div id="category">
 Results in other categories:
 <ul>
-%for i in range(0,24):
-%if facets_list[i][3] != 0:
-	<li><a href="{{facets_list[i][4]}}">{{!facets_list[i][2]}}</a> : {{facets_list[i][3]}}</li>
+%for i in range(0,len(facets_list)):
+%if facets_list[i][4] != 0:
+	<li>{{!facets_list[i][2]}}<a href="{{facets_list[i][5]}}">{{facets_list[i][3]}}</a> : {{facets_list[i][4]}}</li>
 %end
 %end
 
@@ -80,31 +80,21 @@ Results in other categories:
 %end
 
 
+%if (pagenum-1) > 0:
+  <a href="/?q={{query}}&page={{pagenum-1}}">Prev</a>
+%end
 
-%if pagemax<=10:
-		%for i in range(1,pagemax+1):
-		<a href="/?q={{query}}&page={{i}}">{{i}}</a>
-		%end
-%else:
-	%if pagenum<=5:
-		%for i in range(1,11):
-		<a href="/?q={{query}}&page={{i}}">{{i}}</a>
-		%end
-	%elif int(pagemax)>int(pagenum)+5:
-		%for i in range(int(pagenum)-5,int(pagenum)+6):
-			<a href="/?q={{query}}&page={{i}}">{{i}}</a>
-		%end
-	%elif int(pagemax)<=int(pagenum)+5:
-		%for i in range(int(pagenum)-5,pagemax+1):
-			<a href="/?q={{query}}&page={{i}}">{{i}}</a>
-		%end
-	
+%for i in paging:
+	%if i == pagenum:
+	{{ i }}
+	%else:
+	<a href="/?q={{query}}&page={{i}}">{{i}}</a>
 	%end
 %end
-</br>
-</br>
-Total pages: {{pagemax}}
 
+%if (pagenum+1) in paging:
+  <a href="/?q={{query}}&page={{pagenum+1}}">Next</a>
+%end
 
 </body>
 </html>
