@@ -3,64 +3,37 @@
 """
 """
 INDEX = "../index"
-"""
-facets_index = {'CRS' :0,
-  'CRS-PROJCRS':1,
-  'CRS-GEOGCRS':2,
-  'CRS-GCENCRS':3,
-  'CRS-VERTCRS':4,
-  'CRS-ENGCRS':5,
-  'CRS-COMPOUNDCRS':6,
-  'DATUM':7,
-  'DATUM-VERTDAT':8,
-  'DATUM-ENGDAT':9,
-  'DATUM-GEODDAT':10,
-  'ELLIPSOID':11,
-  'PRIMEM':12,
-  'METHOD':13,
-  'CS':14,
-  'CS-VERTCS':15,
-  'CS-SPHERCS':16,
-  'CS-CARTESCS':17,
-  'CS-ELLIPCS':18,
-  'AXIS':19,
-  'AREA':20,
-  'UNIT':21,
-  'UNIT-ANGUNIT':22,
-  'UNIT-SCALEUNIT':23,
-  'UNIT-LENUNIT':24
-}
-"""
+
 facets_list = [
-  ['CRS','CRS','Coordinate reference systems',0,'http://'],
-  ['CRS-PROJCRS','PROJCRS','&nbsp; &nbsp; Projected',0,'http://'],
-  ['CRS-GEOGCRS','GEOGCRS','&nbsp; &nbsp; Geodetic',0,'http://'],
-  ['CRS-GCENCRS','GCENCRS','&nbsp; &nbsp; Geocentric',0,'http://'],
-  ['CRS-VERTCRS','VERTCRS','&nbsp; &nbsp; Vertical',0,'http://'],
-  ['CRS-ENGCRS','ENGCRS','&nbsp; &nbsp; Engineering',0,'http://'],
-  ['CRS-COMPOUNDCRS','COMPOUNDCRS','&nbsp; &nbsp; Compound',0,'http://'], 
-  ['COORDOP','COORDOP','Operation',0,'http://'],
-  ['COORDOP-COPTRANS','COPTRANS','&nbsp; &nbsp; Transformation',0,'http://'],
-  ['COORDOP-COPCONOP','COPCONOP','&nbsp; &nbsp; Compound',0,'http://'],
-  ['COORDOP-COPCON','COPCON','&nbsp; &nbsp; Conversion',0,'http://'],
-  ['DATUM','DATUM','Datum',0,'http://'],
-  ['DATUM-VERTDAT','VERTDAT','&nbsp; &nbsp; Vertical',0,'http://'],
-  ['DATUM-ENGDAT','ENGDAT','&nbsp; &nbsp; Engineering',0,'http://'],
-  ['DATUM-GEODDAT','GEODDAT','&nbsp; &nbsp; Geodetic',0,'http://'],
-  ['ELLIPSOID','ELLIPSOID','Ellipsoid',0,'http://'],
-  ['PRIMEM','PRIMEM','Prime meridian',0,'http://'],
-  ['METHOD','METHOD','Method',0,'http://'],
-  ['CS','CS','Coordinate systems',0,'http://'],
-  ['CS-VERTCS','VERTCS','&nbsp; &nbsp; Vertical',0,'http://'],
-  ['CS-SPHERCS','SPHERCS','&nbsp; &nbsp; Spherical',0,'http://'],
-  ['CS-CARTESCS','CARTESCS','&nbsp; &nbsp; Cartesian',0,'http://'],
-  ['CS-ELLIPCS','ELLIPCS','&nbsp; &nbsp; Ellipsoidal',0,'http://'],
-  ['AXIS','AXIS','Axis',0,'http://'],
-  ['AREA','AREA','Area',0,'http://'],
-  ['UNIT','UNIT','Units',0,'http://'],
-  ['UNIT-ANGUNIT','ANGUNIT','&nbsp; &nbsp; Angle',0,'http://'],
-  ['UNIT-SCALEUNIT','SCALEUNIT','&nbsp; &nbsp; Scale',0,'http://'],
-  ['UNIT-LENUNIT','LENUNIT','&nbsp; &nbsp; Length',0,'http://'],
+  ['CRS','CRS','','Coordinate reference systems',0,'http://'],
+  ['CRS-PROJCRS','PROJCRS','&nbsp; &nbsp;', 'Projected',0,'http://'],
+  ['CRS-GEOGCRS','GEOGCRS','&nbsp; &nbsp;', 'Geodetic',0,'http://'],
+  ['CRS-GCENCRS','GCENCRS','&nbsp; &nbsp;', 'Geocentric',0,'http://'],
+  ['CRS-VERTCRS','VERTCRS','&nbsp; &nbsp;', 'Vertical',0,'http://'],
+  ['CRS-ENGCRS','ENGCRS','&nbsp; &nbsp;', 'Engineering',0,'http://'],
+  ['CRS-COMPOUNDCRS','COMPOUNDCRS','&nbsp; &nbsp;', 'Compound',0,'http://'], 
+  ['COORDOP','COORDOP','','Operation',0,'http://'],
+  ['COORDOP-COPTRANS','COPTRANS','&nbsp; &nbsp;', 'Transformation',0,'http://'],
+  ['COORDOP-COPCONOP','COPCONOP','&nbsp; &nbsp;', 'Compound',0,'http://'],
+  ['COORDOP-COPCON','COPCON','&nbsp; &nbsp;', 'Conversion',0,'http://'],
+  ['DATUM','DATUM','','Datum',0,'http://'],
+  ['DATUM-VERTDAT','VERTDAT','&nbsp; &nbsp;', 'Vertical',0,'http://'],
+  ['DATUM-ENGDAT','ENGDAT','&nbsp; &nbsp;', 'Engineering',0,'http://'],
+  ['DATUM-GEODDAT','GEODDAT','&nbsp; &nbsp;', 'Geodetic',0,'http://'],
+  ['ELLIPSOID','ELLIPSOID','', 'Ellipsoid',0,'http://'],
+  ['PRIMEM','PRIMEM','', 'Prime meridian',0,'http://'],
+  ['METHOD','METHOD','', 'Method',0,'http://'],
+  ['CS','CS','', 'Coordinate systems',0,'http://'],
+  ['CS-VERTCS','VERTCS','&nbsp; &nbsp;', 'Vertical',0,'http://'],
+  ['CS-SPHERCS','SPHERCS','&nbsp; &nbsp;', 'Spherical',0,'http://'],
+  ['CS-CARTESCS','CARTESCS','&nbsp; &nbsp;', 'Cartesian',0,'http://'],
+  ['CS-ELLIPCS','ELLIPCS','&nbsp; &nbsp;', 'Ellipsoidal',0,'http://'],
+  ['AXIS','AXIS','', 'Axis',0,'http://'],
+  ['AREA','AREA','', 'Area',0,'http://'],
+  ['UNIT','UNIT','', 'Units',0,'http://'],
+  ['UNIT-ANGUNIT','ANGUNIT','&nbsp; &nbsp;', 'Angle',0,'http://'],
+  ['UNIT-SCALEUNIT','SCALEUNIT','&nbsp; &nbsp;', 'Scale',0,'http://'],
+  ['UNIT-LENUNIT','LENUNIT','&nbsp; &nbsp;', 'Length',0,'http://'],
 ]
 
 # Index to the facets_list above - manual update on change!
@@ -73,8 +46,6 @@ f_unit_index = 25
 from bottle import route, run, template, request, response,static_file
 import urllib2
 import urllib
-
-
 import sys
 import os
 from whoosh.index import create_in, open_dir
@@ -84,17 +55,14 @@ from whoosh.query import *
 from whoosh import sorting, qparser, scoring,index, highlight,sorting,collectors
 import re
 from pprint import pprint
-
 from pygments.lexer import RegexLexer
 from pygments.token import *
 from pygments import highlight
 from pygments.formatters import HtmlFormatter
-
-from osgeo import osr
-
+from osgeo import gdal, osr, ogr
 import time
+import math
 
-import itertools
 
 re_kind = re.compile(r'kind:([\*\w-]+)')
 re_deprecated = re.compile(r'deprecated:\d')
@@ -203,143 +171,113 @@ def index():
   result = []
 
   with ix.searcher(closereader=False, weighting=PopularityWeighting()) as searcher:
-    parser = MultifieldParser(["tgrams","code","name","trans","code_trans","kind","area","alt_name","wkt"], ix.schema) #,"wkt"
-    query = request.GET.get('q') # p43 - 1.9 The default query language
+    parser = MultifieldParser(["tgrams","code","name","trans","code_trans","kind","area","alt_name","wkt"], ix.schema)
+    query = request.GET.get('q')  # p43 - 1.9 The default query language
     pagenum = int(request.GET.get("page",1))
-    print pagenum
     kind = getQueryParam(query, 'kind')
     deprecated = getQueryParam(query, 'deprecated')
     
-    #print deprecated, 'deprecated', type(deprecated) ,"not deprecated:", not deprecated
-    #print kind, 'kind'
-    
+    # for count inverse deprecated (if it display valid, show me a number of deprecated records)
     statquery = setQueryParam(query, 'deprecated', not deprecated,True)
-    #print statquery, 'statquery1'
-    
     url_facet_statquery ="/?q=" + urllib2.quote(statquery)
-    #print url_facet_statquery
+    # and through all kinds
     statquery = setQueryParam(statquery,'kind','*')
-    #print statquery, 'statquery2'
     
-    
-
+    # show query in all kinds
     catquery = setQueryParam(query,'kind','*')
-    #print catquery, 'catquery'
+    
+    # parse and prepare for search
     myquery = parser.parse(getVerboseQuery(query))
     mycatquery = parser.parse(getVerboseQuery(catquery))
     mystatquery = parser.parse(getVerboseQuery(statquery))
-    #print mystatquery
-    #facets = sorting.Facets()
-    #facets.add_field("kind",maptype=sorting.Count)#,allow_overlap=False
-    #facets.add_field("deprecated",maptype=sorting.Count)#,allow_overlap=False
-
-    start = time.clock()
-#####    # first method for all 2.2s
-    res_facets = searcher.search(mycatquery , groupedby='kind',scored=False,sortedby=None,maptype=sorting.Count)   # ,limit = 50
-    res_facetss = searcher.search(mystatquery , groupedby="deprecated",scored=False,sortedby=None,maptype=sorting.Count)   # ,limit = 50  
-    elapsed = (time.clock() - start)
-    print elapsed , 'facets'
-#### results of documents
+    
+    # how long, exactly, it will take 
     start = time.clock()
     
+    # find a query in all categories
+    res_facets = searcher.search(mycatquery , groupedby='kind',scored=False,sortedby=None,maptype=sorting.Count)
+    # find a query in inverse deprecated
+    res_facetss = searcher.search(mystatquery , groupedby="deprecated",scored=False,sortedby=None,maptype=sorting.Count)
     
-    #results = searcher.search_page(myquery, pagenum, pagelen, terms=True)
+    # result of query
     results = searcher.search(myquery, limit = None) #(pagenum*pagelen)
+    
+    # finish time
     elapsed = (time.clock() - start)
-    print elapsed, "results"
-
     
-    
+    # kind and count of result from catquery
     groups = res_facets.groups("kind")
+    # deprecated or not deprecated with count of result from statquery
     status_groups = res_facetss.groups("deprecated")
     
+    # number of results on one page. If change number, edit "paging"
     pagelen = 10
+    # last document from result on page
     maxdoc = pagelen*pagenum
     
-    for r in results[(maxdoc-pagelen):maxdoc]: #
-      #if r['primary'] == 0 and r['code_trans'] !=0:
-      #  link = str(r['code']) + "-" + str(r['code_trans'])
-  #  
-      #elif r['primary'] == 1 or r['code_trans'] == 0:
+    for r in results[(maxdoc-pagelen):maxdoc]:
       link = str(r['code'])
-     
       result.append({'r':r, 'link':link})
     
-    num_results = len(results) #results.estimated_length()
- 
-    pagemax = round((num_results/10.0) + 0.5)
-
-    # TODO REPLACE with verbose
-    #statquery = setQueryParam(statquery, ' kind', getQueryParam(query,'kind'),True)  
-    #print statquery,'statquery3'      
+    # number of results from results
+    num_results = len(results)
     
-    # set all to zero
+    # paging ala google
+    pagemax = int(math.ceil(num_results / float(pagelen) ))
+    paging = range(1, pagemax+1)[ max(0, pagenum-6) : (pagenum+4 if pagenum >= 10 else min(10,pagemax))]
+    
+    # set all facets_list counts to zero 
     for i in range(0,len(facets_list)):
-      facets_list[i][3] = 0
-      
-    query_kind_index = None
-    # update facets counters
+      facets_list[i][4] = 0
     
+    #make null index of chose kind  
+    query_kind_index = None
+    
+    # update facets counters
     for key,value in groups.iteritems():
         
       # standard kinds
       for i in range(0,len(facets_list)):
         if facets_list[i][0] == key:
-          facets_list[i][3] = int(value)
+          facets_list[i][4] = int(value)
           catquery = setQueryParam(catquery, 'kind', facets_list[i][1])
-          facets_list[i][4] = "/?q=" + urllib2.quote(catquery)
-          # num_results
+          facets_list[i][5] = "/?q=" + urllib2.quote(catquery)
+          
+          # index of chose kind 
           if kind == facets_list[i][1]:
             query_kind_index = i
 
-      # sum kinds
+      # sum special kinds
       if key.startswith('CRS-'):
-        facets_list[f_crs_index][3] += int(value)
+        facets_list[f_crs_index][4] += int(value)
         catquery = setQueryParam(catquery, 'kind', facets_list[f_crs_index][1])
-        facets_list[f_crs_index][4] = "/?q=" + urllib2.quote(catquery)
-        #query_kind_index = f_crs_index
+        facets_list[f_crs_index][5] = "/?q=" + urllib2.quote(catquery)
+
       if key.startswith('DATUM-'):
-        facets_list[f_datum_index][3] += int(value)
+        facets_list[f_datum_index][4] += int(value)
         catquery = setQueryParam(catquery, 'kind', facets_list[f_datum_index][1])
-        facets_list[f_datum_index][4] = "/?q=" + urllib2.quote(catquery)
-        #query_kind_index = f_datum_index
+        facets_list[f_datum_index][5] = "/?q=" + urllib2.quote(catquery)
         
       if key.startswith('CS-'):
-        facets_list[f_cs_index][3] += int(value)
+        facets_list[f_cs_index][4] += int(value)
         catquery = setQueryParam(catquery, 'kind', facets_list[f_cs_index][1])
-        facets_list[f_cs_index][4] = "/?q=" + urllib2.quote(catquery)
-        #query_kind_index = f_cs_index
+        facets_list[f_cs_index][5] = "/?q=" + urllib2.quote(catquery)
         
       if key.startswith('UNIT-'):
-        facets_list[f_unit_index][3] += int(value)
+        facets_list[f_unit_index][4] += int(value)
         catquery = setQueryParam(catquery, 'kind', facets_list[f_unit_index][1])
-        facets_list[f_unit_index][4] = "/?q=" + urllib2.quote(catquery)
-        #query_kind_index = f_unit_index
+        facets_list[f_unit_index][5] = "/?q=" + urllib2.quote(catquery)
+
       if key.startswith('COORDOP-'):
-        facets_list[f_op_index][3] += int(value)
+        facets_list[f_op_index][4] += int(value)
         catquery = setQueryParam(catquery, 'kind', facets_list[f_op_index][1])
-        facets_list[f_op_index][4] = "/?q=" + urllib2.quote(catquery)
-        
-            
-
-
-
-      
-    # num_results update by kind for all records from facet
-    #num_results = 0
-    #print query_kind_index
-    #try:
-    #  num_results = facets_list[query_kind_index][3]
-    #except: # unknown kind: in query
-    #  pass
-    #  print 'neni query_kind_index'
+        facets_list[f_op_index][5] = "/?q=" + urllib2.quote(catquery)
+    
+    # show a clear query (e.g. without kind:CRS, deprecated:0)
     query = setQueryParam(query,'kind',kind)
     query = setQueryParam(query,'deprecated',deprecated)
-    
 
-    
-    
-  return template('results',result=result,facets_list=facets_list,res_facets=res_facets, groups = groups, num_results=num_results, url_facet_statquery=url_facet_statquery, status_groups=status_groups, query=query, pagenum=int(pagenum),elapsed=elapsed,deprecated=deprecated,kind=kind,pagemax=int(pagemax))
+  return template('results',query=query,deprecated=deprecated, num_results=num_results, elapsed=elapsed, facets_list=facets_list, status_groups=status_groups, url_facet_statquery=url_facet_statquery, result=result, pagenum=int(pagenum),paging=paging)
 
 
 
@@ -348,81 +286,70 @@ def index(id):
   class PopularityWeighting(scoring.BM25F):
      use_final = True
      def final(self, searcher, docnum, score):
-       
        popularity = (searcher.stored_fields(docnum).get("popularity"))
-       #print score, popularity
        return score * popularity
-  
   ix = open_dir(INDEX)
    
   with ix.searcher(closereader=False, weighting=PopularityWeighting()) as searcher:
-  
-  
-  #ix = open_dir(INDEX)
-  
-  #with ix.searcher(closereader=False) as searcher:
     parser = MultifieldParser(["code","code_trans"], ix.schema)
-    
+  
     code, code_trans = (id+'-0').split('-')[:2]
-    query = "code:" + code
-    myquery = parser.parse(query)
     
+    query = "code:" + code + " kind:CRS OR kind:COORDOP" #1068-datum, 1068-area,1068 (transformation)
+    myquery = parser.parse(query)
     results = searcher.search(myquery, limit=None) #default limit is 10 , reverse = True
-    #print results
-    item = None
+    
     trans = []
-    num_results = 0
     url_trans = []
     trans_item = []
-    wkt = None
-    default_trans = ""
-    url_method = ""
+    num_results = 0
+    # item = None
+    # wkt = None
+    # default_trans = ""
+    # url_method = ""
     url_format = ""
     export = ""
-    url_area_trans = ""
-    url_area = ""
-    g_coords = ""
-    center = 0,0
+    # url_area_trans = ""
+    # url_area = ""
+    # g_coords = ""
+    # center = 0,0
     trans_coords = ""
-    """
-    start = time.clock()
-    parser = QueryParser("code_trans", ix.schema) #,"wkt"
-    myquery = parser.parse(code_trans)
-    defulttransform = searcher.search(myquery, limit = 1,scored=False,sortedby=None) #(pagenum*pagelen)
-    elapsed = (time.clock() - start)
-    print elapsed , 'trans'
-    print defulttransform
-    """
+    # title = ""
     
     for r in results:
+      found = False
       item = r
       title = item['kind'] + ":" + item['code']
       url_area = area_to_url(item['area'])
-      
-      
-      print r['trans']
-      if code_trans == str(0) and r['primary']==1:
+      # for short link (5514, instead of 5514-15965)
+      if int(code_trans) == 0 and int(r['code_trans']) != 0:
         code_trans = r['code_trans']
+        print code_trans, "code trans"
       
-      if code_trans != 0:
+      #if it default transformation code or has some other transformations
+      if int(code_trans) != 0 or r['trans']:
+        # it is at least one code of transformation (min. defalut trans. code)
         for code_transformation in r['trans']:
-          #query = "code:" + str(code_transformation)
+
           parser = MultifieldParser(["code","kind"], ix.schema)
-          query = "code:"+str(code_transformation)
+          query = "code:"+str(code_transformation)+ " kind:COORDOP"
           myquery = parser.parse(query)
           transformation = searcher.search(myquery, limit=None)
           for hit in transformation:
             trans_item.append(hit)
             
-            if hit['code'] == int(code_trans):  
+            # if it active do not show a link
+            if int(hit['code']) == int(code_trans):  
               link = ""
             else:
               link = str(r['code']) + u"-" + str(hit['code'])
             
+            # if exist default trans code
             default = False
-            if r['code_trans']== hit['code']: 
+            if int(r['code_trans'])== int(hit['code']): 
               default = True
-            print default
+            
+            # safe the main information about each transformation
             trans.append({
             'link':link,
             'code':hit['code'],
@@ -432,91 +359,116 @@ def index(id):
             'code_trans':hit['code'],
             'trans_remarks':hit['remarks'],
             'default':default})
-                
-      default_trans = ''
-      for i in range(0,len(trans_item)):
-        if str(code_trans) == str(trans_item[i]['code']):
-          print 'yes'
-          default_trans = trans_item[i] #information about 
-      if trans_item:
-        url_format = "/"+str(item['code'])+"-"+str(default_trans['code'])
       
-        values = default_trans['wkt']
-        num =[]
-        w = re.findall(r'(-?\d+\.?\d*)',values)
-      
-        for n in w:
-          num.append(float(n))
-        values = tuple(num)     
-
-        if int(r['code_trans']) != int(default_trans['code']):
-          if (values != (0,0,0,0,0,0,0) and type(values) == tuple):
-            ref = osr.SpatialReference()
-            ref.ImportFromEPSG(int(r['code']))
-            ref.SetTOWGS84(*values) 
-            wkt = ref.ExportToWkt().decode('utf-8')
-        else: 
-          wkt = r['wkt']
+      # if it has NOT default transformation code
       else:
-        center = ((item['bbox'][0] - item['bbox'][2])/2.0)+item['bbox'][2],((item['bbox'][3] - item['bbox'][1])/2.0)+item['bbox'][1]
-        g_coords = str(item['bbox'][2]) + "," + str(item['bbox'][1]) + "|" + str(item['bbox'][0]) + "," + str(item['bbox'][1]) + "|" + str(item['bbox'][0]) + "," + str(item['bbox'][3]) + "|" + str(item['bbox'][2]) + "," + str(item['bbox'][3]) + "|" + str(item['bbox'][2]) + "," + str(item['bbox'][1])
+        ref = osr.SpatialReference()
+        ref.ImportFromEPSG(int(r['code']))
+        if ref.GetTOWGS84() != None:
+          found = True
+          default_trans = item
+          wkt = item['wkt']
+      
+      # if it has any transformation
+      if found == False:
         
-    if wkt:    
+        # default trans is active transformation
+        for i in range(0,len(trans_item)):
+          if str(code_trans) == str(trans_item[i]['code']):
+            default_trans = trans_item[i]
+          else:
+            default_trans = trans_item[0]
+
+    
+        if trans_item and default_trans:
+          
+          # from values of TOWGS84 edit wkt of CRS
+          values = default_trans['wkt']
+          num =[]
+          w = re.findall(r'(-?\d+\.?\d*)',values)
+          
+          for n in w:
+            num.append(float(n))
+          values = tuple(num)     
+          
+          # do not change default TOWGS84
+          if int(r['code_trans']) != int(default_trans['code']) :
+            
+            if (values != (0,0,0,0,0,0,0) and type(values) == tuple and values != (0,)):            
+              ref = osr.SpatialReference()
+              ref.ImportFromEPSG(int(r['code']))
+              ref.SetTOWGS84(*values) 
+              wkt = ref.ExportToWkt().decode('utf-8')
+          # if it default, then wkt from CRS
+          else: 
+            wkt = r['wkt']
+        # if do not have trans_item or default_trans    
+        else:
+          center = ((item['bbox'][0] - item['bbox'][2])/2.0)+item['bbox'][2],((item['bbox'][3] - item['bbox'][1])/2.0)+item['bbox'][1]
+          g_coords = str(item['bbox'][2]) + "," + str(item['bbox'][1]) + "|" + str(item['bbox'][0]) + "," + str(item['bbox'][1]) + "|" + str(item['bbox'][0]) + "," + str(item['bbox'][3]) + "|" + str(item['bbox'][2]) + "," + str(item['bbox'][3]) + "|" + str(item['bbox'][2]) + "," + str(item['bbox'][1])
+    
+    # if it CRS (not transformation)
+    if str(item['kind']).startswith('CRS'):
+      if item['wkt']:
+        url_format = "/"+str(item['code'])
+        if int(default_trans['code']) != int(item['code']):
+          url_format = "/"+str(item['code'])+"-"+str(default_trans['code'])
+    
+    # for activated transformation
+    if default_trans:
       url_method ="/?q=" + urllib.quote_plus((default_trans['method']+ ' kind:METHOD').encode('utf-8'))
+      url_area_trans = area_to_url(default_trans['area'])
       center = 0,0
       g_coords = ""
       if default_trans['bbox']:
-          #(51.05, 12.09, 47.74, 22.56)
+        #(51.05, 12.09, 47.74, 22.56)
         center = ((default_trans['bbox'][0] - default_trans['bbox'][2])/2.0)+default_trans['bbox'][2],((default_trans['bbox'][3] - default_trans['bbox'][1])/2.0)+default_trans['bbox'][1]
         g_coords = str(default_trans['bbox'][2]) + "," + str(default_trans['bbox'][1]) + "|" + str(default_trans['bbox'][0]) + "," + str(default_trans['bbox'][1]) + "|" + str(default_trans['bbox'][0]) + "," + str(default_trans['bbox'][3]) + "|" + str(default_trans['bbox'][2]) + "," + str(default_trans['bbox'][3]) + "|" + str(default_trans['bbox'][2]) + "," + str(default_trans['bbox'][1])
-
-      url_area_trans = area_to_url(default_trans['area'])
     
-      trans_coords = "" 
-      if wkt != None:
-        ref = osr.SpatialReference()
-        #ref.ImportFromEPSG(5513)
-        ref.ImportFromWkt(wkt.encode('utf-8'))
-        #ref.ImportFromEPSG(5514)
-        #ref.SetAuthority("PROJCS","EPSG","5514")
-        #ref.SetFromUserInput(item['wkt'].encode('utf-8'))
+    # if available wkt, default_trans and wkt has length minimum 100 characters (transformation has length maximum 100 (just a TOWGS84))
+    if wkt and default_trans and len(wkt)>100:
+      trans_coords = ""         
+      ref = osr.SpatialReference()
+      ref.ImportFromWkt(wkt.encode('utf-8'))
       
-        wgs = osr.SpatialReference()
-        wgs.ImportFromEPSG(4326)
-        xform = osr.CoordinateTransformation(wgs,ref)
+      wgs = osr.SpatialReference()
+      wgs.ImportFromEPSG(4326)
       
-      
-        #print center[0], type(center[0]), center[1], type(center[1])
-        try:
-          trans_coords = xform.TransformPoint(center[0], center[1])
-        except:
-          trans_coords = "" 
-        
-        export = highlight(ref.ExportToPrettyWkt(), WKTLexer(), HtmlFormatter(cssclass='syntax',nobackground=True))
-       
-  return template('detailed', item=item, trans=trans,default_trans=default_trans, num_results=num_results, url_method=url_method, title=title, url_format=url_format, export=export, url_area_trans=url_area_trans, url_area=url_area, center=center, g_coords=g_coords, trans_coords=trans_coords,wkt=wkt )  
+      xform = osr.CoordinateTransformation(wgs,ref)
+
+      try:
+        trans_coords = xform.TransformPoint(center[0], center[1])
+      except:
+        trans_coords = "" 
+      # color html of pretty wkt
+      export = highlight(ref.ExportToPrettyWkt(), WKTLexer(), HtmlFormatter(cssclass='syntax',nobackground=True))
+    # if the CRS has 
+    url_concatop=[]
+    if default_trans['concatop'] != []:
+      for i in range(0,len(default_trans['concatop'])):
+        print default_trans['concatop'][i]
+        url_concatop.append("/"+ str(default_trans['concatop'][i]) + "/")
+  return template('detailed', item=item, trans=trans,default_trans=default_trans, num_results=num_results, url_method=url_method, title=title, url_format=url_format, export=export, url_area_trans=url_area_trans, url_area=url_area, center=center, g_coords=g_coords, trans_coords=trans_coords,wkt=wkt,facets_list=facets_list,url_concatop=url_concatop )  
 
 
 @route('/<id:re:[\d]+(-[\w]+)>/')
 def index(id):
   ix = open_dir(INDEX)
-
   with ix.searcher(closereader=False) as searcher:
+    
     parser = QueryParser("code", ix.schema)
     myquery = parser.parse(id)
     results = searcher.search(myquery)
-    item = ""
+    url_axis = []
     detail = []
-    url_area = ""
     url_uom = ""
     url_children = ""
     url_prime = ""
-    url_axis = []
-    
-    
+    # item = ""
+    # url_area = ""
+
     for r in results:
       item = r
-
       url_area = area_to_url(item['area'])
 
       if 'target_uom' in r:
@@ -536,11 +488,13 @@ def index(id):
 
       if 'children_code' in r:
         if r['children_code'] != 0:
-          if r['kind'].startswith("Datum-"):
+          if r['kind'].startswith("DATUM"):
             url_children = str(r['children_code']) + "-ellipsoid/"
-          elif r['kind'] == "Axis":
+          
+          elif r['kind'] == "AXIS":
             url_children = str(r['children_code']) +"-coordsys/"
-          elif r['kind'].startswith("CoordSys-"):
+          
+          elif r['kind'].startswith("CS"):
             for c in r['children_code']:
               url = str(c) + "-axis"
               url_axis.append(url)
@@ -548,7 +502,7 @@ def index(id):
       detail.append({'url_prime': url_prime, 'url_children':url_children,'url_axis':url_axis, 'url_uom':url_uom, 'url_area' : url_area})
       
  
-  return template('detailed_word', item=item, detail=detail)  
+  return template('detailed_word', item=item, detail=detail, facets_list=facets_list)  
 
 
 @route('/<id:re:[\d]+(-[\d]+)?>/<format>')
@@ -557,45 +511,59 @@ def index(id, format):
   ix = open_dir(INDEX)
   result = []
   export = ""
-  from osgeo import gdal, osr, ogr
+  values = ""
   ref = osr.SpatialReference()
+  
   with ix.searcher(closereader=False) as searcher:
     parser = QueryParser("code", ix.schema)
 
     code, code_trans = (id+'-0').split('-')[:2]
-    
-    code_query = parser.parse(code)
+
+    code_query = parser.parse(str(code) + " kind:CRS OR kind:COORDOP")
     code_result = searcher.search(code_query, sortedby=False,scored=False)
     
-    trans_query = parser.parse(code_trans)
-    trans_result = searcher.search(trans_query,sortedby=False,scored=False)
-    for t in trans_result:
-      values = t['wkt']
-      tcode = t['code']
+  #  trans_query = parser.parse(str(code_trans) + " kind:COORDOP")
+  #  print trans_query
+  #  trans_result = searcher.search(trans_query,sortedby=False,scored=False)
+  #  print trans_result
+    
+    #for t in trans_result:
+    #  values = t['wkt']
+    #  tcode = t['code']
     for r in code_result:
-      code_trans = r['code_trans']
+      rcode = r['code']
       rwkt = r['wkt']
       rcode = r['code']
+      def_trans = r['code_trans']
+  
+    if int(code_trans) != 0:
+      trans_query = parser.parse(str(code_trans) + " kind:COORDOP")
+      trans_result = searcher.search(trans_query,sortedby=False,scored=False)
+      for t in trans_result:
+        values = t['wkt']
+        tcode = t['code']
+        url_coords = rcode + "-" + tcode 
+    else: 
+      trans_result = code_result
+      url_coords = rcode
+    if values:
+      w = re.findall(r'(-?\d+\.?\d*)',values)
+      num =[]
+      for n in w:
+        num.append(float(n))
+      values = tuple(num)
 
-    w = re.findall(r'(-?\d+\.?\d*)',values)
-    num =[]
-    for n in w:
-      num.append(float(n))
-    values = tuple(num)
-
-    if int(code_trans) != int(tcode):
-      if (values != (0,0,0,0,0,0,0) and type(values) == tuple):
-        ref.ImportFromEPSG(int(rcode))
-        ref.SetTOWGS84(*values) 
-        wkt = ref.ExportToWkt().decode('utf-8')
+      if int(def_trans) != int(tcode):
+        if (values != (0,0,0,0,0,0,0) and type(values) == tuple):
+          ref.ImportFromEPSG(int(rcode))
+          ref.SetTOWGS84(*values) 
+          wkt = ref.ExportToWkt().decode('utf-8')
+      else: 
+        wkt = rwkt
     else: 
       wkt = rwkt
-  
-    
-    
     
     ref.ImportFromWkt(wkt)
-
 
     ct = "text/plain" 
     if format == "esriwkt":
@@ -628,7 +596,7 @@ def index(id, format):
       ct = "application/xml" 
     elif format == 'mapserverpython':
       mswkt = ref.ExportToWkt()
-      export = "wkt = '''%s'''\nm = mapObj('')\nm.setWKTProjection(wkt)\nlyr = layerObj(m)\nlyr.setWKTProjection(mswkt)" % (mswkt) #from mapscript import mapObj,layerObj\n
+      export = "wkt = '''%s'''\nm = mapObj('')\nm.setWKTProjection(mswkt)\nlyr = layerObj(m)\nlyr.setWKTProjection(mswkt)" % (mswkt) #from mapscript import mapObj,layerObj\n
     elif format == 'mapnikpython': 
       proj4 = ref.ExportToProj4().strip()
       export = "proj4 = '%s'\nm = Map(256,256,proj4)\nlyr = Layer('Name',proj4)" % (proj4) #from mapnik import Map, Layer\n
@@ -668,9 +636,9 @@ def server_static(filename):
     
 @route('/<id:re:[\d]+(-[\d]+)?>/coordinates/')
 def index(id):
-  
   ix = open_dir(INDEX)
   result = []
+  values = None
   try:
     wgs = request.GET.get('wgs')
     w = re.findall(r'(-?\d+\.?\d*)',wgs)
@@ -681,16 +649,14 @@ def index(id):
   except:
     coord_lat = None
     coord_lon = None
-
-  
-  
+    
   try:
     other = request.GET.get('other')
     o = re.findall(r'(-?\d+\.?\d*)',other)
 
     coord_lat_other = float(o[0])
-
     coord_lon_other = float(o[1])
+  
   except:
     coord_lat_other = None
     coord_lon_other = None
@@ -701,45 +667,50 @@ def index(id):
 
     code, code_trans = (id+'-0').split('-')[:2]
 
-    type = "EPSG"
-
-    code_query = parser.parse(code)
+    code_query = parser.parse(str(code) + " kind:CRS OR kind:COORDOP")
     code_result = searcher.search(code_query, sortedby=False,scored=False)
-    #print code_result[0]
-    trans_query = parser.parse(code_trans)
-    trans_result = searcher.search(trans_query,sortedby=False,scored=False)
     
-    for t in trans_result:
-      #print t
-      values = t['wkt']
-      tcode = t['code']
-
     for r in code_result:
-      code_trans = r['code_trans']
+      def_trans = r['code_trans']
       rwkt = r['wkt']
       rcode = r['code']
       rname = r['name']
-
-    w = re.findall(r'(-?\d+\.?\d*)',values)
-    num =[]
-    for n in w:
-      num.append(float(n))
-    values = tuple(num)     
-
-    if int(code_trans) != int(tcode):
-      if (values != (0,0,0,0,0,0,0) and type(values) == tuple):
-        ref = osr.SpatialReference()
-        ref.ImportFromEPSG(int(rcode))
-        ref.SetTOWGS84(*values) 
-        wkt = ref.ExportToWkt().decode('utf-8')
+    
+    if int(def_trans) != 0:
+      trans_query = parser.parse(str(code_trans) + " kind:COORDOP")
+      trans_result = searcher.search(trans_query,sortedby=False,scored=False)
+     
+      for t in trans_result:
+        values = t['wkt']
+        tcode = t['code']
+        url_coords = rcode + "-" + tcode 
     else: 
+      trans_result = code_result
+      url_coords = rcode
+      
+    if values != None:
+      w = re.findall(r'(-?\d+\.?\d*)',values)
+      num =[]
+      for n in w:
+        num.append(float(n))
+      values = tuple(num) 
+      
+      if int(def_trans) != int(tcode):
+        if (values != (0,0,0,0,0,0,0) and type(values) == tuple):
+          ref = osr.SpatialReference()
+          ref.ImportFromEPSG(int(rcode))
+          ref.SetTOWGS84(*values) 
+          wkt = ref.ExportToWkt().decode('utf-8')
+      else: 
+        wkt = rwkt
+    else:
       wkt = rwkt
       
       
     trans_wgs = "" 
     trans_other = ""
     
-    from osgeo import gdal, osr, ogr
+    
     
     ref = osr.SpatialReference()
     ref.ImportFromWkt(wkt.encode('utf-8'))
@@ -755,7 +726,7 @@ def index(id):
       trans_other = xform.TransformPoint(coord_lat_other, coord_lon_other)
       
   
-  return template ('coordinates', trans_wgs=trans_wgs, trans_other=trans_other, result=code_result[0],coord_lat=coord_lat,coord_lon=coord_lon,coord_lat_other=coord_lat_other,coord_lon_other=coord_lon_other)
+  return template ('coordinates', trans_wgs=trans_wgs, trans_other=trans_other, resultcrs=code_result[0], url_coords=url_coords, coord_lat=coord_lat,coord_lon=coord_lon,coord_lat_other=coord_lat_other,coord_lon_other=coord_lon_other)
 
 if __name__ == "__main__":
   #run(host='0.0.0.0', port=82)
