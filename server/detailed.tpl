@@ -10,30 +10,36 @@
 <body>
 
 <div id ="mysearchabout"><a href=/about>About</a> &nbsp; &nbsp; <a href=/>Search</a></div>
-
 <h1>EPSG.io</h1>
 
 <h2>Find coordinate systems for spatial reference worldwide</h2>
 <hr>
-<h3>{{item['kind']}}</h3>
+<h3>
+	%for i in range(0,len(facets_list)):
+	%if facets_list[i][0] == item['kind']:
+	{{facets_list[i][3]}} - {{facets_list[i][1]}}
+	%end
+	%end
+
+</h3>
 <div id="topic">EPSG:{{item['code']}} {{item['name']}} </div>
 </br>
-%if default_trans:
-	<b>Transformation</b>
+%if default_trans != item:
+	<b>Transformations</b>
 %end
 
 </br>
 </br>
 % i = 0
 %for r in trans:
-	%if r['link'] == "" and r['deprecated'] == item['deprecated'] and r['area_trans']:
+	%if r['link'] == "" and r['deprecated'] == 0 and r['area_trans']:
 		
 		<div id="me">
 			</br>
 			<li> {{r['area_trans']}}
 		
 		%if r['accuracy']:
-			, accuracy {{r['accuracy']}}
+			, accuracy {{r['accuracy']}}m, 
 		%end
 		
 		%if r['code_trans'] != 0:
@@ -47,9 +53,9 @@
 		</div>
 		</br></br>
 		
-	%elif r['deprecated'] == item['deprecated'] and r['area_trans']:
+	%elif r['deprecated'] == 0 and r['area_trans']:
 		<li><a href="/{{r['link']}}/" title = "{{r['trans_remarks']}}">{{r['area_trans']}}, accuracy 
-			{{r['accuracy']}} code {{r['code_trans']}} 
+			{{r['accuracy']}}m, code {{r['code_trans']}} 
 			%if r['default'] == True:
 				DEFAULT
 			%end
@@ -57,22 +63,54 @@
 			%i+=1
 			</br></br>
 		</li>
-
+	
 	%end
-
 %end
-%if i !=0:
+
+<a href="#" onClick="javascript:document.getElementById('trans_deprecated').style.display='block';return false">Show deprecated transformations</a>
+<div id="trans_deprecated" style="display:none">
+%a = 0
+%for r in trans:
+%if r['deprecated'] == 1:
+	%if r['link'] == "":
+	<li>{{r['area_trans']}}, accuracy 
+		{{r['accuracy']}}m, code {{r['code_trans']}} DEPRECATED
+		%if r['default'] == True:
+			DEFAULT
+		%end
+
+		</br></br>
+	%else:
+	<li><a href="/{{r['link']}}/" title = "{{r['trans_remarks']}}">{{r['area_trans']}}, accuracy 
+		{{r['accuracy']}}m,  code {{r['code_trans']}} DEPRECATED
+		%if r['default'] == True:
+			DEFAULT
+		%end
+		</a>
+		</br></br>
+	%end
+	%a+=1
+%end
+%end
+
+</div>
 </br>
-Count of transformations: {{i}}
+</br>
+
+
+%if (i !=0 or a!=0) and default_trans:
+</br>
+Count of transformations: {{i}} (deprecated: {{a}})
 </br>
 	<b>Information about transformation: {{default_trans['code']}}</b>
 
 	<li>Method: <a href="{{url_method}}">{{default_trans['method']}}</a></li>
 	<li>Remarks: {{default_trans['remarks']}}</li>
 	<li>Area of use: <a href="{{url_area_trans}}">{{default_trans['area']}}</a></li>
-
-	%if item['concatop']:
-	<li>steps of transformation : {{default_trans['concatop'][0]}}</li>
+	%if url_concatop != []:
+		%for url in url_concatop:
+			<li>steps of transformation : <a href="{{url}}">{{url}}</a></li>
+		%end
 	%end
 %end
 
@@ -86,7 +124,9 @@ Count of transformations: {{i}}
 <li>Remarks: {{item['remarks']}}</li>
 <li>Information source: {{item['information_source']}}</li>
 <li>Revision date: {{item['revision_date']}}</li>
-
+%if item['concatop']:
+<li>steps of transformation : {{item['concatop']}}</li>
+%end
 
 
 %if 'source_geogcrs' in item:
@@ -100,8 +140,14 @@ Count of transformations: {{i}}
 		<li>Datum: <a href="/{{item['datum_code']}}-datum/">{{item['datum_code']}}-datum</a></li>
 	%end
 %end
+%if 'children_code' in item:
+	%if item['children_code'] != 0 :
+		<li>Coordinate System: <a href="/{{item['children_code']}}-coordsys/">{{item['children_code']}}-coordsys</a></li>
+	%end
+%end
 
-%if wkt:
+
+%if url_format:
 <div id="formats">
 
 	<li><a href="{{url_format}}/prettywkt">PrettyWKT</a></li>
@@ -122,8 +168,8 @@ Count of transformations: {{i}}
 
 
 	</div>
-	{{!export}}
 %end
+{{!export}}
 
 %if item['bbox']:
 
@@ -133,19 +179,19 @@ Count of transformations: {{i}}
 </div>
 <li>center coords for wgs = {{center[0]}}, {{center[1]}}</li>
 %if trans_coords:
-	<li>center coords for EPSG:{{item['code']}} with EPSG:{{item['code_trans']}} transformation  = {{trans_coords[0]}}, {{trans_coords[1]}}, {{trans_coords[2]}}</li>
+	<li>center coords for EPSG:{{item['code']}} with EPSG:{{default_trans['code']}} transformation  = {{trans_coords[0]}}, {{trans_coords[1]}}, {{trans_coords[2]}}</li>
 %end
 %end
 
 %if item['wkt'] and item['bbox'] and trans_coords:
 
-<form action= "/{{item['code']}}-{{default_trans['code']}}/coordinates/" method="get">
-  	from WGS84 to {{item['name']}} <input type="text" name="wgs" placeholder="{{center[0]}} {{center[1]}}" style="width: 200px"/>
+<form action= "{{url_format}}/coordinates/" method="get">
+  	from WGS 84 to {{item['name']}} <input type="text" name="wgs" placeholder="{{center[0]}} {{center[1]}}" style="width: 200px"/>
 		<input type="submit" value="TRANSFORM">
 </form>
 
-<form action= "/{{item['code']}}-{{default_trans['code']}}/coordinates/" method="get">
-  	from {{item['name']}} to WGS84 <input type="text" name="other" placeholder="{{trans_coords[0]}} {{trans_coords[1]}}" style="width: 200px"/>
+<form action= "{{url_format}}/coordinates/" method="get">
+  	from {{item['name']}} to WGS 84 <input type="text" name="other" placeholder="{{trans_coords[0]}} {{trans_coords[1]}}" style="width: 200px"/>
 		<input type="submit" value="TRANSFORM">
 </form>
 %end
