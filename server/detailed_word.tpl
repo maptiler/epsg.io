@@ -16,7 +16,13 @@
 	<h2>Find coordinate systems for spatial reference worldwide</h2>
 	<hr>
 
-	<h3>{{item['kind']}}</h3>
+	<h3>
+	%for i in range(0,len(facets_list)):
+		%if facets_list[i][0] == item['kind']:
+			{{facets_list[i][3]}} - {{facets_list[i][1]}}
+		%end
+	%end
+	</h3>
 	EPSG:{{item['code']}}
 	<div id="topic">{{item['name']}}
 		%if item['alt_name']:
