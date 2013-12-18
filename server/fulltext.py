@@ -43,7 +43,7 @@ f_datum_index = 11
 f_cs_index = 18
 f_unit_index = 25
 
-from bottle import route, run, template, request, response,static_file
+from bottle import route, run, template, request, response, static_file, redirect
 import urllib2
 import urllib
 import sys
@@ -165,13 +165,13 @@ def index():
        
        popularity = (searcher.stored_fields(docnum).get("popularity"))
        #print score, popularity
-       return score * popularity
+       return score #* popularity
   
   ix = open_dir(INDEX)
   result = []
 
   with ix.searcher(closereader=False, weighting=PopularityWeighting()) as searcher:
-    parser = MultifieldParser(["tgrams","code","name","trans","code_trans","kind","area","alt_name","wkt"], ix.schema)
+    parser = MultifieldParser(["tgrams","code","name","trans","code_trans","kind","area","alt_name"], ix.schema)
     query = request.GET.get('q')  # p43 - 1.9 The default query language
     pagenum = int(request.GET.get("page",1))
     kind = getQueryParam(query, 'kind')
@@ -279,15 +279,17 @@ def index():
 
   return template('results',query=query,deprecated=deprecated, num_results=num_results, elapsed=elapsed, facets_list=facets_list, status_groups=status_groups, url_facet_statquery=url_facet_statquery, result=result, pagenum=int(pagenum),paging=paging)
 
+@route('/<id:re:.+[\d]+.+?>/')
+def index(id):
+  redirect('/%s' % id)
 
-
-@route('/<id:re:[\d]+(-[\d]+)?>/')
+@route('/<id:re:[\d]+(-[\d]+)?>')
 def index(id):
   class PopularityWeighting(scoring.BM25F):
      use_final = True
      def final(self, searcher, docnum, score):
        popularity = (searcher.stored_fields(docnum).get("popularity"))
-       return score * popularity
+       return score# * popularity
   ix = open_dir(INDEX)
    
   with ix.searcher(closereader=False, weighting=PopularityWeighting()) as searcher:
@@ -319,12 +321,12 @@ def index(id):
     for r in results:
       found = False
       item = r
+      print item
       title = item['kind'] + ":" + item['code']
       url_area = area_to_url(item['area'])
       # for short link (5514, instead of 5514-15965)
       if int(code_trans) == 0 and int(r['code_trans']) != 0:
         code_trans = r['code_trans']
-        print code_trans, "code trans"
       
       #if it default transformation code or has some other transformations
       if int(code_trans) != 0 or r['trans']:
@@ -446,12 +448,11 @@ def index(id):
     url_concatop=[]
     if default_trans['concatop'] != []:
       for i in range(0,len(default_trans['concatop'])):
-        print default_trans['concatop'][i]
         url_concatop.append("/"+ str(default_trans['concatop'][i]) + "/")
   return template('detailed', item=item, trans=trans,default_trans=default_trans, num_results=num_results, url_method=url_method, title=title, url_format=url_format, export=export, url_area_trans=url_area_trans, url_area=url_area, center=center, g_coords=g_coords, trans_coords=trans_coords,wkt=wkt,facets_list=facets_list,url_concatop=url_concatop )  
 
 
-@route('/<id:re:[\d]+(-[\w]+)>/')
+@route('/<id:re:[\d]+(-[\w]+)>')
 def index(id):
   ix = open_dir(INDEX)
   with ix.searcher(closereader=False) as searcher:
@@ -507,7 +508,6 @@ def index(id):
 
 @route('/<id:re:[\d]+(-[\d]+)?>/<format>')
 def index(id, format):
-  #print id
   ix = open_dir(INDEX)
   result = []
   export = ""
@@ -521,15 +521,7 @@ def index(id, format):
 
     code_query = parser.parse(str(code) + " kind:CRS OR kind:COORDOP")
     code_result = searcher.search(code_query, sortedby=False,scored=False)
-    
-  #  trans_query = parser.parse(str(code_trans) + " kind:COORDOP")
-  #  print trans_query
-  #  trans_result = searcher.search(trans_query,sortedby=False,scored=False)
-  #  print trans_result
-    
-    #for t in trans_result:
-    #  values = t['wkt']
-    #  tcode = t['code']
+
     for r in code_result:
       rcode = r['code']
       rwkt = r['wkt']
@@ -554,7 +546,7 @@ def index(id, format):
       values = tuple(num)
 
       if int(def_trans) != int(tcode):
-        if (values != (0,0,0,0,0,0,0) and type(values) == tuple):
+        if (values != (0,0,0,0,0,0,0) and type(values) == tuple and values != (0,)):
           ref.ImportFromEPSG(int(rcode))
           ref.SetTOWGS84(*values) 
           wkt = ref.ExportToWkt().decode('utf-8')
@@ -727,6 +719,107 @@ def index(id):
       
   
   return template ('coordinates', trans_wgs=trans_wgs, trans_other=trans_other, resultcrs=code_result[0], url_coords=url_coords, coord_lat=coord_lat,coord_lon=coord_lon,coord_lat_other=coord_lat_other,coord_lon_other=coord_lon_other)
+
+@route('/trans')
+def index():
+  tcode_trans_values = None
+  scode_trans_values = None
+  ix = open_dir(INDEX)
+  
+  x = float(request.GET.get('x',0))
+  y = float(request.GET.get('y',0))
+  z = float(request.GET.get('z',0))
+  s_srs = request.GET.get('s_srs',4326)
+  t_srs = request.GET.get('t_srs',4326)
+  callback = str(request.GET.get('callback',0))
+  
+  print x,y,z,s_srs,t_srs,callback
+  scode, scode_trans = (str(s_srs)+'-0').split('-')[:2]
+  tcode, tcode_trans = (str(t_srs)+'-0').split('-')[:2]
+    
+  with ix.searcher(closereader=False) as searcher:
+    parser = QueryParser("code", ix.schema)
+    
+    if int(scode_trans) == 0:
+      scode_query = parser.parse(str(scode) + " kind:CRS")
+      scode_result = searcher.search(scode_query, sortedby=False,scored=False)
+    
+      for r in scode_result:
+        swkt = r['wkt']
+        scode = r['code']
+    
+    if int(scode_trans) != 0:
+      scode_trans_query = parser.parse(str(scode_trans) + " kind:COORDOP")
+      scode_trans_result = searcher.search(scode_trans_query, sortedby=False,scored=False)
+    
+      for r in scode_trans_result:
+        scode_trans_values = r['wkt']
+      
+      
+    if int(tcode_trans) == 0:
+      tcode_query = parser.parse(str(tcode) + " kind:CRS")
+      tcode_result = searcher.search(tcode_query,sortedby=False,scored=False)
+     
+      for r in tcode_result:
+        twkt = r['wkt']
+    
+    if int(tcode_trans) != 0:
+      tcode_trans_query = parser.parse(str(tcode_trans) + " kind:COORDOP")
+      tcode_trans_result = searcher.search(tcode_trans_query, sortedby=False,scored=False)
+    
+      for r in tcode_trans_result:
+        tcode_trans_values = r['wkt']
+        
+    if scode_trans != 0 and scode_trans_values != None:
+      w = re.findall(r'(-?\d+\.?\d*)', scode_trans_values)
+      num =[]
+      for n in w:
+        num.append(float(n))
+      values = tuple(num) 
+      
+      if (values != (0,0,0,0,0,0,0) and type(values) == tuple and values != (0,)):
+        ref = osr.SpatialReference()
+        ref.ImportFromEPSG(int(scode))
+        ref.SetTOWGS84(*values) 
+        swkt = ref.ExportToWkt().decode('utf-8')
+
+    
+    if int(tcode_trans) != 0 and tcode_trans_values != None:
+      w = re.findall(r'(-?\d+\.?\d*)', tcode_trans_values)
+      num =[]
+      for n in w:
+        num.append(float(n))
+      values = tuple(num) 
+
+      if (values != (0,0,0,0,0,0,0) and type(values) == tuple and values != (0,)):
+        ref = osr.SpatialReference()
+        ref.ImportFromEPSG(int(tcode))
+        ref.SetTOWGS84(*values) 
+        twkt = ref.ExportToWkt().decode('utf-8')
+
+    s_srs = osr.SpatialReference()
+    s_srs.ImportFromWkt(swkt.encode('utf-8'))
+
+    t_srs = osr.SpatialReference()
+    t_srs.ImportFromWkt(twkt.encode('utf-8'))
+    
+    
+    xform = osr.CoordinateTransformation(t_srs, s_srs)
+    transformation = xform.TransformPoint(x, y, z)
+    print callback
+    if callback != str(0):
+      export = {}
+      export['x'] = transformation[0]
+      export['y'] = transformation[1]
+      export['z'] = transformation[2]
+      response['Content-Type'] = "application/json"
+    else:
+      export = str(transformation)
+      response['Content-Type'] = "text/plain"
+      
+    return export
+
+  
 
 if __name__ == "__main__":
   #run(host='0.0.0.0', port=82)
