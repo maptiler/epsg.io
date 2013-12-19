@@ -323,6 +323,7 @@ def index(id):
     myquery = parser.parse(query)
     results = searcher.search(myquery, limit=None) #default limit is 10 , reverse = True
     
+    detail = []
     trans = []
     url_trans = []
     trans_item = []
@@ -407,20 +408,19 @@ def index(id):
           
           # from values of TOWGS84 edit wkt of CRS
           values = default_trans['wkt']
-          if re.findall(r'([a-zA-Z_])',values):
+          if re.findall(r'([a-df-zA-Z_])',values):
             nadgrid = default_trans['wkt']
           else:
             num =[]
-            w = re.findall(r'(-?\d+\.?\d*)',values)
           
+            w = re.findall(r'(-?\d+\.\d+\e?\-?\d+)',values)
             for n in w:
               num.append(float(n))
             values = tuple(num)     
-            #print values
             # do not change default TOWGS84
             if int(r['code_trans']) != int(default_trans['code']) :
             
-              if (values != (0,0,0,0,0,0,0) and type(values) == tuple and values != (0,)):            
+              if (values != (0,0,0,0,0,0,0) and type(values) == tuple and values != (0,) and values != ()):            
                 ref = osr.SpatialReference()
                 ref.ImportFromEPSG(int(r['code']))
                 ref.SetTOWGS84(*values) 
@@ -470,7 +470,7 @@ def index(id):
     if default_trans['concatop'] != []:
       for i in range(0,len(default_trans['concatop'])):
         url_concatop.append("/"+ str(default_trans['concatop'][i]) + "/")
-  return template('./templates/detail', item=item, trans=trans,default_trans=default_trans, num_results=num_results, url_method=url_method, title=title, url_format=url_format, export=export, url_area_trans=url_area_trans, url_area=url_area, center=center, g_coords=g_coords, trans_coords=trans_coords,wkt=wkt,facets_list=facets_list,url_concatop=url_concatop, nadgrid=nadgrid )  
+  return template('./templates/detail', item=item, trans=trans, default_trans=default_trans, num_results=num_results, url_method=url_method, title=title, url_format=url_format, export=export, url_area_trans=url_area_trans, url_area=url_area, center=center, g_coords=g_coords, trans_coords=trans_coords,wkt=wkt,facets_list=facets_list,url_concatop=url_concatop, nadgrid=nadgrid, detail=detail )  
 
 
 @route('/<id:re:[\d]+(-[\w]+)>')
@@ -486,6 +486,12 @@ def index(id):
     url_uom = ""
     url_children = ""
     url_prime = ""
+    nadgrid = ""
+    trans_coords = ""
+    trans = ""
+    url_format = ""
+    center = ""
+    default_trans = ""
     # item = ""
     # url_area = ""
 
@@ -524,7 +530,7 @@ def index(id):
       detail.append({'url_prime': url_prime, 'url_children':url_children,'url_axis':url_axis, 'url_uom':url_uom, 'url_area' : url_area})
       
  
-  return template('./templates/detail_alt', item=item, detail=detail, facets_list=facets_list)  
+  return template('./templates/detail', item=item, detail=detail, facets_list=facets_list, nadgrid=nadgrid, trans_coords=trans_coords, trans=trans, url_format=url_format, default_trans=default_trans, center=center)  
 
 
 @route('/<id:re:[\d]+(-[\d]+)?>/<format>')
@@ -534,6 +540,7 @@ def index(id, format):
   export = ""
   values = ""
   ref = osr.SpatialReference()
+  tcode = 0
   
   with ix.searcher(closereader=False) as searcher:
     parser = QueryParser("code", ix.schema)
@@ -559,15 +566,15 @@ def index(id, format):
     else: 
       trans_result = code_result
       url_coords = rcode
-    if not re.findall(r'([a-zA-Z_])',values):
-      w = re.findall(r'(-?\d+\.?\d*)',values)
+    if not re.findall(r'([a-df-zA-Z_])',values):
+      w = re.findall(r'(-?\d+\.\d+\e?\-?\d+)',values)
       num =[]
       for n in w:
         num.append(float(n))
       values = tuple(num)
 
       if int(def_trans) != int(tcode):
-        if (values != (0,0,0,0,0,0,0) and type(values) == tuple and values != (0,)):
+        if (values != (0,0,0,0,0,0,0) and type(values) == tuple and values != (0,) and values != ()):            
           ref.ImportFromEPSG(int(rcode))
           ref.SetTOWGS84(*values) 
           wkt = ref.ExportToWkt().decode('utf-8')
@@ -835,6 +842,18 @@ def server_static(filename):
 @route('/<filename>')
 def server_static(filename):
     return static_file(filename, root='/')
+
+@route('/fonts/<filename>')
+def server_static(filename):
+    return static_file(filename, root='./fonts/')
+
+@route('/img/<filename>')
+def server_static(filename):
+    return static_file(filename, root='./img/')
+
+@route('/index/<filename>')
+def server_static(filename):
+    return static_file(filename, root='./index/')
 
 if __name__ == "__main__":
   #run(host='0.0.0.0', port=82)
