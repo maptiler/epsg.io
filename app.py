@@ -2,7 +2,7 @@
 # encoding: utf-8
 """
 """
-INDEX = "../index"
+INDEX = "./index"
 
 facets_list = [
   ['CRS','CRS','','Coordinate reference systems',0,'http://'],
@@ -160,7 +160,7 @@ def index():
   # Front page without parameters
   if (len(request.GET.keys()) == 0):
     print len(request.GET.keys())
-    return template('search')
+    return template('./templates/search')
   
   class PopularityWeighting(scoring.BM25F):
      use_final = True
@@ -301,7 +301,7 @@ def index():
       
       return json.dumps(json_str)
 
-  return template('results',query=query,deprecated=deprecated, num_results=num_results, elapsed=elapsed, facets_list=facets_list, status_groups=status_groups, url_facet_statquery=url_facet_statquery, result=result, pagenum=int(pagenum),paging=paging)
+  return template('./templates/results',query=query,deprecated=deprecated, num_results=num_results, elapsed=elapsed, facets_list=facets_list, status_groups=status_groups, url_facet_statquery=url_facet_statquery, result=result, pagenum=int(pagenum),paging=paging)
 
 
 
@@ -350,7 +350,6 @@ def index(id):
       # for short link (5514, instead of 5514-15965)
       if int(code_trans) == 0 and int(r['code_trans']) != 0:
         code_trans = r['code_trans']
-      
       #if it default transformation code or has some other transformations
       if int(code_trans) != 0 or r['trans']:
         # it is at least one code of transformation (min. defalut trans. code)
@@ -362,7 +361,6 @@ def index(id):
           transformation = searcher.search(myquery, limit=None)
           for hit in transformation:
             trans_item.append(hit)
-            
             # if it active do not show a link
             if int(hit['code']) == int(code_trans):  
               link = ""
@@ -398,12 +396,13 @@ def index(id):
         
         # default trans is active transformation
         for i in range(0,len(trans_item)):
+          found_dt = False
           if str(code_trans) == str(trans_item[i]['code']):
             default_trans = trans_item[i]
-          else:
+            found_dt = True
+          elif str(code_trans) != str(trans_item[i]['code']) and not found:
             default_trans = trans_item[0]
 
-    
         if trans_item and default_trans:
           
           # from values of TOWGS84 edit wkt of CRS
@@ -471,7 +470,7 @@ def index(id):
     if default_trans['concatop'] != []:
       for i in range(0,len(default_trans['concatop'])):
         url_concatop.append("/"+ str(default_trans['concatop'][i]) + "/")
-  return template('detailed', item=item, trans=trans,default_trans=default_trans, num_results=num_results, url_method=url_method, title=title, url_format=url_format, export=export, url_area_trans=url_area_trans, url_area=url_area, center=center, g_coords=g_coords, trans_coords=trans_coords,wkt=wkt,facets_list=facets_list,url_concatop=url_concatop, nadgrid=nadgrid )  
+  return template('./templates/detail', item=item, trans=trans,default_trans=default_trans, num_results=num_results, url_method=url_method, title=title, url_format=url_format, export=export, url_area_trans=url_area_trans, url_area=url_area, center=center, g_coords=g_coords, trans_coords=trans_coords,wkt=wkt,facets_list=facets_list,url_concatop=url_concatop, nadgrid=nadgrid )  
 
 
 @route('/<id:re:[\d]+(-[\w]+)>')
@@ -525,7 +524,7 @@ def index(id):
       detail.append({'url_prime': url_prime, 'url_children':url_children,'url_axis':url_axis, 'url_uom':url_uom, 'url_area' : url_area})
       
  
-  return template('detailed_word', item=item, detail=detail, facets_list=facets_list)  
+  return template('./templates/detail_alt', item=item, detail=detail, facets_list=facets_list)  
 
 
 @route('/<id:re:[\d]+(-[\d]+)?>/<format>')
@@ -546,7 +545,7 @@ def index(id, format):
 
     for r in code_result:
       rcode = r['code']
-      rwkt = r['wkt']
+      wkt = r['wkt']
       rcode = r['code']
       def_trans = r['code_trans']
   
@@ -572,10 +571,6 @@ def index(id, format):
           ref.ImportFromEPSG(int(rcode))
           ref.SetTOWGS84(*values) 
           wkt = ref.ExportToWkt().decode('utf-8')
-      else: 
-        wkt = rwkt
-    else: 
-      wkt = rwkt
     
     ref.ImportFromWkt(wkt)
 
@@ -596,7 +591,7 @@ def index(id, format):
       out = ref.ExportToPrettyWkt()
       export = highlight(out, WKTLexer(), HtmlFormatter(cssclass='syntax',nobackground=True))
       response.content_type = 'text/html; charset=UTF-8'
-      return template('export', export = export, code=rcode)
+      return template('./templates/export', export = export, code=rcode)
     elif format == 'gml':
       export = ref.ExportToXML()
       ct = "text/gml" 
@@ -679,7 +674,7 @@ def index(id):
     
     for r in code_result:
       def_trans = r['code_trans']
-      rwkt = r['wkt']
+      wkt = r['wkt']
       rcode = r['code']
       rname = r['name']
     
@@ -708,16 +703,9 @@ def index(id):
           ref.ImportFromEPSG(int(rcode))
           ref.SetTOWGS84(*values) 
           wkt = ref.ExportToWkt().decode('utf-8')
-      else: 
-        wkt = rwkt
-    else:
-      wkt = rwkt
-      
-      
+        
     trans_wgs = "" 
     trans_other = ""
-    
-    
     
     ref = osr.SpatialReference()
     ref.ImportFromWkt(wkt.encode('utf-8'))
@@ -732,8 +720,7 @@ def index(id):
       xform = osr.CoordinateTransformation(ref, wgs)
       trans_other = xform.TransformPoint(coord_lat_other, coord_lon_other)
       
-    #print wkt
-  return template ('coordinates', trans_wgs=trans_wgs, trans_other=trans_other, resultcrs=code_result[0], url_coords=url_coords, coord_lat=coord_lat,coord_lon=coord_lon,coord_lat_other=coord_lat_other,coord_lon_other=coord_lon_other)
+  return template ('./templates/coordinates', trans_wgs=trans_wgs, trans_other=trans_other, resultcrs=code_result[0], url_coords=url_coords, coord_lat=coord_lat,coord_lon=coord_lon,coord_lat_other=coord_lat_other,coord_lon_other=coord_lon_other)
 
 @route('/trans')
 def index():
@@ -839,7 +826,7 @@ def index(id):
   
 @route('/about')
 def index():
-  return template('about')
+  return template('./templates/about')
 
 @route('/css/<filename>')
 def server_static(filename):
