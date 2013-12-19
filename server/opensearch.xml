@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<OpenSearchDescription xmlns="http://a9.com/-/spec/opensearch/1.1/" xmlns:moz="http://www.mozilla.org/2006/browser/search/">
+  <ShortName>EPSG.io</ShortName>
+  <Description>Coordinate systems for spatial reference worldwide</Description>
+  <InputEncoding>UTF-8</InputEncoding>
+  <Image width="16" height="16" type="image/x-icon">http://epsg.io/favicon.ico</Image>
+  <Contact>info@klokantech.com</Contact>
+  <Url type="text/html" method="get" template="http://epsg.io/?q={searchTerms}"/>
+  <moz:SearchForm>http://epsg.io/</moz:SearchForm>
+
+</OpenSearchDescription>
