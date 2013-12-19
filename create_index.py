@@ -445,7 +445,7 @@ for code, name, uom_code,remarks,information_source,revision_date,data_source, d
     'alt_name' : alt_name,
     'area': u"",
     'wkt': u"",
-    'bbox': bbox,
+    'bbox': 0,
     'scope': u"",
     'remarks': remarks,
     'trans_remarks': u"",
