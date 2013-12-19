@@ -127,7 +127,9 @@ Count of transformations: {{i}} (deprecated: {{a}})
 %if item['concatop']:
 <li>steps of transformation : {{item['concatop']}}</li>
 %end
-
+%if nadgrid:
+	<li>NadGrid file : {{nadgrid}}</li>
+%end
 
 %if 'source_geogcrs' in item:
 %if item['source_geogcrs']:
