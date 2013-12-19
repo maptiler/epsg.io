@@ -61,7 +61,7 @@ print " - WHOOSH!"
 class EPSGSchema(SchemaClass):
   
   code = TEXT(stored = True, sortable=True, field_boost=5.0) # "EPSG:4326" #coord_ref_sys_code
-  code_trans = NUMERIC(stored = True, sortable = True, field_boost = 5.0)
+  code_trans = NUMERIC(stored = True, sortable = True) #, field_boost = 5.0
   name = TEXT(stored = True, sortable=True, spelling=True, field_boost=3.0, analyzer=StemmingAnalyzer()) # Name "WGS 84" #coord_ref_sys_name
   alt_name = TEXT (stored = True)
   kind = TEXT(stored = True, sortable=True) # "ProjectedCRS" | "GeodeticCRS" #coord_ref_sys_kind
