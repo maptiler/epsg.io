@@ -8,6 +8,7 @@ facets_list = [
   ['CRS','CRS','','Coordinate reference systems',0,'http://'],
   ['CRS-PROJCRS','PROJCRS','&nbsp; &nbsp;', 'Projected',0,'http://'],
   ['CRS-GEOGCRS','GEOGCRS','&nbsp; &nbsp;', 'Geodetic',0,'http://'],
+  ['CRS-GEOG3DCRS','GEOG3DCRS', '&nbsp; &nbsp;', 'Geodetic 3D',0,'http://'],
   ['CRS-GCENCRS','GCENCRS','&nbsp; &nbsp;', 'Geocentric',0,'http://'],
   ['CRS-VERTCRS','VERTCRS','&nbsp; &nbsp;', 'Vertical',0,'http://'],
   ['CRS-ENGCRS','ENGCRS','&nbsp; &nbsp;', 'Engineering',0,'http://'],
@@ -38,10 +39,10 @@ facets_list = [
 
 # Index to the facets_list above - manual update on change!
 f_crs_index = 0
-f_op_index = 7
-f_datum_index = 11
-f_cs_index = 18
-f_unit_index = 25
+f_op_index = 8
+f_datum_index = 12
+f_cs_index = 19
+f_unit_index = 26
 
 from bottle import route, run, template, request, response, static_file, redirect
 import urllib2
@@ -62,6 +63,8 @@ from pygments.formatters import HtmlFormatter
 from osgeo import gdal, osr, ogr
 import time
 import math
+import json
+
 
 
 re_kind = re.compile(r'kind:([\*\w-]+)')
@@ -164,16 +167,22 @@ def index():
      def final(self, searcher, docnum, score):
        
        popularity = (searcher.stored_fields(docnum).get("popularity"))
-       #print score, popularity
+       code = (searcher.stored_fields(docnum).get("code"))
+       #print "code:",code," with score:", score
        return score #* popularity
   
   ix = open_dir(INDEX)
   result = []
 
   with ix.searcher(closereader=False, weighting=PopularityWeighting()) as searcher:
-    parser = MultifieldParser(["tgrams","code","name","trans","code_trans","kind","area","alt_name"], ix.schema)
+  #with ix.searcher(closereader=False, weighting=scoring.BM25F) as searcher:
+  
+    parser = MultifieldParser(["tgrams","code","name","trans","code_trans","kind","area"], ix.schema)
     query = request.GET.get('q')  # p43 - 1.9 The default query language
     pagenum = int(request.GET.get("page",1))
+    format = request.GET.get('format',0)
+    callback = request.GET.get('callback',False)
+    
     kind = getQueryParam(query, 'kind')
     deprecated = getQueryParam(query, 'deprecated')
     
@@ -214,10 +223,13 @@ def index():
     pagelen = 10
     # last document from result on page
     maxdoc = pagelen*pagenum
+    json_str = []
     
     for r in results[(maxdoc-pagelen):maxdoc]:
       link = str(r['code'])
       result.append({'r':r, 'link':link})
+      json_str.append({'code':r['code'], 'name':r['name'], 'wkt':r['wkt'],'default_trans':r['code_trans'],'alternatives_trans':r['trans'],'area_trans':r['area_trans'],'accuracy':r['accuracy'],'kind':r['kind']})
+      
     
     # number of results from results
     num_results = len(results)
@@ -276,12 +288,22 @@ def index():
     # show a clear query (e.g. without kind:CRS, deprecated:0)
     query = setQueryParam(query,'kind',kind)
     query = setQueryParam(query,'deprecated',deprecated)
+    export = {}
+    if str(format) == "json":
+      export['number_result']= num_results
+      export['results'] = json_str
+      json_str = export
+      response['Content-Type'] = "application/json"
+      if callback:
+        json_str = callback + "(" + str(json_str) + ")"
+        response['Content-Type'] = "application/javascript"
+        return json.dumps(json_str)
+      
+      return json.dumps(json_str)
 
   return template('results',query=query,deprecated=deprecated, num_results=num_results, elapsed=elapsed, facets_list=facets_list, status_groups=status_groups, url_facet_statquery=url_facet_statquery, result=result, pagenum=int(pagenum),paging=paging)
 
-@route('/<id:re:.+[\d]+.+?>/')
-def index(id):
-  redirect('/%s' % id)
+
 
 @route('/<id:re:[\d]+(-[\d]+)?>')
 def index(id):
@@ -306,7 +328,7 @@ def index(id):
     trans_item = []
     num_results = 0
     # item = None
-    # wkt = None
+    #wkt = None
     # default_trans = ""
     # url_method = ""
     url_format = ""
@@ -317,13 +339,14 @@ def index(id):
     # center = 0,0
     trans_coords = ""
     # title = ""
+    nadgrid = None
     
     for r in results:
       found = False
       item = r
-      print item
       title = item['kind'] + ":" + item['code']
       url_area = area_to_url(item['area'])
+      wkt = item['wkt']
       # for short link (5514, instead of 5514-15965)
       if int(code_trans) == 0 and int(r['code_trans']) != 0:
         code_trans = r['code_trans']
@@ -369,7 +392,6 @@ def index(id):
         if ref.GetTOWGS84() != None:
           found = True
           default_trans = item
-          wkt = item['wkt']
       
       # if it has any transformation
       if found == False:
@@ -386,24 +408,24 @@ def index(id):
           
           # from values of TOWGS84 edit wkt of CRS
           values = default_trans['wkt']
-          num =[]
-          w = re.findall(r'(-?\d+\.?\d*)',values)
+          if re.findall(r'([a-zA-Z_])',values):
+            nadgrid = default_trans['wkt']
+          else:
+            num =[]
+            w = re.findall(r'(-?\d+\.?\d*)',values)
           
-          for n in w:
-            num.append(float(n))
-          values = tuple(num)     
-          
-          # do not change default TOWGS84
-          if int(r['code_trans']) != int(default_trans['code']) :
+            for n in w:
+              num.append(float(n))
+            values = tuple(num)     
+            #print values
+            # do not change default TOWGS84
+            if int(r['code_trans']) != int(default_trans['code']) :
             
-            if (values != (0,0,0,0,0,0,0) and type(values) == tuple and values != (0,)):            
-              ref = osr.SpatialReference()
-              ref.ImportFromEPSG(int(r['code']))
-              ref.SetTOWGS84(*values) 
-              wkt = ref.ExportToWkt().decode('utf-8')
-          # if it default, then wkt from CRS
-          else: 
-            wkt = r['wkt']
+              if (values != (0,0,0,0,0,0,0) and type(values) == tuple and values != (0,)):            
+                ref = osr.SpatialReference()
+                ref.ImportFromEPSG(int(r['code']))
+                ref.SetTOWGS84(*values) 
+                wkt = ref.ExportToWkt().decode('utf-8')
         # if do not have trans_item or default_trans    
         else:
           center = ((item['bbox'][0] - item['bbox'][2])/2.0)+item['bbox'][2],((item['bbox'][3] - item['bbox'][1])/2.0)+item['bbox'][1]
@@ -449,7 +471,7 @@ def index(id):
     if default_trans['concatop'] != []:
       for i in range(0,len(default_trans['concatop'])):
         url_concatop.append("/"+ str(default_trans['concatop'][i]) + "/")
-  return template('detailed', item=item, trans=trans,default_trans=default_trans, num_results=num_results, url_method=url_method, title=title, url_format=url_format, export=export, url_area_trans=url_area_trans, url_area=url_area, center=center, g_coords=g_coords, trans_coords=trans_coords,wkt=wkt,facets_list=facets_list,url_concatop=url_concatop )  
+  return template('detailed', item=item, trans=trans,default_trans=default_trans, num_results=num_results, url_method=url_method, title=title, url_format=url_format, export=export, url_area_trans=url_area_trans, url_area=url_area, center=center, g_coords=g_coords, trans_coords=trans_coords,wkt=wkt,facets_list=facets_list,url_concatop=url_concatop, nadgrid=nadgrid )  
 
 
 @route('/<id:re:[\d]+(-[\w]+)>')
@@ -538,7 +560,7 @@ def index(id, format):
     else: 
       trans_result = code_result
       url_coords = rcode
-    if values:
+    if not re.findall(r'([a-zA-Z_])',values):
       w = re.findall(r'(-?\d+\.?\d*)',values)
       num =[]
       for n in w:
@@ -617,13 +639,6 @@ def index(id, format):
   response['Content-Type'] = ct 
   return export
   
-@route('/about')
-def index():
-  return template('about')
-
-@route('/css/<filename>')
-def server_static(filename):
-    return static_file(filename, root='./css/')
 
     
 @route('/<id:re:[\d]+(-[\d]+)?>/coordinates/')
@@ -717,7 +732,7 @@ def index(id):
       xform = osr.CoordinateTransformation(ref, wgs)
       trans_other = xform.TransformPoint(coord_lat_other, coord_lon_other)
       
-  
+    #print wkt
   return template ('coordinates', trans_wgs=trans_wgs, trans_other=trans_other, resultcrs=code_result[0], url_coords=url_coords, coord_lat=coord_lat,coord_lon=coord_lon,coord_lat_other=coord_lat_other,coord_lon_other=coord_lon_other)
 
 @route('/trans')
@@ -733,7 +748,7 @@ def index():
   t_srs = request.GET.get('t_srs',4326)
   callback = str(request.GET.get('callback',0))
   
-  print x,y,z,s_srs,t_srs,callback
+  #print x,y,z,s_srs,t_srs,callback
   scode, scode_trans = (str(s_srs)+'-0').split('-')[:2]
   tcode, tcode_trans = (str(t_srs)+'-0').split('-')[:2]
     
@@ -804,22 +819,35 @@ def index():
     t_srs.ImportFromWkt(twkt.encode('utf-8'))
     
     
-    xform = osr.CoordinateTransformation(t_srs, s_srs)
+    xform = osr.CoordinateTransformation(s_srs, t_srs)
     transformation = xform.TransformPoint(x, y, z)
-    print callback
+    export = {}
+    export["x"] = transformation[0]
+    export["y"] = transformation[1]
+    export["z"] = transformation[2]
+    response['Content-Type'] = "text/json"
+    
     if callback != str(0):
-      export = {}
-      export['x'] = transformation[0]
-      export['y'] = transformation[1]
-      export['z'] = transformation[2]
-      response['Content-Type'] = "application/json"
-    else:
-      export = str(transformation)
-      response['Content-Type'] = "text/plain"
+      export = str(callback) + "(" + str(export) + ")"
+      response['Content-Type'] = "application/javascript"
       
     return export
 
+@route('/<id:re:.+[\d]+.+?>/')
+def index(id):
+  redirect('/%s' % id)
   
+@route('/about')
+def index():
+  return template('about')
+
+@route('/css/<filename>')
+def server_static(filename):
+    return static_file(filename, root='./css/')
+
+@route('/<filename>')
+def server_static(filename):
+    return static_file(filename, root='/')
 
 if __name__ == "__main__":
   #run(host='0.0.0.0', port=82)
