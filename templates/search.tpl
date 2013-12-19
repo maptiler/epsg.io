@@ -1,28 +1,74 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-<head>
-	<link rel="stylesheet" type="text/css" href="/css/style.css">
-    <link rel="search" type="application/opensearchdescription+xml" href="/opensearch.xml" title="EPSG.io" />
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"  lang="en" xml:lang="en">
+    <head>    
+        <meta charset="utf-8"/>
+        <title>EPSG.io</title>
+        <meta content="width=device-width, initial-scale=1, maximum-scale=1" name="viewport" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="description" content="EPSG.io" />
+        <meta name="keywords" content="EPSG.io" />
+        <meta name="robots" content="ALL,FOLLOW" />
+        <link type="text/css" rel="stylesheet" href="/css/main.css?v=1" />
+        <link type="image/x-icon" rel="shortcut icon" href="/img/favicon.ico" /> 
+        <link rel="search" type="application/opensearchdescription+xml" href="/opensearch.xml" title="EPSG.io" />
 
-	
-	<title>EPSG.io - Coordinate systems for spatial reference worldwide</title>
-
-</head>
-<body>
-	
-	<div id ="mysearchabout"><a href=/about>About</a></div>
-	<h1>EPSG.io</h1>
-	<h2>Coordinate systems for spatial reference worldwide</h2>
-
-
-<form action= "/" method="get">
-
-	<div id="mysearchbox"><input type="text" name="q" placeholder="country, code or name of a coordinate system"/></div>
-	
-	
-	<div id="search"><input type="submit" value="search"></div>
-</form>
-
-</body>
+    </head>
+    <body id="homepage" data-role="page">
+        <div id="layout-container">
+            <p id="logo-container">
+                <a href="#" title=""><span>Epsg.io</span> Coordinate systems worldwide</a>
+            </p>
+            <h1>Find a coordinate system and get coordinates through a map.</h1>
+            <div id="search-container">
+                <form action="/" method="get">
+                    <p><input type="search" name="q" value="Country, code or name of a coordinate system" /> <input type="submit" name="" value="search" /></p>
+                </form>
+            </div>
+            <div id="home-menu-container">
+                <div class="hm-column lft">
+                    <h2>Most fameous coordinate systems</h2>
+                    <ul>
+                        <li><a href="#" title="">This is Photoshop's version</a></li> 
+                        <li><a href="#" title="">Lorem Ipsum.</a></li> 
+                        <li><a href="#" title="">Proin gravida nibh vel velit</a></li> 
+                        <li><a href="#" title="">Auctor aliquet.</a></li> 
+                        <li><a href="#" title="">Aenean sollicitudin, lorem quis.</a></li> 
+                        <li><a href="#" title="">Bibendum auctor, nisi elit </a></li> 
+                        <li><a href="#" title="">Consequat ipsum, nec sagittis</a></li> 
+                    </ul>
+                </div>
+                <div class="hm-column lft">
+                    <h2>Most fameous coordinate systems</h2>
+                    <ul>
+                        <li><a href="#" title="">This is Photoshop's version</a></li> 
+                        <li><a href="#" title="">Lorem Ipsum.</a></li> 
+                        <li><a href="#" title="">Proin gravida nibh vel velit</a></li> 
+                        <li><a href="#" title="">Auctor aliquet.</a></li> 
+                        <li><a href="#" title="">Aenean sollicitudin, lorem quis.</a></li> 
+                        <li><a href="#" title="">Bibendum auctor, nisi elit </a></li> 
+                        <li><a href="#" title="">Consequat ipsum, nec sagittis</a></li> 
+                    </ul>
+                </div>
+                <div class="hm-column lft last">
+                    <h2>Most fameous coordinate systems</h2>
+                    <ul>
+                        <li><a href="#" title="">This is Photoshop's version</a></li> 
+                        <li><a href="#" title="">Lorem Ipsum.</a></li> 
+                        <li><a href="#" title="">Proin gravida nibh vel velit</a></li> 
+                        <li><a href="#" title="">Auctor aliquet.</a></li> 
+                        <li><a href="#" title="">Aenean sollicitudin, lorem quis.</a></li> 
+                        <li><a href="#" title="">Bibendum auctor, nisi elit </a></li> 
+                        <li><a href="#" title="">Consequat ipsum, nec sagittis</a></li> 
+                    </ul>
+                </div>                
+            </div>
+            <div id="foot">
+                <p id="mzk-logo">
+                    <a href="#" title=""><img src="./img/hzk-logo.png" alt="" /></a>
+                </p>
+                <p>This is Photoshop's version Lorem Ipsum.</p>
+                <p id="copyright">Copyright</p>
+            </div>
+        </div>
+    </body>
 </html>

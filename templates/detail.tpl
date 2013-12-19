@@ -1,201 +1,280 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-<head>
-	<link rel="stylesheet" type="text/css" href="/css/style.css">
-
-	<title>{{title}}</title>
-
-</head>
-<body>
-
-<div id ="mysearchabout"><a href=/about>About</a> &nbsp; &nbsp; <a href=/>Search</a></div>
-<h1>EPSG.io</h1>
-
-<h2>Find coordinate systems for spatial reference worldwide</h2>
-<hr>
-<h3>
-	%for i in range(0,len(facets_list)):
-	%if facets_list[i][0] == item['kind']:
-	{{facets_list[i][3]}} - {{facets_list[i][1]}}
-	%end
-	%end
-
-</h3>
-<div id="topic">EPSG:{{item['code']}} {{item['name']}} </div>
-</br>
-%if default_trans != item:
-	<b>Transformations</b>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"  lang="en" xml:lang="en">
+  <head>  
+    <meta charset="utf-8"/>
+    <title>EPSG.io</title>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1" name="viewport" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="description" content="EPSG.io" />
+    <meta name="keywords" content="EPSG.io" />
+    <meta name="robots" content="ALL,FOLLOW" />
+    <link type="text/css" rel="stylesheet" href="./css/main.css?v=1" />
+    <link type="image/x-icon" rel="shortcut icon" href="/img/favicon.ico" /> 
+  </head>
+  <body id="detailpage" data-role="page">
+    <div id="head">
+      <p id="logo-container">
+        <a href="/" title=""><span>Epsg.io</span> Coordinate systems worldwide</a>
+      </p>
+      <ul id="menu-top">
+        <li><a href="/about" title="">About</a></li>
+      </ul>
+    </div>
+    <div id="layout-container">
+      
+      <h1>EPSG:{{item['code']}}</h1>
+      <p>
+%for i in range(0,len(facets_list)):
+  %if facets_list[i][0] == item['kind']:
+    {{facets_list[i][3]}} - {{facets_list[i][1]}}
+  %end
 %end
-
-</br>
-</br>
-% i = 0
-%for r in trans:
-	%if r['link'] == "" and r['deprecated'] == 0 and r['area_trans']:
-		
-		<div id="me">
-			</br>
-			<li> {{r['area_trans']}}
-		
-		%if r['accuracy']:
-			, accuracy {{r['accuracy']}}m, 
-		%end
-		
-		%if r['code_trans'] != 0:
-			code {{r['code_trans']}} 
-		%end
-		%if r['default'] == True:
-			DEFAULT
-		%end
-		% i +=1
-			</li>
-		</div>
-		</br></br>
-		
-	%elif r['deprecated'] == 0 and r['area_trans']:
-		<li><a href="/{{r['link']}}/" title = "{{r['trans_remarks']}}">{{r['area_trans']}}, accuracy 
-			{{r['accuracy']}}m, code {{r['code_trans']}} 
-			%if r['default'] == True:
-				DEFAULT
-			%end
-			</a>
-			%i+=1
-			</br></br>
-		</li>
-	
-	%end
+      </p>
+      
+      <h2>{{item['name']}}</h2>
+      
+      <p>
+        Scope: {{item['scope']}}<br />
+%if detail:
+        Area of use: <a href="{{detail[0]['url_area']}}"> {{item['area']}}</a><br />
+%else:
+        Area of use: <a href="{{url_area}}">{{item['area']}}</a><br />
 %end
-
-<a href="#" onClick="javascript:document.getElementById('trans_deprecated').style.display='block';return false">Show deprecated transformations</a>
-<div id="trans_deprecated" style="display:none">
-%a = 0
-%for r in trans:
-%if r['deprecated'] == 1:
-	%if r['link'] == "":
-	<li>{{r['area_trans']}}, accuracy 
-		{{r['accuracy']}}m, code {{r['code_trans']}} DEPRECATED
-		%if r['default'] == True:
-			DEFAULT
-		%end
-
-		</br></br>
-	%else:
-	<li><a href="/{{r['link']}}/" title = "{{r['trans_remarks']}}">{{r['area_trans']}}, accuracy 
-		{{r['accuracy']}}m,  code {{r['code_trans']}} DEPRECATED
-		%if r['default'] == True:
-			DEFAULT
-		%end
-		</a>
-		</br></br>
-	%end
-	%a+=1
-%end
-%end
-
-</div>
-</br>
-</br>
-
-
-%if (i !=0 or a!=0) and default_trans:
-</br>
-Count of transformations: {{i}} (deprecated: {{a}})
-</br>
-	<b>Information about transformation: {{default_trans['code']}}</b>
-
-	<li>Method: <a href="{{url_method}}">{{default_trans['method']}}</a></li>
-	<li>Remarks: {{default_trans['remarks']}}</li>
-	<li>Area of use: <a href="{{url_area_trans}}">{{default_trans['area']}}</a></li>
-	%if url_concatop != []:
-		%for url in url_concatop:
-			<li>steps of transformation : <a href="{{url}}">{{url}}</a></li>
-		%end
-	%end
-%end
-
-
-
-</br>
-</br>
-<b>Information about EPSG: {{item['code']}}</b>
-<li>Scope: {{item['scope']}}</li>
-<li>Area of use: <a href="{{url_area}}">{{item['area']}}</a></li>
-<li>Remarks: {{item['remarks']}}</li>
-<li>Information source: {{item['information_source']}}</li>
-<li>Revision date: {{item['revision_date']}}</li>
+        Remarks: {{item['remarks']}}<br />
+        Information source: {{item['information_source']}}<br />
+        Revision date: {{item['revision_date']}}<br />
 %if item['concatop']:
-<li>steps of transformation : {{item['concatop']}}</li>
+        Steps of transformation: {{item['concatop']}}<br />
 %end
 %if nadgrid:
-	<li>NadGrid file : {{nadgrid}}</li>
+        NadGrid file: {{nadgrid}}<br />
 %end
-
 %if 'source_geogcrs' in item:
-%if item['source_geogcrs']:
- 	<li>Geodetic coordinate reference system: <a href="/{{item['source_geogcrs']}}/">{{item['source_geogcrs']}}</a></li>
+  %if item['source_geogcrs']:
+        Geodetic coordinate reference system: <a href="/{{item['source_geogcrs']}}/" title="">{{item['source_geogcrs']}}</a><br />
 
 %end
 %end
 %if 'datum_code' in item:
-	%if item['datum_code'] != 0 :
-		<li>Datum: <a href="/{{item['datum_code']}}-datum/">{{item['datum_code']}}-datum</a></li>
-	%end
+  %if item['datum_code'] != 0 :
+        Datum: <a href="/{{item['datum_code']}}-datum/" title="">{{item['datum_code']}}-datum</a><br />
+  %end
 %end
+%if not detail:
 %if 'children_code' in item:
-	%if item['children_code'] != 0 :
-		<li>Coordinate System: <a href="/{{item['children_code']}}-coordsys/">{{item['children_code']}}-coordsys</a></li>
-	%end
+  %if item['children_code'] != 0 :
+        Coordinate System: <a href="/{{item['children_code']}}-coordsys/" title="">{{item['children_code']}}-coordsys</a><br />
+  %end
+%end
 %end
 
-
-%if url_format:
-<div id="formats">
-
-	<li><a href="{{url_format}}/prettywkt">PrettyWKT</a></li>
-	<li><a href="{{url_format}}/html">Human-readable PrettyWKT</a></li>
-	<li><a href="{{url_format}}/esriwkt">ESRI WKT</a></li>
-	<li><a href="{{url_format}}/prj">Download file {{item['code']}}.prj</a></li>
-	<li><a href="{{url_format}}/proj4">PROJ.4</a></li>
-	<li><a href="{{url_format}}/gml">OGC GML</a></li>
-	<li><a href="{{url_format}}/geoserver">GeoServer</a></li>
-	<li><a href="{{url_format}}/mapfile">MAPfile</a></li>
-	<li><a href="{{url_format}}/mapserverpython">MapSever - Python</a></li>
-	<li><a href="{{url_format}}/mapnik">mapnik</a></li>
-	<li><a href="{{url_format}}/mapnikpython">mapnik - Python</a></li>
-	<li><a href="{{url_format}}/postgis">PostGIS</a></li>
-	<li><a href="{{url_format}}/json">JSON</a></li>
-	<li><a href="{{url_format}}/ogcwkt">OGC WKT</a></li>
-	<li><a href="{{url_format}}/usgs">USGS</a></li>
-
-
-	</div>
+%if item['target_uom']:
+        Target uom: <a href="{{detail[0]['url_uom']}}">{{item['target_uom']}}</a>	
 %end
-{{!export}}
 
-%if item['bbox']:
+%if item['uom_code']:
+        Unit: <a href="/{{item['uom_code']}}-units/">{{item['uom']}}</a>
+%end
 
-<div id=image>
-<img src="/css/crosshair.png" id="crosshair" alt=""/>
-<img src="https://maps.googleapis.com/maps/api/staticmap?size=235x190&scale=2&sensor=false&visual_refresh=true&center={{center[0]}},{{center[1]}}&path=color:0xff0000ff|fillcolor:0xff000022|weight:2|{{g_coords}}" alt="SimpleMap" height="190" width="235">
-</div>
-<li>center coords for wgs = {{center[0]}}, {{center[1]}}</li>
+%if item['files']:
+        File: {{item['files']}}
+%end
+
+%if item['orientation']:
+        Orientation: {{item['orientation']}}
+%end
+
+%if item['abbreviation']:
+        Abrev: {{item['abbreviation']}}
+%end
+
+%if item['order']:
+        Axis order: {{item['order']}}.
+%end
+%if item['description']:
+        Description: {{item['description']}}
+%end
+
+%if item['greenwich_longitude']:
+        Greenwich longitude difference: {{item['greenwich_longitude']}}
+%end
+%if detail != []:
+%if detail[0]['url_prime']:
+        Prime meridian: <a href="/{{detail[0]['url_prime']}}">{{item['prime_meridian']}}-primemeridian</a>
+%end
+%end
+%if detail != []:
+%if detail[0]['url_children']:
+        Link to : <a href="/{{detail[0]['url_children']}}">{{detail[0]['url_children']}}</a>
+%end
+%end
+%if detail != []:
+%if detail[0]['url_axis']:
+        
+  %for a in detail[0]['url_axis']:
+        Link to axis : <a href="/{{a}}/">{{a}}</a><br />
+  %end
+        
+%end
+%end
+      </p>
+      
+      <div id="detail-content-container">
+        <div class="map-container">
+%if center:
+          <div id="mini-map">
+            <img src="./css/crosshair.png" alt="" />
+            <img src="https://maps.googleapis.com/maps/api/staticmap?size=235x190&scale=2&sensor=false&visual_refresh=true&center={{center[0]}},{{center[1]}}&path=color:0xff0000ff|fillcolor:0xff000022|weight:2|{{g_coords}}" alt="SimpleMap" height="190" width="235">
+%end
+          </div>
 %if trans_coords:
-	<li>center coords for EPSG:{{item['code']}} with EPSG:{{default_trans['code']}} transformation  = {{trans_coords[0]}}, {{trans_coords[1]}}, {{trans_coords[2]}}</li>
+          <p>
+            Coordinates<br />
+            <span>{{trans_coords[0]}}</span>  <span>{{trans_coords[1]}}</span>
+          </p>
+%end
+        </div>
+        <div class="location-data-container">
+%if trans:
+%for r in trans:
+          <h2>
+  %if r['link'] == "" and r['area_trans']:
+              {{r['area_trans']}}
+    %if r['accuracy']:
+              , accuracy {{r['accuracy']}}m, 
+    %end
+    %if r['code_trans'] != 0:
+              code {{r['code_trans']}} 
+    %end
+    %if r['default'] == True:
+              DEFAULT
+    %end
+  %end
 %end
 %end
-
-%if item['wkt'] and item['bbox'] and trans_coords:
-
-<form action= "{{url_format}}/coordinates/" method="get">
-  	from WGS 84 to {{item['name']}} <input type="text" name="wgs" placeholder="{{center[0]}} {{center[1]}}" style="width: 200px"/>
-		<input type="submit" value="TRANSFORM">
-</form>
-
-<form action= "{{url_format}}/coordinates/" method="get">
-  	from {{item['name']}} to WGS 84 <input type="text" name="other" placeholder="{{trans_coords[0]}} {{trans_coords[1]}}" style="width: 200px"/>
-		<input type="submit" value="TRANSFORM">
-</form>
+          </h2>
+%if center and trans_coords:
+          <p class="btn-link-container">
+            <a href="{{url_format}}/coordinates/?wgs={{center[0]}}%20{{center[1]}}" title=""><i></i>Get position on a map</a>
+          </p>
 %end
-</body>
+%if trans and default_trans:
+          <p>
+            Method: {{default_trans['method']}}<br />
+            Area of use: <a href="{{url_area_trans}}" title-"">{{default_trans['area']}}</a><br />
+            Remarks: {{default_trans['remarks']}}<br />
+            Information source: <br />
+            Revision date: {{default_trans['revision_date']}}<br />
+%if url_concatop != []:
+            Steps of transformation: 
+  %for url in url_concatop:
+            <a href="{{url}}" title="">{{url}}</a>
+  %end
+%end
+          </p>
+%end
+        </div>
+        <div class="transformations-container">
+          <h3>Available transformations:</h3>
+          <ul>
+% i = 0
+%for r in trans:
+  %if r['link'] == "" and r['deprecated'] == 0 and r['area_trans']:
+            <li> {{r['area_trans']}}
+    %if r['accuracy']:
+            , accuracy {{r['accuracy']}}m, 
+    %end
+    %if r['code_trans'] != 0:
+            code {{r['code_trans']}} 
+    %end
+    %if r['default'] == True:
+            DEFAULT
+    %end
+    % i +=1
+            </li>
+  %elif r['deprecated'] == 0 and r['area_trans']:
+            <li>
+            <a href="/{{r['link']}}/" title = "{{r['trans_remarks']}}">{{r['area_trans']}}, accuracy 
+            {{r['accuracy']}}m, code {{r['code_trans']}} 
+    %if r['default'] == True:
+            DEFAULT
+    %end
+            </a>
+    %i+=1
+            </li>
+
+  %end
+%end
+
+            <a href="#" onClick="javascript:document.getElementById('trans_deprecated').style.display='block';return false">Show deprecated transformations</a>
+            <div id="trans_deprecated" style="display:none">
+%a = 0
+%for r in trans:
+  %if r['deprecated'] == 1:
+    %if r['link'] == "":
+            <li>{{r['area_trans']}}, accuracy {{r['accuracy']}}m, code {{r['code_trans']}} DEPRECATED
+      %if r['default'] == True:
+          DEFAULT
+      %end
+            </li>
+    %else:
+            <li>
+            <a href="/{{r['link']}}/" title = "{{r['trans_remarks']}}">{{r['area_trans']}}, accuracy {{r['accuracy']}}m,  code {{r['code_trans']}} DEPRECATED
+      %if r['default'] == True:
+          DEFAULT
+      %end
+            </a>
+            </li>
+    %end
+    %a+=1
+  %end
+%end
+          </ul>
+        </div>
+      </div>
+%if url_format:
+      <div id="edit-box-container">
+        <div id="eb-menu-container">
+          <h4>Export</h4>
+          <ul id="eb-menu">
+            <li><a class="selected" href="" title="">Well Known Text as HTML<i></i></a></li>
+            <li><a href="" title="">PrettyWKT <i></i></a></li>
+            <li><a href="" title="">ESRI WKT <i></i></a></li>
+            <li><a href="{{url_format}}/prj" title="">Download file {{item['code']}}.prj <i></i></a></li>
+            <li><a href="" title="">PROJ.4 <i></i></a></li>
+            <li><a href="" title="">OGC GML <i></i></a></li>
+            <li><a href="" title="">GeoServer <i></i></a></li>
+            <li><a href="" title="">MAPfile <i></i></a></li>
+            <li><a href="" title="">MapSever - Python <i></i></a></li>
+            <li><a href="" title="">mapnik <i></i></a></li>
+            <li><a href="" title="">mapnik - Python <i></i></a></li>
+            <li><a href="" title="">PostGIS <i></i></a></li>
+            <li><a href="" title="">JSON <i></i></a></li>
+            <li><a href="" title="">OGC WKT <i></i></a></li>
+            <li><a href="" title="">USGS <i></i></a></li>
+          </ul>
+        </div>
+        <div id="code-definition-container-html">
+          <p>Definition: Well Known Text as HTML</p>
+          <ul id="cd-tabs">
+            <li><a href="{{url_format}}/html" title="">Open in new page</a></li>
+            <li><a href="#" title="">Copy URL to clipboard</a></li>
+            <li><a href="#" title="">Copy TEXT to clipboard</a></li>
+          </ul>
+          <div class="syntax">
+            {{!export}}
+          </div>
+        </div>
+      </div>
+%end
+      <div id="foot">
+        <p id="mzk-logo">
+          <a href="#" title=""><img src="./img/hzk-logo.png" alt="" /></a>
+        </p>
+        <p>This is Photoshop's version Lorem Ipsum.</p>
+        <p id="copyright">Copyright</p>
+      </div>
+    </div>
+
+  </body>
 </html>
