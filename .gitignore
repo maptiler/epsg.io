@@ -1,0 +1,4 @@
+*.pyc
+venv
+gunicorn-epsgio.log
+gunicorn-epsgio.pid
