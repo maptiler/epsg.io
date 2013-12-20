@@ -9,7 +9,7 @@
         <meta name="keywords" content="EPSG.io" />
         <meta name="robots" content="ALL,FOLLOW" />
         <link rel="stylesheet" href="/css/main.css" type="text/css" />
-        <link rel="icon" href="/img/favicon.ico" type="image/x-icon" />
+        <link rel="shortcut icon" href="http://epsg.io/favicon.ico" />
         <link rel="search" href="/opensearch.xml" title="EPSG.io" type="application/opensearchdescription+xml"/>
 
     </head>
