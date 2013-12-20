@@ -898,25 +898,25 @@ def index(id):
 def index():
   return template('./templates/about')
 
-@route('/css/<filename>')
-def server_static(filename):
-    return static_file(filename, root='./css/')
+@route('/css/main.css')
+def static():
+    return static_file("main.css", root='./css/')
 
-@route('/<filename>')
-def server_static(filename):
-    return static_file(filename, root='/')
+@route('/opensearch.xml')
+def static():
+    return static_file('opensearch.xml', root='./')
 
 @route('/fonts/<filename>')
-def server_static(filename):
+def static(filename):
     return static_file(filename, root='./fonts/')
 
 @route('/img/<filename>')
-def server_static(filename):
+def static(filename):
     return static_file(filename, root='./img/')
 
-@route('/index/<filename>')
-def server_static(filename):
-    return static_file(filename, root='./index/')
+@route('/favicon.ico')
+def static():
+    return static_file('favicon.ico', root='./img/')
 
 if __name__ == "__main__":
   #run(host='0.0.0.0', port=82)
