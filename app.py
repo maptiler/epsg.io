@@ -912,7 +912,7 @@ def static(filename):
 @route('/favicon.ico')
 def static():
     return static_file('favicon.ico', root='./img/')
-
+.
 if __name__ == "__main__":
   #run(host='0.0.0.0', port=82)
   run(host='0.0.0.0', port=8080, server='gunicorn', workers=4)
