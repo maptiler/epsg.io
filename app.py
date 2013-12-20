@@ -182,6 +182,7 @@ def index():
     pagenum = int(request.GET.get("page",1))
     format = request.GET.get('format',0)
     callback = request.GET.get('callback',False)
+    expanded_trans = request.GET.get('trans',False)
     
     kind = getQueryParam(query, 'kind')
     deprecated = getQueryParam(query, 'deprecated')
@@ -228,7 +229,7 @@ def index():
     for r in results[(maxdoc-pagelen):maxdoc]:
       link = str(r['code'])
       result.append({'r':r, 'link':link})
-      json_str.append({'code':r['code'], 'name':r['name'], 'wkt':r['wkt'],'default_trans':r['code_trans'],'alternatives_trans':r['trans'],'area_trans':r['area_trans'],'accuracy':r['accuracy'],'kind':r['kind']})
+      json_str.append({'code':r['code'], 'name':r['name'], 'wkt':r['wkt'],'default_trans':r['code_trans'],'trans':r['trans'],'area_trans':r['area_trans'],'accuracy':r['accuracy'],'kind':r['kind'], 'bbox':r['bbox']})
       
     
     # number of results from results
@@ -290,6 +291,21 @@ def index():
     query = setQueryParam(query,'deprecated',deprecated)
     export = {}
     if str(format) == "json":
+      
+      if expanded_trans:
+        json_str = []
+        for r in results[(maxdoc-pagelen):maxdoc]:
+          if r['trans']:
+            json_bbox = []
+            for item in r['trans']:
+              parser = MultifieldParser(["code","kind"], ix.schema)
+              query = "code:"+str(item)+ " kind:COORDOP"
+              myquery = parser.parse(query)
+              transformation = searcher.search(myquery, limit=None)
+              for hit in transformation:
+                json_bbox.append({'trans_code':item, 'bbox': hit['bbox'] })
+          json_str.append({'code':r['code'], 'name':r['name'], 'wkt':r['wkt'],'default_trans':r['code_trans'],'accuracy':r['accuracy'],'kind':r['kind'], 'trans':json_bbox})        
+          
       export['number_result']= num_results
       export['results'] = json_str
       json_str = export
@@ -330,11 +346,12 @@ def index(id):
     num_results = 0
     # item = None
     #wkt = None
-    # default_trans = ""
-    # url_method = ""
+    default_trans = ""
+    url_method = ""
     url_format = ""
     export = ""
-    # url_area_trans = ""
+    export_html = ""
+    url_area_trans = ""
     # url_area = ""
     # g_coords = ""
     # center = 0,0
@@ -394,36 +411,38 @@ def index(id):
       
       # if it has any transformation
       if found == False:
-        
         # default trans is active transformation
+        found_dt = False
         for i in range(0,len(trans_item)):
-          found_dt = False
           if str(code_trans) == str(trans_item[i]['code']):
             default_trans = trans_item[i]
             found_dt = True
-          elif str(code_trans) != str(trans_item[i]['code']) and not found:
-            default_trans = trans_item[0]
-
+          #elif int(code_trans) != int(trans_item[i]['code']) and not found_dt:
+          #  default_trans = trans_item[0]
         if trans_item and default_trans:
           
           # from values of TOWGS84 edit wkt of CRS
           values = default_trans['wkt']
+          print values     
+          
           if re.findall(r'([a-df-zA-Z_])',values):
             nadgrid = default_trans['wkt']
-          else:
-            num =[]
-          
-            w = re.findall(r'(-?\d+\.\d+\e?\-?\d+)',values)
-            for n in w:
-              num.append(float(n))
-            values = tuple(num)     
+          elif str(values) != str(0):
+            # num =[]
+            values = tuple(map(float, values[1:-1].split(',')))
+                      # 
+                      # w = re.findall(r'(-?\d*\.\d*[e]?-?\d*)',values)
+                      # for n in w:
+                      #   num.append(float(n))
+                      # values = tuple(num)
+            print values     
             # do not change default TOWGS84
             if int(r['code_trans']) != int(default_trans['code']) :
             
-              if (values != (0,0,0,0,0,0,0) and type(values) == tuple and values != (0,) and values != ()):            
+              if (values != (0.0,0.0,0.0,0.0,0.0,0.0,0.0) and type(values) == tuple and values != (0,) and values != ()):            
                 ref = osr.SpatialReference()
                 ref.ImportFromEPSG(int(r['code']))
-                ref.SetTOWGS84(*values) 
+                ref.SetTOWGS84(*values)
                 wkt = ref.ExportToWkt().decode('utf-8')
         # if do not have trans_item or default_trans    
         else:
@@ -434,8 +453,9 @@ def index(id):
     if str(item['kind']).startswith('CRS'):
       if item['wkt']:
         url_format = "/"+str(item['code'])
-        if int(default_trans['code']) != int(item['code']):
-          url_format = "/"+str(item['code'])+"-"+str(default_trans['code'])
+        if default_trans:
+          if int(default_trans['code']) != int(item['code']):
+            url_format = "/"+str(item['code'])+"-"+str(default_trans['code'])
     
     # for activated transformation
     if default_trans:
@@ -449,11 +469,42 @@ def index(id):
         g_coords = str(default_trans['bbox'][2]) + "," + str(default_trans['bbox'][1]) + "|" + str(default_trans['bbox'][0]) + "," + str(default_trans['bbox'][1]) + "|" + str(default_trans['bbox'][0]) + "," + str(default_trans['bbox'][3]) + "|" + str(default_trans['bbox'][2]) + "," + str(default_trans['bbox'][3]) + "|" + str(default_trans['bbox'][2]) + "," + str(default_trans['bbox'][1])
     
     # if available wkt, default_trans and wkt has length minimum 100 characters (transformation has length maximum 100 (just a TOWGS84))
-    if wkt and default_trans and len(wkt)>100:
+    if wkt and len(wkt)>100:
       trans_coords = ""         
       ref = osr.SpatialReference()
       ref.ImportFromWkt(wkt.encode('utf-8'))
       
+      export = {}  
+      export['prettywkt'] = ref.ExportToPrettyWkt()
+      
+      export['usgs'] = str(ref.ExportToUSGS())
+      export['ogcwkt'] = ref.ExportToWkt()
+      export['proj4'] = ref.ExportToProj4()
+      export['html'] = highlight(ref.ExportToPrettyWkt(), WKTLexer(), HtmlFormatter(cssclass='syntax',nobackground=True))
+      export['gml'] = ref.ExportToXML()
+      export['mapfile'] = 'PROJECTION\n\t'+'\n\t'.join(['"'+l.lstrip('+')+'"' for l in ref.ExportToProj4().split()])+'\nEND' ### CSS: white-space: pre-wrap
+      proj4 = ref.ExportToProj4().strip()
+      export['mapnik'] = '<?xml version="1.0" encoding="utf-8"?>\n<Map srs="%s">\n\t<Layer srs="%s">\n\t</Layer>\n</Map>' % (proj4,proj4)
+      export['mapserverpython'] = "wkt = '''%s'''\nm = mapObj('')\nm.setWKTProjection(ref.ExportToWkt())\nlyr = layerObj(m)\nlyr.setWKTProjection(ref.ExportToWkt())" % (ref.ExportToWkt()) #from mapscript import mapObj,layerObj\n
+      export['mapnikpython'] = "proj4 = '%s'\nm = Map(256,256,proj4)\nlyr = Layer('Name',proj4)" % (proj4) #from mapnik import Map, Layer\n
+      export['geoserver'] = "%s=%s" % (code,ref.ExportToWkt()) # put this custom projection in the 'user_projections' file inside the GEOSERVER_DATA_DIR '\n' # You can further work with your projections via the web admin tool.\n
+      export['postgis'] = 'INSERT into spatial_ref_sys (srid, auth_name, auth_srid, proj4text, srtext) values ( %s, \'%s\', %s, \'%s\', \'%s\');' % (item['code'], "EPSG", item['code'], ref.ExportToProj4(), ref.ExportToWkt())
+        
+      if ref.IsGeographic():
+        code = ref.GetAuthorityCode("GEOGCS")
+      else:
+        code = ref.GetAuthorityCode("PROJCS")
+      export_json = {}
+      if code:
+        export_json['type'] = 'EPSG'
+      export_json['properties'] = {'code':code}
+      export['json'] = export_json
+      
+      ref.MorphToESRI()
+      export['esriwkt'] = ref.ExportToWkt()
+      
+
+      ref.ImportFromWkt(wkt.encode('utf-8'))
       wgs = osr.SpatialReference()
       wgs.ImportFromEPSG(4326)
       
@@ -463,14 +514,16 @@ def index(id):
         trans_coords = xform.TransformPoint(center[0], center[1])
       except:
         trans_coords = "" 
+        
       # color html of pretty wkt
-      export = highlight(ref.ExportToPrettyWkt(), WKTLexer(), HtmlFormatter(cssclass='syntax',nobackground=True))
-    # if the CRS has 
+      export_html = highlight(ref.ExportToPrettyWkt(), WKTLexer(), HtmlFormatter(cssclass='syntax',nobackground=True))
+    
+    # if the CRS its concatenated
     url_concatop=[]
-    if default_trans['concatop'] != []:
+    if default_trans:
       for i in range(0,len(default_trans['concatop'])):
-        url_concatop.append("/"+ str(default_trans['concatop'][i]) + "/")
-  return template('./templates/detail', item=item, trans=trans, default_trans=default_trans, num_results=num_results, url_method=url_method, title=title, url_format=url_format, export=export, url_area_trans=url_area_trans, url_area=url_area, center=center, g_coords=g_coords, trans_coords=trans_coords,wkt=wkt,facets_list=facets_list,url_concatop=url_concatop, nadgrid=nadgrid, detail=detail )  
+        url_concatop.append("/"+ str(default_trans['concatop'][i]))
+  return template('./templates/detail', item=item, trans=trans, default_trans=default_trans, num_results=num_results, url_method=url_method, title=title, url_format=url_format, export_html=export_html, url_area_trans=url_area_trans, url_area=url_area, center=center, g_coords=g_coords, trans_coords=trans_coords,wkt=wkt,facets_list=facets_list,url_concatop=url_concatop, nadgrid=nadgrid, detail=detail,export=export )  
 
 
 @route('/<id:re:[\d]+(-[\w]+)>')
@@ -490,7 +543,6 @@ def index(id):
     trans_coords = ""
     trans = ""
     url_format = ""
-    center = ""
     default_trans = ""
     # item = ""
     # url_area = ""
@@ -498,7 +550,15 @@ def index(id):
     for r in results:
       item = r
       url_area = area_to_url(item['area'])
-
+      
+      center = ""
+      g_coords = ""
+      if item['bbox']:
+        #(51.05, 12.09, 47.74, 22.56)
+        center = ((item['bbox'][0] - item['bbox'][2])/2.0)+item['bbox'][2],((item['bbox'][3] - item['bbox'][1])/2.0)+item['bbox'][1]
+        g_coords = str(item['bbox'][2]) + "," + str(item['bbox'][1]) + "|" + str(item['bbox'][0]) + "," + str(item['bbox'][1]) + "|" + str(item['bbox'][0]) + "," + str(item['bbox'][3]) + "|" + str(item['bbox'][2]) + "," + str(item['bbox'][3]) + "|" + str(item['bbox'][2]) + "," + str(item['bbox'][1])
+        print center
+        print g_coords
       if 'target_uom' in r:
         if r['target_uom'] != 0:
           if r['target_uom'] == 9102:
@@ -526,11 +586,11 @@ def index(id):
             for c in r['children_code']:
               url = str(c) + "-axis"
               url_axis.append(url)
-              
+      
       detail.append({'url_prime': url_prime, 'url_children':url_children,'url_axis':url_axis, 'url_uom':url_uom, 'url_area' : url_area})
       
  
-  return template('./templates/detail', item=item, detail=detail, facets_list=facets_list, nadgrid=nadgrid, trans_coords=trans_coords, trans=trans, url_format=url_format, default_trans=default_trans, center=center)  
+  return template('./templates/detail', item=item, detail=detail, facets_list=facets_list, nadgrid=nadgrid, trans_coords=trans_coords, trans=trans, url_format=url_format, default_trans=default_trans, center=center,g_coords=g_coords)  
 
 
 @route('/<id:re:[\d]+(-[\d]+)?>/<format>')
@@ -567,17 +627,19 @@ def index(id, format):
       trans_result = code_result
       url_coords = rcode
     if not re.findall(r'([a-df-zA-Z_])',values):
-      w = re.findall(r'(-?\d+\.\d+\e?\-?\d+)',values)
-      num =[]
-      for n in w:
-        num.append(float(n))
-      values = tuple(num)
-
-      if int(def_trans) != int(tcode):
-        if (values != (0,0,0,0,0,0,0) and type(values) == tuple and values != (0,) and values != ()):            
-          ref.ImportFromEPSG(int(rcode))
-          ref.SetTOWGS84(*values) 
-          wkt = ref.ExportToWkt().decode('utf-8')
+      if str(values) != str(0):
+      
+        values = tuple(map(float, values[1:-1].split(',')))
+        # w = re.findall(r'(-?\d*\.\d*[e]?-?\d*)',values)
+        #       num =[]
+        #       for n in w:
+        #         num.append(float(n))
+        #       values = tuple(num)
+        if int(def_trans) != int(tcode):
+          if (values != (0,0,0,0,0,0,0) and type(values) == tuple and values != (0,) and values != ()):            
+            ref.ImportFromEPSG(int(rcode))
+            ref.SetTOWGS84(*values) 
+            wkt = ref.ExportToWkt().decode('utf-8')
     
     ref.ImportFromWkt(wkt)
 
