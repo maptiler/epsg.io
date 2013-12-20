@@ -17,6 +17,7 @@
 
 # Do NOT "set -e"
 
+NAME="epsgio"
 PROJECT=/var/www/epsg.io
 VIRTUALENV=$PROJECT/venv
 APP=app:app
@@ -26,8 +27,6 @@ USER=www-data
 GROUP=www-data
 IP=127.0.0.1
 WORKERS=4
-# I am lazy and just call the init script gunicorn-project
-NAME=`basename $0`
 DESC=$NAME
 LOGFILE="$LOGDIR/$NAME.log"
 PIDFILE="$PROJECT/$NAME.pid"

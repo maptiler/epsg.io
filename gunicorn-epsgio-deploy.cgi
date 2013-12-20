@@ -2,7 +2,10 @@
 echo Content-type: text/plain
 echo
 
-cd /var/www/epsg.io/
+NAME=`epsgio`
+PROJECT=/var/www/epsg.io
+PIDFILE="$PROJECT/$NAME.pid"
+cd $PROJECT
 
 echo $PWD
 whoami
@@ -13,8 +16,9 @@ git submodule sync
 git submodule update
 git submodule status
 
-./gunicorn-epsgio reload
-if [ $? -ne 0 ]; then
+if [ -f $PIDFILE ]; then
+    ./gunicorn-epsgio reload
+else
     ./gunicorn-epsgio start
 fi
 
