@@ -2,7 +2,7 @@
 echo Content-type: text/plain
 echo
 
-NAME=`epsgio`
+NAME="epsgio"
 PROJECT=/var/www/epsg.io
 PIDFILE="$PROJECT/$NAME.pid"
 cd $PROJECT
