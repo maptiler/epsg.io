@@ -17,9 +17,9 @@ git submodule update
 git submodule status
 
 if [ -f $PIDFILE ]; then
-    ./gunicorn-epsgio reload
+    ./epsgio reload
 else
-    ./gunicorn-epsgio start
+    ./epsgio start
 fi
 
 echo DONE
