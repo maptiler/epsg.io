@@ -18,7 +18,7 @@
             <p id="logo-container">
                 <a href="/" title=""><span>Epsg.io</span> Coordinate systems worldwide</a>
             </p>
-            <h1>Find a coordinate system and get coordinates through a map.</h1>
+            <h1>Find a coordinate system and get position on a map.</h1>
             <div id="search-container">
                 <form action="/" method="get">
                     <p><input type="search" name="q" placeholder="Country, code or name of a coordinate system" /> <input type="submit" name="" value="search" /></p>

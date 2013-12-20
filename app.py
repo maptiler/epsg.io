@@ -161,7 +161,7 @@ def index():
   # Front page without parameters
   if (len(request.GET.keys()) == 0):
     print len(request.GET.keys())
-    return template('./templates/search')
+    return template('./templates/index')
   
   class PopularityWeighting(scoring.BM25F):
      use_final = True
