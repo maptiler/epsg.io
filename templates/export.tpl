@@ -1,15 +1,34 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-<head>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-	<link rel="stylesheet" type="text/css" href="/css/style.css">
-
-	<title>WKT:{{code}}</title>
-	
-</head>
-
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"  lang="en" xml:lang="en">
+  <head>  
+    <meta charset="utf-8"/>
+    <title>EPSG.io</title>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1" name="viewport" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="description" content="EPSG.io" />
+    <meta name="keywords" content="EPSG.io" />
+    <meta name="robots" content="ALL,FOLLOW" />
+    <link type="text/css" rel="stylesheet" href="/css/main.css?v=1" />
+    <link type="image/x-icon" rel="shortcut icon" href="/img/favicon.ico" /> 
+  </head>
+  <body id="detailpage" data-role="page">
+    <div id="head">
+      <p id="logo-container">
+        <a href="/" title=""><span>Epsg.io</span> Coordinate systems worldwide</a>
+      </p>
+      <ul id="menu-top">
+        <li><a href="/about" title="">About</a></li>
+      </ul>
+    </div>
+    <div id="layout-container">
 {{!export}}
-</body>
-</html>
+  
+    <div id="foot">
+      <p id="mzk-logo">
+        <a href="#" title=""><img src="/img/hzk-logo.png" alt="" /></a>
+      </p>
+      <p>This is Photoshop's version Lorem Ipsum.</p>
+      <p id="copyright">Copyright</p>
+    </div>
+  </body>
+  </html>
