@@ -44,6 +44,7 @@ f_datum_index = 12
 f_cs_index = 19
 f_unit_index = 26
 
+import bottle
 from bottle import route, run, template, request, response, static_file, redirect
 import urllib2
 import urllib
@@ -65,7 +66,7 @@ import time
 import math
 import json
 
-
+app = bottle.default_app()
 
 re_kind = re.compile(r'kind:([\*\w-]+)')
 re_deprecated = re.compile(r'deprecated:\d')
