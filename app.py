@@ -423,9 +423,7 @@ def index(id):
         if trans_item and default_trans:
           
           # from values of TOWGS84 edit wkt of CRS
-          values = default_trans['wkt']
-          print values     
-          
+          values = default_trans['wkt']          
           if re.findall(r'([a-df-zA-Z_])',values):
             nadgrid = default_trans['wkt']
           elif str(values) != str(0):
@@ -436,7 +434,6 @@ def index(id):
                       # for n in w:
                       #   num.append(float(n))
                       # values = tuple(num)
-            print values     
             # do not change default TOWGS84
             if int(r['code_trans']) != int(default_trans['code']) :
             
@@ -558,8 +555,6 @@ def index(id):
         #(51.05, 12.09, 47.74, 22.56)
         center = ((item['bbox'][0] - item['bbox'][2])/2.0)+item['bbox'][2],((item['bbox'][3] - item['bbox'][1])/2.0)+item['bbox'][1]
         g_coords = str(item['bbox'][2]) + "," + str(item['bbox'][1]) + "|" + str(item['bbox'][0]) + "," + str(item['bbox'][1]) + "|" + str(item['bbox'][0]) + "," + str(item['bbox'][3]) + "|" + str(item['bbox'][2]) + "," + str(item['bbox'][3]) + "|" + str(item['bbox'][2]) + "," + str(item['bbox'][1])
-        print center
-        print g_coords
       if 'target_uom' in r:
         if r['target_uom'] != 0:
           if r['target_uom'] == 9102:
