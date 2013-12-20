@@ -54,7 +54,11 @@ do_start() {
   fi
   cd $PROJECT
   . $VIRTUALENV/bin/activate
-  sudo -u $USER $CMD
+  if [[ $EUID -ne 0 ]]; then
+      $CMD
+  else
+      sudo -u $USER $CMD
+  fi
   if [ $? = 0 ]; then
     return 0
   else
