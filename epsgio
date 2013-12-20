@@ -12,11 +12,11 @@
 #
 # Init.d script for Debian Linux
 #
-# Enable with update-rc.d gunicorn-epsgio start 30 2 3 4 5 . stop 70 0 1 6 .
-# (parameters might not be necessary, test)
+# Enable with # update-rc.d epsgio defaults
 
 # Do NOT "set -e"
 
+NAME="epsgio"
 PROJECT=/var/www/epsg.io
 VIRTUALENV=$PROJECT/venv
 APP=app:app
@@ -26,8 +26,6 @@ USER=www-data
 GROUP=www-data
 IP=127.0.0.1
 WORKERS=4
-# I am lazy and just call the init script gunicorn-project
-NAME=`basename $0`
 DESC=$NAME
 LOGFILE="$LOGDIR/$NAME.log"
 PIDFILE="$PROJECT/$NAME.pid"
