@@ -8,20 +8,20 @@
         <meta name="description" content="EPSG.io" />
         <meta name="keywords" content="EPSG.io" />
         <meta name="robots" content="ALL,FOLLOW" />
-        <link type="text/css" rel="stylesheet" href="/css/main.css?v=1" />
-        <link type="image/x-icon" rel="shortcut icon" href="/img/favicon.ico" /> 
-        <link rel="search" type="application/opensearchdescription+xml" href="/opensearch.xml" title="EPSG.io" />
+        <link rel="stylesheet" href="/css/main.css" type="text/css" />
+        <link rel="icon" href="/img/favicon.ico" type="image/x-icon" />
+        <link rel="search" href="/opensearch.xml" title="EPSG.io" type="application/opensearchdescription+xml"/>
 
     </head>
     <body id="homepage" data-role="page">
         <div id="layout-container">
             <p id="logo-container">
-                <a href="#" title=""><span>Epsg.io</span> Coordinate systems worldwide</a>
+                <a href="/" title=""><span>Epsg.io</span> Coordinate systems worldwide</a>
             </p>
             <h1>Find a coordinate system and get coordinates through a map.</h1>
             <div id="search-container">
                 <form action="/" method="get">
-                    <p><input type="search" name="q" value="Country, code or name of a coordinate system" /> <input type="submit" name="" value="search" /></p>
+                    <p><input type="search" name="q" placeholder="Country, code or name of a coordinate system" /> <input type="submit" name="" value="search" /></p>
                 </form>
             </div>
             <div id="home-menu-container">
@@ -64,7 +64,7 @@
             </div>
             <div id="foot">
                 <p id="mzk-logo">
-                    <a href="#" title=""><img src="./img/hzk-logo.png" alt="" /></a>
+                    <a href="http://www.mzk.cz/" title=""><img src="./img/hzk-logo.png" alt="" /></a>
                 </p>
                 <p>This is Photoshop's version Lorem Ipsum.</p>
                 <p id="copyright">Copyright</p>
