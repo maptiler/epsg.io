@@ -17,12 +17,14 @@ git submodule sync
 git submodule update
 git submodule status
 
-if [ -f $PIDFILE ]; then
+ps -p `cat $PIDFILE` > /dev/null
+if [ $? = 1 ]; then
+    echo "STARTING GUNICORN !!!";
+    rm $PIDFILE;
+    $PROJECT/epsgio start;
+else
     echo "RELOADING GUNICORN";
     $PROJECT/epsgio reload;
-else
-    echo "STARTING GUNICORN !!!";
-    $PROJECT/epsgio start;
 fi
 
 echo DONE
