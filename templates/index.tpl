@@ -51,9 +51,9 @@
                 <div class="hm-column lft last">
                     <h2>Another coordinates systems</h2>
                     <ul>
-                        <li><a href="/4618" title="">Brasil</a></li> 
+                        <li><a href="/4618" title="">Brazil</a></li> 
                         <li><a href="/2193" title="">New Zealand</a></li> 
-                        <li><a href="/31287" title="">Australia</a></li> 
+                        <li><a href="/3112" title="">Australia</a></li> 
                     </ul>
                 </div>                
             </div>
