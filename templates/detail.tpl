@@ -237,7 +237,7 @@
         </div>
 %end
       </div>
-%if url_format:
+%if url_format and error_code == 0:
       <div id="edit-box-container">
         <div id="eb-menu-container">
           <h4>Export</h4>
