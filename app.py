@@ -470,58 +470,57 @@ def index(id):
     if wkt and len(wkt)>100:
       trans_coords = ""         
       ref = osr.SpatialReference()
-      ref.ImportFromWkt(wkt.encode('utf-8'))
-      
+      error_code = ref.ImportFromEPSG(int(item['code']))
       export = {}  
       export['prettywkt'] = ref.ExportToPrettyWkt()
       
-      export['usgs'] = str(ref.ExportToUSGS())
-      export['ogcwkt'] = ref.ExportToWkt()
-      export['proj4'] = ref.ExportToProj4()
-      export['html'] = highlight(ref.ExportToPrettyWkt(), WKTLexer(), HtmlFormatter(cssclass='syntax',nobackground=True))
-      export['gml'] = ref.ExportToXML()
-      export['mapfile'] = 'PROJECTION\n\t'+'\n\t'.join(['"'+l.lstrip('+')+'"' for l in ref.ExportToProj4().split()])+'\nEND' ### CSS: white-space: pre-wrap
-      proj4 = ref.ExportToProj4().strip()
-      export['mapnik'] = '<?xml version="1.0" encoding="utf-8"?>\n<Map srs="%s">\n\t<Layer srs="%s">\n\t</Layer>\n</Map>' % (proj4,proj4)
-      export['mapserverpython'] = "wkt = '''%s'''\nm = mapObj('')\nm.setWKTProjection(ref.ExportToWkt())\nlyr = layerObj(m)\nlyr.setWKTProjection(ref.ExportToWkt())" % (ref.ExportToWkt()) #from mapscript import mapObj,layerObj\n
-      export['mapnikpython'] = "proj4 = '%s'\nm = Map(256,256,proj4)\nlyr = Layer('Name',proj4)" % (proj4) #from mapnik import Map, Layer\n
-      export['geoserver'] = "%s=%s" % (code,ref.ExportToWkt()) # put this custom projection in the 'user_projections' file inside the GEOSERVER_DATA_DIR '\n' # You can further work with your projections via the web admin tool.\n
-      export['postgis'] = 'INSERT into spatial_ref_sys (srid, auth_name, auth_srid, proj4text, srtext) values ( %s, \'%s\', %s, \'%s\', \'%s\');' % (item['code'], "EPSG", item['code'], ref.ExportToProj4(), ref.ExportToWkt())
+      if int(try_code) == 0:
+        export['usgs'] = str(ref.ExportToUSGS())
+        export['ogcwkt'] = ref.ExportToWkt()
+        export['proj4'] = ref.ExportToProj4()
+        export['html'] = highlight(ref.ExportToPrettyWkt(), WKTLexer(), HtmlFormatter(cssclass='syntax',nobackground=True))
+        export['gml'] = ref.ExportToXML()
+        export['mapfile'] = 'PROJECTION\n\t'+'\n\t'.join(['"'+l.lstrip('+')+'"' for l in ref.ExportToProj4().split()])+'\nEND' ### CSS: white-space: pre-wrap
+        proj4 = ref.ExportToProj4().strip()
+        export['mapnik'] = '<?xml version="1.0" encoding="utf-8"?>\n<Map srs="%s">\n\t<Layer srs="%s">\n\t</Layer>\n</Map>' % (proj4,proj4)
+        export['mapserverpython'] = "wkt = '''%s'''\nm = mapObj('')\nm.setWKTProjection(ref.ExportToWkt())\nlyr = layerObj(m)\nlyr.setWKTProjection(ref.ExportToWkt())" % (ref.ExportToWkt()) #from mapscript import mapObj,layerObj\n
+        export['mapnikpython'] = "proj4 = '%s'\nm = Map(256,256,proj4)\nlyr = Layer('Name',proj4)" % (proj4) #from mapnik import Map, Layer\n
+        export['geoserver'] = "%s=%s" % (code,ref.ExportToWkt()) # put this custom projection in the 'user_projections' file inside the GEOSERVER_DATA_DIR '\n' # You can further work with your projections via the web admin tool.\n
+        export['postgis'] = 'INSERT into spatial_ref_sys (srid, auth_name, auth_srid, proj4text, srtext) values ( %s, \'%s\', %s, \'%s\', \'%s\');' % (item['code'], "EPSG", item['code'], ref.ExportToProj4(), ref.ExportToWkt())
         
-      if ref.IsGeographic():
-        code = ref.GetAuthorityCode("GEOGCS")
-      else:
-        code = ref.GetAuthorityCode("PROJCS")
-      export_json = {}
-      if code:
-        export_json['type'] = 'EPSG'
-      export_json['properties'] = {'code':code}
-      export['json'] = export_json
+        if ref.IsGeographic():
+          code = ref.GetAuthorityCode("GEOGCS")
+        else:
+          code = ref.GetAuthorityCode("PROJCS")
+        export_json = {}
+        if code:
+          export_json['type'] = 'EPSG'
+        export_json['properties'] = {'code':code}
+        export['json'] = export_json
       
-      ref.MorphToESRI()
-      export['esriwkt'] = ref.ExportToWkt()
+        ref.MorphToESRI()
+        export['esriwkt'] = ref.ExportToWkt()
       
 
-      ref.ImportFromWkt(wkt.encode('utf-8'))
-      wgs = osr.SpatialReference()
-      wgs.ImportFromEPSG(4326)
+        ref.ImportFromWkt(wkt.encode('utf-8'))
+        wgs = osr.SpatialReference()
+        wgs.ImportFromEPSG(4326)
       
-      xform = osr.CoordinateTransformation(wgs,ref)
+        xform = osr.CoordinateTransformation(wgs,ref)
 
-      try:
-        trans_coords = xform.TransformPoint(center[0], center[1])
-      except:
-        trans_coords = "" 
+        try:
+          trans_coords = xform.TransformPoint(center[0], center[1])
+        except:
+          trans_coords = "" 
         
-      # color html of pretty wkt
-      export_html = highlight(ref.ExportToPrettyWkt(), WKTLexer(), HtmlFormatter(cssclass='syntax',nobackground=True))
-    
+        # color html of pretty wkt
+        export_html = highlight(ref.ExportToPrettyWkt(), WKTLexer(), HtmlFormatter(cssclass='syntax',nobackground=True))        
     # if the CRS its concatenated
     url_concatop=[]
     if default_trans:
       for i in range(0,len(default_trans['concatop'])):
         url_concatop.append("/"+ str(default_trans['concatop'][i]))
-  return template('./templates/detail', item=item, trans=trans, default_trans=default_trans, num_results=num_results, url_method=url_method, title=title, url_format=url_format, export_html=export_html, url_area_trans=url_area_trans, url_area=url_area, center=center, g_coords=g_coords, trans_coords=trans_coords,wkt=wkt,facets_list=facets_list,url_concatop=url_concatop, nadgrid=nadgrid, detail=detail,export=export )  
+  return template('./templates/detail', item=item, trans=trans, default_trans=default_trans, num_results=num_results, url_method=url_method, title=title, url_format=url_format, export_html=export_html, url_area_trans=url_area_trans, url_area=url_area, center=center, g_coords=g_coords, trans_coords=trans_coords,wkt=wkt,facets_list=facets_list,url_concatop=url_concatop, nadgrid=nadgrid, detail=detail,export=export, error_code=error_code )  
 
 
 @route('/<id:re:[\d]+(-[\w]+)>')
