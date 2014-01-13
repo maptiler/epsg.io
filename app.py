@@ -179,7 +179,7 @@ def index():
        if code in ("5514","4326","27700","3857"):
          boost = 1.0
          
-       print "code:",code," with score:", score, "with kind:", kind, "boost:", boost 
+       #print "code:",code," with score:", score, "with kind:", kind, "boost:", boost 
        return score * (1 + boost)
   
   ix = open_dir(INDEX)
