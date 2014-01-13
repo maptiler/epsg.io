@@ -356,7 +356,8 @@ def index(id):
     # url_area = ""
     # g_coords = ""
     # center = 0,0
-    trans_coords = ""
+    trans_lat = ""
+    trans_lon = ""
     # title = ""
     nadgrid = None
     
@@ -509,9 +510,14 @@ def index(id):
         xform = osr.CoordinateTransformation(wgs,ref)
 
         try:
-          trans_coords = xform.TransformPoint(center[0], center[1])
+          trans_coords_orig = xform.TransformPoint(center[0], center[1])
+          trans_lat = "%.8f" % trans_coords_orig[0]
+          trans_lon = "%.8f" % trans_coords_orig[1]
+
         except:
-          trans_coords = "" 
+          trans_lat = ""
+          trans_lon = ""
+          print "not trans_coords" 
         
         # color html of pretty wkt
         export_html = highlight(ref.ExportToPrettyWkt(), WKTLexer(), HtmlFormatter(cssclass='syntax',nobackground=True))        
@@ -520,7 +526,7 @@ def index(id):
     if default_trans:
       for i in range(0,len(default_trans['concatop'])):
         url_concatop.append("/"+ str(default_trans['concatop'][i]))
-  return template('./templates/detail', item=item, trans=trans, default_trans=default_trans, num_results=num_results, url_method=url_method, title=title, url_format=url_format, export_html=export_html, url_area_trans=url_area_trans, url_area=url_area, center=center, g_coords=g_coords, trans_coords=trans_coords,wkt=wkt,facets_list=facets_list,url_concatop=url_concatop, nadgrid=nadgrid, detail=detail,export=export, error_code=error_code )  
+  return template('./templates/detail', item=item, trans=trans, default_trans=default_trans, num_results=num_results, url_method=url_method, title=title, url_format=url_format, export_html=export_html, url_area_trans=url_area_trans, url_area=url_area, center=center, g_coords=g_coords, trans_lat=trans_lat, trans_lon=trans_lon,wkt=wkt,facets_list=facets_list,url_concatop=url_concatop, nadgrid=nadgrid, detail=detail,export=export, error_code=error_code )  
 
 
 @route('/<id:re:[\d]+(-[\w]+)>')

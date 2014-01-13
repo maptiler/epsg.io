@@ -128,10 +128,10 @@
             <img src="https://maps.googleapis.com/maps/api/staticmap?size=235x190&scale=2&sensor=false&visual_refresh=true&center={{center[0]}},{{center[1]}}&path=color:0xff0000ff|fillcolor:0xff000022|weight:2|{{g_coords}}" alt="SimpleMap" height="190" width="235">
 %end
           </div>
-%if trans_coords:
+%if trans_lat and trans_lon:
           <p>
             Center coordinates<br />
-            <span>{{trans_coords[0]}}</span>  <span>{{trans_coords[1]}}</span>
+            <span>{{trans_lat}}</span>  <span>{{trans_lon}}</span>
           </p>
 %end
         </div>
@@ -156,7 +156,7 @@
   %end
 %end
 %end
-%if center and trans_coords:
+%if center and trans_lat and trans_lon:
           <p class="btn-link-container">
             <a href="{{url_format}}/coordinates/?wgs={{center[0]}}%20{{center[1]}}" title=""><i></i>Get position on a map</a>
           </p>
