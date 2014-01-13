@@ -167,10 +167,20 @@ def index():
      use_final = True
      def final(self, searcher, docnum, score):
        
+       boost = 0
        popularity = (searcher.stored_fields(docnum).get("popularity"))
        code = (searcher.stored_fields(docnum).get("code"))
-       #print "code:",code," with score:", score
-       return score #* popularity
+       kind = (searcher.stored_fields(docnum).get("kind"))
+       if kind == "CRS-PROJCRS":
+         boost = 0.2
+       if kind == "CRS-GEOGCRS":
+         boost = 0.05
+       # Manually boosted codes - TODO: from a CSV table
+       if code in ("5514","4326","27700","3857"):
+         boost = 1.0
+         
+       print "code:",code," with score:", score, "with kind:", kind, "boost:", boost 
+       return score * (1 + boost)
   
   ix = open_dir(INDEX)
   result = []
