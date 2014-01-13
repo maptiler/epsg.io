@@ -474,7 +474,7 @@ def index(id):
       export = {}  
       export['prettywkt'] = ref.ExportToPrettyWkt()
       
-      if int(try_code) == 0:
+      if int(error_code) == 0:
         export['usgs'] = str(ref.ExportToUSGS())
         export['ogcwkt'] = ref.ExportToWkt()
         export['proj4'] = ref.ExportToProj4()
