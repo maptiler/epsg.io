@@ -23,42 +23,37 @@
                 <form action="/" method="get">
                     <p><input type="search" name="q" placeholder="Country, code or name of a coordinate system" /> <input type="submit" name="" value="search" /></p>
                 </form>
+                <h4> &nbsp; &nbsp; &nbsp; <a href="/?q=Czech%20Republic" title="">Looking for coordinates systems in Czech Republic? </a></h4>
             </div>
             <div id="home-menu-container">
                 <div class="hm-column lft">
-                    <h2>Most fameous coordinate systems</h2>
+                    <h2>World coordinates systems</h2>
                     <ul>
-                        <li><a href="#" title="">This is Photoshop's version</a></li> 
-                        <li><a href="#" title="">Lorem Ipsum.</a></li> 
-                        <li><a href="#" title="">Proin gravida nibh vel velit</a></li> 
-                        <li><a href="#" title="">Auctor aliquet.</a></li> 
-                        <li><a href="#" title="">Aenean sollicitudin, lorem quis.</a></li> 
-                        <li><a href="#" title="">Bibendum auctor, nisi elit </a></li> 
-                        <li><a href="#" title="">Consequat ipsum, nec sagittis</a></li> 
+                        <li><a href="/4326" title="">WGS84 - World Geodetic System 1984, used in GPS </a></li> 
+                        <li><a href="/3857" title="">Spherical Mercator, Google Maps Projection, OpenStreetMap, Bing</a></li> 
+                        <li><a href="/?q=utm" title="">UTM - Universal Transverse Mercator</a></li> 
+                        
+                        <li><a href="/?q=etrs" title="">ETRS - European Terrestrial Reference System</a></li> 
+                        <li><a href="/?q=nad" title="">NAD - North American Datum</a></li> 
                     </ul>
                 </div>
                 <div class="hm-column lft">
-                    <h2>Most fameous coordinate systems</h2>
+                    <h2>Europe coordinates systems</h2>
                     <ul>
-                        <li><a href="#" title="">This is Photoshop's version</a></li> 
-                        <li><a href="#" title="">Lorem Ipsum.</a></li> 
-                        <li><a href="#" title="">Proin gravida nibh vel velit</a></li> 
-                        <li><a href="#" title="">Auctor aliquet.</a></li> 
-                        <li><a href="#" title="">Aenean sollicitudin, lorem quis.</a></li> 
-                        <li><a href="#" title="">Bibendum auctor, nisi elit </a></li> 
-                        <li><a href="#" title="">Consequat ipsum, nec sagittis</a></li> 
+                        <li><a href="/27700" title="">United Kingdom</a></li> 
+                        <li><a href="/2154" title="">France</a></li> 
+                        <li><a href="/5514" title="">Czech Republic</a></li> 
+                        <li><a href="/31467" title="">Germany</a></li> 
+                        <li><a href="/28992" title="">Netherlands</a></li> 
+                        <li><a href="/2056" title="">Switzerland</a></li> 
                     </ul>
                 </div>
                 <div class="hm-column lft last">
-                    <h2>Most fameous coordinate systems</h2>
+                    <h2>Another coordinates systems</h2>
                     <ul>
-                        <li><a href="#" title="">This is Photoshop's version</a></li> 
-                        <li><a href="#" title="">Lorem Ipsum.</a></li> 
-                        <li><a href="#" title="">Proin gravida nibh vel velit</a></li> 
-                        <li><a href="#" title="">Auctor aliquet.</a></li> 
-                        <li><a href="#" title="">Aenean sollicitudin, lorem quis.</a></li> 
-                        <li><a href="#" title="">Bibendum auctor, nisi elit </a></li> 
-                        <li><a href="#" title="">Consequat ipsum, nec sagittis</a></li> 
+                        <li><a href="/4618" title="">Brasil</a></li> 
+                        <li><a href="/2193" title="">New Zealand</a></li> 
+                        <li><a href="/31287" title="">Australia</a></li> 
                     </ul>
                 </div>                
             </div>
