@@ -30,13 +30,13 @@ From {{resultcrs['name']}} to WGS84	<input type="text" name="other" placeholder=
 %if trans_wgs:
 	transformation from wgs to {{resultcrs['name']}} = {{trans_wgs[0]}}, {{trans_wgs[1]}}, {{trans_wgs[2]}}</li>
 	<div id=image>
-	<img src="/css/crosshair.png" id="crosshair" alt=""/>
+	<img src="/img/epsg-target-small.png" id="crosshair" alt=""/>
 	<img src="https://maps.googleapis.com/maps/api/staticmap?size=235x190&scale=2&zoom=10&sensor=false&visual_refresh=true&center={{coord_lat}},{{coord_lon}}&path=color:0xff0000ff|fillcolor:0xff000022|weight:2" alt="SimpleMap" height="190" width="235">
 	</div>
 %elif trans_other:
 	transformation from {{resultcrs['name']}} to wgs= {{trans_other[0]}}, {{trans_other[1]}}, {{trans_other[2]}}</li>
 	<div id=image>
-	<img src="/css/crosshair.png" id="crosshair" alt=""/>
+	<img src="/img/epsg-target-small.png" id="crosshair" alt=""/>
 	<img src="https://maps.googleapis.com/maps/api/staticmap?size=235x190&scale=2&zoom=10&sensor=false&visual_refresh=true&center={{trans_other[0]}},{{trans_other[1]}}&path=color:0xff0000ff|fillcolor:0xff000022|weight:2" alt="SimpleMap" height="190" width="235">
 	</div>
 %else:
