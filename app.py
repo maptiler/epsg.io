@@ -463,7 +463,8 @@ def index(id):
       if item['wkt']:
         url_format = "/"+str(item['code'])
         if default_trans:
-          if int(default_trans['code']) != int(item['code_trans']):
+          # if the actual transformation is different code then basic transformation and basic transformation is not 0 (geodetic systems hasnt got any transformation (4326 - not showing link 4326-4326))
+          if int(default_trans['code']) != int(item['code_trans']) and int(item['code_trans']) != 0:
             url_format = "/"+str(item['code'])+"-"+str(default_trans['code'])
     
     # for activated transformation
