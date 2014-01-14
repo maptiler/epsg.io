@@ -888,10 +888,23 @@ def index():
     
     xform = osr.CoordinateTransformation(s_srs, t_srs)
     transformation = xform.TransformPoint(x, y, z)
+    if type(transformation[0]) != float:
+      trans_lat = "%s" % transformation[0]
+      trans_lon = "%s" % transformation[1]
+      trans_h = "%s" % transformation[2]
+    else:
+      trans_lat = "%.8f" % transformation[0]
+      trans_lon = "%.8f" % transformation[1]
+      trans_h = "%.8f" % transformation[2]
+    if t_srs.GetAuthorityCode('UNIT') == str(9001):
+      trans_lat = "%.2f" % transformation[0]
+      trans_lon = "%.2f" % transformation[1]
+      trans_h = "%.2f" % transformation[2]    
+    
     export = {}
-    export["x"] = transformation[0]
-    export["y"] = transformation[1]
-    export["z"] = transformation[2]
+    export["x"] = trans_lat
+    export["y"] = trans_lon
+    export["z"] = trans_h
     response['Content-Type'] = "text/json"
     
     if callback != str(0):
