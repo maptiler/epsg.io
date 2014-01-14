@@ -1,0 +1,47 @@
+<html>
+  <head>
+    <title>JavaScript Test</title>
+    <link rel="stylesheet" href="../css/main.css" type="text/css" />
+    <script src="http://localhost:9810/compile?id=main"></script>
+  </head>
+  <body>
+    <h1>Home page</h1>
+    
+    <input id="q" value="" placeholder="Placeholder">
+    
+    <div id="countryLinkWrapper">
+    <a href="/?q=Czech%20Republic" id="countryLink">See coordinate systems of <span id="country">Czech Republic</span></a>
+    </div>
+        
+	<script type="text/javascript">home_init();</script>
+    
+    <h1>Results page</h1>
+
+    <pre>
+    TODO: UTM selectors
+    </pre>
+
+	<script type="text/javascript">results_init();</script>
+    
+    <h1>Detail page</h1>
+
+    <pre>
+    TODO: switching WTK/PROJ4/...
+    TODO: show/hide deprecated transformations
+    TODO: Copy&amp;paste URL or WKT
+    </pre>
+
+	<script type="text/javascript">detail_init();</script>
+    
+    <h1>Map page</h1>
+    
+    <a href="map.html">map.html</a>
+
+    <pre>
+    TODO: DMS, DM, D switching
+    TODO: Copy&amp;paste coordinates
+    </pre>
+    
+    
+  </body>
+</html>

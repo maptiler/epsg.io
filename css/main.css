@@ -82,8 +82,8 @@ h4, .h4 { margin: 20px 0 13px 0; padding: 0; font-size: 16px; color: #000; }
 #resultspage { background: #fff; }
     #resultspage h1 { margin: 0 0 6px; font-size: 18px; color: #555; }
 
-#mappage { background: url('../img/_tmp/big-map.jpg') 50% 50% no-repeat; }    
-
+#map { position: absolute; top:0px; bottom:0px; left:0; right:0; border: 0; margin:0; padding:0;}
+#mapsight {position: absolute; top:50%; left:50%; width:51px; height:51px; margin:-26px; pointer-events:none; background: url('../img/epsg-target-large.png') 0 0 no-repeat; }
 
 #layout-container { margin: 0 auto; padding: 0 5px; width: 990px; }
     #logo-container a { margin: 0; color: #989898; font-size: 12px; }
@@ -96,6 +96,8 @@ h4, .h4 { margin: 20px 0 13px 0; padding: 0; font-size: 16px; color: #000; }
     #homepage #logo-container { margin: 0 0 55px 36%; padding: 0; height: 77px; width: auto; display: block; }
         #homepage #logo-container a { padding: 56px 0 0 152px; height: 22px; width: auto; display: block; background: url('../img/logo-232x76.png') 0 0 no-repeat; }
             #logo-container a span { display: none; }
+        #countryLink { display: none; }
+        #countryLinkWrapper { height: 20px;}
     #homepage h1 { margin: 0 0 47px; padding: 0; text-align: center; font-size: 18px; }
     #detailpage h1 { margin-bottom: 0; }
 
@@ -114,7 +116,7 @@ h4, .h4 { margin: 20px 0 13px 0; padding: 0; font-size: 16px; color: #000; }
     #resultspage #search-container { margin: 0 0 70px; }
     #mappage #search-container { margin: 0 0 0 20px; float: left; }
     
-    #lat-lg-container { margin: 0; padding: 0;  float: right; width: 458px; overflow: hidden; }
+    #lat-lg-container { margin: 0; padding: 0; float: right; width: 458px; overflow: hidden; }
         #lat-lg-container p { margin: 0; padding-top: 6px; float: left; height: 24px; border: solid 1px #ccc; background: #fff; }
         #lg { padding-left: 27px; width: 202px; -webkit-border-top-left-radius: 15px; -webkit-border-bottom-left-radius: 15px; -moz-border-radius-topleft: 15px; -moz-border-radius-bottomleft: 15px;
               border-top-left-radius: 15px; border-bottom-left-radius: 15px; border-right: 0; }
@@ -122,10 +124,11 @@ h4, .h4 { margin: 20px 0 13px 0; padding: 0; font-size: 16px; color: #000; }
               border-top-right-radius: 15px; border-bottom-right-radius: 15px; }
         #lat-lg-container input { margin: 0; padding: 0; border: 0; width: 135px; font-size: 12px; }
         #lat-lg-container input:focus { color: #cc0000; }
+        #lonlat_submit { position: absolute; left: -9999px; width: 1px; height: 1px; }
         
     #head { margin: 0; padding: 0; width: 100%; height: 79px; background: url('../img/bg-head-wide.png') 0 0 no-repeat; border-bottom: solid 1px #d0e1eb; overflow: hidden; }
     #mappage #head-top { margin: 0; padding: 0; width: 100%; height: 79px; background: #fff url('../img/bg-head-wide.png') 0 0 no-repeat; overflow: hidden; }
-    #mappage #head { height: 129px; background: transparent; }
+    #mappage #head { position:absolute; top:0; left:0; height: 129px; background: transparent; }
         #head #logo-container { margin: 0; padding: 22px 0 0 47px; float: left; height: 39px; }
         #mappage #head #logo-container { margin-bottom: 18px; }
             #head #logo-container a { padding: 10px 0 0 116px; float: left; height: 29px; background: url('../img/logo-118x39.png') 0 0 no-repeat; color: #85969f; font-size: 12px; }
@@ -241,7 +244,7 @@ h4, .h4 { margin: 20px 0 13px 0; padding: 0; font-size: 16px; color: #000; }
             #cd-tabs { margin: 0; padding: 0; float: right; list-style-type: none; }
                 #cd-tabs li { margin: 0 0 0 30px; padding: 0; display: inline; }
             
-    #map-clipboard-container { margin: 365px auto 0; padding: 0; width: 506px; border-radius: 15px; -moz-border-radius: 15px; -webkit-border-radius: 15px; overflow: hidden; }
+    #map-clipboard-container { position:absolute; width:510px; bottom:25px; left:50%; margin-left: -255px; padding: 0; border-radius: 15px; -moz-border-radius: 15px; -webkit-border-radius: 15px; overflow: hidden; }
         #mc-info-container { margin: 0; padding: 20px 20px 10px; background: #fff; overflow: hidden; }
             #mc-info-container h1 { margin: 0 0 10px; font-size: 18px; color: #555; }
             #mc-info-container p { margin: 0; overflow: hidden; }
@@ -251,7 +254,7 @@ h4, .h4 { margin: 20px 0 13px 0; padding: 0; font-size: 16px; color: #000; }
         #copy-clipboard-container p { margin: 0; padding: 0; overflow: hidden; font-size: 11px; }
             #copy-clipboard-container input[type="text"] { margin: 0; padding: 1px 0 0 16px; height: 28px; float: left; width: 138px; background: #fff;
                                                            font-size: 11px; border: solid 1px #cacaca; }
-            #copy-clipboard-container #cc-lg { -webkit-border-top-left-radius: 15px; -webkit-border-bottom-left-radius: 15px;
+            #copy-clipboard-container #easting { -webkit-border-top-left-radius: 15px; -webkit-border-bottom-left-radius: 15px;
                                                            -moz-border-radius-topleft: 15px; -moz-border-radius-bottomleft: 15px;
                                                            border-top-left-radius: 15px; border-bottom-left-radius: 15px; }
             #copy-clipboard-container input[type="text"]:hover { border: solid 1px #9A9A9A; }
@@ -406,3 +409,5 @@ pre { background: transparent; border: solid 1px #bdbdbd; font-size: 11px; margi
         .hm-column.lft, .hm-column.lft.last { margin: 0 auto; float: none; }
     
 }
+
+.plovr-error-report { position:absolute; top:0; left:0; z-index: 60000;}
