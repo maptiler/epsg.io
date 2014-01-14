@@ -463,7 +463,7 @@ def index(id):
       if item['wkt']:
         url_format = "/"+str(item['code'])
         if default_trans:
-          if int(default_trans['code']) != int(item['code']):
+          if int(default_trans['code']) != int(item['code_trans']):
             url_format = "/"+str(item['code'])+"-"+str(default_trans['code'])
     
     # for activated transformation
@@ -535,7 +535,6 @@ def index(id):
         except:
           trans_lat = ""
           trans_lon = ""
-          print "not trans_coords" 
         
         # color html of pretty wkt
         export_html = highlight(ref.ExportToPrettyWkt(), WKTLexer(), HtmlFormatter(cssclass='syntax',nobackground=True))        
@@ -634,7 +633,9 @@ def index(id, format):
       rcode = r['code']
       wkt = r['wkt']
       rcode = r['code']
+      rname = r['name']
       def_trans = r['code_trans']
+      bbox = r['bbox']
   
     if int(code_trans) != 0:
       trans_query = parser.parse(str(code_trans) + " kind:COORDOP")
@@ -643,9 +644,15 @@ def index(id, format):
         values = t['wkt']
         tcode = t['code']
         url_coords = rcode + "-" + tcode 
+        # if code_trans is 0, then will be use default transformation and it is the same bbox as CRS 
+        bbox = t['bbox']
     else: 
       trans_result = code_result
       url_coords = rcode
+    # One of the formats is a map (because /coordinates/ was redirect on /coordinates and then catch by <format>)
+    if format == "coordinates":
+      center = ((bbox[0] - bbox[2])/2.0)+bbox[2],((bbox[3] - bbox[1])/2.0)+bbox[1]
+      return template ('./templates/map', name=rname, code=rcode, center=center)
     if not re.findall(r'([a-df-zA-Z_])',values):
       if str(values) != str(0):
       
@@ -725,91 +732,6 @@ def index(id, format):
   
 
     
-@route('/<id:re:[\d]+(-[\d]+)?>/coordinates/')
-def index(id):
-  ix = open_dir(INDEX)
-  result = []
-  values = None
-  try:
-    wgs = request.GET.get('wgs')
-    w = re.findall(r'(-?\d+\.?\d*)',wgs)
-
-    coord_lat = float(w[0])
-    coord_lon = float(w[1])
-
-  except:
-    coord_lat = None
-    coord_lon = None
-    
-  try:
-    other = request.GET.get('other')
-    o = re.findall(r'(-?\d+\.?\d*)',other)
-
-    coord_lat_other = float(o[0])
-    coord_lon_other = float(o[1])
-  
-  except:
-    coord_lat_other = None
-    coord_lon_other = None
-  
-  
-  with ix.searcher(closereader=False) as searcher:
-    parser = QueryParser("code", ix.schema)
-
-    code, code_trans = (id+'-0').split('-')[:2]
-
-    code_query = parser.parse(str(code) + " kind:CRS OR kind:COORDOP")
-    code_result = searcher.search(code_query, sortedby=False,scored=False)
-    
-    for r in code_result:
-      def_trans = r['code_trans']
-      wkt = r['wkt']
-      rcode = r['code']
-      rname = r['name']
-    
-    if int(def_trans) != 0:
-      trans_query = parser.parse(str(code_trans) + " kind:COORDOP")
-      trans_result = searcher.search(trans_query,sortedby=False,scored=False)
-     
-      for t in trans_result:
-        values = t['wkt']
-        tcode = t['code']
-        url_coords = rcode + "-" + tcode 
-    else: 
-      trans_result = code_result
-      url_coords = rcode
-      
-    if values != None:
-      w = re.findall(r'(-?\d+\.?\d*)',values)
-      num =[]
-      for n in w:
-        num.append(float(n))
-      values = tuple(num) 
-      
-      if int(def_trans) != int(tcode):
-        if (values != (0,0,0,0,0,0,0) and type(values) == tuple):
-          ref = osr.SpatialReference()
-          ref.ImportFromEPSG(int(rcode))
-          ref.SetTOWGS84(*values) 
-          wkt = ref.ExportToWkt().decode('utf-8')
-        
-    trans_wgs = "" 
-    trans_other = ""
-    
-    ref = osr.SpatialReference()
-    ref.ImportFromWkt(wkt.encode('utf-8'))
-
-    wgs = osr.SpatialReference()
-    wgs.ImportFromEPSG(4326)
-    
-    if coord_lat != None:
-      xform = osr.CoordinateTransformation(wgs, ref)
-      trans_wgs = xform.TransformPoint(coord_lat, coord_lon)
-    elif coord_lat_other != None:
-      xform = osr.CoordinateTransformation(ref, wgs)
-      trans_other = xform.TransformPoint(coord_lat_other, coord_lon_other)
-      
-  return template ('./templates/coordinates', trans_wgs=trans_wgs, trans_other=trans_other, resultcrs=code_result[0], url_coords=url_coords, coord_lat=coord_lat,coord_lon=coord_lon,coord_lat_other=coord_lat_other,coord_lon_other=coord_lon_other)
 
 @route('/trans')
 def index():
@@ -945,6 +867,10 @@ def static(filename):
 @route('/img/<filename>')
 def static(filename):
     return static_file(filename, root='./img/')
+
+@route('/js/index.js')
+def static():
+    return static_file('index.js', root='./js/')
 
 @route('/favicon.ico')
 def static():
