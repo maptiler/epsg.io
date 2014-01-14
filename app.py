@@ -655,8 +655,8 @@ def index(id, format):
       center = ((bbox[0] - bbox[2])/2.0)+bbox[2],((bbox[3] - bbox[1])/2.0)+bbox[1]
       return template ('./templates/map', name=rname, code=rcode, center=center)
     if not re.findall(r'([a-df-zA-Z_])',values):
-      if str(values) != str(0):
       
+      if str(values) != str(0) and str(values) != "":
         values = tuple(map(float, values[1:-1].split(',')))
         # w = re.findall(r'(-?\d*\.\d*[e]?-?\d*)',values)
         #       num =[]
