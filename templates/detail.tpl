@@ -158,7 +158,7 @@
 %end
 %if center and trans_lat and trans_lon:
           <p class="btn-link-container">
-            <a href="{{url_format}}/coordinates/?wgs={{center[0]}}%20{{center[1]}}" title=""><i></i>Get position on a map</a>
+            <a href="{{url_format}}/coordinates" title=""><i></i>Get position on a map</a>
           </p>
 %end
 %if trans and default_trans:
