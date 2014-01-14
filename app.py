@@ -521,8 +521,16 @@ def index(id):
 
         try:
           trans_coords_orig = xform.TransformPoint(center[0], center[1])
-          trans_lat = "%.8f" % trans_coords_orig[0]
-          trans_lon = "%.8f" % trans_coords_orig[1]
+          
+          if type(trans_coords_orig[0]) != float:
+            trans_lat = "%s" % trans_coords_orig[0]
+            trans_lon = "%s" % trans_coords_orig[1]
+          elif ref.GetAuthorityCode('UNIT') == str(9001):
+            trans_lat = "%.2f" % trans_coords_orig[0]
+            trans_lon = "%.2f" % trans_coords_orig[1]
+          else:  
+            trans_lat = "%.8f" % trans_coords_orig[0]
+            trans_lon = "%.8f" % trans_coords_orig[1]
 
         except:
           trans_lat = ""
@@ -553,7 +561,8 @@ def index(id):
     url_children = ""
     url_prime = ""
     nadgrid = ""
-    trans_coords = ""
+    trans_lat = ""
+    trans_lon = ""
     trans = ""
     url_format = ""
     default_trans = ""
@@ -601,7 +610,7 @@ def index(id):
       detail.append({'url_prime': url_prime, 'url_children':url_children,'url_axis':url_axis, 'url_uom':url_uom, 'url_area' : url_area})
       
  
-  return template('./templates/detail', item=item, detail=detail, facets_list=facets_list, nadgrid=nadgrid, trans_coords=trans_coords, trans=trans, url_format=url_format, default_trans=default_trans, center=center,g_coords=g_coords)  
+  return template('./templates/detail', item=item, detail=detail, facets_list=facets_list, nadgrid=nadgrid, trans_lat=trans_lat, trans_lon=trans_lon, trans=trans, url_format=url_format, default_trans=default_trans, center=center,g_coords=g_coords)  
 
 
 @route('/<id:re:[\d]+(-[\d]+)?>/<format>')
