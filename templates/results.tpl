@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"  lang="en" xml:lang="en">
   <head>  
     <meta charset="utf-8"/>
-    <title>EPSG.io</title>
+    <title>{{title}}</title>
     <meta content="width=device-width, initial-scale=1, maximum-scale=1" name="viewport" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="description" content="EPSG.io" />
@@ -27,7 +27,7 @@
           <p><input type="search" name="q" value="{{query}}" /> <input type="submit" name="" value="search" /></p>
         </form>
       </div>
-      <h1>Find a coordinate system and get coordinates through a map.</h1>
+      <h1>{{title}}</h1>
       <p>
 %if deprecated == 1:
           Found {{num_results}} deprecated records (in {{elapsed}} seconds)
@@ -41,7 +41,13 @@
           <ul class="results">
 %for r in result:
             <li>
-              <h2><a href="/{{r['link']}}" title="">{{r['r']['name']}}</a></h2>
+              <h2><a href="/{{r['link']}}" title="">{{r['r']['name']}} 
+              %if 'alt_title' in r['r']:
+              %if r['r']['alt_title'] and r['r']['name']!= r['r']['alt_title']:
+                      ({{r['r']['alt_title']}})
+              %end
+              %end
+              </a></h2>
               <p>
                 EPSG:{{r['r']['code']}}
   %if r['r']['code_trans'] != 0 and r['r']['primary'] == 1:

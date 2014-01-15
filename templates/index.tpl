@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"  lang="en" xml:lang="en">
     <head>    
         <meta charset="utf-8"/>
-        <title>EPSG.io</title>
+        <title>EPSG.io: Coordinate systems worldwide</title>
         <meta content="width=device-width, initial-scale=1, maximum-scale=1" name="viewport" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="description" content="EPSG.io" />
@@ -29,9 +29,9 @@
                 <div class="hm-column lft">
                     <h2>World coordinates systems</h2>
                     <ul>
-                        <li><a href="/4326" title="">WGS84 - World Geodetic System 1984, used in GPS </a></li> 
-                        <li><a href="/3857" title="">Spherical Mercator, Google Maps Projection, OpenStreetMap, Bing</a></li> 
-                        <li><a href="/?q=utm" title="">UTM - Universal Transverse Mercator</a></li> 
+                        <li><a href="/?q=WGS%2084" title="">WGS84 - World Geodetic System 1984, used in GPS </a></li> 
+                        <li><a href="/?q=Spherical%20Mercator" title="">Spherical Mercator, Google Maps Projection, OpenStreetMap, Bing</a></li> 
+                        <li><a href="/?q=UTM" title="">UTM - Universal Transverse Mercator</a></li> 
                         
                         <li><a href="/?q=etrs" title="">ETRS - European Terrestrial Reference System</a></li> 
                         <li><a href="/?q=nad" title="">NAD - North American Datum</a></li> 
@@ -40,20 +40,20 @@
                 <div class="hm-column lft">
                     <h2>Europe coordinates systems</h2>
                     <ul>
-                        <li><a href="/27700" title="">United Kingdom</a></li> 
-                        <li><a href="/2154" title="">France</a></li> 
-                        <li><a href="/5514" title="">Czech Republic</a></li> 
-                        <li><a href="/31467" title="">Germany</a></li> 
-                        <li><a href="/28992" title="">Netherlands</a></li> 
-                        <li><a href="/2056" title="">Switzerland</a></li> 
+                        <li><a href="/?q=United%20Kingdom" title="">United Kingdom</a></li> 
+                        <li><a href="/?q=France" title="">France</a></li> 
+                        <li><a href="/?q=Czech%20Republic" title="">Czech Republic</a></li> 
+                        <li><a href="/?q=Germany" title="">Germany</a></li> 
+                        <li><a href="/?q=Netherlands" title="">Netherlands</a></li> 
+                        <li><a href="/?q=Switzerland" title="">Switzerland</a></li> 
                     </ul>
                 </div>
                 <div class="hm-column lft last">
                     <h2>Another coordinates systems</h2>
                     <ul>
-                        <li><a href="/4618" title="">Brazil</a></li> 
-                        <li><a href="/2193" title="">New Zealand</a></li> 
-                        <li><a href="/3112" title="">Australia</a></li> 
+                        <li><a href="/?q=Brazil" title="">Brazil</a></li> 
+                        <li><a href="/?q=New%20Zealand" title="">New Zealand</a></li> 
+                        <li><a href="/?q=Australia" title="">Australia</a></li> 
                     </ul>
                 </div>                
             </div>

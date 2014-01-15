@@ -41,7 +41,7 @@
         </div>
         <div id="map-clipboard-container">
                 <div id="mc-info-container">
-                    <h1>{{code}} {{name}}</h1>
+                    <h1>EPSG:{{code}} {{name}}</h1>
                     <p>
                         <a href="http://epsg.io/" title="">Change coordinate system</a>
                         <a class="right" href="http://epsg.io/{{code}}" title="">Show details</a>

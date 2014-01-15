@@ -2,7 +2,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml"  lang="en" xml:lang="en">
   <head>  
     <meta charset="utf-8"/>
-    <title>EPSG.io</title>
+%if alt_title:
+    <title>EPSG:{{item['code']}} - {{item['name']}} - {{alt_title}}</title>
+%else:
+    <title>EPSG:{{item['code']}} - {{item['name']}}</title>
+%end    
+    
+    
     <meta content="width=device-width, initial-scale=1, maximum-scale=1" name="viewport" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="description" content="EPSG.io" />
@@ -23,7 +29,7 @@
     </div>
     <div id="layout-container">
       
-      <h1>EPSG:{{item['code']}}</h1>
+      <h1>EPSG:{{name[0]}}</h1>
       <p>
 %for i in range(0,len(facets_list)):
   %if facets_list[i][0] == item['kind']:
@@ -32,38 +38,74 @@
 %end
       </p>
       
-      <h2>{{item['name']}}</h2>
-      
+      <h2>{{item['name']}}<br /> {{alt_title}}</h2>
+
+
       <p>
-        Scope: {{item['scope']}}<br />
-%if detail:
-        Area of use: <a href="{{detail[0]['url_area']}}"> {{item['area']}}</a><br />
-%else:
-        Area of use: <a href="{{url_area}}">{{item['area']}}</a><br />
+        
+%if 'scope' in item:
+%if item['scope']:
+          Scope: {{item['scope']}}<br />
 %end
+%end
+        
+
+%if detail:
+        %if detail[0]['url_area']:
+          Area of use: <a href="{{detail[0]['url_area']}}"> {{item['area']}}</a><br />
+        %end
+%else:
+        %if item['area']:
+          Area of use: <a href="{{url_area}}">{{area_item}}</a><br />
+        %end
+%end
+
+
+%if 'remarks' in item:
+%if item['remarks']:
         Remarks: {{item['remarks']}}<br />
+%end
+%end
+
+
+%if 'information_source' in item:
+%if item['information_source']:
         Information source: {{item['information_source']}}<br />
+%end
+%end
+
+%if 'revision_date' in item:
+%if item['revision_date']:
         Revision date: {{item['revision_date']}}<br />
+%end
+%end
+
+%if 'concatop' in item:
 %if item['concatop']:
         Steps of transformation: {{item['concatop']}}<br />
 %end
+%end
+
 %if nadgrid:
         NadGrid file: {{nadgrid}}<br />
 %end
+
 %if 'source_geogcrs' in item:
   %if item['source_geogcrs']:
         Geodetic coordinate reference system: <a href="/{{item['source_geogcrs']}}/" title="">{{item['source_geogcrs']}}</a><br />
 
 %end
 %end
+
 %if 'datum_code' in item:
-  %if item['datum_code'] != 0 :
+  %if item['datum_code'] != 0 and item['datum_code'] :
         Datum: <a href="/{{item['datum_code']}}-datum/" title="">{{item['datum_code']}}-datum</a><br />
   %end
 %end
+
 %if not detail:
 %if 'children_code' in item:
-  %if item['children_code'] != 0 :
+  %if item['children_code'] != 0 and item['children_code']:
         Coordinate System: <a href="/{{item['children_code']}}-coordsys/" title="">{{item['children_code']}}-coordsys</a><br />
   %end
 %end
@@ -92,8 +134,11 @@
 %if item['order']:
         Axis order: {{item['order']}}.<br />
 %end
+
+%if 'description' in item:
 %if item['description']:
         Description: {{item['description']}}<br />
+%end
 %end
 
 %if item['greenwich_longitude']:
@@ -118,16 +163,52 @@
         
 %end
 %end
+
+%if 'alt_description' in item:
+%if item['alt_description']:
+%if item['wkt']:
+  Alternative description: {{!item['alt_description']}}<br />
+%else:
+  <div id="description-message">{{!item['alt_description']}} </div>
+%end
+%end
+%end
+
+%if 'alt_code' in item:
+ %if item['alt_code'] != ['']:
+  Alternatives codes : 
+  %for a in item['alt_code']:
+    <a href="/{{a}}">{{a}}</a>
+  %end
+ %end
+%end
+
       </p>
       
       <div id="detail-content-container">
         <div class="map-container">
+%if item['bbox']:
 %if center:
+%if trans_lat:
           <div id="mini-map">
+            <a href="{{url_format}}/coordinates">
             <img src="/img/epsg-target-small.png" id="crosshair" alt="" />
-            <img src="https://maps.googleapis.com/maps/api/staticmap?size=235x190&scale=2&sensor=false&visual_refresh=true&center={{center[0]}},{{center[1]}}&path=color:0xff0000ff|fillcolor:0xff000022|weight:2|{{g_coords}}" alt="SimpleMap" height="190" width="235">
-%end
+              <img src="https://maps.googleapis.com/maps/api/staticmap?size=235x190&scale=2&sensor=false&visual_refresh=true&center={{center[0]}},{{center[1]}}&path=color:0xff0000ff|fillcolor:0xff000022|weight:2|{{g_coords}}" alt="SimpleMap" height="190" width="235">
+              
+            </a>
           </div>
+%else:
+<div id="mini-map">
+  <img src="/img/epsg-target-small.png" id="crosshair" alt="" />
+    <img src="https://maps.googleapis.com/maps/api/staticmap?size=235x190&scale=2&sensor=false&visual_refresh=true&center={{center[0]}},{{center[1]}}&path=color:0xff0000ff|fillcolor:0xff000022|weight:2|{{g_coords}}" alt="SimpleMap" height="190" width="235">
+</div>
+          
+%end
+        
+          
+%end
+%end
+
 %if trans_lat and trans_lon:
           <p>
             Center coordinates<br />
