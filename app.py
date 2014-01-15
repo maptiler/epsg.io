@@ -3,38 +3,39 @@
 """
 """
 INDEX = "./index"
+CRS_EXCEPTATIONS = 'CRS_exceptions.csv'
 
 facets_list = [
-  ['CRS','CRS','','Coordinate reference systems',0,'http://'],
-  ['CRS-PROJCRS','PROJCRS','&nbsp; &nbsp;', 'Projected',0,'http://'],
-  ['CRS-GEOGCRS','GEOGCRS','&nbsp; &nbsp;', 'Geodetic',0,'http://'],
-  ['CRS-GEOG3DCRS','GEOG3DCRS', '&nbsp; &nbsp;', 'Geodetic 3D',0,'http://'],
-  ['CRS-GCENCRS','GCENCRS','&nbsp; &nbsp;', 'Geocentric',0,'http://'],
-  ['CRS-VERTCRS','VERTCRS','&nbsp; &nbsp;', 'Vertical',0,'http://'],
-  ['CRS-ENGCRS','ENGCRS','&nbsp; &nbsp;', 'Engineering',0,'http://'],
-  ['CRS-COMPOUNDCRS','COMPOUNDCRS','&nbsp; &nbsp;', 'Compound',0,'http://'], 
-  ['COORDOP','COORDOP','','Operation',0,'http://'],
-  ['COORDOP-COPTRANS','COPTRANS','&nbsp; &nbsp;', 'Transformation',0,'http://'],
-  ['COORDOP-COPCONOP','COPCONOP','&nbsp; &nbsp;', 'Compound',0,'http://'],
-  ['COORDOP-COPCON','COPCON','&nbsp; &nbsp;', 'Conversion',0,'http://'],
-  ['DATUM','DATUM','','Datum',0,'http://'],
-  ['DATUM-VERTDAT','VERTDAT','&nbsp; &nbsp;', 'Vertical',0,'http://'],
-  ['DATUM-ENGDAT','ENGDAT','&nbsp; &nbsp;', 'Engineering',0,'http://'],
-  ['DATUM-GEODDAT','GEODDAT','&nbsp; &nbsp;', 'Geodetic',0,'http://'],
-  ['ELLIPSOID','ELLIPSOID','', 'Ellipsoid',0,'http://'],
-  ['PRIMEM','PRIMEM','', 'Prime meridian',0,'http://'],
-  ['METHOD','METHOD','', 'Method',0,'http://'],
-  ['CS','CS','', 'Coordinate systems',0,'http://'],
-  ['CS-VERTCS','VERTCS','&nbsp; &nbsp;', 'Vertical',0,'http://'],
-  ['CS-SPHERCS','SPHERCS','&nbsp; &nbsp;', 'Spherical',0,'http://'],
-  ['CS-CARTESCS','CARTESCS','&nbsp; &nbsp;', 'Cartesian',0,'http://'],
-  ['CS-ELLIPCS','ELLIPCS','&nbsp; &nbsp;', 'Ellipsoidal',0,'http://'],
-  ['AXIS','AXIS','', 'Axis',0,'http://'],
-  ['AREA','AREA','', 'Area',0,'http://'],
-  ['UNIT','UNIT','', 'Units',0,'http://'],
-  ['UNIT-ANGUNIT','ANGUNIT','&nbsp; &nbsp;', 'Angle',0,'http://'],
-  ['UNIT-SCALEUNIT','SCALEUNIT','&nbsp; &nbsp;', 'Scale',0,'http://'],
-  ['UNIT-LENUNIT','LENUNIT','&nbsp; &nbsp;', 'Length',0,'http://'],
+  ['CRS','CRS','','Coordinate reference systems',0,'http://','Coordinate reference systems for '],
+  ['CRS-PROJCRS','PROJCRS','&nbsp; &nbsp;', 'Projected',0,'http://','Projected coordinate systems for '],
+  ['CRS-GEOGCRS','GEOGCRS','&nbsp; &nbsp;', 'Geodetic',0,'http://', 'Geodetic coordinate systems for '],
+  ['CRS-GEOG3DCRS','GEOG3DCRS', '&nbsp; &nbsp;', 'Geodetic 3D',0,'http://','Geodetic 3D coorinate systems for '],
+  ['CRS-GCENCRS','GCENCRS','&nbsp; &nbsp;', 'Geocentric',0,'http://', 'Geocentric coordinate systems for '],
+  ['CRS-VERTCRS','VERTCRS','&nbsp; &nbsp;', 'Vertical',0,'http://', 'Vertical coordinate systems for '],
+  ['CRS-ENGCRS','ENGCRS','&nbsp; &nbsp;', 'Engineering',0,'http://', 'Engineering coordinate systems for '],
+  ['CRS-COMPOUNDCRS','COMPOUNDCRS','&nbsp; &nbsp;', 'Compound',0,'http://', 'Compound coordinate systems for '], 
+  ['COORDOP','COORDOP','','Operation',0,'http://', 'Operation for '],
+  ['COORDOP-COPTRANS','COPTRANS','&nbsp; &nbsp;', 'Transformation',0,'http://', 'Transformation for '],
+  ['COORDOP-COPCONOP','COPCONOP','&nbsp; &nbsp;', 'Compound',0,'http://', 'Compound operation for '],
+  ['COORDOP-COPCON','COPCON','&nbsp; &nbsp;', 'Conversion',0,'http://', 'Conversion for '],
+  ['DATUM','DATUM','','Datum',0,'http://', 'Datum for '],
+  ['DATUM-VERTDAT','VERTDAT','&nbsp; &nbsp;', 'Vertical',0,'http://', 'Vertical datum for '],
+  ['DATUM-ENGDAT','ENGDAT','&nbsp; &nbsp;', 'Engineering',0,'http://', 'Engineering datum for '],
+  ['DATUM-GEODDAT','GEODDAT','&nbsp; &nbsp;', 'Geodetic',0,'http://', 'Geodetic datum for '],
+  ['ELLIPSOID','ELLIPSOID','', 'Ellipsoid',0,'http://', 'Ellipsoid for '],
+  ['PRIMEM','PRIMEM','', 'Prime meridian',0,'http://', 'Prime meridian for '],
+  ['METHOD','METHOD','', 'Method',0,'http://', 'Method for '],
+  ['CS','CS','', 'Coordinate systems',0,'http://', 'Coordinate system for '],
+  ['CS-VERTCS','VERTCS','&nbsp; &nbsp;', 'Vertical',0,'http://', 'Vertical coordinate system for '],
+  ['CS-SPHERCS','SPHERCS','&nbsp; &nbsp;', 'Spherical',0,'http://', 'Spherical coordinate system for '],
+  ['CS-CARTESCS','CARTESCS','&nbsp; &nbsp;', 'Cartesian',0,'http://', 'Cartesian coordinate system for '],
+  ['CS-ELLIPCS','ELLIPCS','&nbsp; &nbsp;', 'Ellipsoidal',0,'http://', 'Ellipsoidal coordinate system for '],
+  ['AXIS','AXIS','', 'Axis',0,'http://', 'Axis for '],
+  ['AREA','AREA','', 'Area',0,'http://', 'Area for '],
+  ['UNIT','UNIT','', 'Units',0,'http://', 'Unit for '],
+  ['UNIT-ANGUNIT','ANGUNIT','&nbsp; &nbsp;', 'Angle',0,'http://', 'Angle unit for '],
+  ['UNIT-SCALEUNIT','SCALEUNIT','&nbsp; &nbsp;', 'Scale',0,'http://', 'Scale unit for '],
+  ['UNIT-LENUNIT','LENUNIT','&nbsp; &nbsp;', 'Length',0,'http://', 'Length unit for '],
 ]
 
 # Index to the facets_list above - manual update on change!
@@ -65,11 +66,26 @@ from osgeo import gdal, osr, ogr
 import time
 import math
 import json
+import csv
 
 app = bottle.default_app()
 
 re_kind = re.compile(r'kind:([\*\w-]+)')
 re_deprecated = re.compile(r'deprecated:\d')
+
+crs_ex_line = {}
+try:
+  with open(CRS_EXCEPTATIONS) as crs_ex:
+    text = csv.reader(crs_ex, delimiter = ',')
+    # skip the header
+    next(text, None)    
+    for row in text:
+      crs_ex_line[row[0]] = row
+    #print crs_ex_line['4326'][2]
+    #print crs_ex_line
+except:
+  print "!!! FAILED: NO CRS_EXCEPTATIONS !!!"
+  sys.exit(1)
 
 def getQueryParam(q, param):
   """Return value of a param in query"""
@@ -151,6 +167,8 @@ def area_to_url(area):
     qarea = area.split(";")
   else:
     qarea = area
+  if area.startswith("World"):
+    qarea = ["World",]
   url = "/?q=" + urllib.quote_plus(qarea[0].encode('utf-8'))
   
   return url
@@ -168,27 +186,34 @@ def index():
      def final(self, searcher, docnum, score):
        
        boost = 0
-       popularity = (searcher.stored_fields(docnum).get("popularity"))
+       importance = 0
        code = (searcher.stored_fields(docnum).get("code"))
        kind = (searcher.stored_fields(docnum).get("kind"))
+       try:
+         importance = crs_ex_line[code][1]
+       except:
+         pass
+         #print code, "not in list"
+       if not importance:
+         importance = 0
+       # Manually boosted kinds - TODO: in field popularity in Whoosh index
        if kind == "CRS-PROJCRS":
          boost = 0.2
-       if kind == "CRS-GEOGCRS":
+       if kind == "CRS-GEOGCRS" or kind == "CRS-GEOG3DCRS":
          boost = 0.05
        # Manually boosted codes - TODO: from a CSV table
-       if code in ("5514","4326","27700","3857"):
-         boost = 1.0
-         
-       #print "code:",code," with score:", score, "with kind:", kind, "boost:", boost 
-       return score * (1 + boost)
+       # if code in ("5514","4326","27700","3857"):
+       #   boost = 1.0
+
+       #print "code:",code," with score:", score, "with kind:", kind, "boost:", boost, "importance", importance
+       return score * (1 + boost) * (1 + float(importance))
   
   ix = open_dir(INDEX)
   result = []
 
   with ix.searcher(closereader=False, weighting=PopularityWeighting()) as searcher:
   #with ix.searcher(closereader=False, weighting=scoring.BM25F) as searcher:
-  
-    parser = MultifieldParser(["tgrams","code","name","trans","code_trans","kind","area"], ix.schema)
+    parser = MultifieldParser(["tgrams","code","name","trans","code_trans","kind","area","alt_title"], ix.schema)
     query = request.GET.get('q')  # p43 - 1.9 The default query language
     pagenum = int(request.GET.get("page",1))
     format = request.GET.get('format',0)
@@ -257,6 +282,14 @@ def index():
     #make null index of chose kind  
     query_kind_index = None
     
+    # title, h1
+    for i in range(0,len(facets_list)):
+      if kind == facets_list[i][1]:
+        q = re.sub(r'kind:\S+',"",query)
+        q = re.sub(r'deprecated:\d',"",q)
+        q = q.strip()
+        print q
+        title = facets_list[i][6] +'"'+q+'"'
     # update facets counters
     for key,value in groups.iteritems():
         
@@ -328,7 +361,7 @@ def index():
       
       return json.dumps(json_str)
 
-  return template('./templates/results',query=query,deprecated=deprecated, num_results=num_results, elapsed=elapsed, facets_list=facets_list, status_groups=status_groups, url_facet_statquery=url_facet_statquery, result=result, pagenum=int(pagenum),paging=paging)
+  return template('./templates/results',title=title,query=query,deprecated=deprecated, num_results=num_results, elapsed=elapsed, facets_list=facets_list, status_groups=status_groups, url_facet_statquery=url_facet_statquery, result=result, pagenum=int(pagenum),paging=paging)
 
 
 
@@ -337,7 +370,7 @@ def index(id):
   class PopularityWeighting(scoring.BM25F):
      use_final = True
      def final(self, searcher, docnum, score):
-       popularity = (searcher.stored_fields(docnum).get("popularity"))
+       #popularity = (searcher.stored_fields(docnum).get("popularity"))
        return score# * popularity
   ix = open_dir(INDEX)
    
@@ -364,8 +397,8 @@ def index(id):
     export_html = ""
     url_area_trans = ""
     # url_area = ""
-    # g_coords = ""
-    # center = 0,0
+    g_coords = ""
+    center = 0,0
     trans_lat = ""
     trans_lon = ""
     # title = ""
@@ -374,9 +407,13 @@ def index(id):
     for r in results:
       found = False
       item = r
+      name = item['code'].split("-")
       title = item['kind'] + ":" + item['code']
       url_area = area_to_url(item['area'])
       wkt = item['wkt']
+      area_item = item['area']
+      if item['area'].startswith("World:"):
+        area_item = "World"
       # for short link (5514, instead of 5514-15965)
       if int(code_trans) == 0 and int(r['code_trans']) != 0:
         code_trans = r['code_trans']
@@ -422,7 +459,7 @@ def index(id):
           default_trans = item
       
       # if it has any transformation
-      if found == False:
+      if found == False and item['bbox']:
         # default trans is active transformation
         found_dt = False
         for i in range(0,len(trans_item)):
@@ -545,7 +582,12 @@ def index(id):
     if default_trans:
       for i in range(0,len(default_trans['concatop'])):
         url_concatop.append("/"+ str(default_trans['concatop'][i]))
-  return template('./templates/detail', item=item, trans=trans, default_trans=default_trans, num_results=num_results, url_method=url_method, title=title, url_format=url_format, export_html=export_html, url_area_trans=url_area_trans, url_area=url_area, center=center, g_coords=g_coords, trans_lat=trans_lat, trans_lon=trans_lon,wkt=wkt,facets_list=facets_list,url_concatop=url_concatop, nadgrid=nadgrid, detail=detail,export=export, error_code=error_code )  
+    alt_title = ""    
+    if 'alt_title' in item:
+      if item['alt_title']:
+        alt_title = item['alt_title']
+                
+  return template('./templates/detail',alt_title=alt_title,area_item=area_item,name=name,item=item, trans=trans, default_trans=default_trans, num_results=num_results, url_method=url_method, title=title, url_format=url_format, export_html=export_html, url_area_trans=url_area_trans, url_area=url_area, center=center, g_coords=g_coords, trans_lat=trans_lat, trans_lon=trans_lon,wkt=wkt,facets_list=facets_list,url_concatop=url_concatop, nadgrid=nadgrid, detail=detail,export=export, error_code=error_code )  
 
 
 @route('/<id:re:[\d]+(-[\w]+)>')
@@ -574,6 +616,7 @@ def index(id):
       item = r
       url_area = area_to_url(item['area'])
       
+      name = item['code'].split("-")
       center = ""
       g_coords = ""
       if item['bbox']:
@@ -611,7 +654,7 @@ def index(id):
       detail.append({'url_prime': url_prime, 'url_children':url_children,'url_axis':url_axis, 'url_uom':url_uom, 'url_area' : url_area})
       
  
-  return template('./templates/detail', item=item, detail=detail, facets_list=facets_list, nadgrid=nadgrid, trans_lat=trans_lat, trans_lon=trans_lon, trans=trans, url_format=url_format, default_trans=default_trans, center=center,g_coords=g_coords)  
+  return template('./templates/detail', name=name,item=item, detail=detail, facets_list=facets_list, nadgrid=nadgrid, trans_lat=trans_lat, trans_lon=trans_lon, trans=trans, url_format=url_format, default_trans=default_trans, center=center,g_coords=g_coords)  
 
 
 @route('/<id:re:[\d]+(-[\d]+)?>/<format>')
