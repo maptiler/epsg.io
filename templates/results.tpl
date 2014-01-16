@@ -2,7 +2,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml"  lang="en" xml:lang="en">
   <head>  
     <meta charset="utf-8"/>
-    <title>{{title}}</title>
+    %if pagenum == 1:
+      <title>{{title}}</title>
+    %else:
+      <title>{{title}}, page {{pagenum}}</title>
+    %end
+    
     <meta content="width=device-width, initial-scale=1, maximum-scale=1" name="viewport" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="description" content="EPSG.io" />
@@ -27,7 +32,12 @@
           <p><input type="search" name="q" value="{{query}}" /> <input type="submit" name="" value="search" /></p>
         </form>
       </div>
-      <h1>{{title}}</h1>
+      %if pagenum == 1:
+        <h1>{{title}}</h1>
+      %else:
+        <h1>{{title}}, page {{pagenum}}</h1>
+      %end
+      
       <p>
 %if deprecated == 1:
           Found {{num_results}} deprecated records (in {{elapsed}} seconds)
