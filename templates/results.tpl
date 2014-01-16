@@ -44,7 +44,7 @@
               <h2><a href="/{{r['link']}}" title="">{{r['r']['name']}} 
               %if 'alt_title' in r['r']:
               %if r['r']['alt_title'] and r['r']['name']!= r['r']['alt_title']:
-                      ({{r['r']['alt_title']}})
+                      - {{r['r']['alt_title']}}
               %end
               %end
               </a></h2>

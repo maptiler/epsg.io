@@ -1,6 +1,6 @@
 code,importance,alt_title,alt_code,alt_description,internal_note,internal_source
 4326,1.0,"WGS84 - World Geodetic System 1984, used in GPS ",,,,
-3857,0.7,"Spherical Mercator, Google Maps Projection, OpenStreetMap, Bing, ArcGIS, ESRI","900913,3587,54004,41001,102113,102100,3785","This is projected coordinate system used for rendering maps in Google Maps, OpenStreetMap, etc. For details see <a href=""http://www.maptiler.org/google-maps-coordinates-tile-bounds-projection/"">Tile system</a>.",,http://wiki.openstreetmap.org/wiki/EPSG:3857
+3857,0.7,"Spherical Mercator, Google Maps, OpenStreetMap, Bing, ArcGIS, ESRI","900913,3587,54004,41001,102113,102100,3785","This is projected coordinate system used for rendering maps in Google Maps, OpenStreetMap, etc. For details see <a href=""http://www.maptiler.org/google-maps-coordinates-tile-bounds-projection/"">Tile system</a>.",,http://wiki.openstreetmap.org/wiki/EPSG:3857
 3587,,,3857,Some used this likely as a mistype of Spherical Mercator EPSG:3857 (mistype),,http://wiki.openstreetmap.org/wiki/EPSG:3857
 900913,,Spherical Mercator (unofficial - used in open source projects / OSGEO),3857,"      The unofficial code for Spherical Mercator (Google Maps, OpenStreetMap, ..) system - used in OpenLayers and other open-source projects.<p></p>See the official coordinate system <a href=""/3857"">EPSG:3857</a>
 ",,http://wiki.openstreetmap.org/wiki/EPSG:3857
