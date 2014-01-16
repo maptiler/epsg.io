@@ -15,7 +15,7 @@ from whoosh.qparser import QueryParser
 from osgeo import gdal, osr, ogr
 from pprint import pprint
 from whoosh import fields, columns
-from whoosh.analysis import StemmingAnalyzer
+from whoosh.analysis import StemmingAnalyzer # removing suffixes (and sometimes prefixes)
 
 kind_list = {
   'vertical' : "CRS-VERTCRS",
@@ -68,7 +68,7 @@ class EPSGSchema(SchemaClass):
   area = TEXT(stored = True, sortable=True, spelling=True) #epsg_area/area_of_use
   area_trans = TEXT(stored = True, sortable=True, spelling=True)
   deprecated = BOOLEAN(stored = True) # "1 = Valid", "0 - Invalid"
-  popularity = STORED  # number [0..1] - our featured = 1
+  # popularity = STORED  # number [0..1] - our featured = 1
 
   # Description of used transformation - "", "Czech republic (accuracy 1 meter)"
   trans = NUMERIC(stored = True) # area of used towgs transformation + (accuracy) else ""
@@ -87,14 +87,14 @@ class EPSGSchema(SchemaClass):
 
   # Advanced with additional types such as "Elipsoid" | "Area" | ...
   datum_code = NUMERIC(stored=True) 
-  source_geogcrs = STORED
+  source_geogcrs = NUMERIC(stored=True)
   target_crs = STORED
-  children_code = STORED
+  children_code = NUMERIC(stored=True)
   data_source = STORED
   uom = STORED
   target_uom = STORED
-  prime_meridian = STORED
-  greenwich_longitude = NUMERIC(stored=True)
+  prime_meridian = NUMERIC(stored=True)
+  greenwich_longitude = STORED
   concatop = STORED
   method = STORED
   files = STORED
@@ -105,6 +105,8 @@ class EPSGSchema(SchemaClass):
   description = STORED
   primary = STORED
   uom_code = STORED
+  area_code = NUMERIC(stored=True)
+  area_trans_code = NUMERIC(stored=True)
   
   tgrams = NGRAM(minsize=2, maxsize=4, stored=False)
   #datum_name = TEXT(stored = True, sortable=True, spelling=True, field_boost=3.0, analyzer=stem_ana)
@@ -117,6 +119,17 @@ class EPSGSchema(SchemaClass):
   
   # Specific for projected coordinate systems
   #projection = ID(stored = True)
+  
+  # CRS_exceptions
+  alt_title = TEXT(stored = True, sortable=True, spelling=True, field_boost=3.0)
+  code_id = ID(stored = True, unique=True)
+  alt_code = NUMERIC(stored = True)
+  alt_description = TEXT(stored=True)
+  
+  # frontpage_section = STORED
+  # frontpage_title = STORED
+  # importance = STORED
+  
 
 # MAKE DIRECTORY AND CREATE INDEX
 if not os.path.exists(INDEX):
@@ -160,21 +173,29 @@ for code, name, scope, remarks, information_source, revision_date,datum_code, ar
   for source_geogcrs, datum_code in cur.fetchall():
     pass
     
-  popularity = 1.0
+  # popularity = 0.0
   deprecated = int(deprecated)
   code = str(code).decode('utf-8')
   
   if kind_list.has_key(coord_ref_sys_kind):
     kind = kind_list[coord_ref_sys_kind].decode('utf-8')
+  
+  # if kind == "CRS-PROJCRS":
+  #   popularity_kind = 0.2
+  # if kind == "CRS-GEOGCRS" or kind == "CRS-GEOG3DCRS":
+  #   popularity_kind = 0.05
+    
   doc = {
     'code': code,
+    'code_id':code,
     'code_trans' : 0,
     'name': name,
     'alt_name' : alt_name,
     'kind': kind,
     'area': area,
+    'area_code': area_code,
     'deprecated': deprecated,
-    'popularity': popularity,
+    # 'popularity': popularity,
     'trans' : u"",
     'trans_alt_name' : u"",
     'trans_remarks': u"",
@@ -208,14 +229,14 @@ for code, name, scope, remarks, information_source, revision_date,datum_code, ar
     }  
 
 # transofrmation to wgs84
-  cur.execute('SELECT epsg_coordoperation.coord_op_code, epsg_coordoperation.coord_op_accuracy, epsg_coordoperation.coord_op_type, epsg_coordoperation.deprecated, epsg_coordoperation.coord_op_scope, epsg_coordoperation.remarks, epsg_coordoperation.information_source, epsg_coordoperation.revision_date, epsg_coordoperation.uom_code_source_coord_diff,epsg_coordoperation.coord_op_method_code, epsg_area.area_of_use, epsg_area.area_north_bound_lat, epsg_area.area_west_bound_lon, epsg_area.area_south_bound_lat, epsg_area.area_east_bound_lon FROM epsg_coordoperation LEFT JOIN epsg_area ON area_of_use_code = area_code  WHERE source_crs_code = %s and target_crs_code = 4326',(source_geogcrs_code,))
+  cur.execute('SELECT epsg_coordoperation.coord_op_code, epsg_coordoperation.coord_op_accuracy, epsg_coordoperation.coord_op_type, epsg_coordoperation.deprecated, epsg_coordoperation.coord_op_scope, epsg_coordoperation.remarks, epsg_coordoperation.information_source, epsg_coordoperation.revision_date, epsg_coordoperation.uom_code_source_coord_diff,epsg_coordoperation.coord_op_method_code,epsg_coordoperation.area_of_use_code, epsg_area.area_of_use, epsg_area.area_north_bound_lat, epsg_area.area_west_bound_lon, epsg_area.area_south_bound_lat, epsg_area.area_east_bound_lon FROM epsg_coordoperation LEFT JOIN epsg_area ON area_of_use_code = area_code  WHERE source_crs_code = %s and target_crs_code = 4326',(source_geogcrs_code,))
   towgs84 = cur.fetchall()  
   op_code_original = 0
   op_code_trans = {}
   towgs84_original = ref.GetTOWGS84()
   transformations = []
   if len(towgs84) != 0:
-    for op_code, op_accuracy,coord_op_type, opdeprecated, coord_op_scope, remarks, information_source, revision_date,uom_code, coord_op_method_code, area, area_north_bound_lat, area_west_bound_lon, area_south_bound_lat, area_east_bound_lon in towgs84:
+    for op_code, op_accuracy,coord_op_type, opdeprecated, coord_op_scope, remarks, information_source, revision_date,uom_code, coord_op_method_code, area_code,area, area_north_bound_lat, area_west_bound_lon, area_south_bound_lat, area_east_bound_lon in towgs84:
       cur.execute('SELECT parameter_value, param_value_file_ref FROM epsg_coordoperationparamvalue WHERE coord_op_code = %s', (op_code, ))
       values = cur.fetchall()
       if len(values) == 7:
@@ -229,19 +250,20 @@ for code, name, scope, remarks, information_source, revision_date,datum_code, ar
       
       if op_accuracy == None or op_accuracy == 0.0:
         op_accuracy = u'unknown'
-        popularity_acc = -1
-      else:
-        popularity_acc = 1
-        
+      #   popularity_acc = -0.02
+      # else:
+      #   popularity_acc = 0.02
+      #         
       op_code_trans[op_code] = v
       if towgs84_original == v:
         op_code_original = op_code
         doc['area_trans'] = area
+        doc['area_trans_code'] = area_code
         doc['accuracy'] = op_accuracy
         doc['wkt'] = text
         doc['primary'] = 1
         doc['code_trans'] = op_code
-        doc['popularity'] = 5 + popularity_acc
+        # doc['popularity'] = popularity_acc + popularity_kind + 0.1
       
       transformations.append(op_code)
     
@@ -253,20 +275,20 @@ for code, name, scope, remarks, information_source, revision_date,datum_code, ar
       # CRS has transformation to wgs84, but any transformation is not default 
       doc['trans'] = transformations
       doc['primary'] = 0
-      doc['popularity'] = 2 
+      # doc['popularity'] = popularity_acc + popularity_kind
       with ix.writer() as writer:
         writer.add_document(**doc)
   else:
     #print code, "without transformation"
-    doc['popularity'] = 1
+    # doc['popularity'] = popularity_kind
     with ix.writer() as writer:
       writer.add_document(**doc)
 
 ###############################################################################
 print " - SELECT EPSG FROM OPERATIONS"
 ###############################################################################
-cur.execute('SELECT epsg_coordoperation.coord_op_code,epsg_coordoperation.coord_op_name,epsg_coordoperation.coord_op_accuracy, epsg_coordoperation.coord_op_type,epsg_coordoperation.source_crs_code,epsg_coordoperation.target_crs_code, epsg_coordoperation.deprecated, epsg_coordoperation.coord_op_scope, epsg_coordoperation.remarks, epsg_coordoperation.information_source, epsg_coordoperation.revision_date, epsg_coordoperation.uom_code_source_coord_diff,epsg_coordoperation.coord_op_method_code, epsg_area.area_of_use, epsg_area.area_north_bound_lat, epsg_area.area_west_bound_lon, epsg_area.area_south_bound_lat, epsg_area.area_east_bound_lon FROM epsg_coordoperation LEFT JOIN epsg_area ON area_of_use_code = area_code ')
-for op_code,op_name, op_accuracy, coord_op_type, source_crs, target_crs, deprecated, scope, remarks, information_source, revision_date, uom_code, method, area, area_north_bound_lat, area_west_bound_lon, area_south_bound_lat, area_east_bound_lon in cur.fetchall():
+cur.execute('SELECT epsg_coordoperation.coord_op_code,epsg_coordoperation.coord_op_name,epsg_coordoperation.coord_op_accuracy, epsg_coordoperation.coord_op_type,epsg_coordoperation.source_crs_code,epsg_coordoperation.target_crs_code, epsg_coordoperation.deprecated, epsg_coordoperation.coord_op_scope, epsg_coordoperation.remarks, epsg_coordoperation.information_source, epsg_coordoperation.revision_date, epsg_coordoperation.uom_code_source_coord_diff,epsg_coordoperation.coord_op_method_code, epsg_coordoperation.area_of_use_code, epsg_area.area_of_use, epsg_area.area_north_bound_lat, epsg_area.area_west_bound_lon, epsg_area.area_south_bound_lat, epsg_area.area_east_bound_lon FROM epsg_coordoperation LEFT JOIN epsg_area ON area_of_use_code = area_code ')
+for op_code,op_name, op_accuracy, coord_op_type, source_crs, target_crs, deprecated, scope, remarks, information_source, revision_date, uom_code, method, area_code, area, area_north_bound_lat, area_west_bound_lon, area_south_bound_lat, area_east_bound_lon in cur.fetchall():
   op_code = str(op_code).decode('utf-8')
   
   kind = kind_list[coord_op_type].decode('utf-8')
@@ -313,8 +335,9 @@ for op_code,op_name, op_accuracy, coord_op_type, source_crs, target_crs, depreca
     'alt_name' : u"",
     'kind': kind,
     'area': area,
+    'area_code': area_code,
     'deprecated': deprecated,
-    'popularity': 1,
+    # 'popularity': 0,
     'trans' : u"",
     'trans_alt_name' : u"",
     'trans_remarks': u"",
@@ -381,8 +404,9 @@ for code, name, kind, ellipsoid_code, area_code,scope,remarks,information_source
           'alt_name' : alt_name,
           'kind': kind,
           'area': area,
+          'area_code': area_code,
           'deprecated': deprecated,
-          'popularity': 1.0,
+          # 'popularity': 0.0,
           'trans' : u"",
           'trans_alt_name' : u"",
           'trans_remarks': u"",
@@ -409,7 +433,7 @@ for code, name, kind, ellipsoid_code, area_code,scope,remarks,information_source
           'abbreviation' : u"",
           'order' : u"",
           'description':u"",
-          'primary' : 1,
+          'primary' : 0,
           'tgrams': name.lower() 
           
           
@@ -460,7 +484,7 @@ for code, name, uom_code,remarks,information_source,revision_date,data_source, d
     'uom' : unit_name,
     'target_uom': u"",
     'kind': u"ELLIPSOID",
-    'popularity': 1.0,
+    # 'popularity': 0,
     'children_code' : 0,
     'data_source' : data_source,
     'prime_meridian' : 0,
@@ -473,7 +497,7 @@ for code, name, uom_code,remarks,information_source,revision_date,data_source, d
     'abbreviation' : u"",
     'order' : u"",
     'description':u"",
-    'primary' : 1,
+    'primary' : 0,
     'tgrams': name.lower()     
     }
     
@@ -514,7 +538,7 @@ for code, name, greenwich_longitude, uom_code,remarks,information_source,revisio
     'uom' : unit_name,
     'target_uom': u"",
     'kind': u"PRIMEM",
-    'popularity': 1.0,
+    # 'popularity': 0,
     'children_code' : 0,
     'data_source' : data_source,
     'prime_meridian' : 0,
@@ -527,7 +551,7 @@ for code, name, greenwich_longitude, uom_code,remarks,information_source,revisio
     'abbreviation' : u"",
     'order' : u"",
     'description':u"",
-    'primary' : 1,
+    'primary' : 0,
     'tgrams': name.lower()       
     
     
@@ -574,7 +598,7 @@ for code, name, reverse, remarks, information_source, revision_date, data_source
     'uom' : u"",
     'target_uom': u"",
     'kind': u"METHOD",
-    'popularity': 1.0,
+    # 'popularity': 0,
     'children_code' : 0,
     'data_source' : data_source,
     'prime_meridian' : 0,
@@ -587,7 +611,7 @@ for code, name, reverse, remarks, information_source, revision_date, data_source
     'abbreviation' : u"",
     'order' : u"",
     'description':u"",
-    'primary' : 1,
+    'primary' : 0,
     'tgrams': name.lower()       
     
     
@@ -634,7 +658,7 @@ for code, name, kind, remarks, information_source, revision_date, data_source, d
     'uom' : u"",
     'target_uom': u"",
     'kind': kind,
-    'popularity': 1.0,
+    # 'popularity': 0,
     'children_code' : axis_code,
     'data_source' : data_source,
     'prime_meridian' : 0,
@@ -647,7 +671,7 @@ for code, name, kind, remarks, information_source, revision_date, data_source, d
     'abbreviation' : u"",
     'order' : u"",
     'description':u"",
-    'primary' : 1,
+    'primary' : 0,
     'tgrams': name.lower()       
 
     }
@@ -688,7 +712,7 @@ for code, sys_code, orientation, abbreviation, uom_code, order, axis_name, descr
     'uom' : unit_name,
     'target_uom': u"",
     'kind': u"AXIS",
-    'popularity': 1.0,
+    # 'popularity': 0,
     'children_code' : sys_code, #for connect to coordinate system
     'data_source' : data_source,
     'prime_meridian' : 0,
@@ -701,7 +725,7 @@ for code, sys_code, orientation, abbreviation, uom_code, order, axis_name, descr
     'abbreviation' : abbreviation,
     'order' : order,
     'description': description,
-    'primary' : 1,
+    'primary' : 0,
     'tgrams': name.lower()       
     
 
@@ -750,7 +774,7 @@ for code, name, area,area_south_bound_lat,area_north_bound_lat,area_west_bound_l
     'uom' : u"",
     'target_uom': u"",
     'kind': u"AREA",
-    'popularity': 1.0,
+    # 'popularity': 0,
     'children_code' : 0,
     'data_source' : data_source,
     'prime_meridian' : 0,
@@ -763,7 +787,7 @@ for code, name, area,area_south_bound_lat,area_north_bound_lat,area_west_bound_l
     'abbreviation' : u"",
     'order' : u"",
     'description': u"",
-    'primary' : 1,
+    'primary' : 0,
     'tgrams': name.lower()    
     }
 
@@ -809,7 +833,7 @@ for code, name, kind, target_uom, remarks, information_source, data_source, revi
     'uom' : u"",
     'target_uom': target_uom,
     'kind': kind,
-    'popularity': 1.0,
+    # 'popularity': 0,
     'children_code' : 0,
     'data_source' : data_source,
     'prime_meridian' : 0,
@@ -822,7 +846,7 @@ for code, name, kind, target_uom, remarks, information_source, data_source, revi
     'abbreviation' : u"",
     'order' : u"",
     'description': u"",
-    'primary' : 1,
+    'primary' : 0,
     'tgrams':name.lower()    
     }
     
