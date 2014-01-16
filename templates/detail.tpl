@@ -3,15 +3,15 @@
   <head>  
     <meta charset="utf-8"/>
 %if alt_title:
-    <title>EPSG:{{item['code']}} - {{item['name']}} - {{alt_title}}</title>
+    <title>{{item['name']}} - {{alt_title}} - EPSG:{{item['code']}}</title>
 %else:
-    <title>EPSG:{{item['code']}} - {{item['name']}}</title>
+    <title>{{item['name']}} - EPSG:{{item['code']}}</title>
 %end    
     
     
     <meta content="width=device-width, initial-scale=1, maximum-scale=1" name="viewport" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="description" content="{{kind}} for {{item['area']}} {{item['remarks']}} {{item['scope']}}" />
+    <meta name="description" content="EPSG:{{item['code']}} {{kind}} for {{item['area']}} {{item['remarks']}} {{item['scope']}}" />
     <meta name="keywords" content="EPSG.io" />
     <meta name="robots" content="ALL,FOLLOW" />
     <link rel="stylesheet" href="/css/main.css" type="text/css" />

@@ -288,13 +288,17 @@ def index():
         if kind == "AXIS":
           title = "Axes"
           break
+        dep_found = False
         q = re.sub(r'kind:\S+',"",query)
+        if "deprecated:1" in q: dep_found = True 
         q = re.sub(r'deprecated:\d',"",q)
         q = q.strip()
         if q == "":
           title = facets_list[i][6] +"s" 
+          if dep_found == True: title = "Deprecated " + facets_list[i][6].lower() + "s"
         else:
           title = facets_list[i][6] +"s for "+'"'+q+'"'
+          if dep_found == True: title = "Deprecated " + facets_list[i][6].lower() +"s for "+'"'+q+'"'
     
     # update facets counters
     for key,value in groups.iteritems():
