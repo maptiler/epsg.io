@@ -11,7 +11,7 @@
     
     <meta content="width=device-width, initial-scale=1, maximum-scale=1" name="viewport" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="description" content="{{kind}} for {{item['area']}} {{item['remarks']}}" />
+    <meta name="description" content="{{kind}} for {{item['area']}} {{item['remarks']}} {{item['scope']}}" />
     <meta name="keywords" content="EPSG.io" />
     <meta name="robots" content="ALL,FOLLOW" />
     <link rel="stylesheet" href="/css/main.css" type="text/css" />
@@ -295,9 +295,15 @@
 
   %end
 %end
+
 %if deprecated_available:
-            <a href="#" onClick="javascript:document.getElementById('trans_deprecated').style.display='block';return false">Show deprecated transformations</a>
+%if i == 0:
+            <div id="trans_deprecated">
+%else:
+      <a href="#" onClick="javascript:document.getElementById('trans_deprecated').style.display='block';return false">Show deprecated transformations</a>
             <div id="trans_deprecated" style="display:none">
+%end
+
 %a = 0
 %for r in trans:
   %if r['deprecated'] == 1:
