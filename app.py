@@ -9,7 +9,7 @@ facets_list = [
   ['CRS','CRS','','Coordinate reference systems',0,'http://','Coordinate reference system'],
   ['CRS-PROJCRS','PROJCRS','&nbsp; &nbsp;', 'Projected',0,'http://','Projected coordinate system'],
   ['CRS-GEOGCRS','GEOGCRS','&nbsp; &nbsp;', 'Geodetic',0,'http://', 'Geodetic coordinate system'],
-  ['CRS-GEOG3DCRS','GEOG3DCRS', '&nbsp; &nbsp;', 'Geodetic 3D',0,'http://','Geodetic 3D coorinate system'],
+  ['CRS-GEOG3DCRS','GEOG3DCRS', '&nbsp; &nbsp;', 'Geodetic 3D',0,'http://','Geodetic 3D coordinate system'],
   ['CRS-GCENCRS','GCENCRS','&nbsp; &nbsp;', 'Geocentric',0,'http://', 'Geocentric coordinate system'],
   ['CRS-VERTCRS','VERTCRS','&nbsp; &nbsp;', 'Vertical',0,'http://', 'Vertical coordinate system'],
   ['CRS-ENGCRS','ENGCRS','&nbsp; &nbsp;', 'Engineering',0,'http://', 'Engineering coordinate system'],
@@ -25,7 +25,7 @@ facets_list = [
   ['ELLIPSOID','ELLIPSOID','', 'Ellipsoid',0,'http://', 'Ellipsoid'],
   ['PRIMEM','PRIMEM','', 'Prime meridian',0,'http://', 'Prime meridian'],
   ['METHOD','METHOD','', 'Method',0,'http://', 'Method'],
-  ['CS','CS','', 'Coordinate systems',0,'http://', 'Coordinate system '],
+  ['CS','CS','', 'Coordinate systems',0,'http://', 'Coordinate system'],
   ['CS-VERTCS','VERTCS','&nbsp; &nbsp;', 'Vertical',0,'http://', 'Vertical coordinate system'],
   ['CS-SPHERCS','SPHERCS','&nbsp; &nbsp;', 'Spherical',0,'http://', 'Spherical coordinate system'],
   ['CS-CARTESCS','CARTESCS','&nbsp; &nbsp;', 'Cartesian',0,'http://', 'Cartesian coordinate system'],
@@ -285,10 +285,17 @@ def index():
     # title, h1
     for i in range(0,len(facets_list)):
       if kind == facets_list[i][1]:
+        if kind == "AXIS":
+          title = "Axes"
+          break
         q = re.sub(r'kind:\S+',"",query)
         q = re.sub(r'deprecated:\d',"",q)
         q = q.strip()
-        title = facets_list[i][6] +" for "+'"'+q+'"'
+        if q == "":
+          title = facets_list[i][6] +"s" 
+        else:
+          title = facets_list[i][6] +"s for "+'"'+q+'"'
+    
     # update facets counters
     for key,value in groups.iteritems():
         
