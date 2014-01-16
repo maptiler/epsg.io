@@ -27,4 +27,7 @@ else
     $PROJECT/epsgio reload;
 fi
 
+# update whoosh index from the CSV file
+./CRS_exceptions.py
+
 echo DONE
