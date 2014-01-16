@@ -109,7 +109,7 @@ for item in crs_ex_line:
     elif code_result:  
       for result in code_result:
         if 'alt_title' in result:
-          if result['name'] != result['alt_title']:
+          if str(result['name']) != str(result['alt_title']) and str(result['name']) != str(crs_ex_line[item][2].decode('utf-8')):
             alt_title = crs_ex_line[item][2].decode('utf-8')
             
           else:
