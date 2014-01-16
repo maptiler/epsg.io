@@ -264,7 +264,19 @@ def index():
     
     for r in results[(maxdoc-pagelen):maxdoc]:
       link = str(r['code'])
-      result.append({'r':r, 'link':link})
+      
+      if r['area_trans'].startswith("World"):
+        area_short = "World"
+      elif r['area_trans']:
+        area_short = r['area_trans']
+      else:
+        if r['area'].startswith("World"):
+          area_short = "World"
+        else:
+          area_short = r['area']
+
+        
+      result.append({'r':r, 'link':link, 'area':area_short})
       json_str.append({'code':r['code'], 'name':r['name'], 'wkt':r['wkt'],'default_trans':r['code_trans'],'trans':r['trans'],'area_trans':r['area_trans'],'accuracy':r['accuracy'],'kind':r['kind'], 'bbox':r['bbox']})
       
     

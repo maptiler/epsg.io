@@ -71,12 +71,12 @@
               <p class="area">
   %if r['r']['area_trans']:
     %if r['r']['accuracy'] == "":
-                    Area of use: {{r['r']['area_trans']}} (accuracy: unknown)
+                    Area of use: {{r['area']}} (accuracy: unknown)
     %else:  
-                    Area of use: {{r['r']['area_trans']}} (accuracy: {{r['r']['accuracy']}})
+                    Area of use: {{r['area']}} (accuracy: {{r['r']['accuracy']}})
     %end
-  %elif r['r']['area']:
-                    Area of use: {{r['r']['area']}}
+  %else:
+                    Area of use: {{r['area']}}
   %end
               </p>
             </li>
