@@ -14,7 +14,7 @@ code,importance,alt_title,alt_code,alt_description,internal_note,internal_source
 2193,0.1,New Zealand Transverse Mercator (NZTM),,,,http://www.maptoaster.com/maptoaster-topo-nz/articles/nztm/nztm.html
 31370,0.5,Belgium,,,,http://help.maptiler.org/coordinates/europe/be
 102067,0.1,ESRI: S-JTSK,5514,S-JTSK_Krovak_East_North: Used in ArcGIS and other ESRI products.,,http://help.maptiler.org/coordinates/europe/cz
-5514,0.5,,102067,,,http://help.maptiler.org/coordinates/europe/cz
+5514,0.5,"SJTSK",102067,,,http://help.maptiler.org/coordinates/europe/cz
 28403,0.1,,,,,http://help.maptiler.org/coordinates/europe/cz
 32633,,,,,czech,http://help.maptiler.org/coordinates/europe/cz
 29902,0.45,Ireland,,,,http://help.maptiler.org/coordinates/europe/uk
