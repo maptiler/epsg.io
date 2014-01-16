@@ -517,7 +517,12 @@ def index(id):
                 wkt = ref.ExportToWkt().decode('utf-8')
         # if do not have trans_item or default_trans    
         else:
-          center = ((item['bbox'][0] - item['bbox'][2])/2.0)+item['bbox'][2],((item['bbox'][3] - item['bbox'][1])/2.0)+item['bbox'][1]
+          n, w, s, e = item['bbox']
+          
+          center = (n-s)/2.0 + s, (e-w)/2.0 + w
+          if (e < w):
+            center = (n-s)/2.0+s, (w+180 + (360-(w+180)+e+180) / 2.0 ) % 360-180
+            
           g_coords = str(item['bbox'][2]) + "," + str(item['bbox'][1]) + "|" + str(item['bbox'][0]) + "," + str(item['bbox'][1]) + "|" + str(item['bbox'][0]) + "," + str(item['bbox'][3]) + "|" + str(item['bbox'][2]) + "," + str(item['bbox'][3]) + "|" + str(item['bbox'][2]) + "," + str(item['bbox'][1])
     
     # if it CRS (not transformation)
@@ -536,8 +541,11 @@ def index(id):
       center = 0,0
       g_coords = ""
       if default_trans['bbox']:
+        n, w, s, e = default_trans['bbox']
         #(51.05, 12.09, 47.74, 22.56)
-        center = ((default_trans['bbox'][0] - default_trans['bbox'][2])/2.0)+default_trans['bbox'][2],((default_trans['bbox'][3] - default_trans['bbox'][1])/2.0)+default_trans['bbox'][1]
+        center = (n-s)/2.0 + s, (e-w)/2.0 + w
+        if (e < w):
+          center = (n-s)/2.0+s, (w+180 + (360-(w+180)+e+180) / 2.0 ) % 360-180
         g_coords = str(default_trans['bbox'][2]) + "," + str(default_trans['bbox'][1]) + "|" + str(default_trans['bbox'][0]) + "," + str(default_trans['bbox'][1]) + "|" + str(default_trans['bbox'][0]) + "," + str(default_trans['bbox'][3]) + "|" + str(default_trans['bbox'][2]) + "," + str(default_trans['bbox'][3]) + "|" + str(default_trans['bbox'][2]) + "," + str(default_trans['bbox'][1])
     
     # if available wkt, default_trans and wkt has length minimum 100 characters (transformation has length maximum 100 (just a TOWGS84))
