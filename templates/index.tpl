@@ -29,12 +29,11 @@
                 <div class="hm-column lft">
                     <h2>World coordinates systems</h2>
                     <ul>
-                        <li><a href="/?q=WGS%2084" title="">WGS84 - World Geodetic System 1984, used in GPS </a></li> 
-                        <li><a href="/?q=Spherical%20Mercator" title="">Spherical Mercator, Google Maps Projection, OpenStreetMap, Bing</a></li> 
+                        <li><a href="/4326" title="">WGS84 - World Geodetic System 1984, used in GPS </a></li> 
+                        <li><a href="/3857" title="">Spherical Mercator, Google Maps Projection, OpenStreetMap, Bing</a></li> 
                         <li><a href="/?q=UTM" title="">UTM - Universal Transverse Mercator</a></li> 
                         
                         <li><a href="/?q=etrs" title="">ETRS - European Terrestrial Reference System</a></li> 
-                        <li><a href="/?q=nad" title="">NAD - North American Datum</a></li> 
                     </ul>
                 </div>
                 <div class="hm-column lft">
