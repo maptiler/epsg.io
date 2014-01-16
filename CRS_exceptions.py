@@ -32,6 +32,9 @@ except:
   print "!!! FAILED: Connection to Index !!!"
   sys.exit(1)    
 
+###############################################################################
+print "UPDATING INDEX"
+###############################################################################
 for item in crs_ex_line:
   alt_code = crs_ex_line[item][3].split(",")
   doc = {}
@@ -49,10 +52,15 @@ for item in crs_ex_line:
     code_query = parser.parse(str(item) + " kind:CRS")
     code_result = searcher.search(code_query)
     if not code_result:
+      deprecated = 0
+      if "deprecated" in crs_ex_line[item][2]:
+        deprecated = 1
+      
       doc = {
       'code':item.decode('utf-8'),
       'code_id':item.decode('utf-8'),
       'name': crs_ex_line[item][2].decode('utf-8'),
+      'alt_title': u"",
       'alt_description' : crs_ex_line[item][4].decode('utf-8'),
       'alt_code' : alt_code,
       'code_trans' : 0,
@@ -60,8 +68,7 @@ for item in crs_ex_line:
       'accuracy' : u"",
       'kind': u"CRS",
       'area': u"",
-      'deprecated': 0,
-      'popularity': 0,
+      'deprecated': deprecated,
       'trans' : 0,
       'primary' : 0,
       'wkt': u"",
@@ -92,6 +99,8 @@ for item in crs_ex_line:
       'orientation' : u"",
       'abbreviation' : u"",
       'order' : u"",
+      'area_code' : u"",
+      'area_trans_code': u""
 
       }
       with ix.writer() as writer:
@@ -99,22 +108,27 @@ for item in crs_ex_line:
       
     elif code_result:  
       for result in code_result:
-        
-        if result['name'] != result['alt_title']:
-          doc['alt_title'] = crs_ex_line[item][2].decode('utf-8'),
-        else:
-          doc['alt_title'] = u""
+        if 'alt_title' in result:
+          if result['name'] != result['alt_title']:
+            alt_title = crs_ex_line[item][2].decode('utf-8')
+            
+          else:
+            alt_title = u""
           
+        area_trans_code = u""    
+        if 'area_trans_code' in result:
+          area_trans_code = result['area_trans_code']
+        
         doc = {
           'code': result['code'],
           'code_id':result['code_id'],
           'code_trans' : result['code_trans'],
           'name': result['name'],
+          'alt_title': alt_title ,
           'alt_name' : result['alt_name'],
           'kind': result['kind'],
           'area': result['area'],
           'deprecated': result['deprecated'],
-          'popularity': result['popularity'],
           'trans' : result['trans'],
           'trans_alt_name' : result['trans_alt_name'],
           'trans_remarks': result['trans_remarks'],
@@ -147,9 +161,11 @@ for item in crs_ex_line:
           'tgrams':result['name']+" "+result['area'],
           'code_id':item.decode('utf-8'),
           'alt_description' : crs_ex_line[item][4].decode('utf-8'),
-          'alt_code' : alt_code
+          'alt_code' : alt_code,
+          'area_code' : result['area_code'],
+          'area_trans_code' : area_trans_code
         }  
-        with ix.writer() as writer: 
+        with ix.writer() as writer:
           writer.update_document(**doc)
 
 

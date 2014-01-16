@@ -1,27 +1,27 @@
-code,importance,alt_title,alt_code,alt_description,frontpage_section,frontpage_title,internal_note,internal_source
-4326,1.0,"WGS84 - World Geodetic System 1984, used in GPS ",,,0,WGS84 - Latitude and Longitude in GPS,,
-3857,0.7,"Spherical Mercator, Google Maps Projection, OpenStreetMap, Bing","900913,3587,54004,41001,102113,102100,3785","This is projected coordinate system used for rendering maps in Google Maps, OpenStreetMap, etc. For details see <a href=""http://www.maptiler.org/google-maps-coordinates-tile-bounds-projection/"">Tile system</a>.",,,,http://wiki.openstreetmap.org/wiki/EPSG:3857
-3587,0,,3857,"Was never a real EPSG code, but some used this likely as a mistype of EPSG:3785 (mistype)",,,,http://wiki.openstreetmap.org/wiki/EPSG:3857
-900913,0,Spherical Mercator (unofficial),3857,"      The unofficial code for Spherical Mercator (Google Maps, OpenStreetMap, ..) system - used in OpenLayers and other open-source projects.<p></p>See the official coordinate system <a href=""/3857"">EPSG:3857</a>
-",,,,http://wiki.openstreetmap.org/wiki/EPSG:3857
-54004,0,Spherical Mercator (unofficial),3857,,,,,http://wiki.openstreetmap.org/wiki/EPSG:3857
-41001,0,Spherical Mercator (unofficial),3857,"See the official coordinate system <a href=""/3857"">EPSG:3857</a>",,,,http://wiki.openstreetmap.org/wiki/EPSG:3857
-102113,0,,3857,"First used by ESRI, but then replaced by 102100 (equivalent, deprecated)",,,,http://wiki.openstreetmap.org/wiki/EPSG:3857
-102100,0,,3857,"Built differently, but equivalent to 102113 (equivalent, deprecated)",,,,http://wiki.openstreetmap.org/wiki/EPSG:3857
-3785,0,,3857," EPSG added this, similiar to how ESRI:102113 is defined (equivalent, deprecated)",,,,http://wiki.openstreetmap.org/wiki/EPSG:3857
-27700,0.65,United Kingdom UK Great Britain,,,1,United Kingdom Ordnance Survey,,http://help.maptiler.org/coordinates/europe/uk
-5514,0.5,,102067,,,,,http://help.maptiler.org/coordinates/europe/cz
-27200,0.5,New Zealand Map Grid (NZMG),,,,,,http://help.maptiler.org/coordinates/australasia/new-zealand
-2193,0.1,New Zealand Transverse Mercator (NZTM),,,2,New Zealand Transverse Mercator,,http://www.maptoaster.com/maptoaster-topo-nz/articles/nztm/nztm.html
-31370,0.5,Belgium,,,,,,http://help.maptiler.org/coordinates/europe/be
-102067,0.1,ESRI: S-JTSK,5514,S-JTSK_Krovak_East_North: Used in ArcGIS and other ESRI products.,,,,http://help.maptiler.org/coordinates/europe/cz
-28403,0.1,,,,,,,http://help.maptiler.org/coordinates/europe/cz
-32633,0.0,,,,,,czech,http://help.maptiler.org/coordinates/europe/cz
-29902,0.5,Ireland,,,,,,http://help.maptiler.org/coordinates/europe/uk
-2154,0.6,France,,,1,France,,http://help.maptiler.org/coordinates/europe/fr
-3067,0.5,Finland,,,,,,http://help.maptiler.org/coordinates/europe/finland
-28992,0.5,Netherlands - Holland - Dutch,,,1,,,http://help.maptiler.org/coordinates/europe/nl
-21781,0.5,Swiss CH1903 / LV03,,,,,,http://help.maptiler.org/coordinates/europe/ch
-2056,0.4,Swiss CH1903+ / LV95,,,1,,,http://help.maptiler.org/coordinates/europe/ch
-4618,0.5,Brazil,,,2,Brazil,,
-23032,0.1,Denmark,,,1,Denmark,,MapTiler Customer
+code,importance,alt_title,alt_code,alt_description,internal_note,internal_source
+4326,1.0,"WGS84 - World Geodetic System 1984, used in GPS ",,,,
+3857,0.7,"Spherical Mercator, Google Maps Projection, OpenStreetMap, Bing, ArcGIS, ESRI","900913,3587,54004,41001,102113,102100,3785","This is projected coordinate system used for rendering maps in Google Maps, OpenStreetMap, etc. For details see <a href=""http://www.maptiler.org/google-maps-coordinates-tile-bounds-projection/"">Tile system</a>.",,http://wiki.openstreetmap.org/wiki/EPSG:3857
+3587,,,3857,Some used this likely as a mistype of Spherical Mercator EPSG:3857 (mistype),,http://wiki.openstreetmap.org/wiki/EPSG:3857
+900913,,Spherical Mercator (unofficial - used in open source projects / OSGEO),3857,"      The unofficial code for Spherical Mercator (Google Maps, OpenStreetMap, ..) system - used in OpenLayers and other open-source projects.<p></p>See the official coordinate system <a href=""/3857"">EPSG:3857</a>
+",,http://wiki.openstreetmap.org/wiki/EPSG:3857
+54004,,Spherical Mercator (unofficial deprecated ESRI),3857,,,http://wiki.openstreetmap.org/wiki/EPSG:3857
+41001,,Spherical Mercator (unofficial deprecated OSGEO / Tile Map Service),3857,"See the official coordinate system <a href=""/3857"">EPSG:3857</a>",,http://wiki.openstreetmap.org/wiki/EPSG:3857
+102113,,Spherical Mercator (unofficial deprecated ESRI),3857,"First used by ESRI, but then replaced by 102100 (equivalent, deprecated)",,http://wiki.openstreetmap.org/wiki/EPSG:3857
+102100,,Spherical Mercator (unofficial deprecated ESRI),3857,"Built differently, but equivalent to 102113 (equivalent, deprecated)",,http://wiki.openstreetmap.org/wiki/EPSG:3857
+3785,,Spherical Mercator (deprecated EPSG code wrongly defined),3857, Deprecated EPSG code for Spherical Mercator - wrong definition similiar to how deprecated ESRI:102113 is defined,,http://wiki.openstreetmap.org/wiki/EPSG:3857
+27700,0.65,United Kingdom Ordnance Survey,,,,http://help.maptiler.org/coordinates/europe/uk
+27200,0.5,New Zealand Map Grid (NZMG),,,,http://help.maptiler.org/coordinates/australasia/new-zealand
+2193,0.1,New Zealand Transverse Mercator (NZTM),,,,http://www.maptoaster.com/maptoaster-topo-nz/articles/nztm/nztm.html
+31370,0.5,Belgium,,,,http://help.maptiler.org/coordinates/europe/be
+102067,0.1,ESRI: S-JTSK,5514,S-JTSK_Krovak_East_North: Used in ArcGIS and other ESRI products.,,http://help.maptiler.org/coordinates/europe/cz
+5514,0.5,,102067,,,http://help.maptiler.org/coordinates/europe/cz
+28403,0.1,,,,,http://help.maptiler.org/coordinates/europe/cz
+32633,,,,,czech,http://help.maptiler.org/coordinates/europe/cz
+29902,0.45,Ireland,,,,http://help.maptiler.org/coordinates/europe/uk
+2154,0.6,France,,,,http://help.maptiler.org/coordinates/europe/fr
+3067,0.5,Finland,,,,http://help.maptiler.org/coordinates/europe/finland
+28992,0.5,Netherlands - Holland - Dutch,,,,http://help.maptiler.org/coordinates/europe/nl
+21781,0.5,Swiss CH1903 / LV03,,,,http://help.maptiler.org/coordinates/europe/ch
+2056,0.4,Swiss CH1903+ / LV95,,,,http://help.maptiler.org/coordinates/europe/ch
+4618,0.5,Brazil,,,,
+23032,0.1,Denmark,,,,MapTiler Customer
