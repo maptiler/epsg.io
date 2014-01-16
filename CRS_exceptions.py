@@ -34,6 +34,7 @@ except:
 
 for item in crs_ex_line:
   alt_code = crs_ex_line[item][3].split(",")
+  doc = {}
   # alt_code = []
   # try:
   #   alt_code.append(str(crs_ex_line[item][3]))
@@ -62,7 +63,7 @@ for item in crs_ex_line:
       'deprecated': 0,
       'popularity': 0,
       'trans' : 0,
-      'primary' : 1,
+      'primary' : 0,
       'wkt': u"",
       'tgrams': crs_ex_line[item][2].decode('utf-8'),
       'description': u"",
@@ -98,6 +99,12 @@ for item in crs_ex_line:
       
     elif code_result:  
       for result in code_result:
+        
+        if result['name'] != result['alt_title']:
+          doc['alt_title'] = crs_ex_line[item][2].decode('utf-8'),
+        else:
+          doc['alt_title'] = u""
+          
         doc = {
           'code': result['code'],
           'code_id':result['code_id'],
@@ -139,7 +146,6 @@ for item in crs_ex_line:
           'primary' : result['primary'],
           'tgrams':result['name']+" "+result['area'],
           'code_id':item.decode('utf-8'),
-          'alt_title': crs_ex_line[item][2].decode('utf-8'),
           'alt_description' : crs_ex_line[item][4].decode('utf-8'),
           'alt_code' : alt_code
         }  
