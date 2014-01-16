@@ -65,6 +65,8 @@
     %else:  
                     Area of use: {{r['r']['area_trans']}} (accuracy: {{r['r']['accuracy']}})
     %end
+  %elif r['r']['area']:
+                    Area of use: {{r['r']['area']}}
   %end
               </p>
             </li>
@@ -105,7 +107,7 @@
 %for key,value in status_groups.iteritems():
             <li class="last">
   %if key == "f":
-              <a href="{{url_facet_statquery}}" title="">Show invalid ({{value}})</a>
+              <a href="{{url_facet_statquery}}" title="">Show valid ({{value}})</a>
   %elif key == "t":
               <a href="{{url_facet_statquery}}" title="">Show deprecated ({{value}})</a>
             </li>
