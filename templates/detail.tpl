@@ -29,7 +29,11 @@
     </div>
     <div id="layout-container">
       
+      %if item['deprecated'] == 1:
+      <h1>EPSG:{{name[0]}} DEPRECATED</h1>
+      %else:
       <h1>EPSG:{{name[0]}}</h1>
+      %end
       <p>
         {{kind}}
       </p>
