@@ -31,11 +31,7 @@
       
       <h1>EPSG:{{name[0]}}</h1>
       <p>
-%for i in range(0,len(facets_list)):
-  %if facets_list[i][0] == item['kind']:
-    {{facets_list[i][3]}} - {{facets_list[i][1]}}
-  %end
-%end
+        {{kind}}
       </p>
       
       <h2>{{item['name']}}<br /> {{alt_title}}</h2>
@@ -51,7 +47,7 @@
         
 
 %if detail:
-        %if detail[0]['url_area']:
+        %if detail[0]['url_area'] == "":
           Area of use: <a href="{{detail[0]['url_area']}}"> {{item['area']}}</a><br />
         %end
 %else:
@@ -263,7 +259,12 @@
           <h3>Available transformations:</h3>
           <ul>
 % i = 0
+%deprecated_available = False
 %for r in trans:
+  %if not deprecated_available and r['deprecated'] == 1 :
+    %deprecated_available = True
+  %end
+  
   %if r['link'] == "" and r['deprecated'] == 0 and r['area_trans']:
             <li> {{r['area_trans']}}
     %if r['accuracy']:
@@ -290,7 +291,7 @@
 
   %end
 %end
-
+%if deprecated_available:
             <a href="#" onClick="javascript:document.getElementById('trans_deprecated').style.display='block';return false">Show deprecated transformations</a>
             <div id="trans_deprecated" style="display:none">
 %a = 0
@@ -313,6 +314,7 @@
     %end
     %a+=1
   %end
+%end
 %end
           </ul>
         </div>
