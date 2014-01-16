@@ -11,7 +11,7 @@
     
     <meta content="width=device-width, initial-scale=1, maximum-scale=1" name="viewport" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="description" content="EPSG.io" />
+    <meta name="description" content="{{kind}} for {{item['area']}} {{item['remarks']}}" />
     <meta name="keywords" content="EPSG.io" />
     <meta name="robots" content="ALL,FOLLOW" />
     <link rel="stylesheet" href="/css/main.css" type="text/css" />

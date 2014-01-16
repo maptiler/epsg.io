@@ -2,10 +2,10 @@
 <html xmlns="http://www.w3.org/1999/xhtml"  lang="en" xml:lang="en">
     <head>    
         <meta charset="utf-8"/>
-        <title>EPSG.io</title>
+        <title>WGS84 and {{name}} - transform coordinates for position on a map - converting latitude / longitude degrees</title>
         <meta content="width=device-width, initial-scale=1, maximum-scale=1" name="viewport" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-        <meta name="description" content="EPSG.io" />
+        <meta name="description" content="Transform coordinates for position on a map - converting latitude / longitude degrees" />
         <meta name="keywords" content="EPSG.io" />
         <meta name="robots" content="ALL,FOLLOW" />
         <link rel="stylesheet" href="/css/main.css" type="text/css" />
