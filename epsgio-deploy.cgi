@@ -28,6 +28,7 @@ else
 fi
 
 # update whoosh index from the CSV file
-./CRS_exceptions.py
+echo "Updating from CRS_exceptions.py"
+python CRS_exceptions.py
 
 echo DONE
