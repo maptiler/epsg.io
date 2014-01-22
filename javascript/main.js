@@ -1,8 +1,10 @@
-goog.provide('epsg.io.main');
+goog.provide('epsg.io');
 
 goog.require('epsg.io.Coordinates');
-
+goog.require('goog.array');
+goog.require('goog.dom.classes');
 goog.require('goog.net.Jsonp');
+goog.require('goog.style');
 
 
 /**
@@ -41,6 +43,36 @@ epsg.io.results_init = function() {
  * The Detail page javascript
  */
 epsg.io.detail_init = function() {
+
+  // Show / hide deprecated transformations
+  var tdl = goog.dom.getElement('trans_deprecated_link');
+  goog.events.listen(tdl, goog.events.EventType.CLICK, function(e) {
+    e.preventDefault();
+    var d = goog.dom.getElement('trans_deprecated');
+    if (d.style.display == 'block') {
+      d.style.display = 'none';
+      tdl.innerHTML = 'Show deprecated transformations';
+    } else {
+      d.style.display = 'block';
+      tdl.innerHTML = 'Hide deprecated transfortmations';
+    }
+  });
+
+  var switcherClicked = function(e) {
+    e.preventDefault();
+    var clicked = e.target;
+    var clicked_code = goog.dom.getElement(clicked.id + '_code');
+    var old = goog.dom.getElementByClass('selected');
+    var old_code = goog.dom.getElement(old.id + '_code');
+    goog.dom.classes.remove(old, 'selected');
+    old_code.style.display = 'none';
+    goog.dom.classes.add(clicked, 'selected');
+    clicked_code.style.display = 'block';
+  };
+  goog.array.forEach(goog.dom.getElementsByClass('switcher'), function(e) {
+    goog.events.listen(e, goog.events.EventType.CLICK, switcherClicked);
+  });
+
 };
 
 

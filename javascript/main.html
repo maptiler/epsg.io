@@ -24,6 +24,68 @@
 	<script type="text/javascript">results_init();</script>
     
     <h1>Detail page</h1>
+    
+    
+    <a href="#" id="trans_deprecated_link">Show deprecated transformations</a>
+    <div id="trans_deprecated">
+      <ul>
+        <li>
+        <a href="/5514-1625" title = "Parameter values from S-JTSK to ETRS89 (2) (code 1624). Assumes ETRS89 and WGS 84 can be considered the same to within the accuracy of the transformation.">Slovakia., accuracy 1.0 m,  code 1625 DEPRECATED
+        </a>
+        </li>
+        <li>
+        <a href="/5514-4828" title = "Parameter values from S-JTSK to ETRS89 (4) (code 4827). Assumes ETRS89 and WGS 84 can be considered the same to within the accuracy of the transformation.">Slovakia., accuracy 1.0 m,  code 4828 DEPRECATED
+        </a>
+        </li>
+      </ul>
+    </div>
+
+    <ul id="eb-menu">
+       <li><a class="switcher selected" id="s_html" href="/5514.html" title="">Well Known Text as HTML<i></i></a></li>
+       <li><a class="switcher" id="s_prettywkt" href="/5514.prettywkt" title="">PrettyWKT<i></i></a></li>
+       <li><a class="switcher" id="s_esriwkt" href="/5514.esriwkt" title="">ESRI WKT <i></i></a></li>
+       <li><a class="switcher" id="s_proj4" href="/5514.proj4" title="">PROJ.4 <i></i></a></li>
+       <li><a class="switcher" id="s_gml" href="/5514.gml" title="">OGC GML <i></i></a></li>
+    </ul>
+    <div class="code-definition-container" id="s_html_code">
+      <p>Definition: Well Known Text as HTML</p>
+
+      <div class="syntax">
+        {{!export_html}}
+      </div>
+    </div>
+    
+    <div class="code-definition-container" id="s_prettywkt_code">
+      <p>Definition: PrettyWKT</p>
+
+      <div class="syntax">
+        {{!export['prettywkt']}}
+      </div>
+    </div>
+    <div class="code-definition-container" id="s_esriwkt_code">
+      <p>Definition: ESRI WKT</p>
+
+      <div class="syntax">
+        {{export['esriwkt']}}
+        
+      </div>
+    </div>
+    <div class="code-definition-container" id="s_proj4_code">
+      <p>Definition: PROJ.4</p>
+
+      <div class="syntax">
+        {{export['proj4']}}
+      </div>
+    </div>
+    <div class="code-definition-container" id="s_gml_code">
+      <p>Definition: OGC GML</p>
+
+      <div class="syntax">
+        {{export['gml']}}
+      </div>
+    </div>
+
+
 
     <pre>
     TODO: switching WTK/PROJ4/...

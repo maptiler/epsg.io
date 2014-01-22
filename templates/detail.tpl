@@ -399,27 +399,27 @@ Method: <a href="/{{item['method'][0]}}-method" title="">{{item['method'][1]}}</
         <div id="eb-menu-container">
           <h4>Export</h4>
           <ul id="eb-menu">
-            <li><a class="selected" href="" title="" onClick="javascript:document.getElementById('code-definition-container-html').style.display='block'; return false">Well Known Text as HTML<i></i></a></li>
-            <li><a href="" title="" onClick="javascript:document.getElementById('code-definition-container-prettywkt').style.display='block'; return false">PrettyWKT <i></i></a></li>
-            <li><a href="" title="" onClick="javascript:document.getElementById('code-definition-container-esriwkt').style.display='block'; return false">ESRI WKT <i></i></a></li>
-            <li><a href="{{url_format}}/prj" title="">Download file {{item['code']}}.prj <i></i></a></li>
-            <li><a href="" title="" onClick="javascript:document.getElementById('code-definition-container-proj4').style.display='block'; return false">PROJ.4 <i></i></a></li>
-            <li><a href="" title="" onClick="javascript:document.getElementById('code-definition-container-gml').style.display='block'; return false">OGC GML <i></i></a></li>
-            <li><a href="" title="" onClick="javascript:document.getElementById('code-definition-container-geoserver').style.display='block'; return false">GeoServer <i></i></a></li>
-            <li><a href="" title="" onClick="javascript:document.getElementById('code-definition-container-mapfile').style.display='block'; return false">MAPfile <i></i></a></li>
-            <li><a href="" title="" onClick="javascript:document.getElementById('code-definition-container-mapserverpython').style.display='block'; return false">MapSever - Python <i></i></a></li>
-            <li><a href="" title="" onClick="javascript:document.getElementById('code-definition-container-mapnik').style.display='block'; return false">mapnik <i></i></a></li>
-            <li><a href="" title="" onClick="javascript:document.getElementById('code-definition-container-mapnikpython').style.display='block'; return false">mapnik - Python <i></i></a></li>
-            <li><a href="" title="" onClick="javascript:document.getElementById('code-definition-container-postgis').style.display='block'; return false">PostGIS <i></i></a></li>
-            <li><a href="" title="" onClick="javascript:document.getElementById('code-definition-container-json').style.display='block'; return false">JSON <i></i></a></li>
-            <li><a href="" title="" onClick="javascript:document.getElementById('code-definition-container-ogcwkt').style.display='block'; return false">OGC WKT <i></i></a></li>
-            <li><a href="" title="" onClick="javascript:document.getElementById('code-definition-container-usgs').style.display='block'; return false">USGS <i></i></a></li>
+            <li><a class="switcher selected" id="s_html" href="{{url_format}}.html">Well Known Text as HTML<i></i></a></li>
+            <li><a class="switcher" id="s_prettywkt" href="{{url_format}}.prettywkt">PrettyWKT<i></i></a></li>
+            <li><a class="switcher" id="s_esriwkt" href="{{url_format}}.esriwkt">ESRI WKT<i></i></a></li>
+            <li><a class="switcher" id="s_proj4" href="{{url_format}}.proj4">PROJ.4<i></i></a></li>
+            <li><a class="switcher" id="s_gml" href="{{url_format}}.gml">OGC GML<i></i></a></li>
+            <li><a class="switcher" id="s_geoserver" href="{{url_format}}.geoserver">GeoServer<i></i></a></li>
+            <li><a class="switcher" id="s_mapfile" href="{{url_format}}.mapfile">Mapfile<i></i></a></li>
+            <li><a class="switcher" id="s_mapserverpython" href="{{url_format}}.mapserverpython">MapSever - Python<i></i></a></li>
+            <li><a class="switcher" id="s_mapnik" href="{{url_format}}.mapnik">Mapnik<i></i></a></li>
+            <li><a class="switcher" id="s_mapnikpython" href="{{url_format}}.mapnikpython">Mapnik - Python<i></i></a></li>
+            <li><a class="switcher" id="s_postgis" href="{{url_format}}.postgis">PostGIS<i></i></a></li>
+            <li><a class="switcher" id="s_json" href="{{url_format}}.json">JSON<i></i></a></li>
+            <li><a class="switcher" id="s_wkt" href="{{url_format}}.wkt">OGC WKT<i></i></a></li>
+            <li><a class="switcher" id="s_usgs" href="{{url_format}}.usgs">USGS<i></i></a></li>
           </ul>
         </div>
-        <div class="code-definition-container" id="code-html">
+        
+        <div class="code-definition-container" id="s_html_code">
           <p>Definition: Well Known Text as HTML</p>
           <ul>
-            <li><a href="{{url_format}}/html" title="">Open in new page</a></li>
+            <li><a href="{{url_format}}.html" title="">Open in new page</a></li>
             <li><a href="#" title="">Copy URL to clipboard</a></li>
             <li><a href="#" title="">Copy TEXT to clipboard</a></li>
           </ul>
@@ -427,159 +427,148 @@ Method: <a href="/{{item['method'][0]}}-method" title="">{{item['method'][1]}}</
             {{!export_html}}
           </div>
         </div>
-        <div class="code-definition-container" id="code-prettywkt">
+        <div class="code-definition-container" id="s_prettywkt_code">
           <p>Definition: PrettyWKT</p>
           <ul>
-            <li><a href="{{url_format}}/prettywkt" title="">Open in new page</a></li>
+            <li><a href="{{url_format}}.prettywkt" title="">Open in new page</a></li>
             <li><a href="#" title="">Copy URL to clipboard</a></li>
             <li><a href="#" title="">Copy TEXT to clipboard</a></li>
           </ul>
           <div class="syntax">
-            {{!export['prettywkt']}}
+            <pre>{{!export['prettywkt']}}</pre>
           </div>
         </div>
-        <div class="code-definition-container" id="code-esriwkt">
+        <div class="code-definition-container" id="s_esriwkt_code">
           <p>Definition: ESRI WKT</p>
           <ul>
-            <li><a href="{{url_format}}/esriwkt" title="">Open in new page</a></li>
+            <li><a href="{{url_format}}.esriwkt" title="">Open in new page</a></li>
             <li><a href="#" title="">Copy URL to clipboard</a></li>
             <li><a href="#" title="">Copy TEXT to clipboard</a></li>
           </ul>
           <div class="syntax">
-            {{export['esriwkt']}}
+            <pre>{{export['esriwkt']}}</pre>
             
           </div>
         </div>
-        <div class="code-definition-container" id="code-prj">
-          <p>Definition: Download file {{item['code']}}.prj</p>          
-          <ul>
-            <li><a href="{{url_format}}/prj" title="">Open in new page</a></li>
-            <li><a href="#" title="">Copy URL to clipboard</a></li>
-            <li><a href="#" title="">Copy TEXT to clipboard</a></li>
-          </ul>
-          <div class="syntax">
-            {{!export}}
-          </div>
-        </div>
-        <div class="code-definition-container-proj4">
+        <div class="code-definition-container" id="s_proj4_code">
           <p>Definition: PROJ.4</p>
-          <ul id="cd-tabs">
-            <li><a href="{{url_format}}/proj4" title="">Open in new page</a></li>
+          <ul>
+            <li><a href="{{url_format}}.proj4" title="">Open in new page</a></li>
             <li><a href="#" title="">Copy URL to clipboard</a></li>
             <li><a href="#" title="">Copy TEXT to clipboard</a></li>
           </ul>
           <div class="syntax">
-            {{export['proj4']}}
+            <pre>{{export['proj4']}}</pre>
           </div>
         </div>
-        <div class="code-definition-container-gml">
+        <div class="code-definition-container" id="s_gml_code">
           <p>Definition: OGC GML</p>
-          <ul id="cd-tabs">
-            <li><a href="{{url_format}}/gml" title="">Open in new page</a></li>
+          <ul>
+            <li><a href="{{url_format}}.gml" title="">Open in new page</a></li>
             <li><a href="#" title="">Copy URL to clipboard</a></li>
             <li><a href="#" title="">Copy TEXT to clipboard</a></li>
           </ul>
           <div class="syntax">
-            {{export['gml']}}
+            <pre>{{export['gml']}}</pre>
           </div>
         </div>
-        <div class="code-definition-container-geoserver">
+        <div class="code-definition-container" id="s_geoserver_code">
           <p>Definition: GeoServer</p>
-          <ul id="cd-tabs">
-            <li><a href="{{url_format}}/geoserver" title="">Open in new page</a></li>
+          <ul>
+            <li><a href="{{url_format}}.geoserver" title="">Open in new page</a></li>
             <li><a href="#" title="">Copy URL to clipboard</a></li>
             <li><a href="#" title="">Copy TEXT to clipboard</a></li>
           </ul>
           <div class="syntax">
-            {{export['geoserver']}}
+            <pre>{{export['geoserver']}}</pre>
           </div>
         </div>
-        <div class="code-definition-container-mapfile">
+        <div class="code-definition-container" id="s_mapfile_code">
           <p>Definition: MAPfile</p>
-          <ul class="cd-tabs">
-            <li><a href="{{url_format}}/mapfile" title="">Open in new page</a></li>
+          <ul>
+            <li><a href="{{url_format}}.mapfile" title="">Open in new page</a></li>
             <li><a href="#" title="">Copy URL to clipboard</a></li>
             <li><a href="#" title="">Copy TEXT to clipboard</a></li>
           </ul>
           <div class="syntax">
-            {{!export['mapfile']}}
+            <pre>{{!export['mapfile']}}</pre>
           </div>
         </div>
-        <div class="code-definition-container-mapserverpython">
+        <div class="code-definition-container" id="s_mapserverpython_code">
           <p>Definition: MapSever - Python</p>
-          <ul id="cd-tabs">
-            <li><a href="{{url_format}}/mapserverpython" title="">Open in new page</a></li>
+          <ul>
+            <li><a href="{{url_format}}.mapserverpython" title="">Open in new page</a></li>
             <li><a href="#" title="">Copy URL to clipboard</a></li>
             <li><a href="#" title="">Copy TEXT to clipboard</a></li>
           </ul>
           <div class="syntax">
-            {{!export['mapserverpython']}}
+            <pre>{{!export['mapserverpython']}}</pre>
           </div>
         </div>
-        <div class="code-definition-container-mapnik">
+        <div class="code-definition-container" id="s_mapnik_code">
           <p>Definition: mapnik</p>
-          <ul id="cd-tabs">
-            <li><a href="{{url_format}}/mapnik" title="">Open in new page</a></li>
+          <ul>
+            <li><a href="{{url_format}}.mapnik" title="">Open in new page</a></li>
             <li><a href="#" title="">Copy URL to clipboard</a></li>
             <li><a href="#" title="">Copy TEXT to clipboard</a></li>
           </ul>
           <div class="syntax">
-            {{!export['mapnik']}}
+            <pre>{{export['mapnik']}}</pre>
           </div>
         </div>
-        <div class="code-definition-container-mapnikpython">
+        <div class="code-definition-container" id="s_mapnikpython_code">
           <p>Definition: mapnik - Python</p>
-          <ul id="cd-tabs">
-            <li><a href="{{url_format}}/mapnikpython" title="">Open in new page</a></li>
+          <ul>
+            <li><a href="{{url_format}}.mapnikpython" title="">Open in new page</a></li>
             <li><a href="#" title="">Copy URL to clipboard</a></li>
             <li><a href="#" title="">Copy TEXT to clipboard</a></li>
           </ul>
           <div class="syntax">
-            {{!export['mapnikpython']}}
+            <pre>{{!export['mapnikpython']}}</pre>
           </div>
         </div>
-        <div class="code-definition-container-postgis">
+        <div class="code-definition-container" id="s_postgis_code">
           <p>Definition: PostGIS</p>
-          <ul id="cd-tabs">
-            <li><a href="{{url_format}}/postgis" title="">Open in new page</a></li>
+          <ul>
+            <li><a href="{{url_format}}.postgis" title="">Open in new page</a></li>
             <li><a href="#" title="">Copy URL to clipboard</a></li>
             <li><a href="#" title="">Copy TEXT to clipboard</a></li>
           </ul>
           <div class="syntax">
-            {{!export['postgis']}}
+            <pre>{{!export['postgis']}}</pre>
           </div>
         </div>
-        <div class="code-definition-container-json">
+        <div class="code-definition-container" id="s_json_code">
           <p>Definition: JSON</p>
-          <ul id="cd-tabs">
-            <li><a href="{{url_format}}/json" title="">Open in new page</a></li>
+          <ul>
+            <li><a href="{{url_format}}.json" title="">Open in new page</a></li>
             <li><a href="#" title="">Copy URL to clipboard</a></li>
             <li><a href="#" title="">Copy TEXT to clipboard</a></li>
           </ul>
           <div class="syntax">
-            {{!export['json']}}
+            <pre>{{!export['json']}}</pre>
           </div>
         </div>
-        <div class="code-definition-container-ogcwkt">
+        <div class="code-definition-container" id="s_wkt_code">
           <p>Definition: OGC WKT</p>
-          <ul id="cd-tabs">
-            <li><a href="{{url_format}}/ogcwkt" title="">Open in new page</a></li>
+          <ul>
+            <li><a href="{{url_format}}.wkt" title="">Open in new page</a></li>
             <li><a href="#" title="">Copy URL to clipboard</a></li>
             <li><a href="#" title="">Copy TEXT to clipboard</a></li>
           </ul>
           <div class="syntax">
-            {{!export['ogcwkt']}}
+            <pre>{{!export['ogcwkt']}}</pre>
           </div>
         </div>
-        <div class="code-definition-container-usgs">
+        <div class="code-definition-container" id="s_usgs_code">
           <p>Definition: USGS</p>
-          <ul id="cd-tabs">
-            <li><a href="{{url_format}}/usgs" title="">Open in new page</a></li>
+          <ul>
+            <li><a href="{{url_format}}.usgs" title="">Open in new page</a></li>
             <li><a href="#" title="">Copy URL to clipboard</a></li>
             <li><a href="#" title="">Copy TEXT to clipboard</a></li>
           </ul>
           <div class="syntax">
-            {{!export['usgs']}}
+            <pre>{{!export['usgs']}}</pre>
           </div>
         </div>        
       </div>
