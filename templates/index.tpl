@@ -24,7 +24,7 @@
       <div id="search-container">
         
         <form action="/" method="get">
-          <p><input id="q" name = "q" type="search" placeholder="Country, code or name of a coordinate system" /> <input type="submit" name="" value="search" /></p>
+          <p><input id="q" name="q" type="search" placeholder="Country, code or name of a coordinate system" /> <input type="submit" name="" value="search" /></p>
         </form>
        
         <div id="countryLinkWrapper">
