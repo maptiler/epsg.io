@@ -483,6 +483,7 @@ def index(id):
       for i in range(0,len(facets_list)):
         if facets_list[i][0] == item['kind']:
           kind = facets_list[i][6]
+          url_kind = "/?q=kind:" + facets_list[i][1]
       if item['area'].startswith("World:"):
         area_item = "World"
       # for short link (5514, instead of 5514-15965)
@@ -701,7 +702,7 @@ def index(id):
 
 
           
-  return template('./templates/detail',type_epsg=type_epsg, name=name, projcrs_by_gcrs=projcrs_by_gcrs, kind=kind, alt_title=alt_title, area_item=area_item, code_short=code_short, item=item, trans=trans, default_trans=default_trans, num_results=num_results, url_method=url_method, title=title, url_format=url_format, export_html=export_html, url_area_trans=url_area_trans, url_area=url_area, center=center, g_coords=g_coords, trans_lat=trans_lat, trans_lon=trans_lon,wkt=wkt,facets_list=facets_list,url_concatop=url_concatop, nadgrid=nadgrid, detail=detail,export=export, error_code=error_code )  
+  return template('./templates/detail',url_kind=url_kind, type_epsg=type_epsg, name=name, projcrs_by_gcrs=projcrs_by_gcrs, kind=kind, alt_title=alt_title, area_item=area_item, code_short=code_short, item=item, trans=trans, default_trans=default_trans, num_results=num_results, url_method=url_method, title=title, url_format=url_format, export_html=export_html, url_area_trans=url_area_trans, url_area=url_area, center=center, g_coords=g_coords, trans_lat=trans_lat, trans_lon=trans_lon,wkt=wkt,facets_list=facets_list,url_concatop=url_concatop, nadgrid=nadgrid, detail=detail,export=export, error_code=error_code )  
 
 
 @route('/<id:re:[\d]+(-[\w]+)>')
@@ -774,6 +775,7 @@ def index(id):
       for i in range(0,len(facets_list)):
         if facets_list[i][0] == item['kind']:
           kind = facets_list[i][6]
+          url_kind = "/?q=kind:" + facets_list[i][1]
       
       if item['bbox']:
         #(51.05, 12.09, 47.74, 22.56)
@@ -832,7 +834,7 @@ def index(id):
         for gcrs_item in gcrs_result:        
           projcrs_by_gcrs.append({'result': gcrs_item})
           
-  return template('./templates/detail',type_epsg=type_epsg, name=name, projcrs_by_gcrs=projcrs_by_gcrs, alt_title=alt_title, kind=kind, code_short=code_short,item=item, detail=detail, facets_list=facets_list, nadgrid=nadgrid, trans_lat=trans_lat, trans_lon=trans_lon, trans=trans, url_format=url_format, default_trans=default_trans, center=center,g_coords=g_coords)  
+  return template('./templates/detail',url_kind=url_kind, type_epsg=type_epsg, name=name, projcrs_by_gcrs=projcrs_by_gcrs, alt_title=alt_title, kind=kind, code_short=code_short,item=item, detail=detail, facets_list=facets_list, nadgrid=nadgrid, trans_lat=trans_lat, trans_lon=trans_lon, trans=trans, url_format=url_format, default_trans=default_trans, center=center,g_coords=g_coords)  
 
 
 @route('/<id:re:[\d]+(-[\d]+)?>/<format>')
