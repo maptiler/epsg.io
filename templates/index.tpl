@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="/css/main.css" type="text/css" />
     <link rel="shortcut icon" href="http://epsg.io/favicon.ico" />
     <link rel="search" href="/opensearch.xml" title="EPSG.io" type="application/opensearchdescription+xml"/>
+    <script src="/js/index.js"></script>
 
   </head>
   <body id="homepage" data-role="page">
@@ -23,10 +24,12 @@
       <div id="search-container">
         
         <form action="/" method="get">
-          <p><input type="search" name="q" placeholder="Country, code or name of a coordinate system" /> <input type="submit" name="" value="search" /></p>
+          <p><input id="q" name = "q" type="search" placeholder="Country, code or name of a coordinate system" /> <input type="submit" name="" value="search" /></p>
         </form>
-        
-        <h4> &nbsp; &nbsp; &nbsp; <a href="/?q=Czech%20Republic" title="">Looking for coordinates systems in Czech Republic? </a></h4>
+       
+        <div id="countryLinkWrapper">
+        <a href="/?q=Czech%20Republic" id="countryLink">Click to see the coordinates systems of <span id="country">Czech Republic</span></a>
+        </div>
       
       </div>
       
@@ -69,5 +72,6 @@
         <p id="copyright">Copyright &copy; 2014</p>
       </div>
     </div>
+    <script type="text/javascript">home_init();</script>
   </body>
 </html>
