@@ -295,6 +295,7 @@ def index():
     
     # number of results from results
     num_results = len(results)
+    num_kind = len(res_facets)
     
     # paging ala google
     pagemax = int(math.ceil(num_results / float(pagelen) ))
@@ -308,23 +309,30 @@ def index():
     query_kind_index = None
     
     # title, h1
-    for i in range(0,len(facets_list)):
-      if kind == facets_list[i][1]:
-        if kind == "AXIS":
-          title = "Axes"
-          break
-        dep_found = False
-        q = re.sub(r'kind:\S+',"",query)
-        if "deprecated:1" in q: dep_found = True 
-        q = re.sub(r'deprecated:\d',"",q)
-        q = q.strip()
-        if q == "":
-          title = facets_list[i][6] +"s" 
-          if dep_found == True: title = "Deprecated " + facets_list[i][6].lower() + "s"
-        else:
-          title = facets_list[i][6] +"s for "+'"'+q+'"'
-          if dep_found == True: title = "Deprecated " + facets_list[i][6].lower() +"s for "+'"'+q+'"'
+    dep_found = False
+    q = re.sub(r'kind:\S+',"",query)
+    if "deprecated:1" in q: dep_found = True 
+    q = re.sub(r'deprecated:\d',"",q)
+    q = q.strip()
+    kind_low = kind.lower()
     
+    if num_kind != 0:
+      title = "Searching for "+ '"'+ q +'"'
+      for i in range(0,len(facets_list)):
+        if kind == facets_list[i][1]:
+          if kind == "AXIS":
+            title = "Axes"
+            break
+          kind_low = facets_list[i][6].lower()
+          if q == "":
+            title = facets_list[i][6] +"s" 
+            if dep_found == True: title = "Deprecated " + kind_low + "s"
+          else:
+            title = facets_list[i][6] +"s for "+'"'+q+'"'
+            if dep_found == True: title = "Deprecated " + kind_low +"s for "+'"'+q+'"'
+    else:
+      title = '"'+ q +'"' + " is not in EPSG.io"
+    kind_low = q,kind_low
     # update facets counters
     for key,value in groups.iteritems():
         
@@ -396,7 +404,7 @@ def index():
       
       return json.dumps(json_str)
   
-  return template('./templates/results', short_code=short_code, title=title, query=query, deprecated=deprecated, num_results=num_results, elapsed=elapsed, facets_list=facets_list, status_groups=status_groups, url_facet_statquery=url_facet_statquery, result=result, pagenum=int(pagenum),paging=paging)
+  return template('./templates/results', kind_low=kind_low, num_kind=num_kind, short_code=short_code, title=title, query=query, deprecated=deprecated, num_results=num_results, elapsed=elapsed, facets_list=facets_list, status_groups=status_groups, url_facet_statquery=url_facet_statquery, result=result, pagenum=int(pagenum),paging=paging)
 
 
 

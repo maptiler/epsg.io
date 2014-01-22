@@ -49,6 +49,7 @@
       <div id="result-content-container">
         <div id="results-container">
           <ul class="results">
+%if num_results != 0:
 %for r in result:
             <li>
               <h2><a href="/{{r['link']}}" title="">{{r['name']}} 
@@ -82,6 +83,12 @@
   %end
               </p>
             </li>
+%end
+%elif num_kind != 0:
+  "{{kind_low[0]}}" is not in {{kind_low[1]}}, please select other kind on the left side.
+
+%else:
+ Please change your query.
 %end
           </ul>
           
