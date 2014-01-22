@@ -16,7 +16,7 @@ code,importance,alt_title,alt_code,alt_description,internal_note,internal_source
 102067,0.1,,5514,S-JTSK_Krovak_East_North: Used in ArcGIS and other ESRI products.,,http://help.maptiler.org/coordinates/europe/cz
 5514,0.5,"SJTSK",102067,,,http://help.maptiler.org/coordinates/europe/cz
 28403,0.1,,,,,http://help.maptiler.org/coordinates/europe/cz
-32633,,,,,czech,http://help.maptiler.org/coordinates/europe/cz
+32633,,,,,czech ,http://help.maptiler.org/coordinates/europe/cz
 29902,0.45,Ireland,,,,http://help.maptiler.org/coordinates/europe/uk
 2154,0.6,France,,,,http://help.maptiler.org/coordinates/europe/fr
 3067,0.5,Finland,,,,http://help.maptiler.org/coordinates/europe/finland
