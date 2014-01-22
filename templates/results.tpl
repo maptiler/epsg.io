@@ -51,7 +51,7 @@
           <ul class="results">
 %for r in result:
             <li>
-              <h2><a href="/{{r['link']}}" title="">{{r['r']['name']}} 
+              <h2><a href="/{{r['link']}}" title="">{{r['name']}} 
               %if 'alt_title' in r['r']:
               %if r['r']['alt_title'] and r['r']['name']!= r['r']['alt_title']:
                       - {{r['r']['alt_title']}}
@@ -59,7 +59,7 @@
               %end
               </a></h2>
               <p>
-                EPSG:{{r['r']['code']}}
+                {{r['type_epsg']}}:{{r['short_code'][0]}}
   %if r['r']['code_trans'] != 0 and r['r']['primary'] == 1:
                   with transformation: {{r['r']['code_trans']}} (default)
   %elif r['r']['code_trans'] == 0 and r['r']['primary'] == 1:
@@ -76,7 +76,9 @@
                     Area of use: {{r['area']}} (accuracy: {{r['r']['accuracy']}})
     %end
   %else:
+  %if r['area']:
                     Area of use: {{r['area']}}
+  %end
   %end
               </p>
             </li>
