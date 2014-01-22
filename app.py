@@ -845,7 +845,7 @@ def index(id):
   return template('./templates/detail',url_kind=url_kind, type_epsg=type_epsg, name=name, projcrs_by_gcrs=projcrs_by_gcrs, alt_title=alt_title, kind=kind, code_short=code_short,item=item, detail=detail, facets_list=facets_list, nadgrid=nadgrid, trans_lat=trans_lat, trans_lon=trans_lon, trans=trans, url_format=url_format, default_trans=default_trans, center=center,g_coords=g_coords)  
 
 
-@route('/<id:re:[\d]+(-[\d]+)?>.<format>')
+@route('/<id:re:[\d]+(-[\d]+)?\S><format>')
 def index(id, format):
   ix = open_dir(INDEX)
   result = []
