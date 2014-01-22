@@ -40,7 +40,7 @@
         %end
       %end
       <p>
-        {{kind}}
+        <a href="{{url_kind}}">{{kind}} </a>
       </p>
       
       <h2>{{name}}<br /> {{alt_title}}</h2>
@@ -112,7 +112,7 @@
 
 %if 'coord_sys' in item:
 %if item['coord_sys']:
-  Ellipsoid: <a href="/{{item['coord_sys'][0]}}-ellipsoid">{{item['coord_sys'][1]}}</a><br />
+  Coordinate system: <a href="/{{item['coord_sys'][0]}}-coordsys">{{item['coord_sys'][1]}}</a><br />
 %end
 %end
 
@@ -172,7 +172,7 @@ Method: <a href="/{{item['method'][0]}}-method" title="">{{item['method'][1]}}</
 %if item['prime_meridian']:
   Prime meridian: <a href="/{{item['prime_meridian'][0]}}-primemeridian">{{item['prime_meridian'][1]}}</a>
   %if 'greenwich_longitude' in item:
-    %if item['prime_meridian'][0] != "8901":
+    %if item['prime_meridian'][0] != 8901 and detail != [] and item['greenwich_longitude'] !=0:
       ({{item['greenwich_longitude']}} degree from Greenwich)<br />
     %else:
     <br />
@@ -189,11 +189,6 @@ Method: <a href="/{{item['method'][0]}}-method" title="">{{item['method'][1]}}</
 %if item['greenwich_longitude'] != 0 and item['greenwich_longitude']:
     {{item['greenwich_longitude']}} degree from Greenwich<br />
 %end
-%end
-%end
-%if detail != []:
-%if detail[0]['url_prime']:
-        Prime meridian: <a href="/{{detail[0]['url_prime']}}">{{item['prime_meridian'][1]}}</a><br />
 %end
 %end
 %if detail != []:
