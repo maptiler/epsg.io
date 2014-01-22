@@ -16,6 +16,7 @@
     <meta name="robots" content="ALL,FOLLOW" />
     <link rel="stylesheet" href="/css/main.css" type="text/css" />
     <link rel="shortcut icon" href="http://epsg.io/favicon.ico" />
+    <script src="/js/index.js"></script>
     
   </head>
   <body id="detailpage" data-role="page">
@@ -358,10 +359,10 @@ Method: <a href="/{{item['method'][0]}}-method" title="">{{item['method'][1]}}</
 
 %if deprecated_available:
 %if i == 0:
-            <div id="trans_deprecated">
+  <div id="trans_deprecated">
 %else:
-      <a href="#" onClick="javascript:document.getElementById('trans_deprecated').style.display='block';return false">Show deprecated transformations</a>
-            <div id="trans_deprecated" style="display:none">
+  <a href="#" id="trans_deprecated_link">Show deprecated transformations</a>
+  <div id="trans_deprecated">
 %end
 
 %a = 0
@@ -386,10 +387,13 @@ Method: <a href="/{{item['method'][0]}}-method" title="">{{item['method'][1]}}</
   %end
 %end
 %end
-          </ul>
         </div>
+        </ul>
+        
 %end
       </div>
+</div>
+      
 %if url_format and error_code == 0:
       <div id="edit-box-container">
         <div id="eb-menu-container">
@@ -587,7 +591,7 @@ Method: <a href="/{{item['method'][0]}}-method" title="">{{item['method'][1]}}</
         <p>Find a coordinate system and get position on a map.</p>
         <p id="copyright">Copyright &copy; 2014</p>
       </div>
-    </div>
+  	<script type="text/javascript">detail_init();</script>
 
   </body>
 </html>

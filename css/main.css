@@ -98,7 +98,9 @@ h4, .h4 { margin: 20px 0 13px 0; padding: 0; font-size: 16px; color: #000; }
         #homepage #logo-container a { padding: 56px 0 0 152px; height: 22px; width: auto; display: block; background: url('../img/logo-232x76.png') 0 0 no-repeat; }
             #logo-container a span { display: none; }
         #countryLink { display: none; }
-        #countryLinkWrapper { height: 20px;}
+        #countryLinkWrapper { height: 20px; margin-top: 15px; font-size: 14px; text-align: center;}
+            #countryLinkWrapper a {text-decoration: underline;}
+            
     #homepage h1 { margin: 0 0 47px; padding: 0; text-align: center; font-size: 18px; }
     #detailpage h1 { margin-bottom: 0; }
 
@@ -106,7 +108,7 @@ h4, .h4 { margin: 20px 0 13px 0; padding: 0; font-size: 16px; color: #000; }
     
     #search-container { margin: 0 auto 104px; padding: 0; width: 452px; }
         #search-container p { margin: 0; padding: 0; overflow: hidden; }
-            #search-container input[type="search"] { margin: 0 10px 0 0; padding: 2px 20px 0; height: 32px; width: 300px; font-size: 11px; color: #989898; }
+            #search-container input[type="search"] { margin: 0 10px 0 0; padding: 2px 20px 0; height: 32px; width: 328px; font-size: 11px; color: #989898; }
             #search-container input[type="submit"] { margin: 0; padding: 2px 0 0; width: 114px; height: 32px; text-align: center; font-size: 14px; text-transform: uppercase; 
                                                      color: #4295c5; background: #fff; cursor: pointer; }
             #search-container input[type="submit"]:hover { color: #fff; background: #4295c5; }
@@ -179,7 +181,7 @@ h4, .h4 { margin: 20px 0 13px 0; padding: 0; font-size: 16px; color: #000; }
             .transformations-container ul { margin: 0; list-style-type: none; font-size: 12px; }
             .transformations-container ul li a { color: #9d9d9d; }
             .transformations-container ul li a:hover { color: #555; text-decoration: none; }
-            
+            #trans_deprecated { display:none; }
             
     #edit-box-container { margin: 0 0 50px; padding: 40px 0 0 0; border-top: solid 1px #eee; overflow: hidden; }
         #eb-menu-container { margin: 0; padding: 0; float: left; width: 270px; }
