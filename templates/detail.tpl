@@ -3,9 +3,9 @@
   <head>  
     <meta charset="utf-8"/>
 %if alt_title:
-    <title>{{item['name']}} - {{alt_title}} - EPSG:{{item['code']}}</title>
+    <title>{{name}} - {{alt_title}} - {{type_epsg}}:{{item['code']}}</title>
 %else:
-    <title>{{item['name']}} - EPSG:{{item['code']}}</title>
+    <title>{{name}} - {{type_epsg}}:{{item['code']}}</title>
 %end    
     
     
@@ -30,15 +30,20 @@
     <div id="layout-container">
       
       %if item['deprecated'] == 1:
-      <h1>EPSG:{{name[0]}} DEPRECATED</h1>
+        <h1>EPSG:{{code_short[0]}} DEPRECATED</h1>
+      
       %else:
-      <h1>EPSG:{{name[0]}}</h1>
+        %if item['information_source'] == "ESRI":
+        <h1>{{type_epsg}}:{{code_short[0]}}</h1>
+        %else:
+          <h1>{{type_epsg}}:{{code_short[0]}}</h1>
+        %end
       %end
       <p>
         {{kind}}
       </p>
       
-      <h2>{{item['name']}}<br /> {{alt_title}}</h2>
+      <h2>{{name}}<br /> {{alt_title}}</h2>
 
 
       <p>
@@ -92,27 +97,30 @@
 
 %if 'source_geogcrs' in item:
   %if item['source_geogcrs']:
-        Geodetic coordinate reference system: <a href="/{{item['source_geogcrs']}}/" title="">{{item['source_geogcrs']}}</a><br />
+        Geodetic coordinate reference system: <a href="/{{item['source_geogcrs'][0]}}" title="">{{item['source_geogcrs'][1]}}</a><br />
 
 %end
 %end
 
-%if 'datum_code' in item:
-  %if item['datum_code'] != 0 and item['datum_code'] :
-        Datum: <a href="/{{item['datum_code']}}-datum/" title="">{{item['datum_code']}}-datum</a><br />
+%if 'datum' in item:
+  %if item['datum'] != 0 and item['datum'] :
+        Datum: <a href="/{{item['datum'][0]}}-datum/" title="">{{item['datum'][1]}}</a><br />
   %end
 %end
 
-%if not detail:
-%if 'children_code' in item:
-  %if item['children_code'] != 0 and item['children_code']:
-        Coordinate System: <a href="/{{item['children_code']}}-coordsys/" title="">{{item['children_code']}}-coordsys</a><br />
-  %end
+
+
+%if 'coord_sys' in item:
+%if item['coord_sys']:
+  Ellipsoid: <a href="/{{item['coord_sys'][0]}}-ellipsoid">{{item['coord_sys'][1]}}</a><br />
 %end
 %end
 
 %if item['target_uom']:
-        Target uom: <a href="{{detail[0]['url_uom']}}">{{item['target_uom']}}</a><br />
+%if int(code_short[0]) != int(item['target_uom'][0]):
+
+        Target uom: <a href="/{{item['target_uom'][0]}}-units">{{item['target_uom'][1]}}</a><br />
+%end
 %end
 
 %if item['uom_code']:
@@ -141,24 +149,58 @@
 %end
 %end
 
-%if item['greenwich_longitude']:
-        Greenwich longitude difference: {{item['greenwich_longitude']}}<br />
+
+%if 'ellipsoid' in item:
+%if item['ellipsoid']:
+  Ellipsoid: <a href="/{{item['ellipsoid'][0]}}-ellipsoid">{{item['ellipsoid'][1]}}</a><br />
+%end
+%end
+
+%if "method" in item:
+%if item['method']:
+Method: <a href="/{{item['method'][0]}}-method" title="">{{item['method'][1]}}</a><br />
+%end
+%end
+
+%if 'data_source' in item:
+ %if item['data_source']:
+  Data source: {{item['data_source']}} <br />
+%end
+%end
+
+%if 'prime_meridian' in item:
+%if item['prime_meridian']:
+  Prime meridian: <a href="/{{item['prime_meridian'][0]}}-primemeridian">{{item['prime_meridian'][1]}}</a>
+  %if 'greenwich_longitude' in item:
+    %if item['prime_meridian'][0] != "8901":
+      ({{item['greenwich_longitude']}} degree from Greenwich)<br />
+    %else:
+    <br />
+    %end
+    
+  %else:
+  <br />
+  %end
+  
+%end
+%end
+%if detail != []:
+%if 'greenwich_longitude' in item:
+%if item['greenwich_longitude'] != 0 and item['greenwich_longitude']:
+    {{item['greenwich_longitude']}} degree from Greenwich<br />
+%end
+%end
 %end
 %if detail != []:
 %if detail[0]['url_prime']:
-        Prime meridian: <a href="/{{detail[0]['url_prime']}}">{{item['prime_meridian']}}-primemeridian</a><br />
-%end
-%end
-%if detail != []:
-%if detail[0]['url_children']:
-        Link to : <a href="/{{detail[0]['url_children']}}">{{detail[0]['url_children']}}</a><br />
+        Prime meridian: <a href="/{{detail[0]['url_prime']}}">{{item['prime_meridian'][1]}}</a><br />
 %end
 %end
 %if detail != []:
 %if detail[0]['url_axis']:
         
   %for a in detail[0]['url_axis']:
-        Link to axis : <a href="/{{a}}/">{{a}}</a><br />
+        Link to axis : <a href="/{{a['axis_code']}}-axis">{{a['axis_name']}}</a><br />
   %end
         
 %end
@@ -169,7 +211,11 @@
 %if item['wkt']:
   Alternative description: {{!item['alt_description']}}<br />
 %else:
+  %if export_html:
+  <div id="description-message">{{!export_html}} </div>
+  %else:
   <div id="description-message">{{!item['alt_description']}} </div>
+  %end
 %end
 %end
 %end
@@ -215,6 +261,23 @@
             <span>{{trans_lat}}</span>  <span>{{trans_lon}}</span>
           </p>
 %end
+%if projcrs_by_gcrs:
+%if kind == "Projected coordinate system":
+  Projected CRS with the same GCS ({{item['source_geogcrs'][0]}}): <br />
+%else:
+  Links to Projected CRS: <br />
+%end
+%end
+
+%for r in projcrs_by_gcrs:
+  <a href="/{{r['result']['code']}}">EPSG:{{r['result']['code']}} {{r['result']['name']}}</a>
+  %if r['result']['code_trans']:
+  <a href="{{r['result']['code']}}/coordinates"> (map)</a> <br />
+  %else:
+  <br />
+  %end
+%end
+
         </div>
         <div class="location-data-container">
 %if trans:
@@ -231,7 +294,7 @@
           </h2>
               
     %if r['accuracy']:
-              Accuracy {{r['accuracy']}}m 
+              Accuracy {{r['accuracy']}} m 
     %end
 
   %end
@@ -244,15 +307,17 @@
 %end
 %if trans and default_trans:
           <p>
-            Method: {{default_trans['method']}}<br />
-            Area of use: <a href="{{url_area_trans}}" title-"">{{default_trans['area']}}</a><br />
+            %if default_trans['method']:
+              Method: <a href="/{{default_trans['method'][0]}}-method" title="">{{default_trans['method'][1]}}</a><br />
+            %end
+            Area of use: <a href="{{url_area_trans}}">{{default_trans['area']}}</a><br />
             Remarks: {{default_trans['remarks']}}<br />
-            Information source: <br />
+            Information source: {{default_trans['information_source']}}<br />
             Revision date: {{default_trans['revision_date']}}<br />
 %if url_concatop != []:
             Steps of transformation: 
   %for url in url_concatop:
-            <a href="{{url}}" title="">{{url}}</a>
+            <a href="{{url}}" title="">{{url}} </a>
   %end
 %end
           </p>
@@ -272,7 +337,7 @@
   %if r['link'] == "" and r['deprecated'] == 0 and r['area_trans']:
             <li> {{r['area_trans']}}
     %if r['accuracy']:
-            , accuracy {{r['accuracy']}}m, 
+            , accuracy {{r['accuracy']}} m, 
     %end
     %if r['code_trans'] != 0:
             code {{r['code_trans']}} 
@@ -284,8 +349,8 @@
             </li>
   %elif r['deprecated'] == 0 and r['area_trans']:
             <li>
-            <a href="/{{r['link']}}/" title = "{{r['trans_remarks']}}">{{r['area_trans']}}, accuracy 
-            {{r['accuracy']}}m, code {{r['code_trans']}} 
+            <a href="/{{r['link']}}" title = "{{r['trans_remarks']}}">{{r['area_trans']}}, accuracy 
+            {{r['accuracy']}} m, code {{r['code_trans']}} 
     %if r['default'] == True:
             DEFAULT
     %end
@@ -308,14 +373,14 @@
 %for r in trans:
   %if r['deprecated'] == 1:
     %if r['link'] == "":
-            <li>{{r['area_trans']}}, accuracy {{r['accuracy']}}m, code {{r['code_trans']}} DEPRECATED
+            <li>{{r['area_trans']}}, accuracy {{r['accuracy']}} m, code {{r['code_trans']}} DEPRECATED
       %if r['default'] == True:
           DEFAULT
       %end
             </li>
     %else:
             <li>
-            <a href="/{{r['link']}}/" title = "{{r['trans_remarks']}}">{{r['area_trans']}}, accuracy {{r['accuracy']}}m,  code {{r['code_trans']}} DEPRECATED
+            <a href="/{{r['link']}}" title = "{{r['trans_remarks']}}">{{r['area_trans']}}, accuracy {{r['accuracy']}} m,  code {{r['code_trans']}} DEPRECATED
       %if r['default'] == True:
           DEFAULT
       %end
