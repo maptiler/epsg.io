@@ -666,9 +666,10 @@ def index(id):
             trans_lat = ""
             trans_lon = ""
         # color html of pretty wkt
+        ref.ImportFromEPSG(int(item['code']))
         export_html = highlight(ref.ExportToPrettyWkt(), WKTLexer(), HtmlFormatter(cssclass='syntax',nobackground=True)) 
 
-    if 'alt_description' in item and (item['information_source'] == "ESRI" or item['information_source'] == "other") and export_html == "":
+    if 'alt_description' in item and (item['information_source'] == "ESRI" or item['information_source'] == "other") and export_html == "" and error_code != 0:
       export_html = highlight(item['alt_description'], WKTLexer(), HtmlFormatter(cssclass='syntax',nobackground=True)) 
            
     # if the CRS its concatenated
