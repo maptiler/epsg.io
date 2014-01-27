@@ -568,6 +568,8 @@
             <pre>{{!export['usgs']}}</pre>
           </div>
         </div>
+        %else:
+          NO DEFINITION AVAILABLE
         %end
       </div>
 
