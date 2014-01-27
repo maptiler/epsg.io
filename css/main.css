@@ -211,6 +211,7 @@ h4, .h4 { margin: 20px 0 13px 0; padding: 0; font-size: 16px; color: #000; }
         #s_json_code { display:none;}
         #s_wkt_code { display:none;}
         #s_usgs_code { display:none;}
+        #s_proj4js_code { display:none;}
 
 
         .code-definition-container-proj4 { margin: 0; padding: 0; float: right; width: 698px; display:none;}

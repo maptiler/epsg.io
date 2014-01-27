@@ -402,6 +402,7 @@
             <li><a class="switcher" id="s_prettywkt" href="{{url_format}}.prettywkt">PrettyWKT<i></i></a></li>
             <li><a class="switcher" id="s_esriwkt" href="{{url_format}}.esriwkt">ESRI WKT<i></i></a></li>
             <li><a class="switcher" id="s_proj4" href="{{url_format}}.proj4">PROJ.4<i></i></a></li>
+            <li><a class="switcher" id="s_proj4js" href="{{url_format}}.proj4js">PROJ.4 JavaScript<i></i></a></li>
             <li><a class="switcher" id="s_gml" href="{{url_format}}.gml">OGC GML<i></i></a></li>
             <li><a class="switcher" id="s_geoserver" href="{{url_format}}.geoserver">GeoServer<i></i></a></li>
             <li><a class="switcher" id="s_mapfile" href="{{url_format}}.mapfile">Mapfile<i></i></a></li>
@@ -458,6 +459,17 @@
           </ul>
           <div class="syntax">
             <pre>{{export['proj4']}}</pre>
+          </div>
+        </div>
+        <div class="code-definition-container" id="s_proj4js_code">
+          <p>Definition: PROJ.4 JavaScript</p>
+          <ul>
+            <li><a href="{{url_format}}.proj4js" title="">Open in new page</a></li>
+            <li><a href="#" title="">Copy URL to clipboard</a></li>
+            <li><a href="#" title="">Copy TEXT to clipboard</a></li>
+          </ul>
+          <div class="syntax">
+            <pre>{{export['proj4js']}}</pre>
           </div>
         </div>
         <div class="code-definition-container" id="s_gml_code">

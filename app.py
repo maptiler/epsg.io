@@ -633,11 +633,12 @@ def index(id):
         export['gml'] = ref.ExportToXML()
         export['mapfile'] = 'PROJECTION\n\t'+'\n\t'.join(['"'+l.lstrip('+')+'"' for l in ref.ExportToProj4().split()])+'\nEND' ### CSS: white-space: pre-wrap
         proj4 = ref.ExportToProj4().strip()
+        export['proj4js'] = '%s["%s:%s"] = "%s";' % ("Proj4js.defs", type_epsg, code, proj4)
         export['mapnik'] = '<?xml version="1.0" encoding="utf-8"?>\n<Map srs="%s">\n\t<Layer srs="%s">\n\t</Layer>\n</Map>' % (proj4,proj4)
         export['mapserverpython'] = "wkt = '''%s'''\nm = mapObj('')\nm.setWKTProjection(ref.ExportToWkt())\nlyr = layerObj(m)\nlyr.setWKTProjection(ref.ExportToWkt())" % (ref.ExportToWkt()) #from mapscript import mapObj,layerObj\n
         export['mapnikpython'] = "proj4 = '%s'\nm = Map(256,256,proj4)\nlyr = Layer('Name',proj4)" % (proj4) #from mapnik import Map, Layer\n
         export['geoserver'] = "%s=%s" % (code,ref.ExportToWkt()) # put this custom projection in the 'user_projections' file inside the GEOSERVER_DATA_DIR '\n' # You can further work with your projections via the web admin tool.\n
-        export['postgis'] = 'INSERT into spatial_ref_sys (srid, auth_name, auth_srid, proj4text, srtext) values ( %s, \'%s\', %s, \'%s\', \'%s\');' % (item['code'], "EPSG", item['code'], ref.ExportToProj4(), ref.ExportToWkt())
+        export['postgis'] = 'INSERT into spatial_ref_sys (srid, auth_name, auth_srid, proj4text, srtext) values ( %s, \'%s\', %s, \'%s\', \'%s\');' % (item['code'], type_epsg, item['code'], ref.ExportToProj4(), ref.ExportToWkt())
         
         if ref.IsGeographic():
           code = ref.GetAuthorityCode("GEOGCS")
@@ -874,6 +875,7 @@ def index(id, format):
     code, code_trans = (id+'-0').split('-')[:2]
 
     code_trans = code_trans.replace("/","")
+    code = code.replace(".","")
     code_query = parser.parse(str(code) + " kind:CRS OR kind:COORDOP")
     code_result = searcher.search(code_query, sortedby=False,scored=False)
 
@@ -884,6 +886,11 @@ def index(id, format):
       rname = r['name'].replace("ESRI: ","").strip()
       def_trans = r['code_trans']
       bbox = r['bbox']
+      
+      type_epsg = "EPSG"
+      if r['information_source'] == "ESRI":
+        name = r['name'].replace("ESRI: ","").strip()
+        type_epsg = "ESRI"
   
     if int(code_trans) != 0:
       trans_query = parser.parse(str(code_trans) + " kind:COORDOP")
@@ -931,6 +938,11 @@ def index(id, format):
       export = ref.ExportToWkt()
     elif format == "proj4":
       export = ref.ExportToProj4()
+    elif format == 'proj4js':
+        export = ref.ExportToProj4().strip()
+        if code:
+            export = '%s["%s:%s"] = "%s";' % ("Proj4js.defs", type_epsg, code, export)
+            ct = "application/javascript"
     elif format == 'html':
       out = ref.ExportToPrettyWkt()
       export = highlight(out, WKTLexer(), HtmlFormatter(cssclass='syntax',nobackground=True))
@@ -957,7 +969,7 @@ def index(id, format):
       export = "%s=%s" % (code,ref.ExportToWkt()) # put this custom projection in the 'user_projections' file inside the GEOSERVER_DATA_DIR '\n' # You can further work with your projections via the web admin tool.\n
       # we'll assume Geotools has this SRS...
     elif format == 'postgis':                                              
-      export = 'INSERT into spatial_ref_sys (srid, auth_name, auth_srid, proj4text, srtext) values ( %s, \'%s\', %s, \'%s\', \'%s\');' % (rcode, "EPSG", rcode, ref.ExportToProj4(), ref.ExportToWkt())                                                  
+      export = 'INSERT into spatial_ref_sys (srid, auth_name, auth_srid, proj4text, srtext) values ( %s, \'%s\', %s, \'%s\', \'%s\');' % (rcode, type_epsg, rcode, ref.ExportToProj4(), ref.ExportToWkt())                                                  
     elif format == 'json':
       if ref.IsGeographic():
         code = ref.GetAuthorityCode("GEOGCS")
