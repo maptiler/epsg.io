@@ -141,8 +141,10 @@
         %end
 
         %if 'ellipsoid' in item:
-          %if item['ellipsoid'][0] != "None":
-            Ellipsoid: <a href="/{{item['ellipsoid'][0]}}-ellipsoid">{{item['ellipsoid'][1]}}</a><br />
+          %if item['ellipsoid']:
+            %if item['ellipsoid'][0] != "None":
+              Ellipsoid: <a href="/{{item['ellipsoid'][0]}}-ellipsoid">{{item['ellipsoid'][1]}}</a><br />
+            %end
           %end
         %end
 
