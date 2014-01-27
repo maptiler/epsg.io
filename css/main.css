@@ -280,7 +280,7 @@ h4, .h4 { margin: 20px 0 13px 0; padding: 0; font-size: 16px; color: #000; }
                                           border-top-right-radius: 15px; border-bottom-right-radius: 15px; }
             #copy-clipboard-container a:hover { text-decoration: none; background: #4295c5; }
                  
-    #side-container { margin: 0; padding: 0; float: right; width: 180px; }
+    #side-container { margin: 0; padding: 0; float: right; width: 216px; }
         #alt-search { margin: 0 0 0 8px; padding: 0; list-style-type: none; }
         #alt-search li { margin: 0; padding: 0; }
         #alt-search li ul { margin: 0 0 0 12px; list-style-type: none; }
