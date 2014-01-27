@@ -891,7 +891,7 @@ def index(id, format):
       trans_result = code_result
       url_coords = rcode
     # One of the formats is a map (because /coordinates/ was redirect on /coordinates and then catch by <format>)
-    if format == "coordinates":
+    if format == "map":
       center = ((bbox[0] - bbox[2])/2.0)+bbox[2],((bbox[3] - bbox[1])/2.0)+bbox[1]
       return template ('./templates/map', name=rname, code=rcode, center=center)
     if not re.findall(r'([a-df-zA-Z_])',values):

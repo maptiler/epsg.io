@@ -219,7 +219,7 @@
             %if center:
               %if trans_lat:
                 <div id="mini-map">
-                  <a href="{{url_format}}/coordinates">
+                  <a href="{{url_format}}/map">
                     <img src="/img/epsg-target-small.png" id="crosshair" alt="" />
                       <img src="http://maps.googleapis.com/maps/api/staticmap?size=235x190&scale=2&sensor=false&visual_refresh=true&center={{center[0]}},{{center[1]}}&path=color:0xff0000ff|fillcolor:0xff000022|weight:2|{{g_coords}}" alt="SimpleMap" height="190" width="235">
               
@@ -254,7 +254,7 @@
           %for r in projcrs_by_gcrs:
             <a href="/{{r['result']['code']}}">EPSG:{{r['result']['code']}} {{r['result']['name']}}</a>
             %if r['result']['code_trans']:
-              <a href="{{r['result']['code']}}/coordinates"> (map)</a> <br />
+              <a href="{{r['result']['code']}}/map"> (map)</a> <br />
             %else:
               <br />
             %end
@@ -287,7 +287,7 @@
 
           %if center and trans_lat and trans_lon:
             <p class="btn-link-container">
-              <a href="{{url_format}}/coordinates" title=""><i></i>Get position on a map</a>
+              <a href="{{url_format}}/map" title=""><i></i>Get position on a map</a>
             </p>
           %end
           
