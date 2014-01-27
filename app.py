@@ -287,9 +287,16 @@ def index():
       
       if len(short_area) > 100:
         short_area = short_area.split("-", 2)[0]
+      
+      url_map = ""
+      if r['wkt'] and r['bbox']:
+        ref = osr.SpatialReference()
+        a = ref.ImportFromWkt(r['wkt'])
+        if a == 0:
+          url_map = "/" + r['code']+ "/map"
 
         
-      result.append({'r':r, 'name':name, 'type_epsg':type_epsg, 'link':link, 'area':short_area, 'short_code': short_code})
+      result.append({'r':r, 'name':name, 'type_epsg':type_epsg, 'link':link, 'area':short_area, 'short_code':short_code, 'url_map':url_map})
       json_str.append({'code':r['code'], 'name':name, 'wkt':r['wkt'],'default_trans':r['code_trans'],'trans':r['trans'],'area_trans':r['area_trans'],'accuracy':r['accuracy'],'kind':r['kind'], 'bbox':r['bbox']})
       
     

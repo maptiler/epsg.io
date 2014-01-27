@@ -58,7 +58,11 @@
                       - {{r['r']['alt_title']}}
               %end
               %end
-              </a></h2>
+                </a>
+                %if r['url_map'] != "":
+                  <a href="{{r['url_map']}}"> (coordinates on a map) </a>
+                %end
+              </h2>
               <p>
                 {{r['type_epsg']}}:{{r['short_code'][0]}}
   %if r['r']['code_trans'] != 0 and r['r']['primary'] == 1:
