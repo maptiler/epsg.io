@@ -104,19 +104,19 @@
           
           <ul class="paginator">
             %if (pagenum-1) > 0:
-              <li class="prev"><a href="/?q={{query}}&page={{pagenum-1}}" title="">Prev</a></li>
+              <li class="prev"><a href="/?q={{query}}&amp;page={{pagenum-1}}" title="">Prev</a></li>
             %end
 
             %for i in paging:
               %if i == pagenum:
                 <li><span>{{ i }}</span></li>
               %else:
-                <li><a href="/?q={{query}}&page={{i}}" title="">{{i}}</a></li>
+                <li><a href="/?q={{query}}&amp;page={{i}}" title="">{{i}}</a></li>
               %end
             %end
 
             %if (pagenum+1) in paging:
-              <li class="next"><a href="/?q={{query}}&page={{pagenum+1}}" title="">Next</a></li>
+              <li class="next"><a href="/?q={{query}}&amp;page={{pagenum+1}}" title="">Next</a></li>
             %end
           </ul>
         </div>
