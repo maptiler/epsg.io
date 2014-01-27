@@ -615,6 +615,7 @@ def index(id):
       ref = osr.SpatialReference()
       error_code = ref.ImportFromEPSG(int(item['code']))
       export = {}  
+      ref.ImportFromWkt(wkt)  
       export['prettywkt'] = ref.ExportToPrettyWkt()
       
       if int(error_code) == 0:
@@ -666,7 +667,7 @@ def index(id):
             trans_lat = ""
             trans_lon = ""
         # color html of pretty wkt
-        ref.ImportFromEPSG(int(item['code']))
+        ref.ImportFromWkt(wkt)  
         export_html = highlight(ref.ExportToPrettyWkt(), WKTLexer(), HtmlFormatter(cssclass='syntax',nobackground=True)) 
 
     if 'alt_description' in item and (item['information_source'] == "ESRI" or item['information_source'] == "other") and export_html == "" and error_code != 0:
