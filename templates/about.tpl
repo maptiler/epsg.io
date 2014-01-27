@@ -12,6 +12,7 @@
     <link rel="shortcut icon" href="http://epsg.io/favicon.ico" />
     
   </head>
+  
   <body id="detailpage" data-role="page">
     <div id="head">
       <p id="logo-container">
@@ -21,16 +22,20 @@
         <li><a href="/about" title="">About</a></li>
       </ul>
     </div>
+    
     <div id="layout-container">
-<p>
-TODO:
-</p>
-    <div id="foot">
-      <p id="mzk-logo">
-        <a href="http://www.mzk.cz/" title=""><img src="/img/hzk-logo.png" alt="" /></a>
+      <p>
+        TODO:
       </p>
-      <p>Find a coordinate system and get position on a map.</p>
-      <p id="copyright">Copyright &copy; 2014</p>
+      
+      <div id="foot">
+        <p id="mzk-logo">
+          <a href="http://www.mzk.cz/" title=""><img src="/img/hzk-logo.png" alt="" /></a>
+        </p>
+        <p>Find a coordinate system and get position on a map.</p>
+        <p id="copyright">Copyright &copy; 2014</p>
+      </div>
+      
     </div>
   </body>
-  </html>
+</html>
