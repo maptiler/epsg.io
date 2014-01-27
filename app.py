@@ -473,6 +473,7 @@ def index(id):
     # title = ""
     nadgrid = None
     gcrs_code = ""
+    deprecated_available = 0
     
     for r in results:
       found = False
@@ -519,6 +520,9 @@ def index(id):
             if int(r['code_trans'])== int(hit['code']): 
               default = True
             
+            # if exist some deprecated transformations
+            if hit['deprecated'] == 1:
+              deprecated_available = 1
             # safe the main information about each transformation
             trans.append({
             'link':link,
@@ -710,7 +714,7 @@ def index(id):
 
 
           
-  return template('./templates/detail',url_kind=url_kind, type_epsg=type_epsg, name=name, projcrs_by_gcrs=projcrs_by_gcrs, kind=kind, alt_title=alt_title, area_item=area_item, code_short=code_short, item=item, trans=trans, default_trans=default_trans, num_results=num_results, url_method=url_method, title=title, url_format=url_format, export_html=export_html, url_area_trans=url_area_trans, url_area=url_area, center=center, g_coords=g_coords, trans_lat=trans_lat, trans_lon=trans_lon,wkt=wkt,facets_list=facets_list,url_concatop=url_concatop, nadgrid=nadgrid, detail=detail,export=export, error_code=error_code )  
+  return template('./templates/detail', deprecated_available=deprecated_available, url_kind=url_kind, type_epsg=type_epsg, name=name, projcrs_by_gcrs=projcrs_by_gcrs, kind=kind, alt_title=alt_title, area_item=area_item, code_short=code_short, item=item, trans=trans, default_trans=default_trans, num_results=num_results, url_method=url_method, title=title, url_format=url_format, export_html=export_html, url_area_trans=url_area_trans, url_area=url_area, center=center, g_coords=g_coords, trans_lat=trans_lat, trans_lon=trans_lon,wkt=wkt,facets_list=facets_list,url_concatop=url_concatop, nadgrid=nadgrid, detail=detail,export=export, error_code=error_code )  
 
 
 @route('/<id:re:[\d]+(-[\w]+)>')
@@ -767,6 +771,7 @@ def index(id):
     # url_area = ""
     alt_title = ""
         
+    deprecated_available = 0
     for r in results:
       item = r
       url_area = area_to_url(item['area'])
@@ -842,7 +847,7 @@ def index(id):
         for gcrs_item in gcrs_result:        
           projcrs_by_gcrs.append({'result': gcrs_item})
           
-  return template('./templates/detail',url_kind=url_kind, type_epsg=type_epsg, name=name, projcrs_by_gcrs=projcrs_by_gcrs, alt_title=alt_title, kind=kind, code_short=code_short,item=item, detail=detail, facets_list=facets_list, nadgrid=nadgrid, trans_lat=trans_lat, trans_lon=trans_lon, trans=trans, url_format=url_format, default_trans=default_trans, center=center,g_coords=g_coords)  
+  return template('./templates/detail', deprecated_available=deprecated_available, url_kind=url_kind, type_epsg=type_epsg, name=name, projcrs_by_gcrs=projcrs_by_gcrs, alt_title=alt_title, kind=kind, code_short=code_short,item=item, detail=detail, facets_list=facets_list, nadgrid=nadgrid, trans_lat=trans_lat, trans_lon=trans_lon, trans=trans, url_format=url_format, default_trans=default_trans, center=center,g_coords=g_coords)  
 
 
 @route('/<id:re:[\d]+(-[\d]+)?\S><format>')
@@ -859,6 +864,7 @@ def index(id, format):
 
     code, code_trans = (id+'-0').split('-')[:2]
 
+    code_trans = code_trans.replace("/","")
     code_query = parser.parse(str(code) + " kind:CRS OR kind:COORDOP")
     code_result = searcher.search(code_query, sortedby=False,scored=False)
 
