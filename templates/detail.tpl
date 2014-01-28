@@ -399,27 +399,27 @@
           <h4>Export</h4>
           <ul id="eb-menu">
             <li><a class="switcher selected" id="s_html" href="{{url_format}}.html">Well Known Text as HTML<i></i></a></li>
-            <li><a class="switcher" id="s_prettywkt" href="{{url_format}}.prettywkt">PrettyWKT<i></i></a></li>
+            <li><a class="switcher" id="s_wkt" href="{{url_format}}.wkt">OGC WKT<i></i></a></li>
+            <!-- <li><a class="switcher" id="s_prettywkt" href="{{url_format}}.prettywkt">PrettyWKT<i></i></a></li> -->
             <li><a class="switcher" id="s_esriwkt" href="{{url_format}}.esriwkt">ESRI WKT<i></i></a></li>
             <li><a class="switcher" id="s_proj4" href="{{url_format}}.proj4">PROJ.4<i></i></a></li>
-            <li><a class="switcher" id="s_proj4js" href="{{url_format}}.proj4js">PROJ.4 JavaScript<i></i></a></li>
-            <li><a class="switcher" id="s_gml" href="{{url_format}}.gml">OGC GML<i></i></a></li>
+            <!-- <li><a class="switcher" id="s_proj4js" href="{{url_format}}.proj4js">PROJ.4 JavaScript<i></i></a></li> -->
+            <li><a class="switcher" id="s_xml" href="{{url_format}}.xml">XML<i></i></a></li>
             <li><a class="switcher" id="s_geoserver" href="{{url_format}}.geoserver">GeoServer<i></i></a></li>
-            <li><a class="switcher" id="s_mapfile" href="{{url_format}}.mapfile">Mapfile<i></i></a></li>
-            <li><a class="switcher" id="s_mapserverpython" href="{{url_format}}.mapserverpython">MapSever - Python<i></i></a></li>
+            <li><a class="switcher" id="s_mapfile" href="{{url_format}}.mapfile">MapServer<i></i></a></li>
+            <!-- <li><a class="switcher" id="s_mapserverpython" href="{{url_format}}.mapserverpython">MapSever - Python<i></i></a></li> -->
             <li><a class="switcher" id="s_mapnik" href="{{url_format}}.mapnik">Mapnik<i></i></a></li>
-            <li><a class="switcher" id="s_mapnikpython" href="{{url_format}}.mapnikpython">Mapnik - Python<i></i></a></li>
-            <li><a class="switcher" id="s_postgis" href="{{url_format}}.postgis">PostGIS<i></i></a></li>
-            <li><a class="switcher" id="s_json" href="{{url_format}}.json">JSON<i></i></a></li>
-            <li><a class="switcher" id="s_wkt" href="{{url_format}}.wkt">OGC WKT<i></i></a></li>
+            <!-- <li><a class="switcher" id="s_mapnikpython" href="{{url_format}}.mapnikpython">Mapnik - Python<i></i></a></li> -->
+            <li><a class="switcher" id="s_postgis" href="{{url_format}}.sql">PostGIS (SQL)<i></i></a></li>
+            <!-- <li><a class="switcher" id="s_json" href="{{url_format}}.json">JSON<i></i></a></li> -->
             <li><a class="switcher" id="s_usgs" href="{{url_format}}.usgs">USGS<i></i></a></li>
           </ul>
         </div>
         
         <div class="code-definition-container" id="s_html_code">
-          <p>Definition: Well Known Text as HTML</p>
+          <p>Definition: Well Known Text (WKT)</p>
           <ul>
-            <li><a href="{{url_format}}.html" title="">Open in new page</a></li>
+            <li><a href="{{url_format}}.prettywkt" title="">Open in new page</a></li>
             <li><a href="#" title="">Copy URL to clipboard</a></li>
             <li><a href="#" title="">Copy TEXT to clipboard</a></li>
           </ul>
@@ -427,7 +427,7 @@
             {{!export_html}}
           </div>
         </div>
-        <div class="code-definition-container" id="s_prettywkt_code">
+  <!--  <div class="code-definition-container" id="s_prettywkt_code">
           <p>Definition: PrettyWKT</p>
           <ul>
             <li><a href="{{url_format}}.prettywkt" title="">Open in new page</a></li>
@@ -437,7 +437,7 @@
           <div class="syntax">
             <pre>{{!export['prettywkt']}}</pre>
           </div>
-        </div>
+        </div> -->
         <div class="code-definition-container" id="s_esriwkt_code">
           <p>Definition: ESRI WKT</p>
           <ul>
@@ -460,11 +460,11 @@
           <div class="syntax">
             <pre>{{export['proj4']}}</pre>
           </div>
-        </div>
-        <div class="code-definition-container" id="s_proj4js_code">
-          <p>Definition: PROJ.4 JavaScript</p>
+    <!--</div>
+        <div class="code-definition-container" id="s_proj4js_code"> -->
+          <p>Definition: JavaScript (PROJ.4) </p>
           <ul>
-            <li><a href="{{url_format}}.proj4js" title="">Open in new page</a></li>
+            <li><a href="{{url_format}}.js" title="">Open in new page</a></li>
             <li><a href="#" title="">Copy URL to clipboard</a></li>
             <li><a href="#" title="">Copy TEXT to clipboard</a></li>
           </ul>
@@ -472,15 +472,15 @@
             <pre>{{export['proj4js']}}</pre>
           </div>
         </div>
-        <div class="code-definition-container" id="s_gml_code">
-          <p>Definition: OGC GML</p>
+        <div class="code-definition-container" id="s_xml_code">
+          <p>Definition: XML</p>
           <ul>
-            <li><a href="{{url_format}}.gml" title="">Open in new page</a></li>
+            <li><a href="{{url_format}}.xml" title="">Open in new page</a></li>
             <li><a href="#" title="">Copy URL to clipboard</a></li>
             <li><a href="#" title="">Copy TEXT to clipboard</a></li>
           </ul>
           <div class="syntax">
-            <pre>{{export['gml']}}</pre>
+            <pre>{{export['xml']}}</pre>
           </div>
         </div>
         <div class="code-definition-container" id="s_geoserver_code">
@@ -504,9 +504,9 @@
           <div class="syntax">
             <pre>{{!export['mapfile']}}</pre>
           </div>
-        </div>
-        <div class="code-definition-container" id="s_mapserverpython_code">
-          <p>Definition: MapSever - Python</p>
+     <!--   </div>
+        <div class="code-definition-container" id="s_mapserverpython_code"> -->
+          <p>Definition: MapServer - Python</p>
           <ul>
             <li><a href="{{url_format}}.mapserverpython" title="">Open in new page</a></li>
             <li><a href="#" title="">Copy URL to clipboard</a></li>
@@ -526,8 +526,8 @@
           <div class="syntax">
             <pre>{{export['mapnik']}}</pre>
           </div>
-        </div>
-        <div class="code-definition-container" id="s_mapnikpython_code">
+     <!--   </div>
+        <div class="code-definition-container" id="s_mapnikpython_code"> -->
           <p>Definition: mapnik - Python</p>
           <ul>
             <li><a href="{{url_format}}.mapnikpython" title="">Open in new page</a></li>
@@ -541,7 +541,7 @@
         <div class="code-definition-container" id="s_postgis_code">
           <p>Definition: PostGIS</p>
           <ul>
-            <li><a href="{{url_format}}.postgis" title="">Open in new page</a></li>
+            <li><a href="{{url_format}}.sql" title="">Open in new page</a></li>
             <li><a href="#" title="">Copy URL to clipboard</a></li>
             <li><a href="#" title="">Copy TEXT to clipboard</a></li>
           </ul>
@@ -549,7 +549,7 @@
             <pre>{{!export['postgis']}}</pre>
           </div>
         </div>
-        <div class="code-definition-container" id="s_json_code">
+  <!--      <div class="code-definition-container" id="s_json_code">
           <p>Definition: JSON</p>
           <ul>
             <li><a href="{{url_format}}.json" title="">Open in new page</a></li>
@@ -557,9 +557,9 @@
             <li><a href="#" title="">Copy TEXT to clipboard</a></li>
           </ul>
           <div class="syntax">
-            <pre>{{!export['json']}}</pre>
+            
           </div>
-        </div>
+        </div> -->
         <div class="code-definition-container" id="s_wkt_code">
           <p>Definition: OGC WKT</p>
           <ul>

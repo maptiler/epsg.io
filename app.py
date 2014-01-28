@@ -630,7 +630,7 @@ def index(id):
         export['ogcwkt'] = ref.ExportToWkt()
         export['proj4'] = ref.ExportToProj4()
         export['html'] = highlight(ref.ExportToPrettyWkt(), WKTLexer(), HtmlFormatter(cssclass='syntax',nobackground=True))
-        export['gml'] = ref.ExportToXML()
+        export['xml'] = '<?xml version="1.0" encoding="UTF-8"?>\n %s' % (ref.ExportToXML())
         export['mapfile'] = 'PROJECTION\n\t'+'\n\t'.join(['"'+l.lstrip('+')+'"' for l in ref.ExportToProj4().split()])+'\nEND' ### CSS: white-space: pre-wrap
         proj4 = ref.ExportToProj4().strip()
         export['proj4js'] = '%s["%s:%s"] = "%s";' % ("Proj4js.defs", type_epsg, code, proj4)
@@ -640,15 +640,15 @@ def index(id):
         export['geoserver'] = "%s=%s" % (code,ref.ExportToWkt()) # put this custom projection in the 'user_projections' file inside the GEOSERVER_DATA_DIR '\n' # You can further work with your projections via the web admin tool.\n
         export['postgis'] = 'INSERT into spatial_ref_sys (srid, auth_name, auth_srid, proj4text, srtext) values ( %s, \'%s\', %s, \'%s\', \'%s\');' % (item['code'], type_epsg, item['code'], ref.ExportToProj4(), ref.ExportToWkt())
         
-        if ref.IsGeographic():
-          code = ref.GetAuthorityCode("GEOGCS")
-        else:
-          code = ref.GetAuthorityCode("PROJCS")
-        export_json = {}
-        if code:
-          export_json['type'] = 'EPSG'
-        export_json['properties'] = {'code':code}
-        export['json'] = export_json
+        # if ref.IsGeographic():
+        #   code = ref.GetAuthorityCode("GEOGCS")
+        # else:
+        #   code = ref.GetAuthorityCode("PROJCS")
+        # export_json = {}
+        # if code:
+        #   export_json['type'] = 'EPSG'
+        # export_json['properties'] = {'code':code}
+        # export['json'] = export_json
       
         ref.MorphToESRI()
         export['esriwkt'] = ref.ExportToWkt()
@@ -938,7 +938,7 @@ def index(id, format):
       export = ref.ExportToWkt()
     elif format == "proj4":
       export = ref.ExportToProj4()
-    elif format == 'proj4js':
+    elif format == 'js':
         export = ref.ExportToProj4().strip()
         if code:
             export = '%s["%s:%s"] = "%s";' % ("Proj4js.defs", type_epsg, code, export)
@@ -947,9 +947,9 @@ def index(id, format):
       out = ref.ExportToPrettyWkt()
       export = highlight(out, WKTLexer(), HtmlFormatter(cssclass='syntax',nobackground=True))
       response.content_type = 'text/html; charset=UTF-8'
-      return template('./templates/export', export = export, code=rcode)
-    elif format == 'gml':
-      export = ref.ExportToXML()
+      #return template('./templates/export', export = export, code=rcode)
+    elif format == 'xml':
+      export = '<?xml version="1.0" encoding="UTF-8"?>\n %s' % (ref.ExportToXML())
       ct = "text/gml" 
     elif format == 'usgs':
       export = str(ref.ExportToUSGS())
@@ -968,18 +968,18 @@ def index(id, format):
     elif format == 'geoserver':
       export = "%s=%s" % (code,ref.ExportToWkt()) # put this custom projection in the 'user_projections' file inside the GEOSERVER_DATA_DIR '\n' # You can further work with your projections via the web admin tool.\n
       # we'll assume Geotools has this SRS...
-    elif format == 'postgis':                                              
+    elif format == 'sql':                                              
       export = 'INSERT into spatial_ref_sys (srid, auth_name, auth_srid, proj4text, srtext) values ( %s, \'%s\', %s, \'%s\', \'%s\');' % (rcode, type_epsg, rcode, ref.ExportToProj4(), ref.ExportToWkt())                                                  
-    elif format == 'json':
-      if ref.IsGeographic():
-        code = ref.GetAuthorityCode("GEOGCS")
-      else:
-        code = ref.GetAuthorityCode("PROJCS")
-      export = {}
-      if code:
-        export['type'] = 'EPSG'
-      export['properties'] = {'code':code}
-      ct = "application/json" 
+    # elif format == 'json':
+    #   if ref.IsGeographic():
+    #     code = ref.GetAuthorityCode("GEOGCS")
+    #   else:
+    #     code = ref.GetAuthorityCode("PROJCS")
+    #   export = {}
+    #   if code:
+    #     export['type'] = 'EPSG'
+    #   export['properties'] = {'code':code}
+    #   ct = "application/json" 
     elif format == 'prj':
       ref.MorphToESRI()
       export = ref.ExportToWkt()
