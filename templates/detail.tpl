@@ -217,6 +217,7 @@
       
       <div id="detail-content-container">
         <div class="map-container">
+          %no_map = False
           %if item['bbox']:
             %if center:
               %if trans_lat:
@@ -235,6 +236,7 @@
               %end
             %end
           %else:
+            %no_map = True
             <p>NO MAP AVAILABLE</p>
           %end
 
@@ -298,7 +300,9 @@
             %end
           %end
           
+          %no_default = False
           %if not found:
+            %no_default = True
             <p>NO DEFAULT TRANSFORMATION</p>
           %end
 
@@ -330,6 +334,7 @@
         </div>
 
         <div class="transformations-container">        
+          %no_trans = False
           %if trans:
             <h3>Available transformations:</h3>
             <ul>
@@ -402,11 +407,19 @@
             
             </ul>
           %else:
+            %no_trans = True
             <p>NO TRANSFORMATIONS AVAILABLE</p>
             <a href="#" id="trans_deprecated_link"></a>
           %end
         </div>
+        
+
       </div>
+      %if no_map and no_trans and no_default:
+        %if 'alt_description' in item:
+          <div id="description-message">{{!item['alt_description']}} </div>
+        %end
+      %end
       
       <div id="edit-box-container">
         %if url_format and error_code == 0:
