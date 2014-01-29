@@ -194,10 +194,10 @@
         %found_alt = False
         %if 'alt_description' in item:
           %if item['alt_description']:
-            %found_alt = True
             %if item['wkt']:
               Alternative description: {{!item['alt_description']}}<br />
             %else:
+              %found_alt = True
               %if export_html:
                 <div id="description-message">{{!export_html}} </div>
               %else:
