@@ -244,47 +244,66 @@
               <span>{{trans_lat}}</span>  <span>{{trans_lon}}</span>
             </p>
           %end
-          
-          %if projcrs_by_gcrs:
-            %if kind == "Projected coordinate system":
-              Projected CRS with the same GCS ({{item['source_geogcrs'][0]}}): <br />
-            %else:
-              Links to Projected CRS: <br />
+          <div id="projected-link">
+            %if projcrs_by_gcrs:
+              %if kind == "Projected coordinate system":
+                Projected CRS with the same GCS ({{item['source_geogcrs'][0]}}): <br />
+              %else:
+                Links to Projected CRS: <br />
+              %end
             %end
-          %end
-
-          %for r in projcrs_by_gcrs:
-            <a href="/{{r['result']['code']}}">EPSG:{{r['result']['code']}} {{r['result']['name']}}</a>
-            %if r['result']['code_trans']:
-              <a href="{{r['result']['code']}}/map"> (map)</a> <br />
-            %else:
-              <br />
+        
+            %for r in projcrs_by_gcrs:
+              <a href="/{{r['result']['code']}}">EPSG:{{r['result']['code']}} {{r['result']['name']}}</a>
+              %if r['result']['code_trans']:
+                <a href="{{r['result']['code']}}/map"> (map)</a> <br />
+              %else:
+                <br />
+              %end
             %end
-          %end
-
+        
+            %if more_gcrs_result:
+              <a href="#" id="more_crs_link">Show more</a>
+              <div id="more_crs">
+                %for r in more_gcrs_result:
+                  <a href="/{{r['result']['code']}}">EPSG:{{r['result']['code']}} {{r['result']['name']}}</a>
+                  %if r['result']['code_trans']:
+                    <a href="{{r['result']['code']}}/map"> (map)</a> <br />
+                  %else:
+                    <br />
+                  %end
+                %end
+              </div>
+            %end
+          </div>
         </div>
 
         <div class="location-data-container">
+          %found = False
           %if trans:
             %for r in trans:
-              
-                %if r['link'] == "" and r['area_trans']:
+              %if r['link'] == "" and r['area_trans'] and not found:
+                  %found = True
                   <h2>
-                  {{r['area_trans']}} <br />
-                  
-                  %if r['code_trans'] != 0:
-                    code {{r['code_trans']}} 
-                  %end
-
-                  %if r['default'] == True:
-                    DEFAULT
-                  %end
-                  </h2>
-                  %if r['accuracy']:
-                    Accuracy {{r['accuracy']}} m 
-                  %end
+                {{r['area_trans']}} <br />
+                
+                %if r['code_trans'] != 0:
+                  {{type_epsg}}: {{r['code_trans']}} 
                 %end
+
+                %if r['default'] == True:
+                  DEFAULT
+                %end
+                </h2>
+                %if r['accuracy']:
+                  Accuracy {{r['accuracy']}} m 
+                %end
+              %end
             %end
+          %end
+          
+          %if not found:
+            <p>NO DEFAULT TRANSFORMATION</p>
           %end
 
           %if center and trans_lat and trans_lon:
@@ -387,7 +406,7 @@
             
             </ul>
           %else:
-            NO TRANSFORMATIONS AVAILABLE <br />
+            <p>NO TRANSFORMATIONS AVAILABLE</p>
             <a href="#" id="trans_deprecated_link"></a>
           %end
         </div>

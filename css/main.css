@@ -163,9 +163,11 @@ h4, .h4 { margin: 20px 0 13px 0; padding: 0; font-size: 16px; color: #000; }
     #detail-content-container { margin: 0 0 50px; padding: 41px 0 0 0; overflow: hidden; border-top: solid 1px #eee; }
         #detail-content-container h2 { margin-top: 0; font-size: 18px; }
         .map-container, .location-data-container, .transformations-container {  margin: 0; padding: 0; float: left; }
-        .map-container { margin-right: 43px; padding-top: 8px; width: 266px; }
+        .map-container { margin-right: 43px; padding-top: 0px; width: 266px; }
             #mini-map { margin-bottom: 15px; width: 235px; height: 190px; display: block; position:relative;}
             #crosshair { position:absolute; top:50%; left:50%; margin-top:-11px; margin-left:-11px;}
+            #more_crs { display:none;}
+            #more_crs_link {text-decoration:underline}
         .location-data-container { width: 284px; }
             .location-data-container .btn-link-container { margin: 0 0 25px; padding: 25px 0 0 0; border-top: solid 1px #eee; overflow: hidden; }
                 .btn-link-container a { margin: 0; padding: 7px 22px 0 13px; height: 24px; color: #4295c5; float: left; border: solid 1px #cacaca; 

@@ -701,7 +701,7 @@ def index(id):
       with ix.searcher(closereader=False, weighting=PopularityWeighting()) as searcher:
         parser = MultifieldParser(["source_geogcrs"], ix.schema)
         gcrs_query = parser.parse(gcrs_code + " kind:PROJCRS" + " deprecated:0")
-        gcrs_result = searcher.search(gcrs_query, limit=5)
+        gcrs_result = searcher.search(gcrs_query, limit=30)
         for gcrs_item in gcrs_result:
           # do not append if find yourself
           if gcrs_item['code'] != item['code']:    
@@ -711,20 +711,24 @@ def index(id):
       with ix.searcher(closereader=False, weighting=PopularityWeighting()) as searcher:
         parser = QueryParser("trans", ix.schema)
         gcrs_query = parser.parse(code + " kind:PROJCRS" + " deprecated:0")
-        gcrs_result = searcher.search(gcrs_query)
+        gcrs_result = searcher.search(gcrs_query, limit=30)
         if gcrs_result:
           for gcrs_item in gcrs_result:        
             projcrs_by_gcrs.append({'result': gcrs_item})
         else:
           parser = QueryParser("source_geogcrs", ix.schema)
           gcrs_query = parser.parse(gcrs_code + " kind:PROJCRS" + " deprecated:0")
-          gcrs_result = searcher.search(gcrs_query)
+          gcrs_result = searcher.search(gcrs_query, limit=30)
           for gcrs_item in gcrs_result:        
             projcrs_by_gcrs.append({'result': gcrs_item})
-
+    
+    more_gcrs_result = []
+    if len(projcrs_by_gcrs) > 5:
+      more_gcrs_result = projcrs_by_gcrs[5:]
+      projcrs_by_gcrs = projcrs_by_gcrs[:5]
 
           
-  return template('./templates/detail', deprecated_available=deprecated_available, url_kind=url_kind, type_epsg=type_epsg, name=name, projcrs_by_gcrs=projcrs_by_gcrs, kind=kind, alt_title=alt_title, area_item=area_item, code_short=code_short, item=item, trans=trans, default_trans=default_trans, num_results=num_results, url_method=url_method, title=title, url_format=url_format, export_html=export_html, url_area_trans=url_area_trans, url_area=url_area, center=center, g_coords=g_coords, trans_lat=trans_lat, trans_lon=trans_lon,wkt=wkt,facets_list=facets_list,url_concatop=url_concatop, nadgrid=nadgrid, detail=detail,export=export, error_code=error_code )  
+  return template('./templates/detail', more_gcrs_result=more_gcrs_result, deprecated_available=deprecated_available, url_kind=url_kind, type_epsg=type_epsg, name=name, projcrs_by_gcrs=projcrs_by_gcrs, kind=kind, alt_title=alt_title, area_item=area_item, code_short=code_short, item=item, trans=trans, default_trans=default_trans, num_results=num_results, url_method=url_method, title=title, url_format=url_format, export_html=export_html, url_area_trans=url_area_trans, url_area=url_area, center=center, g_coords=g_coords, trans_lat=trans_lat, trans_lon=trans_lon,wkt=wkt,facets_list=facets_list,url_concatop=url_concatop, nadgrid=nadgrid, detail=detail,export=export, error_code=error_code )  
 
 
 @route('/<id:re:[\d]+(-[\w]+)>')
@@ -853,11 +857,20 @@ def index(id):
         #   gcrs_query = parser.parse(code + " kind:PROJCRS" + " deprecated:0")          
         # else:
         gcrs_query = parser.parse(code + " kind:PROJCRS" + " deprecated:0")
-        gcrs_result = searcher.search(gcrs_query)
-        for gcrs_item in gcrs_result:        
+        gcrs_result = searcher.search(gcrs_query, limit=30)
+        num_gcrs_result = len(gcrs_result)
+        for gcrs_item in gcrs_result:
           projcrs_by_gcrs.append({'result': gcrs_item})
-          
-  return template('./templates/detail', deprecated_available=deprecated_available, url_kind=url_kind, type_epsg=type_epsg, name=name, projcrs_by_gcrs=projcrs_by_gcrs, alt_title=alt_title, kind=kind, code_short=code_short,item=item, detail=detail, facets_list=facets_list, nadgrid=nadgrid, trans_lat=trans_lat, trans_lon=trans_lon, trans=trans, url_format=url_format, default_trans=default_trans, center=center,g_coords=g_coords)  
+        
+        more_gcrs_result = []
+        if len(projcrs_by_gcrs) > 5:
+          more_gcrs_result = projcrs_by_gcrs[5:]
+          projcrs_by_gcrs = projcrs_by_gcrs[:5]
+        
+        
+
+
+  return template('./templates/detail', more_gcrs_result=more_gcrs_result, deprecated_available=deprecated_available, url_kind=url_kind, type_epsg=type_epsg, name=name, projcrs_by_gcrs=projcrs_by_gcrs, alt_title=alt_title, kind=kind, code_short=code_short,item=item, detail=detail, facets_list=facets_list, nadgrid=nadgrid, trans_lat=trans_lat, trans_lon=trans_lon, trans=trans, url_format=url_format, default_trans=default_trans, center=center,g_coords=g_coords)  
 
 
 @route('/<id:re:[\d]+(-[\d]+)?\S><format>')
@@ -949,8 +962,8 @@ def index(id, format):
       response.content_type = 'text/html; charset=UTF-8'
       #return template('./templates/export', export = export, code=rcode)
     elif format == 'xml':
-      export = '<?xml version="1.0" encoding="UTF-8"?>\n %s' % (ref.ExportToXML())
-      ct = "text/gml" 
+      export = '<?xml version="1.0" encoding="UTF-8"?>\n %s' % (ref.ExportToXML().replace(">",' xmlns:gml="http://www.opengis.net/gml/3.2">',1))
+      ct = "text/xml" 
     elif format == 'usgs':
       export = str(ref.ExportToUSGS())
     elif format == 'mapfile':
