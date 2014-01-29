@@ -58,19 +58,6 @@ epsg.io.detail_init = function() {
     }
   });
 
-  var td2 = goog.dom.getElement('more_crs_link');
-  goog.events.listen(td2, goog.events.EventType.CLICK, function(e) {
-    e.preventDefault();
-    var d = goog.dom.getElement('more_crs');
-    if (d.style.display == 'block') {
-      d.style.display = 'none';
-      td2.innerHTML = 'Show more';
-    } else {
-      d.style.display = 'block';
-      td2.innerHTML = 'Hide more';
-    }
-  });
-
   var switcherClicked = function(e) {
     e.preventDefault();
     var clicked = e.target;

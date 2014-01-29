@@ -269,17 +269,7 @@
             %end
         
             %if more_gcrs_result:
-              <a href="#" id="more_crs_link">Show more</a>
-              <div id="more_crs">
-                %for r in more_gcrs_result:
-                  <a href="/{{r['result']['code']}}">EPSG:{{r['result']['code']}} {{r['result']['name']}}</a>
-                  %if r['result']['code_trans']:
-                    <a href="{{r['result']['code']}}/map"> (map)</a> <br />
-                  %else:
-                    <br />
-                  %end
-                %end
-              </div>
+              <a href="{{more_gcrs_result}}">More</a>
             %end
           </div>
         </div>
