@@ -65,11 +65,12 @@
                       %end
                     %end
                     </a>
-                    
                     %if r['url_map'] != "":
-                      <a href="{{r['url_map']}}"> (coordinates on a map) </a>
+                      - <a href="{{r['url_map']}}">coordinates on a map</a></h2>
+                    %else:
+                      </h2>
                     %end
-                  </h2>
+                  
                   <p>
                     {{r['type_epsg']}}:{{r['short_code'][0]}}
                     %if r['r']['code_trans'] != 0 and r['r']['primary'] == 1:
