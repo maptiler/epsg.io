@@ -422,14 +422,14 @@
             <!-- <li><a class="switcher" id="s_prettywkt" href="{{url_format}}.prettywkt">PrettyWKT<i></i></a></li> -->
             <li><a class="switcher" id="s_esriwkt" href="{{url_format}}.esriwkt">ESRI WKT<i></i></a></li>
             <li><a class="switcher" id="s_proj4" href="{{url_format}}.proj4">PROJ.4<i></i></a></li>
-            <!-- <li><a class="switcher" id="s_proj4js" href="{{url_format}}.proj4js">PROJ.4 JavaScript<i></i></a></li> -->
+            <li><a class="switcher" id="s_proj4js" href="{{url_format}}.proj4js">JavaScript (PROJ.4)<i></i></a></li>
             <li><a class="switcher" id="s_xml" href="{{url_format}}.xml">XML<i></i></a></li>
             <li><a class="switcher" id="s_geoserver" href="{{url_format}}.geoserver">GeoServer<i></i></a></li>
             <li><a class="switcher" id="s_mapfile" href="{{url_format}}.mapfile">MapServer<i></i></a></li>
             <!-- <li><a class="switcher" id="s_mapserverpython" href="{{url_format}}.mapserverpython">MapSever - Python<i></i></a></li> -->
             <li><a class="switcher" id="s_mapnik" href="{{url_format}}.mapnik">Mapnik<i></i></a></li>
             <!-- <li><a class="switcher" id="s_mapnikpython" href="{{url_format}}.mapnikpython">Mapnik - Python<i></i></a></li> -->
-            <li><a class="switcher" id="s_postgis" href="{{url_format}}.sql">PostGIS (SQL)<i></i></a></li>
+            <li><a class="switcher" id="s_postgis" href="{{url_format}}.sql">SQL (PostGIS)<i></i></a></li>
             <!-- <li><a class="switcher" id="s_json" href="{{url_format}}.json">JSON<i></i></a></li> -->
             <li><a class="switcher" id="s_usgs" href="{{url_format}}.usgs">USGS<i></i></a></li>
           </ul>
@@ -479,8 +479,9 @@
           <div class="syntax">
             <pre>{{export['proj4']}}</pre>
           </div>
-    <!--</div>
-        <div class="code-definition-container" id="s_proj4js_code"> -->
+        </div>
+        
+        <div class="code-definition-container" id="s_proj4js_code">
           <p>Definition: JavaScript (PROJ.4) </p>
           <ul>
             <li><a href="{{url_format}}.js" title="">Open in new page</a></li>
@@ -491,6 +492,7 @@
             <pre>{{export['proj4js']}}</pre>
           </div>
         </div>
+        
         <div class="code-definition-container" id="s_xml_code">
           <p>Definition: XML</p>
           <ul>
@@ -502,6 +504,7 @@
             <pre>{{export['xml']}}</pre>
           </div>
         </div>
+        
         <div class="code-definition-container" id="s_geoserver_code">
           <p>Definition: GeoServer</p>
           <ul>
@@ -513,8 +516,9 @@
             <pre>{{export['geoserver']}}</pre>
           </div>
         </div>
+        
         <div class="code-definition-container" id="s_mapfile_code">
-          <p>Definition: MAPfile</p>
+          <p>Definition: MapServer - MAPfile</p>
           <ul>
             <li><a href="{{url_format}}.mapfile" title="">Open in new page</a></li>
             <li><a href="#" title="">Copy URL to clipboard</a></li>
@@ -523,7 +527,7 @@
           <div class="syntax">
             <pre>{{!export['mapfile']}}</pre>
           </div>
-     <!--   </div>
+     <!--</div>
         <div class="code-definition-container" id="s_mapserverpython_code"> -->
           <p>Definition: MapServer - Python</p>
           <ul>
@@ -535,8 +539,9 @@
             <pre>{{!export['mapserverpython']}}</pre>
           </div>
         </div>
+        
         <div class="code-definition-container" id="s_mapnik_code">
-          <p>Definition: mapnik</p>
+          <p>Definition: Mapnik</p>
           <ul>
             <li><a href="{{url_format}}.mapnik" title="">Open in new page</a></li>
             <li><a href="#" title="">Copy URL to clipboard</a></li>
@@ -545,9 +550,9 @@
           <div class="syntax">
             <pre>{{export['mapnik']}}</pre>
           </div>
-     <!--   </div>
+     <!--</div>
         <div class="code-definition-container" id="s_mapnikpython_code"> -->
-          <p>Definition: mapnik - Python</p>
+          <p>Definition: Mapnik - Python</p>
           <ul>
             <li><a href="{{url_format}}.mapnikpython" title="">Open in new page</a></li>
             <li><a href="#" title="">Copy URL to clipboard</a></li>
@@ -557,8 +562,9 @@
             <pre>{{!export['mapnikpython']}}</pre>
           </div>
         </div>
+        
         <div class="code-definition-container" id="s_postgis_code">
-          <p>Definition: PostGIS</p>
+          <p>Definition: SQL (PostGIS)</p>
           <ul>
             <li><a href="{{url_format}}.sql" title="">Open in new page</a></li>
             <li><a href="#" title="">Copy URL to clipboard</a></li>
@@ -568,7 +574,7 @@
             <pre>{{!export['postgis']}}</pre>
           </div>
         </div>
-  <!--      <div class="code-definition-container" id="s_json_code">
+  <!--  <div class="code-definition-container" id="s_json_code">
           <p>Definition: JSON</p>
           <ul>
             <li><a href="{{url_format}}.json" title="">Open in new page</a></li>
@@ -579,6 +585,7 @@
             
           </div>
         </div> -->
+        
         <div class="code-definition-container" id="s_wkt_code">
           <p>Definition: OGC WKT</p>
           <ul>
@@ -590,6 +597,7 @@
             <pre>{{!export['ogcwkt']}}</pre>
           </div>
         </div>
+        
         <div class="code-definition-container" id="s_usgs_code">
           <p>Definition: USGS</p>
           <ul>
