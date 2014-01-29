@@ -867,7 +867,6 @@ def index(id):
         # else:
         gcrs_query = parser.parse(code + " kind:PROJCRS" + " deprecated:0")
         gcrs_result = searcher.search(gcrs_query, limit=6)
-        print len(gcrs_result)
         if len(gcrs_result) >5:
           more_gcrs_result = "/?q=datum:"+code+" OR coord_sys:"+code+" OR prime_meridian:"+code+" OR ellipsoid:"+code+" OR method:"+code+" OR area_code:"+code+" kind:PROJCRS deprecated:0"
         for gcrs_item in gcrs_result[:5]:

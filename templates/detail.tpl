@@ -417,7 +417,9 @@
       </div>
       %if no_map and no_trans and no_default:
         %if 'alt_description' in item:
-          <div id="description-message">{{!item['alt_description']}} </div>
+          %if item['alt_description']:
+            <div id="description-message">{{!item['alt_description']}} </div>
+          %end
         %end
       %end
       
