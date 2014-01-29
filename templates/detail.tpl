@@ -241,7 +241,13 @@
           %if trans_lat and trans_lon:
             <p>
               Center coordinates<br />
-              <span>{{trans_lat}}</span>  <span>{{trans_lon}}</span>
+              IN {{item['code']}} <span>{{trans_lat}}</span>  <span>{{trans_lon}}</span> <br />
+              IN WGS84 <span>{{center[1]}}</span>  <span>{{center[0]}}</span> <br />
+              %if default_trans:
+                BBOX <span>{{default_trans['bbox'][1]}}</span>  <span>{{default_trans['bbox'][2]}}</span>, <span>{{default_trans['bbox'][3]}}</span>  <span>{{default_trans['bbox'][0]}}</span>
+              %else:
+                BBOX <span>{{item['bbox'][1]}}</span>  <span>{{item['bbox'][2]}}</span>, <span>{{item['bbox'][3]}}</span>  <span>{{item['bbox'][0]}}</span>
+              %end
             </p>
           %end
           <div id="projected-link">
