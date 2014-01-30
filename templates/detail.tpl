@@ -245,19 +245,23 @@
           %if trans_lat and trans_lon:
             <p>
               Center coordinates<br />
-              IN {{item['code']}} <span>{{trans_lat}}</span>  <span>{{trans_lon}}</span> <br />
-              IN WGS84 <span>{{center[1]}}</span>  <span>{{center[0]}}</span> <br />
-              %if default_trans:
-                BBOX <span>{{default_trans['bbox'][1]}}</span>  <span>{{default_trans['bbox'][2]}}</span>, <span>{{default_trans['bbox'][3]}}</span>  <span>{{default_trans['bbox'][0]}}</span>
-              %else:
-                BBOX <span>{{item['bbox'][1]}}</span>  <span>{{item['bbox'][2]}}</span>, <span>{{item['bbox'][3]}}</span>  <span>{{item['bbox'][0]}}</span>
-              %end
+              <span>{{trans_lat}}</span>  <span>{{trans_lon}}</span> <br />
+              <p>Projected Bounds: {{bbox_coords[3]}} {{bbox_coords[2]}}, {{bbox_coords[1]}} {{bbox_coords[0]}}<br />
+                %if default_trans:
+                  WGS84 Bounds: <span>{{default_trans['bbox'][1]}}</span>  <span>{{default_trans['bbox'][2]}}</span>, <span>{{default_trans['bbox'][3]}}</span>  <span>{{default_trans['bbox'][0]}}</span>
+                %else:
+                  WGS84 Bounds: <span>{{item['bbox'][1]}}</span>  <span>{{item['bbox'][2]}}</span>, <span>{{item['bbox'][3]}}</span>  <span>{{item['bbox'][0]}}</span>
+                %end
+              
+              </p> 
+              
+
             </p>
           %end
           <div id="projected-link">
             %if projcrs_by_gcrs:
               %if kind == "Projected coordinate system":
-                Projected CRS with the same GCS ({{item['source_geogcrs'][0]}}): <br />
+                Projected CRS with the same GCS (<a href="/{{item['source_geogcrs'][0]}}">{{item['source_geogcrs'][1]}}</a>): <br />
               %else:
                 Links to Projected CRS: <br />
               %end

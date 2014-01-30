@@ -481,6 +481,7 @@ def index(id):
     nadgrid = None
     gcrs_code = ""
     deprecated_available = 0
+    bbox_coords = ""
     
     for r in results:
       found = False
@@ -609,6 +610,7 @@ def index(id):
       g_coords = ""
       if default_trans['bbox']:
         n, w, s, e = default_trans['bbox']
+        
         #(51.05, 12.09, 47.74, 22.56)
         center = (n-s)/2.0 + s, (e-w)/2.0 + w
         if (e < w):
@@ -656,24 +658,47 @@ def index(id):
           ref.ImportFromWkt(wkt.encode('utf-8'))
           wgs = osr.SpatialReference()
           wgs.ImportFromEPSG(4326)
-      
           xform = osr.CoordinateTransformation(wgs,ref)
-        
+          
+          
           try:
-            trans_coords_orig = xform.TransformPoint(center[1],center[0])
+            trans_coords_orig = xform.TransformPoint(center[1],center[0]) #5514 - 49.3949, 17.325
+            #transform the bouding box coords (if have default trans, this will be a default tran else from crs)
+            bbox_coords_orig1 = xform.TransformPoint(e,n)
+            bbox_coords_orig2 = xform.TransformPoint(w,s)
+            
             if type(trans_coords_orig[0]) != float:
               trans_lat = "%s" % trans_coords_orig[0]
               trans_lon = "%s" % trans_coords_orig[1]
+              bbox_lat1 = "%s" % bbox_coords_orig1[0]
+              bbox_lon1 = "%s" % bbox_coords_orig1[1]
+              bbox_lat2 = "%s" % bbox_coords_orig2[0]
+              bbox_lon2 = "%s" % bbox_coords_orig2[1]
             elif ref.GetAuthorityCode('UNIT') == str(9001):
               trans_lat = "%.2f" % trans_coords_orig[0]
               trans_lon = "%.2f" % trans_coords_orig[1]
+              bbox_lat1 = "%.2f" % bbox_coords_orig1[0]
+              bbox_lon1 = "%.2f" % bbox_coords_orig1[1]
+              bbox_lat2 = "%.2f" % bbox_coords_orig2[0]
+              bbox_lon2 = "%.2f" % bbox_coords_orig2[1]
             else:  
               trans_lat = "%.8f" % trans_coords_orig[0]
               trans_lon = "%.8f" % trans_coords_orig[1]
+              bbox_lat1 = "%.8f" % bbox_coords_orig1[0]
+              bbox_lon1 = "%.8f" % bbox_coords_orig1[1]
+              bbox_lat2 = "%.8f" % bbox_coords_orig2[0]
+              bbox_lon2 = "%.8f" % bbox_coords_orig2[1]
 
           except:
             trans_lat = ""
             trans_lon = ""
+            bbox_lan1 = ""
+            bbox_lon1 = ""
+            bbox_lan2 = ""
+            bbox_lon2 = ""
+          
+          bbox_coords = (bbox_lon1, bbox_lat1, bbox_lon2, bbox_lat2) #n,e,s,w
+          
         # color html of pretty wkt
         ref.ImportFromWkt(wkt)  
         export_html = highlight(ref.ExportToPrettyWkt(), WKTLexer(), HtmlFormatter(cssclass='syntax',nobackground=True)) 
@@ -705,7 +730,7 @@ def index(id):
         gcrs_query = parser.parse(gcrs_code + " kind:PROJCRS" + " deprecated:0")
         gcrs_result = searcher.search(gcrs_query, limit=5)
         if len(gcrs_result) >5:
-          more_gcrs_result = "/?q=source_geogcrs:"+gcrs_code+" kind:PROJCRS deprecated:0"
+          more_gcrs_result = urllib2.quote("/?q=source_geogcrs:"+gcrs_code+" kind:PROJCRS deprecated:0")
         for gcrs_item in gcrs_result:
           # do not append if find yourself
           if gcrs_item['code'] != item['code']:    
@@ -717,7 +742,7 @@ def index(id):
         gcrs_query = parser.parse(code + " kind:PROJCRS" + " deprecated:0")
         gcrs_result = searcher.search(gcrs_query, limit=5)
         if len(gcrs_result) >5:
-          more_gcrs_result = "/?q=trans:"+code+" kind:PROJCRS deprecated:0"
+          more_gcrs_result = urllib2.quote("/?q=trans:"+code+" kind:PROJCRS deprecated:0")
         if gcrs_result:
           for gcrs_item in gcrs_result:        
             projcrs_by_gcrs.append({'result': gcrs_item})
@@ -726,7 +751,7 @@ def index(id):
           gcrs_query = parser.parse(gcrs_code + " kind:PROJCRS" + " deprecated:0")
           gcrs_result = searcher.search(gcrs_query, limit=5)
           if len(gcrs_result) >5:
-            more_gcrs_result = "/?q=source_geogcrs:"+gcrs_code+" kind:PROJCRS deprecated:0"
+            more_gcrs_result = urllib2.quote("/?q=source_geogcrs:"+gcrs_code+" kind:PROJCRS deprecated:0")
           for gcrs_item in gcrs_result:        
             projcrs_by_gcrs.append({'result': gcrs_item})
     
@@ -735,7 +760,7 @@ def index(id):
     #   projcrs_by_gcrs = projcrs_by_gcrs[:5]
 
           
-  return template('./templates/detail', more_gcrs_result=more_gcrs_result, deprecated_available=deprecated_available, url_kind=url_kind, type_epsg=type_epsg, name=name, projcrs_by_gcrs=projcrs_by_gcrs, kind=kind, alt_title=alt_title, area_item=area_item, code_short=code_short, item=item, trans=trans, default_trans=default_trans, num_results=num_results, url_method=url_method, title=title, url_format=url_format, export_html=export_html, url_area_trans=url_area_trans, url_area=url_area, center=center, g_coords=g_coords, trans_lat=trans_lat, trans_lon=trans_lon,wkt=wkt,facets_list=facets_list,url_concatop=url_concatop, nadgrid=nadgrid, detail=detail,export=export, error_code=error_code )  
+  return template('./templates/detail',bbox_coords=bbox_coords, more_gcrs_result=more_gcrs_result, deprecated_available=deprecated_available, url_kind=url_kind, type_epsg=type_epsg, name=name, projcrs_by_gcrs=projcrs_by_gcrs, kind=kind, alt_title=alt_title, area_item=area_item, code_short=code_short, item=item, trans=trans, default_trans=default_trans, num_results=num_results, url_method=url_method, title=title, url_format=url_format, export_html=export_html, url_area_trans=url_area_trans, url_area=url_area, center=center, g_coords=g_coords, trans_lat=trans_lat, trans_lon=trans_lon,wkt=wkt,facets_list=facets_list,url_concatop=url_concatop, nadgrid=nadgrid, detail=detail,export=export, error_code=error_code )  
 
 
 @route('/<id:re:[\d]+(-[\w]+)>')
@@ -791,6 +816,8 @@ def index(id):
     # item = ""
     # url_area = ""
     alt_title = ""
+    bbox_coords = ""
+    
         
     deprecated_available = 0
     for r in results:
@@ -812,10 +839,14 @@ def index(id):
           url_kind = "/?q=kind:" + facets_list[i][1]
       
       if item['bbox']:
+        n, w, s, e = item['bbox']
+        center = (n-s)/2.0 + s, (e-w)/2.0 + w
+        if (e < w):
+          center = (n-s)/2.0+s, (w+180 + (360-(w+180)+e+180) / 2.0 ) % 360-180
+        
         #(51.05, 12.09, 47.74, 22.56)
-        center = ((item['bbox'][0] - item['bbox'][2])/2.0)+item['bbox'][2],((item['bbox'][3] - item['bbox'][1])/2.0)+item['bbox'][1]
         g_coords = str(item['bbox'][2]) + "," + str(item['bbox'][1]) + "|" + str(item['bbox'][0]) + "," + str(item['bbox'][1]) + "|" + str(item['bbox'][0]) + "," + str(item['bbox'][3]) + "|" + str(item['bbox'][2]) + "," + str(item['bbox'][3]) + "|" + str(item['bbox'][2]) + "," + str(item['bbox'][1])
-      
+        bbox_coords = (n,e,s,w)
       # if 'target_uom' in r:
       #   if r['target_uom'] != 0:
       #     if r['target_uom'] == 9102:
@@ -868,7 +899,7 @@ def index(id):
         gcrs_query = parser.parse(code + " kind:PROJCRS" + " deprecated:0")
         gcrs_result = searcher.search(gcrs_query, limit=6)
         if len(gcrs_result) >5:
-          more_gcrs_result = "/?q=datum:"+code+" OR coord_sys:"+code+" OR prime_meridian:"+code+" OR ellipsoid:"+code+" OR method:"+code+" OR area_code:"+code+" kind:PROJCRS deprecated:0"
+          more_gcrs_result = urllib2.quote("/?q=datum:"+code+" OR coord_sys:"+code+" OR prime_meridian:"+code+" OR ellipsoid:"+code+" OR method:"+code+" OR area_code:"+code+" kind:PROJCRS deprecated:0")
         for gcrs_item in gcrs_result[:5]:
           projcrs_by_gcrs.append({'result': gcrs_item})
         
