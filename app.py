@@ -735,7 +735,7 @@ def index(id):
         gcrs_query = parser.parse(gcrs_code + " kind:PROJCRS" + " deprecated:0")
         gcrs_result = searcher.search(gcrs_query, limit=5)
         if len(gcrs_result) >5:
-          more_gcrs_result = urllib2.quote("/?q=source_geogcrs:"+gcrs_code+" kind:PROJCRS deprecated:0")
+          more_gcrs_result = "/?q=source_geogcrs:"+gcrs_code+" kind:PROJCRS deprecated:0"
         for gcrs_item in gcrs_result:
           # do not append if find yourself
           if gcrs_item['code'] != item['code']:    
@@ -747,7 +747,7 @@ def index(id):
         gcrs_query = parser.parse(code + " kind:PROJCRS" + " deprecated:0")
         gcrs_result = searcher.search(gcrs_query, limit=5)
         if len(gcrs_result) >5:
-          more_gcrs_result = urllib2.quote("/?q=trans:"+code+" kind:PROJCRS deprecated:0")
+          more_gcrs_result = "/?q=trans:"+code+" kind:PROJCRS deprecated:0"
         if gcrs_result:
           for gcrs_item in gcrs_result:        
             projcrs_by_gcrs.append({'result': gcrs_item})
@@ -756,7 +756,7 @@ def index(id):
           gcrs_query = parser.parse(gcrs_code + " kind:PROJCRS" + " deprecated:0")
           gcrs_result = searcher.search(gcrs_query, limit=5)
           if len(gcrs_result) >5:
-            more_gcrs_result = urllib2.quote("/?q=source_geogcrs:"+gcrs_code+" kind:PROJCRS deprecated:0")
+            more_gcrs_result = "/?q=source_geogcrs:"+gcrs_code+" kind:PROJCRS deprecated:0"
           for gcrs_item in gcrs_result:        
             projcrs_by_gcrs.append({'result': gcrs_item})
     
@@ -904,7 +904,7 @@ def index(id):
         gcrs_query = parser.parse(code + " kind:PROJCRS" + " deprecated:0")
         gcrs_result = searcher.search(gcrs_query, limit=6)
         if len(gcrs_result) >5:
-          more_gcrs_result = urllib2.quote("/?q=datum:"+code+" OR coord_sys:"+code+" OR prime_meridian:"+code+" OR ellipsoid:"+code+" OR method:"+code+" OR area_code:"+code+" kind:PROJCRS deprecated:0")
+          more_gcrs_result = "/?q=datum:"+code+" OR coord_sys:"+code+" OR prime_meridian:"+code+" OR ellipsoid:"+code+" OR method:"+code+" OR area_code:"+code+" kind:PROJCRS deprecated:0"
         for gcrs_item in gcrs_result[:5]:
           projcrs_by_gcrs.append({'result': gcrs_item})
         
