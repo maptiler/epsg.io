@@ -246,18 +246,21 @@
             <p>
               Center coordinates<br />
               <span>{{trans_lat}}</span>  <span>{{trans_lon}}</span> <br />
-              <p>Projected Bounds: {{bbox_coords[3]}} {{bbox_coords[2]}}, {{bbox_coords[1]}} {{bbox_coords[0]}}<br />
+              <p>Projected bounds: {{bbox_coords[3]}} {{bbox_coords[2]}}, {{bbox_coords[1]}} {{bbox_coords[0]}}<br />
                 %if default_trans:
-                  WGS84 Bounds: <span>{{default_trans['bbox'][1]}}</span>  <span>{{default_trans['bbox'][2]}}</span>, <span>{{default_trans['bbox'][3]}}</span>  <span>{{default_trans['bbox'][0]}}</span>
+                  WGS84 bounds: <span>{{default_trans['bbox'][1]}}</span>  <span>{{default_trans['bbox'][2]}}</span>, <span>{{default_trans['bbox'][3]}}</span>  <span>{{default_trans['bbox'][0]}}</span>
                 %else:
-                  WGS84 Bounds: <span>{{item['bbox'][1]}}</span>  <span>{{item['bbox'][2]}}</span>, <span>{{item['bbox'][3]}}</span>  <span>{{item['bbox'][0]}}</span>
+                  WGS84 bounds: <span>{{item['bbox'][1]}}</span>  <span>{{item['bbox'][2]}}</span>, <span>{{item['bbox'][3]}}</span>  <span>{{item['bbox'][0]}}</span>
                 %end
-              
+            
               </p> 
-              
-
             </p>
           %end
+          
+          %if bbox_coords and not (trans_lat or trans_lon):
+            <p>WGS84 bounds: {{bbox_coords[3]}} {{bbox_coords[2]}}, {{bbox_coords[1]}} {{bbox_coords[0]}}</p>
+          %end
+            
           <div id="projected-link">
             %if projcrs_by_gcrs:
               %if kind == "Projected coordinate system":

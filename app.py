@@ -459,6 +459,11 @@ def index(id):
     myquery = parser.parse(query)
     results = searcher.search(myquery, limit=None) #default limit is 10 , reverse = True
     
+    
+    # TODO: if it any results, then redirect to ...
+    #if len(results) == 0:
+      
+    
     detail = []
     trans = []
     url_trans = []
@@ -910,7 +915,7 @@ def index(id):
         
 
 
-  return template('./templates/detail', more_gcrs_result=more_gcrs_result, deprecated_available=deprecated_available, url_kind=url_kind, type_epsg=type_epsg, name=name, projcrs_by_gcrs=projcrs_by_gcrs, alt_title=alt_title, kind=kind, code_short=code_short,item=item, detail=detail, facets_list=facets_list, nadgrid=nadgrid, trans_lat=trans_lat, trans_lon=trans_lon, trans=trans, url_format=url_format, default_trans=default_trans, center=center,g_coords=g_coords)  
+  return template('./templates/detail', bbox_coords=bbox_coords,more_gcrs_result=more_gcrs_result, deprecated_available=deprecated_available, url_kind=url_kind, type_epsg=type_epsg, name=name, projcrs_by_gcrs=projcrs_by_gcrs, alt_title=alt_title, kind=kind, code_short=code_short,item=item, detail=detail, facets_list=facets_list, nadgrid=nadgrid, trans_lat=trans_lat, trans_lon=trans_lon, trans=trans, url_format=url_format, default_trans=default_trans, center=center,g_coords=g_coords)  
 
 
 @route('/<id:re:[\d]+(-[\d]+)?\S><format>')
