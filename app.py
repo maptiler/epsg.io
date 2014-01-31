@@ -637,7 +637,7 @@ def index(id):
         export['ogcwkt'] = ref.ExportToWkt()
         export['proj4'] = ref.ExportToProj4()
         export['html'] = highlight(ref.ExportToPrettyWkt(), WKTLexer(), HtmlFormatter(cssclass='syntax',nobackground=True))
-        export['xml'] = '<?xml version="1.0" encoding="UTF-8"?>\n %s' % (ref.ExportToXML())
+        export['xml'] = '<?xml version="1.0" encoding="UTF-8"?>\n %s' % (ref.ExportToXML().replace(">",' xmlns:gml="http://www.opengis.net/gml/3.2">',1))
         export['mapfile'] = 'PROJECTION\n\t'+'\n\t'.join(['"'+l.lstrip('+')+'"' for l in ref.ExportToProj4().split()])+'\nEND' ### CSS: white-space: pre-wrap
         proj4 = ref.ExportToProj4().strip()
         export['proj4js'] = '%s["%s:%s"] = "%s";' % ("Proj4js.defs", type_epsg, code, proj4)
@@ -662,6 +662,7 @@ def index(id):
           ref.SetFromUserInput(wkt_3857)
         ref.MorphToESRI()
         export['esriwkt'] = ref.ExportToWkt()
+        
         if item['bbox']:
           ref.ImportFromWkt(wkt.encode('utf-8'))
           wgs = osr.SpatialReference()
@@ -937,6 +938,7 @@ def index(id, format):
 
     code_trans = code_trans.replace("/","")
     code = code.replace(".","")
+    code_trans = code_trans.replace(".","")
     code_query = parser.parse(str(code) + " kind:CRS OR kind:COORDOP")
     code_result = searcher.search(code_query, sortedby=False,scored=False)
 
@@ -986,7 +988,10 @@ def index(id, format):
     
     ref.ImportFromWkt(wkt)
 
-    ct = "text/plain" 
+    ct = "text/plain"
+    if request.GET.get('download',1) == "":
+      response['Content-disposition'] = "attachment; filename=%s.prj" % rcode
+      
     if format == "esriwkt":
       if rcode == "3857":
         wkt_3857 = 'PROJCS["WGS_1984_Web_Mercator_Auxiliary_Sphere",GEOGCS["GCS_WGS_1984",DATUM["D_WGS_1984",SPHEROID["WGS_1984",6378137.0,298.257223563]],PRIMEM["Greenwich",0.0],UNIT["Degree",0.0174532925199433]],PROJECTION["Mercator_Auxiliary_Sphere"],PARAMETER["False_Easting",0.0],PARAMETER["False_Northing",0.0],PARAMETER["Central_Meridian",0.0],PARAMETER["Standard_Parallel_1",0.0],PARAMETER["Auxiliary_Sphere_Type",0.0],UNIT["Meter",1.0],AUTHORITY["EPSG",3857]]'
@@ -1044,10 +1049,10 @@ def index(id, format):
     #     export['type'] = 'EPSG'
     #   export['properties'] = {'code':code}
     #   ct = "application/json" 
-    elif format == 'prj':
-      ref.MorphToESRI()
-      export = ref.ExportToWkt()
-      response['Content-disposition'] = "attachment; filename=%s.prj" % rcode 
+    # elif format == 'prj':
+    #   ref.MorphToESRI()
+    #   export = ref.ExportToWkt()
+    #   response['Content-disposition'] = "attachment; filename=%s.prj" % rcode 
     elif format == 'ogcwkt':
       export = ref.ExportToWkt()
   

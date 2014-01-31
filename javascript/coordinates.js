@@ -53,6 +53,7 @@ epsg.io.Coordinates = function(srs, opt_lon, opt_lat) {
   this.eastingElement = goog.dom.getElement('easting');
   this.northingElement = goog.dom.getElement('northing');
   this.eastNorthFormElement = goog.dom.getElement('eastnorth_form');
+  this.eastNorthCopyElement = goog.dom.getElement('eastnorth_copy');
 
   // Force preservation of user typed values on recalculation
   this.forceLonLat = false;
@@ -181,6 +182,18 @@ epsg.io.Coordinates = function(srs, opt_lon, opt_lat) {
       goog.bind(function() {
         var bounds = this.map.getBounds();
         searchbox.setBounds(bounds);
+      }, this));
+
+  // ZeroClipboard initialization
+  var ZeroClipboard = window['ZeroClipboard'];
+  ZeroClipboard['config']({ 'moviePath': '/js/ZeroClipboard.swf' });
+  this.eastNorthZeroClipboard = new ZeroClipboard(this.eastNorthCopyElement);
+
+  this.eastNorthZeroClipboard['on']('dataRequested',
+      goog.bind(function(client, args) {
+        var eastNorthText = this.eastingElement.value + '\t' +
+            this.northingElement.value;
+        client['setText'](eastNorthText);
       }, this));
 
 };

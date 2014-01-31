@@ -198,6 +198,7 @@ h4, .h4 { margin: 20px 0 13px 0; padding: 0; font-size: 16px; color: #000; }
               .code-definition-container ul { margin: 0; padding: 0; float: right; list-style-type: none; }
               .code-definition-container li { margin: 0 0 0 30px; padding: 0; display: inline; }
 
+        #s_html_text { display:none; }
         #s_prettywkt_code { display:none;}
         #s_esriwkt_code { display:none;}
         #s_proj4_code { display:none;}

@@ -1,8 +1,15 @@
+<!--
+1. Start plovr in one window (cd javascript; make)
+2. Run local web server in the project root directory in second window (python -m SimpleHTTPServer)
+3. Open web this file in web browser (http://localhost:8000/javascript/main.html)
+-->
 <html>
   <head>
     <title>JavaScript Test</title>
     <link rel="stylesheet" href="../css/main.css" type="text/css" />
+    <script src="../js/ZeroClipboard.min.js"></script>
     <script src="http://localhost:9810/compile?id=main"></script>
+    
   </head>
   <body>
     <h1>Home page</h1>
@@ -47,16 +54,25 @@
        <li><a class="switcher" id="s_proj4" href="/5514.proj4" title="">PROJ.4 <i></i></a></li>
        <li><a class="switcher" id="s_gml" href="/5514.gml" title="">OGC GML <i></i></a></li>
     </ul>
+    
     <div class="code-definition-container" id="s_html_code">
       <p>Definition: Well Known Text as HTML</p>
-
-      <div class="syntax">
+      <ul>
+        <li><a href="{{url_format}}.prettywkt" title="">Open in new page</a></li>
+        <li><a id="s_html_urlclip" class="zeroclipboard" data-clipboard-text="http://epsg.io/asasdfasdf" href="#" title="">Copy URL to clipboard</a></li>
+        <li><a id="s_html_textclip" class="zeroclipboard" data-clipboard-target="s_html_text" href="#" title="">Copy TEXT to clipboard</a></li>
+      </ul>
+      <div id="s_html_text" class="syntax">
         {{!export_html}}
       </div>
     </div>
     
+    <a id="test-another-url" class="zeroclipboard" data-clipboard-text="http://epsg.io/another" href="#" title="">Copy another URL to clipboard</a></li>
+    
+    
     <div class="code-definition-container" id="s_prettywkt_code">
       <p>Definition: PrettyWKT</p>
+
 
       <div class="syntax">
         {{!export['prettywkt']}}

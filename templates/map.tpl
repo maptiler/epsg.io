@@ -12,6 +12,7 @@
         <link rel="shortcut icon" href="http://epsg.io/favicon.ico" />
         <link rel="search" href="/opensearch.xml" title="EPSG.io" type="application/opensearchdescription+xml"/>
         <script src="http://maps.googleapis.com/maps/api/js?sensor=false&amp;libraries=places"></script>
+        <script src="/js/ZeroClipboard.min.js"></script>
         <script src="/js/index.js"></script>
     </head>
     <body id="mappage" data-role="page">
@@ -52,7 +53,7 @@
                         <form id="eastnorth_form" method="post" action="#">
                         <input id="easting" type="text" name="easting" value="" />
                         <input id="northing" type="text" name="northing" value="" />
-                        <a href="" title="">Copy to clipboard</a>
+                        <a id="eastnorth_copy" href="#" title="">Copy to clipboard</a>
                         <input type="submit" id="lonlat_submit" value="">
                         </form>
                     </p>

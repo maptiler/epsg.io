@@ -73,6 +73,13 @@ epsg.io.detail_init = function() {
     goog.events.listen(e, goog.events.EventType.CLICK, switcherClicked);
   });
 
+  var ZeroClipboard = window['ZeroClipboard'];
+  ZeroClipboard['config']({ 'moviePath': '/js/ZeroClipboard.swf' });
+
+  // Put zeroclipboard on all elements with "zeroclipboard" class
+  goog.array.forEach(goog.dom.getElementsByClass('zeroclipboard'),
+      function(element) { new ZeroClipboard(element); });
+
 };
 
 

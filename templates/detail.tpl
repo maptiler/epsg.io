@@ -16,6 +16,7 @@
     <meta name="robots" content="ALL,FOLLOW" />
     <link rel="stylesheet" href="/css/main.css" type="text/css" />
     <link rel="shortcut icon" href="http://epsg.io/favicon.ico" />
+    <script src="/js/ZeroClipboard.min.js"></script>
     <script src="/js/index.js"></script>
     
   </head>
@@ -458,45 +459,45 @@
         <div class="code-definition-container" id="s_html_code">
           <p>Definition: Well Known Text (WKT)</p>
           <ul>
-            <li><a href="{{url_format}}.prettywkt" title="">Open in new page</a></li>
-            <li><a href="#" title="">Copy URL to clipboard</a></li>
-            <li><a href="#" title="">Copy TEXT to clipboard</a></li>
+            <li><a href="{{url_format}}.prettywkt">Open in new page</a></li>
+            <li><a id="s_html_copyUrl" class="zeroclipboard" data-clipboard-text="http://epsg.io{{url_format}}.prettywkt" href="#">Copy URL to clipboard</a></li>
+            <li><a id="s_html_copyText" class="zeroclipboard" data-clipboard-target="s_html_text" href="#">Copy TEXT to clipboard</a></li>
+            <li><a href="{{url_format}}.prettywkt?download">Download ({{item['code']}}.prj)</a></li>
+            
           </ul>
           <div class="syntax">
             {{!export_html}}
           </div>
         </div>
-  <!--  <div class="code-definition-container" id="s_prettywkt_code">
-          <p>Definition: PrettyWKT</p>
-          <ul>
-            <li><a href="{{url_format}}.prettywkt" title="">Open in new page</a></li>
-            <li><a href="#" title="">Copy URL to clipboard</a></li>
-            <li><a href="#" title="">Copy TEXT to clipboard</a></li>
-          </ul>
-          <div class="syntax">
-            <pre>{{!export['prettywkt']}}</pre>
-          </div>
-        </div> -->
+        <div class="code-definition-container" id="s_html_text">
+          <pre>{{export['prettywkt']}}</pre>
+        </div>
+
         <div class="code-definition-container" id="s_esriwkt_code">
           <p>Definition: ESRI WKT</p>
           <ul>
-            <li><a href="{{url_format}}.esriwkt" title="">Open in new page</a></li>
-            <li><a href="#" title="">Copy URL to clipboard</a></li>
-            <li><a href="#" title="">Copy TEXT to clipboard</a></li>
+            <li><a href="{{url_format}}.esriwkt">Open in new page</a></li>
+            <li><a id="s_esriwkt_copyUrl" class="zeroclipboard" data-clipboard-text="http://epsg.io{{url_format}}.esriwkt" href="#">Copy URL to clipboard</a></li>
+            <li><a id="s_esriwkt_copyText" class="zeroclipboard" data-clipboard-target="s_esriwkt_text" href="#">Copy TEXT to clipboard</a></li>
+            <li><a href="{{url_format}}.esriwkt?download">Download ({{item['code']}}.prj)</a></li>
+          
           </ul>
-          <div class="syntax">
+          <div id="s_esriwkt_text" class="syntax">
             <pre>{{export['esriwkt']}}</pre>
             
           </div>
         </div>
+        
         <div class="code-definition-container" id="s_proj4_code">
           <p>Definition: PROJ.4</p>
           <ul>
-            <li><a href="{{url_format}}.proj4" title="">Open in new page</a></li>
-            <li><a href="#" title="">Copy URL to clipboard</a></li>
-            <li><a href="#" title="">Copy TEXT to clipboard</a></li>
+            <li><a href="{{url_format}}.proj4">Open in new page</a></li>
+            <li><a id="s_proj4_copyUrl" class="zeroclipboard" data-clipboard-text="http://epsg.io{{url_format}}.proj4" href="#">Copy URL to clipboard</a></li>
+            <li><a id="s_proj4_copyText" class="zeroclipboard" data-clipboard-target="s_proj4_text" href="#">Copy TEXT to clipboard</a></li>
+            <li><a href="{{url_format}}.proj4?download">Download ({{item['code']}}.prj)</a></li>
+            
           </ul>
-          <div class="syntax">
+          <div id="s_proj4_text" class="syntax">
             <pre>{{export['proj4']}}</pre>
           </div>
         </div>
@@ -504,11 +505,13 @@
         <div class="code-definition-container" id="s_proj4js_code">
           <p>Definition: JavaScript (PROJ.4) </p>
           <ul>
-            <li><a href="{{url_format}}.js" title="">Open in new page</a></li>
-            <li><a href="#" title="">Copy URL to clipboard</a></li>
-            <li><a href="#" title="">Copy TEXT to clipboard</a></li>
+            <li><a href="{{url_format}}.js">Open in new page</a></li>
+            <li><a id="s_proj4js_copyUrl" class="zeroclipboard" data-clipboard-text="http://epsg.io{{url_format}}.js" href="#">Copy URL to clipboard</a></li>
+            <li><a id="s_proj4js_copyText" class="zeroclipboard" data-clipboard-target="s_proj4js_text" href="#">Copy TEXT to clipboard</a></li>
+            <li><a href="{{url_format}}.js?download">Download ({{item['code']}}.prj)</a></li>
+            
           </ul>
-          <div class="syntax">
+          <div id="s_proj4js_text" class="syntax">
             <pre>{{export['proj4js']}}</pre>
           </div>
         </div>
@@ -516,11 +519,13 @@
         <div class="code-definition-container" id="s_xml_code">
           <p>Definition: XML</p>
           <ul>
-            <li><a href="{{url_format}}.xml" title="">Open in new page</a></li>
-            <li><a href="#" title="">Copy URL to clipboard</a></li>
-            <li><a href="#" title="">Copy TEXT to clipboard</a></li>
+            <li><a href="{{url_format}}.xml">Open in new page</a></li>
+            <li><a id="s_xml_copyUrl" class="zeroclipboard" data-clipboard-text="http://epsg.io{{url_format}}.xml"href="#">Copy URL to clipboard</a></li>
+            <li><a id="s_xml_copyText" class="zeroclipboard" data-clipboard-target="s_xml_text" href="#">Copy TEXT to clipboard</a></li>
+            <li><a href="{{url_format}}.xml?download">Download ({{item['code']}}.prj)</a></li>
+            
           </ul>
-          <div class="syntax">
+          <div id="s_xml_text" class="syntax">
             <pre>{{export['xml']}}</pre>
           </div>
         </div>
@@ -528,11 +533,13 @@
         <div class="code-definition-container" id="s_geoserver_code">
           <p>Definition: GeoServer</p>
           <ul>
-            <li><a href="{{url_format}}.geoserver" title="">Open in new page</a></li>
-            <li><a href="#" title="">Copy URL to clipboard</a></li>
-            <li><a href="#" title="">Copy TEXT to clipboard</a></li>
+            <li><a href="{{url_format}}.geoserver">Open in new page</a></li>
+            <li><a id="s_geoserver_copyUrl" class="zeroclipboard" data-clipboard-text="http://epsg.io{{url_format}}.geoserver"href="#">Copy URL to clipboard</a></li>
+            <li><a id="s_geoserver_copyText" class="zeroclipboard" data-clipboard-target="s_geoserver_text" href="#">Copy TEXT to clipboard</a></li>
+            <li><a href="{{url_format}}.geoserver?download">Download ({{item['code']}}.prj)</a></li>
+            
           </ul>
-          <div class="syntax">
+          <div id="s_geoserver_text" class="syntax">
             <pre>{{export['geoserver']}}</pre>
           </div>
         </div>
@@ -540,22 +547,26 @@
         <div class="code-definition-container" id="s_mapfile_code">
           <p>Definition: MapServer - MAPfile</p>
           <ul>
-            <li><a href="{{url_format}}.mapfile" title="">Open in new page</a></li>
-            <li><a href="#" title="">Copy URL to clipboard</a></li>
-            <li><a href="#" title="">Copy TEXT to clipboard</a></li>
+            <li><a href="{{url_format}}.mapfile">Open in new page</a></li>
+            <li><a id="s_mapfile_copyUrl" class="zeroclipboard" data-clipboard-text="http://epsg.io{{url_format}}.mapfile" href="#">Copy URL to clipboard</a></li>
+            <li><a id="s_mapfile_copyText" class="zeroclipboard" data-clipboard-target="s_mapfile_text" href="#">Copy TEXT to clipboard</a></li>
+            <li><a href="{{url_format}}.mapfile?download">Download ({{item['code']}}.prj)</a></li>
+            
           </ul>
-          <div class="syntax">
+          <div id="s_mapfile_text" class="syntax">
             <pre>{{!export['mapfile']}}</pre>
           </div>
      <!--</div>
         <div class="code-definition-container" id="s_mapserverpython_code"> -->
           <p>Definition: MapServer - Python</p>
           <ul>
-            <li><a href="{{url_format}}.mapserverpython" title="">Open in new page</a></li>
-            <li><a href="#" title="">Copy URL to clipboard</a></li>
-            <li><a href="#" title="">Copy TEXT to clipboard</a></li>
+            <li><a href="{{url_format}}.mapserverpython">Open in new page</a></li>
+            <li><a id="s_mapserverpython_copyUrl" class="zeroclipboard" data-clipboard-text="http://epsg.io{{url_format}}.mapserverpython"href="#">Copy URL to clipboard</a></li>
+            <li><a id="s_mapserverpython_copyText" class="zeroclipboard" data-clipboard-target="s_mapserverpython_text" href="#">Copy TEXT to clipboard</a></li>
+            <li><a href="{{url_format}}.mapserverpython?download">Download ({{item['code']}}.prj)</a></li>
+            
           </ul>
-          <div class="syntax">
+          <div id="s_mapserverpython_text" class="syntax">
             <pre>{{!export['mapserverpython']}}</pre>
           </div>
         </div>
@@ -563,20 +574,24 @@
         <div class="code-definition-container" id="s_mapnik_code">
           <p>Definition: Mapnik</p>
           <ul>
-            <li><a href="{{url_format}}.mapnik" title="">Open in new page</a></li>
-            <li><a href="#" title="">Copy URL to clipboard</a></li>
-            <li><a href="#" title="">Copy TEXT to clipboard</a></li>
+            <li><a href="{{url_format}}.mapnik">Open in new page</a></li>
+            <li><a id="s_mapnik_copyUrl" class="zeroclipboard" data-clipboard-text="http://epsg.io{{url_format}}.mapnik"href="#">Copy URL to clipboard</a></li>
+            <li><a id="s_mapnik_copyText" class="zeroclipboard" data-clipboard-target="s_mapnik_text" href="#">Copy TEXT to clipboard</a></li>
+            <li><a href="{{url_format}}.mapnik?download">Download ({{item['code']}}.prj)</a></li>
+            
           </ul>
-          <div class="syntax">
+          <div id="s_mapnik_text" class="syntax">
             <pre>{{export['mapnik']}}</pre>
           </div>
      <!--</div>
         <div class="code-definition-container" id="s_mapnikpython_code"> -->
           <p>Definition: Mapnik - Python</p>
           <ul>
-            <li><a href="{{url_format}}.mapnikpython" title="">Open in new page</a></li>
-            <li><a href="#" title="">Copy URL to clipboard</a></li>
-            <li><a href="#" title="">Copy TEXT to clipboard</a></li>
+            <li><a href="{{url_format}}.mapnikpython">Open in new page</a></li>
+            <li><a id="s_mapnikpython_copyUrl" class="zeroclipboard" data-clipboard-text="http://epsg.io{{url_format}}.mapnikpython"href="#">Copy URL to clipboard</a></li>
+            <li><a id="s_mapnikpython_copyText" class="zeroclipboard" data-clipboard-target="s_mapnikpython_text" href="#">Copy TEXT to clipboard</a></li>
+            <li><a href="{{url_format}}.mapnikpython?download">Download ({{item['code']}}.prj)</a></li>
+            
           </ul>
           <div class="syntax">
             <pre>{{!export['mapnikpython']}}</pre>
@@ -586,34 +601,27 @@
         <div class="code-definition-container" id="s_postgis_code">
           <p>Definition: SQL (PostGIS)</p>
           <ul>
-            <li><a href="{{url_format}}.sql" title="">Open in new page</a></li>
-            <li><a href="#" title="">Copy URL to clipboard</a></li>
-            <li><a href="#" title="">Copy TEXT to clipboard</a></li>
+            <li><a href="{{url_format}}.sql">Open in new page</a></li>
+            <li><a id="s_postgis_copyUrl" class="zeroclipboard" data-clipboard-text="http://epsg.io{{url_format}}.sql"href="#">Copy URL to clipboard</a></li>
+            <li><a id="s_postgis_copyText" class="zeroclipboard" data-clipboard-target="s_postgis_text" href="#">Copy TEXT to clipboard</a></li>
+            <li><a href="{{url_format}}.sql?download">Download ({{item['code']}}.prj)</a></li>
+            
           </ul>
-          <div class="syntax">
+          <div id="s_postgis_text" class="syntax">
             <pre>{{!export['postgis']}}</pre>
           </div>
         </div>
-  <!--  <div class="code-definition-container" id="s_json_code">
-          <p>Definition: JSON</p>
-          <ul>
-            <li><a href="{{url_format}}.json" title="">Open in new page</a></li>
-            <li><a href="#" title="">Copy URL to clipboard</a></li>
-            <li><a href="#" title="">Copy TEXT to clipboard</a></li>
-          </ul>
-          <div class="syntax">
-            
-          </div>
-        </div> -->
-        
+
         <div class="code-definition-container" id="s_wkt_code">
           <p>Definition: OGC WKT</p>
           <ul>
-            <li><a href="{{url_format}}.wkt" title="">Open in new page</a></li>
-            <li><a href="#" title="">Copy URL to clipboard</a></li>
-            <li><a href="#" title="">Copy TEXT to clipboard</a></li>
+            <li><a href="{{url_format}}.wkt">Open in new page</a></li>
+            <li><a id="s_wkt_copyUrl" class="zeroclipboard" data-clipboard-text="http://epsg.io{{url_format}}.wkt" href="#">Copy URL to clipboard</a></li>
+            <li><a id="s_wkt_copyText" class="zeroclipboard" data-clipboard-target="s_wkt_text" href="#">Copy TEXT to clipboard</a></li>
+            <li><a href="{{url_format}}.wkt?download">Download ({{item['code']}}.prj)</a></li>
+            
           </ul>
-          <div class="syntax">
+          <div id="s_wkt_text" class="syntax">
             <pre>{{!export['ogcwkt']}}</pre>
           </div>
         </div>
@@ -621,11 +629,13 @@
         <div class="code-definition-container" id="s_usgs_code">
           <p>Definition: USGS</p>
           <ul>
-            <li><a href="{{url_format}}.usgs" title="">Open in new page</a></li>
-            <li><a href="#" title="">Copy URL to clipboard</a></li>
-            <li><a href="#" title="">Copy TEXT to clipboard</a></li>
+            <li><a href="{{url_format}}.usgs">Open in new page</a></li>
+            <li><a id="s_usgs_copyUrl" class="zeroclipboard" data-clipboard-text="http://epsg.io{{url_format}}.usgs" href="#">Copy URL to clipboard</a></li>
+            <li><a id="s_usgs_copyText" class="zeroclipboard" data-clipboard-target="s_usgs_text" href="#">Copy TEXT to clipboard</a></li>
+            <li><a href="{{url_format}}.usgs?download">Download ({{item['code']}}.prj)</a></li>
+            
           </ul>
-          <div class="syntax">
+          <div id="s_usgs_text" class="syntax">
             <pre>{{!export['usgs']}}</pre>
           </div>
         </div>
