@@ -1192,9 +1192,9 @@ def static(filename):
 def static(filename):
     return static_file(filename, root='./img/')
 
-@route('/js/index.js')
-def static():
-    return static_file('index.js', root='./js/')
+@route('/js/<filename>')
+def static(filename):
+    return static_file(filename, root='./js/')
 
 @route('/favicon.ico')
 def static():
