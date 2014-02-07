@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gml:Dictionary xmlns:epsg="urn:x-ogp:spec:schema-xsd:EPSG:1.0:dataset" xmlns:gml="http://www.opengis.net/gml/3.2" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:rim="urn:oasis:names:tc:ebxml-regrep:xsd:rim:3.0" gml:id="release-8.3.3">
+  <gml:description>Release for version 8.3.3</gml:description>
+  <gml:identifier codeSpace="OGP">release-8.3.3</gml:identifier>
+  <gml:dictionaryEntry xmlns:epsg="urn:x-ogp:spec:schema-xsd:EPSG:1.0:dataset" xmlns:gml="http://www.opengis.net/gml/3.2">
+    <epsg:ExtentDefinition gml:id="epsg-area-1024">
+      <gml:identifier codeSpace="OGP">urn:ogc:def:area:EPSG::1024</gml:identifier>
+      <epsg:extent>
+        <epsg:AreaOfUse xmlns:gmd="http://www.isotc211.org/2005/gmd" xmlns:gco="http://www.isotc211.org/2005/gco" xmlns:xlink="http://www.w3.org/1999/xlink">
+          <gmd:description>
+            <gco:CharacterString>Afghanistan.</gco:CharacterString>
+          </gmd:description>
+          <gmd:geographicElement>
+            <gmd:EX_GeographicBoundingBox>
+              <gmd:westBoundLongitude>
+                <gco:Decimal>60.5</gco:Decimal>
+              </gmd:westBoundLongitude>
+              <gmd:eastBoundLongitude>
+                <gco:Decimal>74.92</gco:Decimal>
+              </gmd:eastBoundLongitude>
+              <gmd:southBoundLatitude>
+                <gco:Decimal>29.41</gco:Decimal>
+              </gmd:southBoundLatitude>
+              <gmd:northBoundLatitude>
+                <gco:Decimal>38.47</gco:Decimal>
+              </gmd:northBoundLatitude>
+            </gmd:EX_GeographicBoundingBox>
+          </gmd:geographicElement>
+          <gml:metaDataProperty>
+            <epsg:CommonMetaData>
+              <epsg:informationSource>ISO 3166 Maintenance Agency.  ftp://ftp.fu-berlin.de/pub/doc/iso</epsg:informationSource>
+              <epsg:revisionDate>2012-04-18</epsg:revisionDate>
+              <epsg:changes>
+                <epsg:changeID xlink:href="urn:ogc:def:change-request:EPSG::2002.341"/>
+                <epsg:changeID xlink:href="urn:ogc:def:change-request:EPSG::2012.040"/>
+              </epsg:changes>
+              <epsg:show>false</epsg:show>
+              <epsg:isDeprecated>false</epsg:isDeprecated>
+            </epsg:CommonMetaData>
+          </gml:metaDataProperty>
+          <gml:identifier codeSpace="OGP">urn:ogc:def:area:EPSG::1024</gml:identifier>
+          <gml:name>Afghanistan</gml:name>
+          <epsg:isoA2CountryCode>AF</epsg:isoA2CountryCode>
+          <epsg:isoA3CountryCode>AFG</epsg:isoA3CountryCode>
+          <epsg:isoNumericCountryCode>4</epsg:isoNumericCountryCode>
+          <epsg:geometryFile xlink:href="urn:ogc:def:extent-polygon:EPSG::1024" xlink:type="simple"/>
+        </epsg:AreaOfUse>
+      </epsg:extent>
+    </epsg:ExtentDefinition>
+  </gml:dictionaryEntry>
+  <gml:dictionaryEntry xmlns:epsg="urn:x-ogp:spec:schema-xsd:EPSG:1.0:dataset" xmlns:gml="http://www.opengis.net/gml/3.2">
+    <epsg:ExtentDefinition gml:id="epsg-area-1025">
+      <gml:identifier codeSpace="OGP">urn:ogc:def:area:EPSG::1025</gml:identifier>
+      <epsg:extent>
+        <epsg:AreaOfUse xmlns:gmd="http://www.isotc211.org/2005/gmd" xmlns:gco="http://www.isotc211.org/2005/gco" xmlns:xlink="http://www.w3.org/1999/xlink">
+          <gmd:description>
+            <gco:CharacterString>Albania - onshore and offshore.</gco:CharacterString>
+          </gmd:description>
+          <gmd:geographicElement>
+            <gmd:EX_GeographicBoundingBox>
+              <gmd:westBoundLongitude>
+                <gco:Decimal>18.46</gco:Decimal>
+              </gmd:westBoundLongitude>
+              <gmd:eastBoundLongitude>
+                <gco:Decimal>21.05</gco:Decimal>
+              </gmd:eastBoundLongitude>
+              <gmd:southBoundLatitude>
+                <gco:Decimal>39.64</gco:Decimal>
+              </gmd:southBoundLatitude>
+              <gmd:northBoundLatitude>
+                <gco:Decimal>42.66</gco:Decimal>
+              </gmd:northBoundLatitude>
+            </gmd:EX_GeographicBoundingBox>
+          </gmd:geographicElement>
+          <gml:metaDataProperty>
+            <epsg:CommonMetaData>
+              <epsg:informationSource>ISO 3166 Maintenance Agency.  ftp://ftp.fu-berlin.de/pub/doc/iso</epsg:informationSource>
+              <epsg:revisionDate>2012-01-05</epsg:revisionDate>
+              <epsg:changes>
+                <epsg:changeID xlink:href="urn:ogc:def:change-request:EPSG::2002.341"/>
+                <epsg:changeID xlink:href="urn:ogc:def:change-request:EPSG::2005.890"/>
+                <epsg:changeID xlink:href="urn:ogc:def:change-request:EPSG::2011.095"/>
+              </epsg:changes>
+              <epsg:show>false</epsg:show>
+              <epsg:isDeprecated>false</epsg:isDeprecated>
+            </epsg:CommonMetaData>
+          </gml:metaDataProperty>
+          <gml:identifier codeSpace="OGP">urn:ogc:def:area:EPSG::1025</gml:identifier>
+          <gml:name>Albania</gml:name>
+          <epsg:isoA2CountryCode>AL</epsg:isoA2CountryCode>
+          <epsg:isoA3CountryCode>ALB</epsg:isoA3CountryCode>
+          <epsg:isoNumericCountryCode>8</epsg:isoNumericCountryCode>
+          <epsg:geometryFile xlink:href="urn:ogc:def:extent-polygon:EPSG::1025" xlink:type="simple"/>
+        </epsg:AreaOfUse>
+      </epsg:extent>
+    </epsg:ExtentDefinition>
+  </gml:dictionaryEntry>
+  <gml:dictionaryEntry xmlns:epsg="urn:x-ogp:spec:schema-xsd:EPSG:1.0:dataset" xmlns:gml="http://www.opengis.net/gml/3.2">
+    <epsg:ExtentDefinition gml:id="epsg-area-1026">
+      <gml:identifier codeSpace="OGP">urn:ogc:def:area:EPSG::1026</gml:identifier>
+      <epsg:extent>
+        <epsg:AreaOfUse xmlns:gmd="http://www.isotc211.org/2005/gmd" xmlns:gco="http://www.isotc211.org/2005/gco" xmlns:xlink="http://www.w3.org/1999/xlink">
+          <gmd:description>
+            <gco:CharacterString>Algeria - onshore and offshore.</gco:CharacterString>
+          </gmd:description>
+          <gmd:geographicElement>
+            <gmd:EX_GeographicBoundingBox>
+              <gmd:westBoundLongitude>
+                <gco:Decimal>-8.67</gco:Decimal>
+              </gmd:westBoundLongitude>
+              <gmd:eastBoundLongitude>
+                <gco:Decimal>11.99</gco:Decimal>
+              </gmd:eastBoundLongitude>
+              <gmd:southBoundLatitude>
+                <gco:Decimal>18.98</gco:Decimal>
+              </gmd:southBoundLatitude>
+              <gmd:northBoundLatitude>
+                <gco:Decimal>38.8</gco:Decimal>
+              </gmd:northBoundLatitude>
+            </gmd:EX_GeographicBoundingBox>
+          </gmd:geographicElement>
+          <gml:metaDataProperty>
+            <epsg:CommonMetaData>
+              <epsg:informationSource>ISO 3166 Maintenance Agency.  ftp://ftp.fu-berlin.de/pub/doc/iso</epsg:informationSource>
+              <epsg:revisionDate>2012-04-18</epsg:revisionDate>
+              <epsg:changes>
+                <epsg:changeID xlink:href="urn:ogc:def:change-request:EPSG::2002.341"/>
+                <epsg:changeID xlink:href="urn:ogc:def:change-request:EPSG::2005.890"/>
+                <epsg:changeID xlink:href="urn:ogc:def:change-request:EPSG::2012.049"/>
+              </epsg:changes>
+              <epsg:show>false</epsg:show>
+              <epsg:isDeprecated>false</epsg:isDeprecated>
+            </epsg:CommonMetaData>
+          </gml:metaDataProperty>
+          <gml:identifier codeSpace="OGP">urn:ogc:def:area:EPSG::1026</gml:identifier>
+          <gml:name>Algeria</gml:name>
+          <epsg:isoA2CountryCode>DZ</epsg:isoA2CountryCode>
+          <epsg:isoA3CountryCode>DZA</epsg:isoA3CountryCode>
+          <epsg:isoNumericCountryCode>12</epsg:isoNumericCountryCode>
+          <epsg:geometryFile xlink:href="urn:ogc:def:extent-polygon:EPSG::1026" xlink:type="simple"/>
+        </epsg:AreaOfUse>
+      </epsg:extent>
+    </epsg:ExtentDefinition>
+  </gml:dictionaryEntry>
+  <gml:dictionaryEntry xmlns:epsg="urn:x-ogp:spec:schema-xsd:EPSG:1.0:dataset" xmlns:gml="http://www.opengis.net/gml/3.2">
+    <epsg:ExtentDefinition gml:id="epsg-area-1027">
+      <gml:identifier codeSpace="OGP">urn:ogc:def:area:EPSG::1027</gml:identifier>
+      <epsg:extent>
+        <epsg:AreaOfUse xmlns:gmd="http://www.isotc211.org/2005/gmd" xmlns:gco="http://www.isotc211.org/2005/gco" xmlns:xlink="http://www.w3.org/1999/xlink">
+          <gmd:description>
+            <gco:CharacterString>American Samoa - onshore and offshore.</gco:CharacterString>
+          </gmd:description>
+          <gmd:geographicElement>
+            <gmd:EX_GeographicBoundingBox>
+              <gmd:westBoundLongitude>
+                <gco:Decimal>-173.75</gco:Decimal>
+              </gmd:westBoundLongitude>
+              <gmd:eastBoundLongitude>
+                <gco:Decimal>-165.2</gco:Decimal>
+              </gmd:eastBoundLongitude>
+              <gmd:southBoundLatitude>
+                <gco:Decimal>-17.56</gco:Decimal>
+              </gmd:southBoundLatitude>
+              <gmd:northBoundLatitude>
+                <gco:Decimal>-10.02</gco:Decimal>
+              </gmd:northBoundLatitude>
+            </gmd:EX_GeographicBoundingBox>
+          </gmd:geographicElement>
+          <gml:metaDataProperty>
+            <epsg:CommonMetaData>
+              <epsg:informationSource>ISO 3166 Maintenance Agency.  ftp://ftp.fu-berlin.de/pub/doc/iso</epsg:informationSource>
+              <epsg:revisionDate>2011-07-27</epsg:revisionDate>
+              <epsg:changes>
+                <epsg:changeID xlink:href="urn:ogc:def:change-request:EPSG::2002.341"/>
+                <epsg:changeID xlink:href="urn:ogc:def:change-request:EPSG::2005.890"/>
+                <epsg:changeID xlink:href="urn:ogc:def:change-request:EPSG::2011.068"/>
+              </epsg:changes>
+              <epsg:show>false</epsg:show>
+              <epsg:isDeprecated>false</epsg:isDeprecated>
+            </epsg:CommonMetaData>
+          </gml:metaDataProperty>
+          <gml:identifier codeSpace="OGP">urn:ogc:def:area:EPSG::1027</gml:identifier>
+          <gml:name>American Samoa</gml:name>
+          <epsg:isoA2CountryCode>AS</epsg:isoA2CountryCode>
+          <epsg:isoA3CountryCode>ASM</epsg:isoA3CountryCode>
+          <epsg:isoNumericCountryCode>16</epsg:isoNumericCountryCode>
+          <epsg:geometryFile xlink:href="urn:ogc:def:extent-polygon:EPSG::1027" xlink:type="simple"/>
+        </epsg:AreaOfUse>
+      </epsg:extent>
+    </epsg:ExtentDefinition>
+  </gml:dictionaryEntry>
+  <gml:dictionaryEntry xmlns:epsg="urn:x-ogp:spec:schema-xsd:EPSG:1.0:dataset" xmlns:gml="http://www.opengis.net/gml/3.2">
+    <gml:CartesianCS xmlns:xlink="http://www.w3.org/1999/xlink" gml:id="epsg-cs-4499">
+      <gml:metaDataProperty>
+        <epsg:CommonMetaData>
+          <epsg:type>Cartesian</epsg:type>
+          <epsg:informationSource>OGP</epsg:informationSource>
+          <epsg:revisionDate>2001-04-29</epsg:revisionDate>
+          <epsg:isDeprecated>false</epsg:isDeprecated>
+        </epsg:CommonMetaData>
+      </gml:metaDataProperty>
+      <gml:identifier codeSpace="OGP">urn:ogc:def:cs:EPSG::4499</gml:identifier>
+      <gml:name>Cartesian 2D CS. Axes: easting, northing (X,Y). Orientations: east, north. UoM: m.</gml:name>
+      <gml:remarks>Used in projected and engineering coordinate reference systems.</gml:remarks>
+      <gml:axis>
+        <gml:CoordinateSystemAxis gml:id="epsg-axis-41" uom="urn:ogc:def:uom:EPSG::9001">
+          <gml:descriptionReference xlink:href="urn:ogc:def:axis-name:EPSG::9906"/>
+          <gml:identifier codeSpace="OGP">urn:ogc:def:axis:EPSG::41</gml:identifier>
+          <gml:axisAbbrev>X</gml:axisAbbrev>
+          <gml:axisDirection codeSpace="EPSG">east</gml:axisDirection>
+        </gml:CoordinateSystemAxis>
+      </gml:axis>
+      <gml:axis>
+        <gml:CoordinateSystemAxis gml:id="epsg-axis-42" uom="urn:ogc:def:uom:EPSG::9001">
+          <gml:descriptionReference xlink:href="urn:ogc:def:axis-name:EPSG::9907"/>
+          <gml:identifier codeSpace="OGP">urn:ogc:def:axis:EPSG::42</gml:identifier>
+          <gml:axisAbbrev>Y</gml:axisAbbrev>
+          <gml:axisDirection codeSpace="EPSG">north</gml:axisDirection>
+        </gml:CoordinateSystemAxis>
+      </gml:axis>
+    </gml:CartesianCS>
+  </gml:dictionaryEntry>
+</gml:Dictionary>
