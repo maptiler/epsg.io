@@ -16,7 +16,15 @@
     <meta name="robots" content="ALL,FOLLOW" />
     <link rel="stylesheet" href="/css/main.css" type="text/css" />
     <link rel="shortcut icon" href="http://epsg.io/favicon.ico" />
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
+      ga('create', 'UA-47718358-1', 'epsg.io');
+      ga('send', 'pageview');
+    </script>
   </head>
   
   <body id="resultspage" data-role="page">
@@ -97,7 +105,14 @@
                 </li>
               %end
             %elif num_kind != 0:
-              "{{kind_low[0]}}" is not in {{kind_low[1]}}, please select other kind on the left side.
+              "{{kind_low[0]}}" is not in {{kind_low[1]}}, please select other kind
+              <li>
+              %for i in [0,8,12,16,17,18,19,24,25,26]:
+                %if facets_list[i][4] != 0:
+                  {{!facets_list[i][2]}}<a href="{{facets_list[i][5]}}" title="">{{facets_list[i][3]}} </a>
+                %end
+              %end
+              </li>
             %else:
               Please change your query.
             %end
@@ -123,27 +138,41 @@
         </div>
         
         <div id="side-container">
-          <h3>Alternatives search</h3>
-            <ul id="alt-search">
-              %for i in range(0,len(facets_list)):
-                %if facets_list[i][4] != 0:
-                  <li class="selected">{{!facets_list[i][2]}}<a href="{{facets_list[i][5]}}" title="">{{facets_list[i][3]}} ({{facets_list[i][4]}})</a></li>
+          %if show_alt_search:
+            <h3>Alternatives search</h3>
+              <ul id="alt-search">
+                %for i in range(0,len(facets_list)):
+                  %if facets_list[i][4] != 0:
+                    <li class="selected">{{!facets_list[i][2]}}<a href="{{facets_list[i][5]}}" title="">{{facets_list[i][3]}} ({{facets_list[i][4]}})</a></li>
+                  %end
                 %end
-              %end
-            
-              %for key,value in status_groups.iteritems():
+
                 <li class="last">
-                  %if key == "f":
-                    <a href="{{url_facet_statquery}}" title="">Show valid ({{value}})</a>
-                  %elif key == "t":
-                    <a href="{{url_facet_statquery}}" title="">Show deprecated ({{value}})</a>
+                  %if 'deprecated%3A0' in url_facet_statquery:
+                    <a href="{{url_facet_statquery}}" title="">Show valid</a>
+                  %else:
+                    <a href="{{url_facet_statquery}}" title="">Show deprecated</a>
                   %end
                 </li>
-              %end            
-            </ul>
+              </ul>
+            %end
         </div>
       </div>
-      
+   </div>
+   <div id="spacer"><p></p></div>
+
+    <div id="footer">
+
+      <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+      <!-- EPSG.io -->
+      <ins class="adsbygoogle"
+           style="display:inline-block;width:728px;height:90px"
+           data-ad-client="ca-pub-0328423815528922"
+           data-ad-slot="6564733120"></ins>
+      <script>
+      (adsbygoogle = window.adsbygoogle || []).push({});
+      </script>
+
       <div id="foot">
         <p id="mzk-logo">
           <a href="http://www.mzk.cz/" title=""><img src="./img/hzk-logo.png" alt="" /></a>
