@@ -182,39 +182,12 @@ def index():
     #print len(request.GET.keys())
     return template('./templates/index')
   
-  class PopularityWeighting(scoring.BM25F):
-     use_final = True
-     def final(self, searcher, docnum, score):
-       
-       boost = 0
-       importance = 0
-       code = (searcher.stored_fields(docnum).get("code"))
-       kind = (searcher.stored_fields(docnum).get("kind"))
-       try:
-         importance = crs_ex_line[code][1]
-       except:
-         pass
-         #print code, "not in list"
-       if not importance:
-         importance = 0
-       # Manually boosted kinds - TODO: in field popularity in Whoosh index
-       if kind == "CRS-PROJCRS":
-         boost = 0.2
-       if kind == "CRS-GEOGCRS" or kind == "CRS-GEOG3DCRS":
-         boost = 0.05
-       # Manually boosted codes - TODO: from a CSV table
-       # if code in ("5514","4326","27700","3857"):
-       #   boost = 1.0
-
-       #print "code:",code," with score:", score, "with kind:", kind, "boost:", boost, "importance", importance
-       return score * (1 + boost) * (1 + float(importance))
   
   ix = open_dir(INDEX)
   result = []
 
-  with ix.searcher(closereader=False, weighting=PopularityWeighting()) as searcher:
-  #with ix.searcher(closereader=False, weighting=scoring.BM25F) as searcher:
-    parser = MultifieldParser(["tgrams","code","name","trans","code_trans","kind","area", "area_trans","alt_title"], ix.schema)
+  with ix.searcher(closereader=False) as searcher:
+    parser = MultifieldParser(["code","name","kind","area","area_trans","alt_title"], ix.schema)
     query = request.GET.get('q')  # p43 - 1.9 The default query language
     pagenum = int(request.GET.get("page",1))
     format = request.GET.get('format',0)
@@ -228,7 +201,7 @@ def index():
     statquery = setQueryParam(query, 'deprecated', not deprecated,True)
     url_facet_statquery ="/?q=" + urllib2.quote(statquery)
     # and through all kinds
-    statquery = setQueryParam(statquery,'kind','*')
+    #statquery = setQueryParam(statquery,'kind','*')
     
     # show query in all kinds
     catquery = setQueryParam(query,'kind','*')
@@ -236,16 +209,16 @@ def index():
     # parse and prepare for search
     myquery = parser.parse(getVerboseQuery(query))
     mycatquery = parser.parse(getVerboseQuery(catquery))
-    mystatquery = parser.parse(getVerboseQuery(statquery))
     
+    #mystatquery = parser.parse(getVerboseQuery(statquery))
     # how long, exactly, it will take 
     start = time.clock()
     
     # find a query in all categories
     res_facets = searcher.search(mycatquery , groupedby='kind',scored=False,sortedby=None,maptype=sorting.Count)
     # find a query in inverse deprecated
-    res_facetss = searcher.search(mystatquery , groupedby="deprecated",scored=False,sortedby=None,maptype=sorting.Count)
     
+    #res_facetss = searcher.search(mystatquery , groupedby="deprecated",scored=False,sortedby=None,maptype=sorting.Count)    
     # result of query
     results = searcher.search(myquery, limit = None) #(pagenum*pagelen)
     
@@ -255,7 +228,7 @@ def index():
     # kind and count of result from catquery
     groups = res_facets.groups("kind")
     # deprecated or not deprecated with count of result from statquery
-    status_groups = res_facetss.groups("deprecated")
+    #status_groups ={}#res_facetss.groups("deprecated")
     
     # number of results on one page. If change number, edit "paging"
     pagelen = 10
