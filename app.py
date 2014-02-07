@@ -3,6 +3,7 @@
 """
 """
 INDEX = "./index"
+DATABASE = "./gml/gml.sqlite"
 
 CRS_EXCEPTIONS = 'CRS_exceptions.csv'
 # ['kind'(in whoosh), 'short kind', 'space for formating', 'explenation of abb', '', 'long kind']
@@ -68,6 +69,7 @@ import time
 import math
 import json
 import csv
+import sqlite3 as sqlite
 
 app = bottle.default_app()
 
@@ -88,6 +90,11 @@ except:
   print "!!! FAILED: NO CRS_EXCEPTIONS !!!"
   sys.exit(1)
 
+con = sqlite.connect(DATABASE)
+if not con:
+  print "Connection to sqlite maprank_records FAILED"
+  sys.exit(1)
+cur = con.cursor()
 def getQueryParam(q, param):
   """Return value of a param in query"""
   if param == 'deprecated':
@@ -161,6 +168,47 @@ class WKTLexer(RegexLexer):
         ]
     }
     
+class XmlLexer(RegexLexer):
+    """
+    Generic lexer for XML (eXtensible Markup Language).
+    """
+
+    flags = re.MULTILINE | re.DOTALL | re.UNICODE
+
+    name = 'XML'
+    aliases = ['xml']
+    filenames = ['*.xml', '*.xsl', '*.rss', '*.xslt', '*.xsd', '*.wsdl']
+    mimetypes = ['text/xml', 'application/xml', 'image/svg+xml',
+                 'application/rss+xml', 'application/atom+xml']
+
+    tokens = {
+        'root': [
+            ('[^<&]+', Text),
+            (r'&\S*?;', Name.Entity),
+            (r'\<\!\[CDATA\[.*?\]\]\>', Comment.Preproc),
+            ('<!--', Comment, 'comment'),
+            (r'<\?.*?\?>', Comment.Preproc),
+            ('<![^>]*>', Comment.Preproc),
+            (r'<\s*[\w:.-]+', Name.Tag, 'tag'),
+            (r'<\s*/\s*[\w:.-]+\s*>', Name.Tag),
+        ],
+        'comment': [
+            ('[^-]+', Comment),
+            ('-->', Comment, '#pop'),
+            ('-', Comment),
+        ],
+        'tag': [
+            (r'\s+', Text),
+            (r'[\w.:-]+\s*=', Name.Attribute, 'attr'),
+            (r'/?\s*>', Name.Tag, '#pop'),
+        ],
+        'attr': [
+            ('\s+', Text),
+            ('".*?"', String, '#pop'),
+            ("'.*?'", String, '#pop'),
+            (r'[^\s>]+', String, '#pop'),
+        ],
+    }
 def area_to_url(area):
   if area.rfind("-"):
     qarea = area.split(" -")[:1]
@@ -595,9 +643,24 @@ def index(id):
           center = (n-s)/2.0+s, (w+180 + (360-(w+180)+e+180) / 2.0 ) % 360-180
         g_coords = str(default_trans['bbox'][2]) + "," + str(default_trans['bbox'][1]) + "|" + str(default_trans['bbox'][0]) + "," + str(default_trans['bbox'][1]) + "|" + str(default_trans['bbox'][0]) + "," + str(default_trans['bbox'][3]) + "|" + str(default_trans['bbox'][2]) + "," + str(default_trans['bbox'][3]) + "|" + str(default_trans['bbox'][2]) + "," + str(default_trans['bbox'][1])
     
+    ogpxml = ""
+    if item['kind'].startswith("CRS"):
+      urn = "urn:ogc:def:crs:EPSG::"+code
+      cur.execute('SELECT id,xml FROM gml where urn = ?', (urn,))
+      gml = cur.fetchall()
+      for id,xml in gml:
+        ogpxml = '<?xml version="1.0" encoding="UTF-8"?>\n %s' % xml
+    elif item['kind'].startswith("COORDOP"):
+      urn = "urn:ogc:def:coordinateOperation:EPSG::" + code
+      cur.execute('SELECT id,xml FROM gml where urn = ?', (urn,))
+      gml = cur.fetchall()
+      for id,xml in gml:
+        ogpxml = '<?xml version="1.0" encoding="UTF-8"?>\n %s' % xml
+    ogpxml_highlight = highlight(ogpxml, XmlLexer(), HtmlFormatter(cssclass='syntax',nobackground=True)) 
     # if available wkt, default_trans and wkt has length minimum 100 characters (transformation has length maximum 100 (just a TOWGS84))
     error_code = 9
     if wkt and len(wkt)>100:
+    xml_highlight = ""
       trans_coords = ""         
       ref = osr.SpatialReference()
       error_code = ref.ImportFromEPSG(int(item['code']))
@@ -611,6 +674,7 @@ def index(id):
         export['proj4'] = ref.ExportToProj4()
         export['html'] = highlight(ref.ExportToPrettyWkt(), WKTLexer(), HtmlFormatter(cssclass='syntax',nobackground=True))
         export['xml'] = '<?xml version="1.0" encoding="UTF-8"?>\n %s' % (ref.ExportToXML().replace(">",' xmlns:gml="http://www.opengis.net/gml/3.2">',1))
+        xml_highlight = highlight(export['xml'], XmlLexer(), HtmlFormatter(cssclass='syntax',nobackground=True)) 
         export['mapfile'] = 'PROJECTION\n\t'+'\n\t'.join(['"'+l.lstrip('+')+'"' for l in ref.ExportToProj4().split()])+'\nEND' ### CSS: white-space: pre-wrap
         proj4 = ref.ExportToProj4().strip()
         export['proj4js'] = '%s["%s:%s"] = "%s";' % ("Proj4js.defs", type_epsg, code, proj4)
@@ -742,8 +806,7 @@ def index(id):
     #   projcrs_by_gcrs = projcrs_by_gcrs[:5]
 
           
-  return template('./templates/detail',bbox_coords=bbox_coords, more_gcrs_result=more_gcrs_result, deprecated_available=deprecated_available, url_kind=url_kind, type_epsg=type_epsg, name=name, projcrs_by_gcrs=projcrs_by_gcrs, kind=kind, alt_title=alt_title, area_item=area_item, code_short=code_short, item=item, trans=trans, default_trans=default_trans, num_results=num_results, url_method=url_method, title=title, url_format=url_format, export_html=export_html, url_area_trans=url_area_trans, url_area=url_area, center=center, g_coords=g_coords, trans_lat=trans_lat, trans_lon=trans_lon,wkt=wkt,facets_list=facets_list,url_concatop=url_concatop, nadgrid=nadgrid, detail=detail,export=export, error_code=error_code )  
-
+  return template('./templates/detail', ogpxml_highlight=ogpxml_highlight, xml_highlight=xml_highlight, area_trans_item=area_trans_item, ogpxml=ogpxml, bbox_coords=bbox_coords, more_gcrs_result=more_gcrs_result, deprecated_available=deprecated_available, url_kind=url_kind, type_epsg=type_epsg, name=name, projcrs_by_gcrs=projcrs_by_gcrs, kind=kind, alt_title=alt_title, area_item=area_item, code_short=code_short, item=item, trans=trans, default_trans=default_trans, num_results=num_results, url_method=url_method, title=title, url_format=url_format, export_html=export_html, url_area_trans=url_area_trans, url_area=url_area, center=center, g_coords=g_coords, trans_lat=trans_lat, trans_lon=trans_lon, wkt=wkt, facets_list=facets_list,url_concatop=url_concatop, nadgrid=nadgrid, detail=detail,export=export, error_code=error_code )  
 
 @route('/<id:re:[\d]+(-[\w]+)>')
 def index(id):
@@ -875,6 +938,24 @@ def index(id):
     if id:
       with ix.searcher(closereader=False, weighting=PopularityWeighting()) as searcher:
         parser = MultifieldParser(["datum","coord_sys","prime_meridian","ellipsoid","method","area_code"], ix.schema)
+    # Find right GML from sqlite
+    urn = ""
+    ogpxml = ""
+    if item['kind'].startswith("UNIT"):urn = "urn:ogc:def:uom:EPSG::"+str(code_short[0])
+    elif item['kind'].startswith("METHOD"):urn = "urn:ogc:def:method:EPSG::"+str(code_short[0])
+    elif item['kind'].startswith("ELLIPSOID"):urn = "urn:ogc:def:ellipsoid:EPSG::"+str(code_short[0])
+    elif item['kind'].startswith("DATUM"):urn = "urn:ogc:def:datum:EPSG::"+str(code_short[0])
+    elif item['kind'].startswith("AXIS"):urn = "urn:ogc:def:axis:EPSG::"+str(code_short[0])
+    elif item['kind'].startswith("AREA"):urn = "urn:ogc:def:area:EPSG::"+str(code_short[0])
+    elif item['kind'].startswith("CS"):urn = "urn:ogc:def:cs:EPSG::"+str(code_short[0])
+    elif item['kind'].startswith("PRIMEM"):urn = "urn:ogc:def:meridian:EPSG::"+str(code_short[0])
+    
+    if urn != "":
+      cur.execute('SELECT id,xml FROM gml where urn = ?', (urn,))
+      gml = cur.fetchall()
+      for id,xml in gml:
+        ogpxml = '<?xml version="1.0" encoding="UTF-8"?>\n %s' % xml
+        ogpxml_highlight = highlight(ogpxml, XmlLexer(), HtmlFormatter(cssclass='syntax',nobackground=True)) 
         # if spec_code == "ellipsoid" or spec_code == "primemeridian":
         #   gcrs_query = parser.parse(code + " kind:PROJCRS" + " deprecated:0")          
         # else:
@@ -892,8 +973,35 @@ def index(id):
         
 
 
-  return template('./templates/detail', bbox_coords=bbox_coords,more_gcrs_result=more_gcrs_result, deprecated_available=deprecated_available, url_kind=url_kind, type_epsg=type_epsg, name=name, projcrs_by_gcrs=projcrs_by_gcrs, alt_title=alt_title, kind=kind, code_short=code_short,item=item, detail=detail, facets_list=facets_list, nadgrid=nadgrid, trans_lat=trans_lat, trans_lon=trans_lon, trans=trans, url_format=url_format, default_trans=default_trans, center=center,g_coords=g_coords)  
+  return template('./templates/detail', ogpxml_highlight=ogpxml_highlight, area_trans_item=area_trans_item, error_code=error_code, ogpxml=ogpxml, bbox_coords=bbox_coords,more_gcrs_result=more_gcrs_result, deprecated_available=deprecated_available, url_kind=url_kind, type_epsg=type_epsg, name=name, projcrs_by_gcrs=projcrs_by_gcrs, alt_title=alt_title, kind=kind, code_short=code_short,item=item, detail=detail, facets_list=facets_list, nadgrid=nadgrid, trans_lat=trans_lat, trans_lon=trans_lon, trans=trans, url_format=url_format, default_trans=default_trans, center=center,g_coords=g_coords)  
 
+@route('/<id:re:[\d]+(-[a-zA-Z]+)><format:re:[\.]+[gml]+>')
+def index(id, format):
+  code, text = (id+'-0').split('-')[:2]
+  text = text.replace("/","").replace(".","")
+  code = code.replace(".","")
+  
+  urn = ""
+  xml = ""
+  if text.startswith("units"):urn = "urn:ogc:def:uom:EPSG::"+str(code)
+  elif text.startswith("method"):urn = "urn:ogc:def:method:EPSG::"+str(code)
+  elif text.startswith("ellipsoid"):urn = "urn:ogc:def:ellipsoid:EPSG::"+str(code)
+  elif text.startswith("datum"):urn = "urn:ogc:def:datum:EPSG::"+str(code)
+  elif text.startswith("axis"):urn = "urn:ogc:def:axis:EPSG::"+str(code)
+  elif text.startswith("area"):urn = "urn:ogc:def:area:EPSG::"+str(code)
+  elif text.startswith("cs"):urn = "urn:ogc:def:cs:EPSG::"+str(code)
+  elif text.startswith("primem"):urn = "urn:ogc:def:meridian:EPSG::"+str(code)
+  
+  if urn != "" and format == ".gml":
+    cur.execute('SELECT id,xml FROM gml where urn = ?', (urn,))
+    gml = cur.fetchall()
+    for id,xml in gml:
+      xml = '<?xml version="1.0" encoding="UTF-8"?>\n %s' % xml
+      response['Content-Type'] = "text/xml" 
+      
+      if request.GET.get('download',1) == "":
+        response['Content-disposition'] = "attachment; filename=%s.gml" % id
+  return xml
 
 @route('/<id:re:[\d]+(-[\d]+)?\S><format>')
 def index(id, format):
@@ -927,6 +1035,19 @@ def index(id, format):
       if r['information_source'] == "ESRI":
         name = r['name'].replace("ESRI: ","").strip()
         type_epsg = "ESRI"
+      xml = ""
+      if r['kind'].startswith("CRS"):
+        urn = "urn:ogc:def:crs:EPSG::"+code
+        cur.execute('SELECT id,xml FROM gml where urn = ?', (urn,))
+        gml = cur.fetchall()
+        for id,xml in gml:
+          pass
+      elif r['kind'].startswith("COORDOP"):
+        urn = "urn:ogc:def:coordinateOperation:EPSG::" + code
+        cur.execute('SELECT id,xml FROM gml where urn = ?', (urn,))
+        gml = cur.fetchall()
+        for id,xml in gml:
+          pass
   
     if int(code_trans) != 0:
       trans_query = parser.parse(str(code_trans) + " kind:COORDOP")
@@ -996,6 +1117,11 @@ def index(id, format):
     elif format == 'usgs':
       export = str(ref.ExportToUSGS())
     elif format == 'mapfile':
+    elif format == '.gml':
+      export = '<?xml version="1.0" encoding="UTF-8"?>\n %s' % (xml)
+      ct = "text/xml"
+      if request.GET.get('download',1) == "":
+        response['Content-disposition'] = "attachment; filename=%s.gml" % rcode
       export = 'PROJECTION\n\t'+'\n\t'.join(['"'+l.lstrip('+')+'"' for l in ref.ExportToProj4().split()])+'\nEND' ### CSS: white-space: pre-wrap
     elif format == 'mapnik': 
       proj4 = ref.ExportToProj4().strip()
@@ -1148,6 +1274,17 @@ def index():
 
 @route('/<id:re:.+[\d]+.+?>/')
 def index(id):
+  redirect('/%s' % id)
+@route('/<id:re:(urn:ogc:def:)+.*>')
+def index(id):
+  print id
+  id=id.replace("urn:ogc:def:","").replace(":EPSG::","-")
+  epsg_object,code = id.split("-")
+  if epsg_object == "crs" or epsg_object == "coordinateOperation":
+    id = code
+  else:
+    id = code + "-" + epsg_object
+    
   redirect('/%s' % id)
   
 @route('/about')
