@@ -12,21 +12,25 @@ import os.path
 import time
 
 exceptations_mod_time=time.gmtime(os.path.getmtime(CRS_EXCEPTATIONS))
+# exceptations_create_time=time.gmtime(os.path.getctime(CRS_EXCEPTATIONS))
 index_mod_time=time.gmtime(os.path.getmtime(INDEX))
+index_create_time=time.gmtime(os.path.getctime(INDEX))
 
-#print "last modified CRS_ex: %s" % exceptations_mod_time
-#print "last modified index_copy: %s" % index_mod_time
-
-do_it = False
-if exceptations_mod_time>=index_mod_time: # index is OLDER then exceptations
+# print "create CRS_ex: %s" % exceptations_create_time
+# print "create index: %s" % index_create_time
+# print
+# print "last modified CRS_ex: %s" % exceptations_mod_time
+# print "last modified index: %s" % index_mod_time
+do_it = True
+if exceptations_mod_time>=index_mod_time or index_mod_time!=index_create_time: # index is OLDER then exceptations
   do_it = True
   
 
 if do_it == True:
   
-###############################################################################
+  ###############################################################################
   print "INICIALIZING"
-###############################################################################
+  ###############################################################################
   crs_ex_line = {}
   try:
     with open(CRS_EXCEPTATIONS) as crs_ex:
@@ -86,8 +90,6 @@ if do_it == True:
         'deprecated': deprecated,
         'trans' : 0,
         'primary' : 0,
-        'wkt': u"",
-        'tgrams': crs_ex_line[item][2].decode('utf-8'),
         'description': u"",
       
         'alt_name' : u"",
@@ -99,13 +101,13 @@ if do_it == True:
         'information_source': u"",
         'revision_date': u"",
         'datum' : u"",
-        'source_geogcrs': u"",
-        'children_code' : u"",
+        'geogcrs': u"",
+        #'children_code' : u"",
         'data_source' : u"",
         'uom_code' : u"",
         'uom' : u"",
         'target_uom': u"",
-        'prime_meridian' : u"",
+        'primem' : u"",
         'greenwich_longitude' : u"",
         'concatop' : u"",
         'method' : u"",
@@ -117,13 +119,14 @@ if do_it == True:
         'area_code' : u"",
         'area_trans_code': u"",
         'ellipsoid' : u"",
-        'coord_sys': u"",
 
+        'cs': u"",
         }
         with ix.writer() as writer:
           writer.add_document(**doc)
       
       elif code_result:  
+        alt_title = u""
         for result in code_result:
           if 'alt_title' in result:
             if str(result['name']) != str(result['alt_title']) and str(result['name']) != str(crs_ex_line[item][2].decode('utf-8')):
@@ -136,6 +139,21 @@ if do_it == True:
           if 'area_trans_code' in result:
             area_trans_code = result['area_trans_code']
         
+          boost = 0
+          if result['kind'] == "CRS-PROJCRS":
+            boost = 0.2
+          if result['kind'] == "CRS-GEOGCRS" or result['kind'] == "CRS-GEOG3DCRS":
+            boost = 0.05
+          # boost by code from csv file
+          importance = 0
+          try:
+            importance = crs_ex_line[item][1]
+            if importance == u"":
+              importance = 0
+          except:
+            pass
+          
+          score = float((1 + boost) * (1 + float(importance)))
           doc = {
             'code': result['code'],
             'code_id':result['code_id'],
@@ -151,20 +169,19 @@ if do_it == True:
             'trans_remarks': result['trans_remarks'],
             'area_trans' : result['area_trans'],
             'accuracy' : result['accuracy'],
-            'wkt': result['wkt'],
             'bbox': result['bbox'],
             'scope': result['scope'],
             'remarks': result['remarks'],
             'information_source': result['information_source'],
             'revision_date': result['revision_date'],
             'datum' : result['datum'],
-            'source_geogcrs': result['source_geogcrs'],
-            'children_code' : result['children_code'],
+            'geogcrs': result['geogcrs'],
+            #'children_code' : result['children_code'],
             'data_source' : result['data_source'],
             'uom_code' : result['uom_code'],
             'uom' : result['uom'],
             'target_uom': result['target_uom'],
-            'prime_meridian' : result['prime_meridian'],
+            'primem' : result['primem'],
             'greenwich_longitude' : result['greenwich_longitude'],
             'concatop' : result['concatop'],
             'method' : result['method'],
@@ -175,14 +192,14 @@ if do_it == True:
             'order' : result['order'],
             'description':result['description'],
             'primary' : result['primary'],
-            'tgrams':result['name']+" "+result['area'],
             'code_id':item.decode('utf-8'),
             'alt_description' : crs_ex_line[item][4].decode('utf-8'),
             'alt_code' : alt_code,
             'area_code' : result['area_code'],
             'area_trans_code' : area_trans_code,
             'ellipsoid' : result['ellipsoid'],
-            'coord_sys': result['coord_sys'],
+            'cs': result['cs'],
+            '_boost': score
           }  
           with ix.writer() as writer:
             writer.update_document(**doc)
