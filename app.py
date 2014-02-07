@@ -38,6 +38,7 @@ facets_list = [
   ['UNIT-ANGUNIT','ANGUNIT','&nbsp; &nbsp;', 'Angle',0,'http://', 'Angle unit'],
   ['UNIT-SCALEUNIT','SCALEUNIT','&nbsp; &nbsp;', 'Scale',0,'http://', 'Scale unit'],
   ['UNIT-LENUNIT','LENUNIT','&nbsp; &nbsp;', 'Length',0,'http://', 'Length unit'],
+  ['UNIT-TIMEUNIT','TIMEUNIT','&nbsp; &nbsp;', 'Time',0,'http://', 'Time unit']
 ]
 
 # Index to the facets_list above - manual update on change!
@@ -234,6 +235,7 @@ def index():
   ix = open_dir(INDEX)
   result = []
 
+  ref = osr.SpatialReference()
   with ix.searcher(closereader=False) as searcher:
     parser = MultifieldParser(["code","name","kind","area","area_trans","alt_title"], ix.schema)
     query = request.GET.get('q')  # p43 - 1.9 The default query language
@@ -310,11 +312,12 @@ def index():
         short_area = short_area.split("-", 2)[0]
       
       url_map = ""
-      if r['wkt'] and r['bbox']:
-        ref = osr.SpatialReference()
-        a = ref.ImportFromWkt(r['wkt'])
-        if a == 0:
-          url_map = "/" + r['code']+ "/map"
+      ref.ImportFromEPSG(int(short_code[0]))
+      wkt = ref.ExportToWkt()
+      if wkt and r['bbox']:
+        # a = ref.ImportFromWkt(r['wkt'])
+        # if a == 0:
+        url_map = "/" + r['code']+ "/map"
 
         
       result.append({'r':r, 'name':name, 'type_epsg':type_epsg, 'link':link, 'area':short_area, 'short_code':short_code, 'url_map':url_map})
@@ -441,37 +444,7 @@ def index():
 
 @route('/<id:re:[\d]+(-[\d]+)?>')
 def index(id):
-  # class PopularityWeighting(scoring.BM25F):
-  #    use_final = True
-  #    def final(self, searcher, docnum, score):
-  #      #popularity = (searcher.stored_fields(docnum).get("popularity"))
-  #      return score# * popularity
-  class PopularityWeighting(scoring.BM25F):
-     use_final = True
-     def final(self, searcher, docnum, score):
-       
-       boost = 0
-       importance = 0
-       code = (searcher.stored_fields(docnum).get("code"))
-       kind = (searcher.stored_fields(docnum).get("kind"))
-       try:
-         importance = crs_ex_line[code][1]
-       except:
-         pass
-         #print code, "not in list"
-       if not importance:
-         importance = 0
-       # Manually boosted kinds - TODO: in field popularity in Whoosh index
-       if kind == "CRS-PROJCRS":
-         boost = 0.2
-       if kind == "CRS-GEOGCRS" or kind == "CRS-GEOG3DCRS":
-         boost = 0.05
-       # Manually boosted codes - TODO: from a CSV table
-       # if code in ("5514","4326","27700","3857"):
-       #   boost = 1.0
-
-       #print "code:",code," with score:", score, "with kind:", kind, "boost:", boost, "importance", importance
-       return score * (1 + boost) * (1 + float(importance))
+  ref = osr.SpatialReference()
   ix = open_dir(INDEX)
    
   with ix.searcher(closereader=False) as searcher:
@@ -518,14 +491,29 @@ def index(id):
       code_short = item['code'].split("-")
       name = item['name']
       type_epsg = "EPSG"
+      a = ref.ImportFromEPSG(int(code_short[0]))
+      if a == 0:
+        wkt = ref.ExportToWkt()
+      else:
+        wkt = ""
       if item['information_source'] == "ESRI":
         name = item['name'].replace("ESRI: ","").strip()
         type_epsg = "ESRI"
+        if a != 0:
+          a = ref.ImportFromProj4(item['description'])
+          if a != 0:
+            alt_description = proj
+          else:
+            ref.ExportToWkt()
+            ref.SetProjCS(name.replace(" ", "_"))
+            ref.SetAuthority("PROJCS","EPSG",int(code))
+            ref.ExportToPrettyWkt()
+            alt_description = str(ref).decode('utf-8')
+        elif a == 0:
+          wkt = ref.ExportToWkt().decode('utf-8')
         
       title = item['kind'] + ":" + item['code']
       url_area = area_to_url(item['area'])
-      wkt = item['wkt']
-      area_item = item['area']
       for i in range(0,len(facets_list)):
         if facets_list[i][0] == item['kind']:
           kind = facets_list[i][6]
@@ -573,7 +561,6 @@ def index(id):
       
       # if it has NOT default transformation code
       else:
-        ref = osr.SpatialReference()
         ref.ImportFromEPSG(int(r['code']))
         if ref.GetTOWGS84() != None:
           found = True
@@ -592,9 +579,9 @@ def index(id):
         if trans_item and default_trans:
           
           # from values of TOWGS84 edit wkt of CRS
-          values = default_trans['wkt']          
+          values = default_trans['description']          
           if re.findall(r'([a-df-zA-Z_])',values):
-            nadgrid = default_trans['wkt']
+            nadgrid = default_trans['description']
           elif str(values) != str(0):
             # num =[]
             values = tuple(map(float, values[1:-1].split(',')))
@@ -607,7 +594,6 @@ def index(id):
             if int(r['code_trans']) != int(default_trans['code']) :
             
               if (values != (0.0,0.0,0.0,0.0,0.0,0.0,0.0) and type(values) == tuple and values != (0,) and values != ()):            
-                ref = osr.SpatialReference()
                 ref.ImportFromEPSG(int(r['code']))
                 ref.SetTOWGS84(*values)
                 wkt = ref.ExportToWkt().decode('utf-8')
@@ -623,12 +609,14 @@ def index(id):
     
     # if it CRS (not transformation)
     if str(item['kind']).startswith('CRS'):
-      if item['wkt']:
+      if wkt:
         url_format = "/"+str(item['code'])
         if default_trans:
           # if the actual transformation is different code then basic transformation and basic transformation is not 0 (geodetic systems hasnt got any transformation (4326 - not showing link 4326-4326))
           if int(default_trans['code']) != int(item['code_trans']) and int(item['code_trans']) != 0:
             url_format = "/"+str(item['code'])+"-"+str(default_trans['code'])
+    elif str(item['kind']).startswith('COORDOP'):
+      url_format = "/"+str(item['code'])
     
     # for activated transformation
     if default_trans:
@@ -660,12 +648,12 @@ def index(id):
       for id,xml in gml:
         ogpxml = '<?xml version="1.0" encoding="UTF-8"?>\n %s' % xml
     ogpxml_highlight = highlight(ogpxml, XmlLexer(), HtmlFormatter(cssclass='syntax',nobackground=True)) 
+    
     # if available wkt, default_trans and wkt has length minimum 100 characters (transformation has length maximum 100 (just a TOWGS84))
     error_code = 9
-    if wkt and len(wkt)>100:
     xml_highlight = ""
+    if wkt:
       trans_coords = ""         
-      ref = osr.SpatialReference()
       error_code = ref.ImportFromEPSG(int(item['code']))
       export = {}  
       ref.ImportFromWkt(wkt)  
@@ -767,26 +755,26 @@ def index(id):
 
 
     gcrs_code = 0
-    if item['source_geogcrs']:
-      gcrs_code = str(item['source_geogcrs'][0])
+    if item['geogcrs']:
+      gcrs_code = str(item['geogcrs'][0])
     
     projcrs_by_gcrs = []
     more_gcrs_result = ""
     
     if gcrs_code and not item['kind'].startswith('COORDOP'):
-      with ix.searcher(closereader=False, weighting=PopularityWeighting()) as searcher:
-        parser = MultifieldParser(["source_geogcrs"], ix.schema)
+      with ix.searcher(closereader=False) as searcher:
+        parser = MultifieldParser(["geogcrs"], ix.schema)
         gcrs_query = parser.parse(gcrs_code + " kind:PROJCRS" + " deprecated:0")
         gcrs_result = searcher.search(gcrs_query, limit=5)
         if len(gcrs_result) >5:
-          more_gcrs_result = "/?q=source_geogcrs:"+gcrs_code+" kind:PROJCRS deprecated:0"
+          more_gcrs_result = "/?q=geogcrs:"+gcrs_code+" kind:PROJCRS deprecated:0"
         for gcrs_item in gcrs_result:
           # do not append if find yourself
           if gcrs_item['code'] != item['code']:    
             projcrs_by_gcrs.append({'result': gcrs_item})
     
     if item['kind'].startswith('COORDOP'):
-      with ix.searcher(closereader=False, weighting=PopularityWeighting()) as searcher:
+      with ix.searcher(closereader=False) as searcher:
         parser = QueryParser("trans", ix.schema)
         gcrs_query = parser.parse(code + " kind:PROJCRS" + " deprecated:0")
         gcrs_result = searcher.search(gcrs_query, limit=5)
@@ -796,52 +784,18 @@ def index(id):
           for gcrs_item in gcrs_result:        
             projcrs_by_gcrs.append({'result': gcrs_item})
         else:
-          parser = QueryParser("source_geogcrs", ix.schema)
+          parser = QueryParser("geogcrs", ix.schema)
           gcrs_query = parser.parse(gcrs_code + " kind:PROJCRS" + " deprecated:0")
           gcrs_result = searcher.search(gcrs_query, limit=5)
           if len(gcrs_result) >5:
-            more_gcrs_result = "/?q=source_geogcrs:"+gcrs_code+" kind:PROJCRS deprecated:0"
+            more_gcrs_result = "/?q=geogcrs:"+gcrs_code+" kind:PROJCRS deprecated:0"
           for gcrs_item in gcrs_result:        
             projcrs_by_gcrs.append({'result': gcrs_item})
-    
-    # if len(projcrs_by_gcrs) > 5:
-    #   more_gcrs_result = "/?q="+code+" kind"
-    #   projcrs_by_gcrs = projcrs_by_gcrs[:5]
-
           
   return template('./templates/detail', ogpxml_highlight=ogpxml_highlight, xml_highlight=xml_highlight, area_trans_item=area_trans_item, ogpxml=ogpxml, bbox_coords=bbox_coords, more_gcrs_result=more_gcrs_result, deprecated_available=deprecated_available, url_kind=url_kind, type_epsg=type_epsg, name=name, projcrs_by_gcrs=projcrs_by_gcrs, kind=kind, alt_title=alt_title, area_item=area_item, code_short=code_short, item=item, trans=trans, default_trans=default_trans, num_results=num_results, url_method=url_method, title=title, url_format=url_format, export_html=export_html, url_area_trans=url_area_trans, url_area=url_area, center=center, g_coords=g_coords, trans_lat=trans_lat, trans_lon=trans_lon, wkt=wkt, facets_list=facets_list,url_concatop=url_concatop, nadgrid=nadgrid, detail=detail,export=export, error_code=error_code )  
 
 @route('/<id:re:[\d]+(-[\w]+)>')
 def index(id):
-  
-  class PopularityWeighting(scoring.BM25F):
-     use_final = True
-     def final(self, searcher, docnum, score):
-       
-       boost = 0
-       importance = 0
-       code = (searcher.stored_fields(docnum).get("code"))
-       kind = (searcher.stored_fields(docnum).get("kind"))
-       try:
-         importance = crs_ex_line[code][1]
-       except:
-         pass
-         #print code, "not in list"
-       if not importance:
-         importance = 0
-       # Manually boosted kinds - TODO: in field popularity in Whoosh index
-       if kind == "CRS-PROJCRS":
-         boost = 0.2
-       if kind == "CRS-GEOGCRS" or kind == "CRS-GEOG3DCRS":
-         boost = 0.05
-       # Manually boosted codes - TODO: from a CSV table
-       # if code in ("5514","4326","27700","3857"):
-       #   boost = 1.0
-
-       #print "code:",code," with score:", score, "with kind:", kind, "boost:", boost, "importance", importance
-       return score * (1 + boost) * (1 + float(importance))
-  
-  
   
   ix = open_dir(INDEX)
   with ix.searcher(closereader=False) as searcher:
@@ -898,52 +852,26 @@ def index(id):
         #(51.05, 12.09, 47.74, 22.56)
         g_coords = str(item['bbox'][2]) + "," + str(item['bbox'][1]) + "|" + str(item['bbox'][0]) + "," + str(item['bbox'][1]) + "|" + str(item['bbox'][0]) + "," + str(item['bbox'][3]) + "|" + str(item['bbox'][2]) + "," + str(item['bbox'][3]) + "|" + str(item['bbox'][2]) + "," + str(item['bbox'][1])
         bbox_coords = (n,e,s,w)
-      # if 'target_uom' in r:
-      #   if r['target_uom'] != 0:
-      #     if r['target_uom'] == 9102:
-      #       url_uom = "/9101-units"
-      #     elif r['target_uom'] == 9101:
-      #       url_uom = "/9101-units"
-      #     elif r['target_uom'] == 9001:
-      #       url_uom = "/9001-units"
-      #     elif r['target_uom'] == 9201:
-      #       url_uom = "/9201-units"
-     
-      if 'prime_meridian' in r:
-        if r['prime_meridian']:
-          url_prime = str(r['prime_meridian'])+ "-primemeridian"
-          
-      if 'children_code' in r:
-        if r['children_code'] != 0:
-          if r['kind'].startswith("DATUM"):
-            url_children = str(r['children_code']) + "-ellipsoid"
-          # 
-          # elif r['kind'] == "AXIS":
-          #   url_children = str(r['children_code']) +"-coordsys"
-          # 
-          # elif r['kind'].startswith("CS"):
-          #   for c in r['children_code']:
-          #     url = str(c) + "-axis"
-          #     url_axis.append(url)
-      if 'coord_sys' in r:
+
+      if 'primem' in r:
+        if r['primem']:
+          url_prime = str(r['primem'])+ "-primem"
+
+      if 'cs' in r:
         if r['kind'] == "AXIS":
-          url_children = str(r['coord_sys'][0]) +"-coordsys"
+          url_children = str(r['cs'][0]) +"-cs"
       
       if r['kind'].startswith("CS"):
           for c in r['axis']:
-            #print c
             #url = str(c['axis_code'])+"-axis"
             url_axis.append(c) #url
       
-      detail.append({'url_prime': url_prime, 'url_children':url_children,'url_axis':url_axis, 'url_area' : url_area}) #'url_uom':url_uom
+      detail.append({'url_prime': url_prime,'url_axis':url_axis, 'url_area' : url_area}) #'url_uom':url_uom,  'url_children':url_children
     
     code, spec_code = (id+'-0').split('-')[:2]
     projcrs_by_gcrs = []
     more_gcrs_result = ""
     
-    if id:
-      with ix.searcher(closereader=False, weighting=PopularityWeighting()) as searcher:
-        parser = MultifieldParser(["datum","coord_sys","prime_meridian","ellipsoid","method","area_code"], ix.schema)
     # Find right GML from sqlite
     urn = ""
     ogpxml = ""
@@ -962,22 +890,19 @@ def index(id):
       for id,xml in gml:
         ogpxml = '<?xml version="1.0" encoding="UTF-8"?>\n %s' % xml
         ogpxml_highlight = highlight(ogpxml, XmlLexer(), HtmlFormatter(cssclass='syntax',nobackground=True)) 
+      
+    if id and code_short[1] != "units":
+      with ix.searcher(closereader=False) as searcher:
+        parser = MultifieldParser(["datum","cs","primem","ellipsoid","method","area_code"], ix.schema)
         # if spec_code == "ellipsoid" or spec_code == "primemeridian":
         #   gcrs_query = parser.parse(code + " kind:PROJCRS" + " deprecated:0")          
         # else:
         gcrs_query = parser.parse(code + " kind:PROJCRS" + " deprecated:0")
         gcrs_result = searcher.search(gcrs_query, limit=6)
         if len(gcrs_result) >5:
-          more_gcrs_result = "/?q=datum:"+code+" OR coord_sys:"+code+" OR prime_meridian:"+code+" OR ellipsoid:"+code+" OR method:"+code+" OR area_code:"+code+" kind:PROJCRS deprecated:0"
+          more_gcrs_result = "/?q=datum:"+code+" OR cs:"+code+" OR primem:"+code+" OR ellipsoid:"+code+" OR method:"+code+" OR area_code:"+code+" kind:PROJCRS deprecated:0"
         for gcrs_item in gcrs_result[:5]:
           projcrs_by_gcrs.append({'result': gcrs_item})
-        
-        # if len(projcrs_by_gcrs) > 5:
-        #   more_gcrs_result = projcrs_by_gcrs[5:]
-        #   projcrs_by_gcrs = projcrs_by_gcrs[:5]
-        # 
-        
-
 
   return template('./templates/detail', ogpxml_highlight=ogpxml_highlight, area_trans_item=area_trans_item, error_code=error_code, ogpxml=ogpxml, bbox_coords=bbox_coords,more_gcrs_result=more_gcrs_result, deprecated_available=deprecated_available, url_kind=url_kind, type_epsg=type_epsg, name=name, projcrs_by_gcrs=projcrs_by_gcrs, alt_title=alt_title, kind=kind, code_short=code_short,item=item, detail=detail, facets_list=facets_list, nadgrid=nadgrid, trans_lat=trans_lat, trans_lon=trans_lon, trans=trans, url_format=url_format, default_trans=default_trans, center=center,g_coords=g_coords)  
 
@@ -1016,8 +941,8 @@ def index(id, format):
   export = ""
   values = ""
   ref = osr.SpatialReference()
-  tcode = 0
   
+  tcode = 0 
   with ix.searcher(closereader=False) as searcher:
     parser = QueryParser("code", ix.schema)
 
@@ -1031,16 +956,19 @@ def index(id, format):
 
     for r in code_result:
       rcode = r['code']
-      wkt = r['wkt']
       rcode = r['code']
       rname = r['name'].replace("ESRI: ","").strip()
       def_trans = r['code_trans']
       bbox = r['bbox']
       
+      ref.ImportFromEPSG(int(rcode))
+      wkt = ref.ExportToWkt()
+      
       type_epsg = "EPSG"
       if r['information_source'] == "ESRI":
         name = r['name'].replace("ESRI: ","").strip()
         type_epsg = "ESRI"
+      
       xml = ""
       if r['kind'].startswith("CRS"):
         urn = "urn:ogc:def:crs:EPSG::"+code
@@ -1055,11 +983,12 @@ def index(id, format):
         for id,xml in gml:
           pass
   
+  
     if int(code_trans) != 0:
       trans_query = parser.parse(str(code_trans) + " kind:COORDOP")
       trans_result = searcher.search(trans_query,sortedby=False,scored=False)
       for t in trans_result:
-        values = t['wkt']
+        values = t['description']
         tcode = t['code']
         url_coords = rcode + "-" + tcode 
         # if code_trans is 0, then will be use default transformation and it is the same bbox as CRS 
@@ -1183,7 +1112,8 @@ def index():
   #print x,y,z,s_srs,t_srs,callback
   scode, scode_trans = (str(s_srs)+'-0').split('-')[:2]
   tcode, tcode_trans = (str(t_srs)+'-0').split('-')[:2]
-    
+  ref = osr.SpatialReference()
+  
   with ix.searcher(closereader=False) as searcher:
     parser = QueryParser("code", ix.schema)
     
@@ -1192,7 +1122,9 @@ def index():
       scode_result = searcher.search(scode_query, sortedby=False,scored=False)
     
       for r in scode_result:
-        swkt = r['wkt']
+        #swkt = r['wkt']
+        ref.ImportFromEPSG(scode)
+        swkt = ref.ExportToWkt()
         scode = r['code']
     
     if int(scode_trans) != 0:
@@ -1200,7 +1132,7 @@ def index():
       scode_trans_result = searcher.search(scode_trans_query, sortedby=False,scored=False)
     
       for r in scode_trans_result:
-        scode_trans_values = r['wkt']
+        scode_trans_values = r['description']
       
       
     if int(tcode_trans) == 0:
@@ -1208,14 +1140,16 @@ def index():
       tcode_result = searcher.search(tcode_query,sortedby=False,scored=False)
      
       for r in tcode_result:
-        twkt = r['wkt']
+        #twkt = r['wkt']
+        ref.ImportFromEPSG(tcode)
+        swkt = ref.ExportToWkt()
     
     if int(tcode_trans) != 0:
       tcode_trans_query = parser.parse(str(tcode_trans) + " kind:COORDOP")
       tcode_trans_result = searcher.search(tcode_trans_query, sortedby=False,scored=False)
     
       for r in tcode_trans_result:
-        tcode_trans_values = r['wkt']
+        tcode_trans_values = r['description']
         
     if scode_trans != 0 and scode_trans_values != None:
       w = re.findall(r'(-?\d+\.?\d*)', scode_trans_values)
