@@ -46,59 +46,116 @@
         </li>
       </ul>
     </div>
-
-    <ul id="eb-menu">
-       <li><a class="switcher selected" id="s_html" href="/5514.html" title="">Well Known Text as HTML<i></i></a></li>
-       <li><a class="switcher" id="s_prettywkt" href="/5514.prettywkt" title="">PrettyWKT<i></i></a></li>
-       <li><a class="switcher" id="s_esriwkt" href="/5514.esriwkt" title="">ESRI WKT <i></i></a></li>
-       <li><a class="switcher" id="s_proj4" href="/5514.proj4" title="">PROJ.4 <i></i></a></li>
-       <li><a class="switcher" id="s_gml" href="/5514.gml" title="">OGC GML <i></i></a></li>
-    </ul>
     
-    <div class="code-definition-container" id="s_html_code">
-      <p>Definition: Well Known Text as HTML</p>
-      <ul>
-        <li><a href="{{url_format}}.prettywkt" title="">Open in new page</a></li>
-        <li><a id="s_html_urlclip" class="zeroclipboard" data-clipboard-text="http://epsg.io/asasdfasdf" href="#" title="">Copy URL to clipboard</a></li>
-        <li><a id="s_html_textclip" class="zeroclipboard" data-clipboard-target="s_html_text" href="#" title="">Copy TEXT to clipboard</a></li>
-      </ul>
-      <div id="s_html_text" class="syntax">
-        {{!export_html}}
+    <div id="edit-box-container">
+      <div id="eb-menu-container">
+        <h4>Export</h4>
+        <ul id="eb-menu">
+          <li><a class="switcher" id="s_html" href="{{url_format}}.html">Well Known Text as HTML<i></i></a></li>
+          <!-- <li><a class="switcher" id="s_prettywkt" href="{{url_format}}.prettywkt">PrettyWKT<i></i></a></li>-->
+          <li><a class="switcher switcher_selected" id="s_esriwkt" href="{{url_format}}.esriwkt">ESRI WKT<i></i></a></li>
+          <li><a class="switcher" id="s_proj4" href="{{url_format}}.proj4">PROJ.4<i></i></a></li>
+          <li><a class="switcher" id="s_proj4js" href="{{url_format}}.proj4js">JavaScript (PROJ.4)<i></i></a></li>
+          <li><a class="switcher" id="s_ogpxml" href="{{url_format}}.ogpxml">OGP XML<i></i></a></li>
+          <li><a class="switcher" id="s_xml" href="{{url_format}}.xml">XML<i></i></a></li>
+        </ul>
       </div>
-    </div>
-    
-    <a id="test-another-url" class="zeroclipboard" data-clipboard-text="http://epsg.io/another" href="#" title="">Copy another URL to clipboard</a></li>
-    
-    
-    <div class="code-definition-container" id="s_prettywkt_code">
-      <p>Definition: PrettyWKT</p>
-
-
-      <div class="syntax">
-        {{!export['prettywkt']}}
+      
+      <div class="code-definition-container" id="s_html_code">
+        <p>Definition: Well Known Text (WKT)</p>
+        <ul>
+          <li><a href="{{url_format}}.prettywkt">Open</a></li>
+          <li><a id="s_html_copyUrl" class="zeroclipboard" data-clipboard-text="http://epsg.io{{url_format}}.prettywkt" href="#">Copy URL</a></li>
+          <li><a id="s_html_copyText" class="zeroclipboard" data-clipboard-target="s_html_text" href="#">Copy TEXT</a></li>
+          <li><a href="{{url_format}}.prettywkt?download">Download</a></li>
+          
+        </ul>
+        <div class="syntax">
+          {{!export_html}}
+        </div>
+        <div class="syntax" id="s_html_text">
+          <pre>{{export['prettywkt']}}</pre>
+        </div>
       </div>
-    </div>
-    <div class="code-definition-container" id="s_esriwkt_code">
-      <p>Definition: ESRI WKT</p>
 
-      <div class="syntax">
-        {{export['esriwkt']}}
+      
+      <div class="code-definition-container" id="s_ogpxml_code">
+        <p>Definition: OGP XML</p>
+        <ul>
+          <li><a href="{{url_format}}.ogpxml">Open</a></li>
+          <li><a id="s_ogpxml_copyUrl" class="zeroclipboard" data-clipboard-text="http://epsg.io{{url_format}}.ogpxml" href="#">Copy URL</a></li>
+          <li><a id="s_ogpxml_copyText" class="zeroclipboard" data-clipboard-target="s_ogpxml_text" href="#">Copy TEXT</a></li>
+          <li><a href="{{url_format}}.xml?download">Download</a></li>
+
+        </ul>
+        <div class="syntax">
+          {{!ogpxml_highlight}}
+        </div>
+        <div class="syntax" id="s_ogpxml_text">
+          {{ogpxml}}
+        </div>
+      </div>
+
+      
+      <div class="code-definition-container code_visible" id="s_esriwkt_code">
+        <p>Definition: ESRI WKT</p>
+        <ul>
+          <li><a href="{{url_format}}.esriwkt">Open</a></li>
+          <li><a id="s_esriwkt_copyUrl" class="zeroclipboard" data-clipboard-text="http://epsg.io{{url_format}}.esriwkt" href="#">Copy URL</a></li>
+          <li><a id="s_esriwkt_copyText" class="zeroclipboard" data-clipboard-target="s_esriwkt_text" href="#">Copy TEXT</a></li>
+          <li><a href="{{url_format}}.esriwkt?download">Download</a></li>
         
+        </ul>
+        <div id="s_esriwkt_text" class="syntax">
+          <pre>{{export['esriwkt']}}</pre>  
+        </div>
       </div>
-    </div>
-    <div class="code-definition-container" id="s_proj4_code">
-      <p>Definition: PROJ.4</p>
+      
+      <div class="code-definition-container" id="s_proj4_code">
+        <p>Definition: PROJ.4</p>
+        <ul>
+          <li><a href="{{url_format}}.proj4">Open</a></li>
+          <li><a id="s_proj4_copyUrl" class="zeroclipboard" data-clipboard-text="http://epsg.io{{url_format}}.proj4" href="#">Copy URL</a></li>
+          <li><a id="s_proj4_copyText" class="zeroclipboard" data-clipboard-target="s_proj4_text" href="#">Copy TEXT</a></li>
+          <li><a href="{{url_format}}.proj4?download">Download</a></li>
+          
+        </ul>
+        <div id="s_proj4_text" class="syntax">
+          <pre>{{export['proj4']}}</pre>
+        </div>
+      </div>
+      
+      <div class="code-definition-container" id="s_proj4js_code">
+        <p>Definition: JavaScript (PROJ.4) </p>
+        <ul>
+          <li><a href="{{url_format}}.js">Open</a></li>
+          <li><a id="s_proj4js_copyUrl" class="zeroclipboard" data-clipboard-text="http://epsg.io{{url_format}}.js" href="#">Copy URL</a></li>
+          <li><a id="s_proj4js_copyText" class="zeroclipboard" data-clipboard-target="s_proj4js_text" href="#">Copy TEXT</a></li>
+          <li><a href="{{url_format}}.js?download">Download</a></li>
+          
+        </ul>
+        <div id="s_proj4js_text" class="syntax">
+          <pre>{{export['proj4js']}}</pre>
+        </div>
+      </div>
+      
+      <div class="code-definition-container" id="s_xml_code">
+        <p>Definition: XML</p>
+        <ul>
+          <li><a href="{{url_format}}.xml">Open</a></li>
+          <li><a id="s_xml_copyUrl" class="zeroclipboard" data-clipboard-text="http://epsg.io{{url_format}}.xml"href="#">Copy URL</a></li>
+          <li><a id="s_xml_copyText" class="zeroclipboard" data-clipboard-target="s_xml_text" href="#">Copy TEXT</a></li>
+          <li><a href="{{url_format}}.xml?download">Download</a></li>
+          
+        </ul>
+        <div class="syntax">
+          {{!xml_highlight}}
+        </div>
+        <div id="s_xml_text" class="syntax">
+          <pre>{{export['xml']}}</pre>
+        </div>
+      </div>
 
-      <div class="syntax">
-        {{export['proj4']}}
-      </div>
-    </div>
-    <div class="code-definition-container" id="s_gml_code">
-      <p>Definition: OGC GML</p>
-
-      <div class="syntax">
-        {{export['gml']}}
-      </div>
     </div>
 
 
