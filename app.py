@@ -318,7 +318,7 @@ def index():
 
         
       result.append({'r':r, 'name':name, 'type_epsg':type_epsg, 'link':link, 'area':short_area, 'short_code':short_code, 'url_map':url_map})
-      json_str.append({'code':r['code'], 'name':name, 'wkt':r['wkt'],'default_trans':r['code_trans'],'trans':r['trans'],'area_trans':r['area_trans'],'accuracy':r['accuracy'],'kind':r['kind'], 'bbox':r['bbox']})
+      json_str.append({'code':r['code'], 'name':name, 'wkt':wkt,'default_trans':r['code_trans'],'trans':r['trans'],'area_trans':r['area_trans'],'accuracy':r['accuracy'],'kind':r['kind'], 'bbox':r['bbox']})
       
     
     # number of results from results
@@ -410,8 +410,11 @@ def index():
       if expanded_trans:
         json_str = []
         for r in results[(maxdoc-pagelen):maxdoc]:
+          short_code = r['code'].split("-")
+          ref.ImportFromEPSG(int(short_code[0]))
+          wkt = ref.ExportToWkt()
+          json_bbox = []
           if r['trans']:
-            json_bbox = []
             for item in r['trans']:
               parser = MultifieldParser(["code","kind"], ix.schema)
               query = "code:"+str(item)+ " kind:COORDOP"
@@ -419,20 +422,20 @@ def index():
               transformation = searcher.search(myquery, limit=None)
               for hit in transformation:
                 json_bbox.append({'trans_code':item, 'bbox': hit['bbox'] })
-          json_str.append({'code':r['code'], 'name':name, 'wkt':r['wkt'],'default_trans':r['code_trans'],'accuracy':r['accuracy'],'kind':r['kind'], 'trans':json_bbox})        
+          json_str.append({'code':r['code'], 'name':name, 'wkt':wkt,'default_trans':r['code_trans'],'accuracy':r['accuracy'],'kind':r['kind'], 'trans':json_bbox})        
           
       export['number_result']= num_results
       export['results'] = json_str
       json_str = export
       response['Content-Type'] = "application/json"
       if callback:
-        json_str = callback + "(" + str(json_str) + ")"
-        response['Content-Type'] = "application/javascript"
-        return json.dumps(json_str)
+        json_str = callback + "(" + json.dumps(json_str) + ")"
+        response['Content-Type']  = "application/javascript"
+        return json_str
       
       return json.dumps(json_str)
   
-  return template('./templates/results', kind_low=kind_low, num_kind=num_kind, short_code=short_code, title=title, query=query, deprecated=deprecated, num_results=num_results, elapsed=elapsed, facets_list=facets_list, status_groups=status_groups, url_facet_statquery=url_facet_statquery, result=result, pagenum=int(pagenum),paging=paging)
+  return template('./templates/results',show_alt_search=show_alt_search, kind_low=kind_low, num_kind=num_kind, short_code=short_code, title=title, query=query, deprecated=deprecated, num_results=num_results, elapsed=elapsed, facets_list=facets_list, url_facet_statquery=url_facet_statquery, result=result, pagenum=int(pagenum),paging=paging)
 
 
 
