@@ -48,7 +48,7 @@ f_cs_index = 19
 f_unit_index = 26
 
 import bottle
-from bottle import route, run, template, request, response, static_file, redirect
+from bottle import route, run, template, request, response, static_file, redirect, error
 import urllib2
 import urllib
 import sys
@@ -868,6 +868,9 @@ def index(id):
     
         
     deprecated_available = 0
+    if len(results) == 0:
+      error = 404
+      return template('./templates/error', error=error)
     for r in results:
       item = r
       url_area = area_to_url(item['area'])
@@ -1275,6 +1278,15 @@ def index():
       
     return export
 
+@error(code=404)
+def error404(error):
+  error = 404
+  return template('./templates/error', error=error)
+
+@error(code=500)
+def error500(error):
+  error = "500: Internal Server Error"
+  return template('./templates/error', error=error)
 @route('/<id:re:.+[\d]+.+?>/')
 def index(id):
   redirect('/%s' % id)
