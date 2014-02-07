@@ -6,7 +6,7 @@ INDEX = "./index"
 DATABASE = "./gml/gml.sqlite"
 
 CRS_EXCEPTIONS = 'CRS_exceptions.csv'
-# ['kind'(in whoosh), 'short kind', 'space for formating', 'explenation of abb', '', 'long kind']
+# ['kind'(in whoosh), 'short kind', 'space for formating', 'explenation of abb', 'link to new query', 'long kind']
 facets_list = [
   ['CRS','CRS','','Coordinate reference systems',0,'http://','Coordinate reference system'],
   ['CRS-PROJCRS','PROJCRS','&nbsp; &nbsp;', 'Projected',0,'http://','Projected coordinate system'],
@@ -86,7 +86,6 @@ try:
     for row in text:
       crs_ex_line[row[0]] = row
     #print crs_ex_line['4326'][2]
-    #print crs_ex_line
 except:
   print "!!! FAILED: NO CRS_EXCEPTIONS !!!"
   sys.exit(1)
@@ -96,6 +95,7 @@ if not con:
   print "Connection to sqlite maprank_records FAILED"
   sys.exit(1)
 cur = con.cursor()
+
 def getQueryParam(q, param):
   """Return value of a param in query"""
   if param == 'deprecated':
@@ -236,7 +236,11 @@ def index():
   result = []
 
   ref = osr.SpatialReference()
+  # with ix.reader() as reader:
+  #   print reader.most_frequent_terms("kind",50)
+    
   with ix.searcher(closereader=False) as searcher:
+    
     parser = MultifieldParser(["code","name","kind","area","area_trans","alt_title"], ix.schema)
     query = request.GET.get('q')  # p43 - 1.9 The default query language
     pagenum = int(request.GET.get("page",1))
@@ -263,11 +267,11 @@ def index():
     #mystatquery = parser.parse(getVerboseQuery(statquery))
     # how long, exactly, it will take 
     start = time.clock()
+    # find a query in all categories 
     
-    # find a query in all categories
-    res_facets = searcher.search(mycatquery , groupedby='kind',scored=False,sortedby=None,maptype=sorting.Count)
+    
+    res_facets = searcher.search(mycatquery , groupedby="kind",scored=False,sortedby=None,maptype=sorting.Count)
     # find a query in inverse deprecated
-    
     #res_facetss = searcher.search(mystatquery , groupedby="deprecated",scored=False,sortedby=None,maptype=sorting.Count)    
     # result of query
     results = searcher.search(myquery, limit = None) #(pagenum*pagelen)
@@ -298,15 +302,15 @@ def index():
         name = r['name'].replace("ESRI: ","").strip()
         type_epsg = "ESRI"
       
-      if r['area_trans'].startswith("World"):
+      if r['area'].startswith("World"):
+        short_area = "World"
+      else:
+        short_area = r['area']
+        
+      if r['area_trans'].startswith("World"):        
         short_area = "World"
       elif r['area_trans']:
         short_area = r['area_trans']
-      else:
-        if r['area'].startswith("World"):
-          short_area = "World"
-        else:
-          short_area = r['area']
       
       if len(short_area) > 100:
         short_area = short_area.split("-", 2)[0]
@@ -365,8 +369,11 @@ def index():
       title = '"'+ q +'"' + " is not in EPSG.io"
     kind_low = q,kind_low
     # update facets counters
+    show_alt_search = False
     for key,value in groups.iteritems():
         
+      if value>0:
+        show_alt_search = True
       # standard kinds
       for i in range(0,len(facets_list)):
         if facets_list[i][0] == key:
@@ -456,11 +463,6 @@ def index(id):
     myquery = parser.parse(query)
     results = searcher.search(myquery, limit=None) #default limit is 10 , reverse = True
     
-    
-    # TODO: if it any results, then redirect to ...
-    #if len(results) == 0:
-      
-    
     detail = []
     trans = []
     url_trans = []
@@ -518,8 +520,16 @@ def index(id):
         if facets_list[i][0] == item['kind']:
           kind = facets_list[i][6]
           url_kind = "/?q=kind:" + facets_list[i][1]
+      
+      area_item = item['area']
+      area_trans_item = item['area_trans']
       if item['area'].startswith("World:"):
         area_item = "World"
+      if item['area_trans'].startswith("World:"):
+        area_trans_item = "World"
+      
+      if len(area_trans_item) > 100:
+        area_trans_item = area_trans_item.split(":", 1)[0]
       # for short link (5514, instead of 5514-15965)
       if int(code_trans) == 0 and int(r['code_trans']) != 0:
         code_trans = r['code_trans']
@@ -821,14 +831,19 @@ def index(id):
     bbox_coords = ""
     
         
+    error_code = 9
+    area_trans_item = ""
     deprecated_available = 0
+    
     if len(results) == 0:
       error = 404
       return template('./templates/error', error=error)
+      
     for r in results:
       item = r
       url_area = area_to_url(item['area'])
       
+      url_format ="/"+str(item['code'])
       code_short = item['code'].split("-")
       name = item['name']
       type_epsg = "EPSG"
@@ -1217,9 +1232,11 @@ def error404(error):
 def error500(error):
   error = "500: Internal Server Error"
   return template('./templates/error', error=error)
+
 @route('/<id:re:.+[\d]+.+?>/')
 def index(id):
   redirect('/%s' % id)
+
 @route('/<id:re:(urn:ogc:def:)+.*>')
 def index(id):
   print id
