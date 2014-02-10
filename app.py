@@ -1288,7 +1288,6 @@ def index(id,format):
   if len(gml) == 0:
     error = 404
     try_url = ""
-    print (time.clock() - start)
     
     return template('./templates/error',error=error, try_url=try_url)
     
@@ -1335,7 +1334,7 @@ def index(id,format):
     id_reformated = id.replace("ogc-","").replace("epsg-","")
     id_reformated = id_reformated.split("-")
     url = id_reformated[1]+"-"+id_reformated[0]
-    
+    url = url.replace("-crs","").replace("-op","")
     ix = open_dir(INDEX)
     with ix.searcher(closereader=False) as searcher:
       parser = QueryParser("code", ix.schema)
