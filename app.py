@@ -991,6 +991,10 @@ def index(id, format):
       rname = r['name'].replace("ESRI: ","").strip()
       def_trans = r['code_trans']
       bbox = r['bbox']
+      # bbox is in format (dd.dd, dd.dd,dd.dd, dd.dd) but for js we need format like [dd.dd, dd.dd,dd.dd, dd.dd] 
+      mbbox = []
+      for b in bbox:
+        mbbox.append(b)
       
       ref.ImportFromEPSG(int(rcode))
       wkt = ref.ExportToWkt()
@@ -1024,6 +1028,11 @@ def index(id, format):
         url_coords = rcode + "-" + tcode 
         # if code_trans is 0, then will be use default transformation and it is the same bbox as CRS 
         bbox = t['bbox']
+        # bbox is in format (dd.dd, dd.dd,dd.dd, dd.dd) but for js we need format like [dd.dd, dd.dd,dd.dd, dd.dd] 
+        mbbox = []
+        for b in bbox:
+          mbbox.append(b)
+
     else: 
       trans_result = code_result
       url_coords = rcode
@@ -1043,9 +1052,12 @@ def index(id, format):
             wkt = ref.ExportToWkt().decode('utf-8')
     
     # One of the formats is a map (because /coordinates/ was redirect on /coordinates and then catch by <format>)
-    if format == "/map":
-      center = ((bbox[0] - bbox[2])/2.0)+bbox[2],((bbox[3] - bbox[1])/2.0)+bbox[1]
-      return template ('./templates/map', name=rname, code=rcode, center=center)
+    if format == "/map":      
+      n, w, s, e = bbox
+      center = (n-s)/2.0 + s, (e-w)/2.0 + w
+      if (e < w):
+        center = (n-s)/2.0+s, (w+180 + (360-(w+180)+e+180) / 2.0 ) % 360-180
+      return template ('./templates/map', name=rname, code=rcode, center=center, bbox=mbbox)
     
     ref.ImportFromWkt(wkt)
     ct = "text/plain"
