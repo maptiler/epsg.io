@@ -837,7 +837,8 @@ def index(id):
     
     if len(results) == 0:
       error = 404
-      return template('./templates/error', error=error)
+      try_url= ""
+      return template('./templates/error', error=error, try_url=try_url)
       
     for r in results:
       item = r
@@ -1226,29 +1227,101 @@ def index():
 @error(code=404)
 def error404(error):
   error = 404
-  return template('./templates/error', error=error)
+  try_url = ""
+  return template('./templates/error', error=error, try_url=try_url)
 
 @error(code=500)
 def error500(error):
   error = "500: Internal Server Error"
-  return template('./templates/error', error=error)
+  try_url = ""
+  return template('./templates/error', error=error, try_url=try_url)
 
 @route('/<id:re:.+[\d]+.+?>/')
 def index(id):
   redirect('/%s' % id)
 
-@route('/<id:re:(urn:ogc:def:)+.*>')
-def index(id):
-  print id
-  id=id.replace("urn:ogc:def:","").replace(":EPSG::","-")
-  epsg_object,code = id.split("-")
-  if epsg_object == "crs" or epsg_object == "coordinateOperation":
-    id = code
-  else:
-    id = code + "-" + epsg_object
+#handling for urn from sqlite
+@route('/<id:re:(urn:ogc:def:([\w]+-?[\w]+):[\w]+::\d+\.?\d+(\.\d)?)><format:re:(\.gml)?>')
+def index(id,format):
+  # if i want gml
+  if format == ".gml":
+    cur.execute('SELECT id,xml FROM gml where urn = ?', (id,))
+    gml = cur.fetchall()
+    if len(gml)!=0:
+      for id,xml in gml:
+        export = '<?xml version="1.0" encoding="UTF-8"?>\n %s' % (xml)
+        response['Content-Type'] = "text/xml" 
+        return export
+    else:
+      error = 404
+      try_url = ""
+      return template('./templates/error',error=error, try_url=try_url)
+  # exist this urn?
+  cur.execute('SELECT id,urn FROM gml where urn = ?', (id,))
+  gml = cur.fetchall()
+  if len(gml) == 0:
+    error = 404
+    try_url = ""
+    print (time.clock() - start)
     
-  redirect('/%s' % id)
-  
+    return template('./templates/error',error=error, try_url=try_url)
+    
+  # if exist than change to our url
+  id_reformated=id.replace("urn:ogc:def:","").replace(":EPSG::"," ")
+  subject,code = id_reformated.split(" ")
+  subject = subject.replace("uom","units")
+  if subject == "crs" or subject == "coordinateOperation":
+    url = code
+  else:
+    url = code + "-" + subject
+  # try quick question into whoosh if exist the record with "url"
+  ix = open_dir(INDEX)
+  with ix.searcher(closereader=False) as searcher:
+    parser = QueryParser("code", ix.schema)
+    myquery = parser.parse(url)
+    results = searcher.search(myquery)
+    #if not exist record in whoosh with "url", redirect to error page without changed url
+    if len(results) == 0:
+      error = 404
+      try_url = "/"+id+".gml"
+      return template('./templates/error',error=error, try_url=try_url)
+    else:
+      redirect('/%s' % url)
+
+# the same logic as for sqlite urn's
+@route('/<id:re:(\w+-\w+-\d+((\.\d+)?(\.?\d+)?)?)><format:re:((\.)?gml)?>')
+def index(id,format):  
+  if format ==".gml":
+    cur.execute('SELECT id,xml FROM gml where id = ?', (id,))
+    gml = cur.fetchall()
+    for id,xml in gml:
+      export = '<?xml version="1.0" encoding="UTF-8"?>\n %s' % (xml)
+      response['Content-Type'] = "text/xml" 
+      return export
+      
+  cur.execute('SELECT id,urn FROM gml where id = ?', (id,))
+  gml = cur.fetchall()
+  if len(gml) == 0:
+    error = 404
+    try_url= ""
+    return template('./templates/error',error=error, try_url=try_url)
+  else:
+    id_reformated = id.replace("ogc-","").replace("epsg-","")
+    id_reformated = id_reformated.split("-")
+    url = id_reformated[1]+"-"+id_reformated[0]
+    
+    ix = open_dir(INDEX)
+    with ix.searcher(closereader=False) as searcher:
+      parser = QueryParser("code", ix.schema)
+      myquery = parser.parse(url)
+      results = searcher.search(myquery)
+      if len(results) == 0:
+        error = 404
+        try_url = "/"+id+".gml"
+        return template('./templates/error',error=error, try_url=try_url)
+      else:
+        redirect ('/%s' %url)
+
 @route('/about')
 def index():
   return template('./templates/about')
