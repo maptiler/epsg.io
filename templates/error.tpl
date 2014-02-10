@@ -42,8 +42,12 @@
         <h1>Something went wrong.</h1>
         <p>{{error}}</p>
       %end
-     
-     <h2>Try to searchin below or go to <a href="http://epsg.io">epsg.io</a></h2>
+      
+      %if try_url:
+        <h2>Try to searching below or go to <a href="{{try_url}}">GML</a></h2>
+      %else:
+        <h2>Try to searching below or go to <a href="http://epsg.io">epsg.io</a></h2>
+      %end
      
      <div id="error-content-container">
        <div id="search-container">
