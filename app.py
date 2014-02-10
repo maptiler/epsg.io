@@ -318,6 +318,9 @@ def index():
       url_map = ""
       ref.ImportFromEPSG(int(short_code[0]))
       wkt = ref.ExportToWkt()
+      proj4 = ref.ExportToProj4().strip()
+      proj4js = '%s["%s:%s"] = "%s";' % ("Proj4js.defs", type_epsg, short_code[0], proj4)
+      
       if wkt and r['bbox']:
         # a = ref.ImportFromWkt(r['wkt'])
         # if a == 0:
@@ -325,7 +328,8 @@ def index():
 
         
       result.append({'r':r, 'name':name, 'type_epsg':type_epsg, 'link':link, 'area':short_area, 'short_code':short_code, 'url_map':url_map})
-      json_str.append({'code':r['code'], 'name':name, 'wkt':wkt,'default_trans':r['code_trans'],'trans':r['trans'],'area_trans':r['area_trans'],'accuracy':r['accuracy'],'kind':r['kind'], 'bbox':r['bbox']})
+      if not expanded_trans:
+        json_str.append({'code':r['code'], 'name':name, 'wkt':wkt,'proj4js':proj4js,'default_trans':r['code_trans'],'trans':r['trans'],'area_trans':r['area_trans'],'accuracy':r['accuracy'],'kind':r['kind'], 'bbox':r['bbox']})
       
     
     # number of results from results
@@ -423,6 +427,9 @@ def index():
           short_code = r['code'].split("-")
           ref.ImportFromEPSG(int(short_code[0]))
           wkt = ref.ExportToWkt()
+          proj4 = ref.ExportToProj4().strip()
+          proj4js = '%s["%s:%s"] = "%s";' % ("Proj4js.defs", type_epsg, short_code[0], proj4)
+          
           json_bbox = []
           if r['trans']:
             for item in r['trans']:
@@ -432,7 +439,7 @@ def index():
               transformation = searcher.search(myquery, limit=None)
               for hit in transformation:
                 json_bbox.append({'trans_code':item, 'bbox': hit['bbox'] })
-          json_str.append({'code':r['code'], 'name':name, 'wkt':wkt,'default_trans':r['code_trans'],'accuracy':r['accuracy'],'kind':r['kind'], 'trans':json_bbox})        
+          json_str.append({'code':r['code'], 'name':name, 'wkt':wkt,'proj4js':proj4js,'default_trans':r['code_trans'],'accuracy':r['accuracy'],'kind':r['kind'], 'trans':json_bbox})        
           
       export['number_result']= num_results
       export['results'] = json_str
