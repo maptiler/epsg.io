@@ -114,9 +114,10 @@
             Target uom: <a href="/{{item['target_uom'][0]}}-units">{{item['target_uom'][1]}}</a><br />
           %end
         %end
-
-        %if item['uom_code']:
-          Unit: <a href="/{{item['uom_code']}}-units/">{{item['uom']}}</a><br />
+        %if 'uom_code' in item:
+          %if item['uom_code']:
+            Unit: <a href="/{{item['uom_code']}}-units/">{{item['uom']}}</a><br />
+          %end
         %end
 
         %if item['files']:
@@ -279,30 +280,34 @@
             <ul>
               % i = 0
               %for r in trans:
-                %if r['link'] == "" and r['deprecated'] == 0 and r['area_trans']:
-                  <li> {{area_trans_item}}
-                
-                  %if r['accuracy']:
-                    , accuracy {{r['accuracy']}} m, 
-                  %end
-
-                  %if r['code_trans'] != 0:
-                    code {{r['code_trans']}} 
-                  %end
-
+                %if r['link'] == "" and r['deprecated'] == 0:
+                  <li>
                   %if r['default'] == True:
                     DEFAULT
                   %end
+                   {{r['area_trans_trans']}}
+                
+                  %if r['accuracy']:
+                    , accuracy&nbsp;{{r['accuracy']}}&nbsp;m, 
+                  %end
+
+                  %if r['code_trans'] != 0:
+                    code&nbsp;{{r['code_trans']}} 
+                  %end
+
                   % i +=1
                   </li>
                 
-                %elif r['deprecated'] == 0 and r['area_trans']:
+                %elif r['deprecated'] == 0:
                   <li>
-                    <a href="/{{r['link']}}" title = "{{r['trans_remarks']}}">{{area_trans_item}}, accuracy {{r['accuracy']}} m, code {{r['code_trans']}} 
+
+                    
+                    <a href="/{{r['link']}}" title = "{{r['trans_remarks']}}">
+                      %if r['default'] == True:
+                        DEFAULT
+                      %end
+                      {{r['area_trans_trans']}}, accuracy&nbsp;{{r['accuracy']}}&nbsp;m, code&nbsp;{{r['code_trans']}} 
                   
-                    %if r['default'] == True:
-                      DEFAULT
-                    %end
                     </a>
                     %i+=1
                   </li>
@@ -320,19 +325,19 @@
               %for r in trans:
                 %if r['deprecated'] == 1:
                   %if r['link'] == "":
-                    <li>{{r['area_trans']}}, accuracy {{r['accuracy']}} m, code {{area_trans_item}} DEPRECATED
-                  
-                    %if r['default'] == True:
-                      DEFAULT
-                    %end
+                    <li>
+                      %if r['default'] == True:
+                        DEFAULT
+                      %end
+                      {{r['area_trans']}}, accuracy&nbsp;{{r['accuracy']}}&nbsp;m, code&nbsp;{{r['area_trans_trans']}} DEPRECATED
                     </li>
                   %else:
                     <li>
-                      <a href="/{{r['link']}}" title = "{{r['trans_remarks']}}">{{area_trans_item}}, accuracy {{r['accuracy']}} m,  code {{r['code_trans']}} DEPRECATED
+                      %if r['default'] == True:
+                        DEFAULT
+                      %end
+                      <a href="/{{r['link']}}" title = "{{r['trans_remarks']}}">{{r['area_trans_trans']}}, accuracy&nbsp;{{r['accuracy']}}&nbsp;m, code&nbsp;{{r['code_trans']}} DEPRECATED
      
-                    %if r['default'] == True:
-                      DEFAULT
-                    %end
                       </a>
                     </li>
                   %end
@@ -377,10 +382,10 @@
           %found = False
           %if trans:
             %for r in trans:
-              %if r['link'] == "" and r['area_trans'] and not found:
+              %if r['link'] == "" and not found:
                   %found = True
                   <h2>
-                {{area_trans_item}} <br />
+                {{r['area_trans_trans']}} <br />
                 
                 %if r['code_trans'] != 0:
                   {{type_epsg}}: <a href="/{{r['code_trans']}}">{{r['code_trans']}}</a>
@@ -391,7 +396,7 @@
                 %end
                 </h2>
                 %if r['accuracy']:
-                  Accuracy {{r['accuracy']}} m 
+                  Accuracy&nbsp;{{r['accuracy']}}&nbsp;m 
                 %end
               %end
             %end
