@@ -271,11 +271,11 @@ def index():
     
     
     res_facets = searcher.search(mycatquery , groupedby="kind",scored=False,sortedby=None,maptype=sorting.Count)
+    
     # find a query in inverse deprecated
     #res_facetss = searcher.search(mystatquery , groupedby="deprecated",scored=False,sortedby=None,maptype=sorting.Count)    
     # result of query
     results = searcher.search(myquery, limit = None) #(pagenum*pagelen)
-    
     # finish time
     elapsed = (time.clock() - start)
     
@@ -520,8 +520,8 @@ def index(id):
         if facets_list[i][0] == item['kind']:
           kind = facets_list[i][6]
           url_kind = "/?q=kind:" + facets_list[i][1]
-      
       area_item = item['area']
+      
       area_trans_item = item['area_trans']
       if item['area'].startswith("World:"):
         area_item = "World"
@@ -1018,7 +1018,6 @@ def index(id, format):
         for id,xml in gml:
           pass
   
-  
     if int(code_trans) != 0:
       trans_query = parser.parse(str(code_trans) + " kind:COORDOP")
       trans_result = searcher.search(trans_query,sortedby=False,scored=False)
@@ -1162,7 +1161,7 @@ def index():
     
       for r in scode_result:
         #swkt = r['wkt']
-        ref.ImportFromEPSG(scode)
+        ref.ImportFromEPSG(int(scode))
         swkt = ref.ExportToWkt()
         scode = r['code']
     
@@ -1180,9 +1179,9 @@ def index():
      
       for r in tcode_result:
         #twkt = r['wkt']
-        ref.ImportFromEPSG(tcode)
-        swkt = ref.ExportToWkt()
-    
+        ref.ImportFromEPSG(int(tcode))
+        twkt = ref.ExportToWkt()
+        
     if int(tcode_trans) != 0:
       tcode_trans_query = parser.parse(str(tcode_trans) + " kind:COORDOP")
       tcode_trans_result = searcher.search(tcode_trans_query, sortedby=False,scored=False)
@@ -1246,7 +1245,7 @@ def index():
     response['Content-Type'] = "text/json"
     
     if callback != str(0):
-      export = str(callback) + "(" + str(export) + ")"
+      export = str(callback) + "(" + json.dumps(export) + ")"
       response['Content-Type'] = "application/javascript"
       
     return export
