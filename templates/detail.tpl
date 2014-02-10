@@ -466,11 +466,11 @@
             <li><a class="switcher switcher_selected" id="s_html" href="{{url_format}}.html">Well Known Text as HTML<i></i></a></li>
             <li><a class="switcher" id="s_wkt" href="{{url_format}}.wkt">OGC WKT<i></i></a></li>
             <!-- <li><a class="switcher" id="s_prettywkt" href="{{url_format}}.prettywkt">PrettyWKT<i></i></a></li>-->
-            <li><a class="switcher" id="s_esriwkt" href="{{url_format}}.esriwkt">ESRI WKT<i></i></a></li>
-            <li><a class="switcher" id="s_proj4" href="{{url_format}}.proj4">PROJ.4<i></i></a></li>
-            <li><a class="switcher" id="s_proj4js" href="{{url_format}}.proj4js">JavaScript (PROJ.4)<i></i></a></li>
             <li><a class="switcher" id="s_gml" href="{{url_format}}.gml">OGC GML<i></i></a></li>
             <li><a class="switcher" id="s_xml" href="{{url_format}}.xml">XML<i></i></a></li>
+            <li><a class="switcher" id="s_esriwkt" href="{{url_format}}.esriwkt">ESRI WKT<i></i></a></li>
+            <li><a class="switcher" id="s_proj4" href="{{url_format}}.proj4">PROJ.4<i></i></a></li>
+            <li><a class="switcher" id="s_proj4js" href="{{url_format}}.proj4js">JavaScript (PROJ.4js)<i></i></a></li>
             <li><a class="switcher" id="s_geoserver" href="{{url_format}}.geoserver">GeoServer<i></i></a></li>
             <li><a class="switcher" id="s_mapfile" href="{{url_format}}.mapfile">MapServer<i></i></a></li>
             <!-- <li><a class="switcher" id="s_mapserverpython" href="{{url_format}}.mapserverpython">MapSever - Python<i></i></a></li> -->
@@ -529,7 +529,7 @@
         </div>
         
         <div class="code-definition-container" id="s_proj4js_code">
-          <p>Definition: JavaScript (PROJ.4) </p>
+          <p>Definition: JavaScript (PROJ.4js) </p>
           <ul>
             <li><a href="{{url_format}}.js">Open</a></li>
             <li><a id="s_proj4js_copyUrl" class="zeroclipboard" data-clipboard-text="http://epsg.io{{url_format}}.js" href="#">Copy URL</a></li>
