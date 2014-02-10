@@ -838,10 +838,10 @@ def index(id):
             projcrs_by_gcrs.append({'result': gcrs_item})
         else:
           parser = QueryParser("geogcrs", ix.schema)
-          gcrs_query = parser.parse(gcrs_code + " kind:PROJCRS" + " deprecated:0")
+          gcrs_query = parser.parse(str(gcrs_code) + " kind:PROJCRS" + " deprecated:0")
           gcrs_result = searcher.search(gcrs_query, limit=5)
           if len(gcrs_result) >5:
-            more_gcrs_result = "/?q=geogcrs:"+gcrs_code+" kind:PROJCRS deprecated:0"
+            more_gcrs_result = "/?q=geogcrs:"+str(gcrs_code)+" kind:PROJCRS deprecated:0"
           for gcrs_item in gcrs_result:        
             projcrs_by_gcrs.append({'result': gcrs_item})
           
