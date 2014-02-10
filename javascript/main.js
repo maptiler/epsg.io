@@ -18,17 +18,18 @@ epsg.io.home_init = function() {
 
   // Client side GeoIP country detection with
   // http://freegeoip.net/json/?callback=asfasd
-  var jsonp = new goog.net.Jsonp('http://freegeoip.net/json/');
-  jsonp.send({}, function(result) {
-    if (!result['country_name']) return;
-    var q = result['country_name'];
-    if (result['country_code'] == 'US') q = result['region_name'];
-    goog.dom.getElement('country').innerHTML = q;
-    goog.dom.getElement('countryLink').href =
-        'http://epsg.io/?q=' + encodeURIComponent(q);
-    goog.dom.getElement('countryLink').style.display = 'inline';
-  });
-
+  if (goog.dom.getElement('countryLinkWrapper')) {
+    var jsonp = new goog.net.Jsonp('http://freegeoip.net/json/');
+    jsonp.send({}, function(result) {
+      if (!result['country_name']) return;
+      var q = result['country_name'];
+      if (result['country_code'] == 'US') q = result['region_name'];
+      goog.dom.getElement('country').innerHTML = q;
+      goog.dom.getElement('countryLink').href =
+          'http://epsg.io/?q=' + encodeURIComponent(q);
+      goog.dom.getElement('countryLink').style.display = 'inline';
+    });
+  }
 };
 
 
@@ -89,11 +90,12 @@ epsg.io.detail_init = function() {
 /**
  * The Map page javascript
  * @param {!string} srs Spatial Reference System (usually EPSG code)
+ * @param {Array.<number>} bbox [n,w,s,e]
  * @param {number=} opt_lon Longitude of map center (defaults to 0)
  * @param {number=} opt_lat Latitude of map center (defaults to 0)
  */
-epsg.io.map_init = function(srs, opt_lon, opt_lat) {
-  new epsg.io.Coordinates(srs, opt_lon, opt_lat);
+epsg.io.map_init = function(srs, bbox, opt_lon, opt_lat) {
+  new epsg.io.Coordinates(srs, bbox, opt_lon, opt_lat);
 };
 
 goog.exportSymbol('home_init', epsg.io.home_init);

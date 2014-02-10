@@ -61,6 +61,7 @@
             </div>
         </div>
     <script type="text/javascript">
-map_init('{{code}}',{{center[1]}},{{center[0]}});</script>
+    
+map_init('{{code}}', {{bbox}}, {{center[1]}}, {{center[0]}});</script>
     </body>
 </html>

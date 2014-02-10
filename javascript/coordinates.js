@@ -24,11 +24,12 @@ epsg.io.TRANS_SERVICE_URL = 'http://epsg.io/trans';
 /**
  * The main Coordinates object
  * @param {!string} srs Spatial Reference System (usually EPSG code)
+ * @param {Array.<number>} bbox [n,w,s,e]
  * @param {number=} opt_lon Longitude of map center (defaults to 0)
  * @param {number=} opt_lat Latitude of map center (defaults to 0)
  * @constructor
  */
-epsg.io.Coordinates = function(srs, opt_lon, opt_lat) {
+epsg.io.Coordinates = function(srs, bbox, opt_lon, opt_lat) {
 
   // srs
   this.srs_ = srs || '4326';
@@ -72,6 +73,10 @@ epsg.io.Coordinates = function(srs, opt_lon, opt_lat) {
   this.jsonp_ = new goog.net.Jsonp(epsg.io.TRANS_SERVICE_URL);
 
   var latlng = new google.maps.LatLng(this.lat_, this.lon_);
+  // BoundingBox
+  var swlatlng = new google.maps.LatLng(bbox[2], bbox[1]);
+  var nelatlng = new google.maps.LatLng(bbox[0], bbox[3]);
+  var bounds = new google.maps.LatLngBounds(swlatlng, nelatlng);
   var myOptions = {
     zoom: 8,
     center: latlng,
@@ -92,6 +97,9 @@ epsg.io.Coordinates = function(srs, opt_lon, opt_lat) {
 
   this.map = new google.maps.Map(this.mapElement, myOptions);
 
+  //this.map.setCenter(bounds.getCenter());
+  this.map.fitBounds(bounds);
+  this.map.setCenter(latlng);
   google.maps.event.addListener(this.map, 'center_changed',
       goog.bind(function() {
         var pos = this.map.getCenter();
