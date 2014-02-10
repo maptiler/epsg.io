@@ -529,7 +529,11 @@ def index(id):
         area_trans_item = "World"
       
       if len(area_trans_item) > 100:
-        area_trans_item = area_trans_item.split(":", 1)[0]
+        if ":" in area_trans_item:
+          area_trans_item = area_trans_item.split(":", 1)[0]
+        elif "-" in area_trans_item:
+          area_trans_item = area_trans_item.split("-", 2)[0]
+
       # for short link (5514, instead of 5514-15965)
       if int(code_trans) == 0 and int(r['code_trans']) != 0:
         code_trans = r['code_trans']
@@ -554,7 +558,17 @@ def index(id):
             default = False
             if int(r['code_trans'])== int(hit['code']): 
               default = True
-            
+              
+            area_trans_trans = hit['area']
+            if item['area'].startswith("World:"):
+              area_trans_trans = "World"
+
+            if len(area_trans_trans) > 50:
+              if ":" in area_trans_trans:
+                area_trans_trans = area_trans_trans.split(":", 1)[0]
+              elif "-" in area_trans_trans:
+                area_trans_trans = area_trans_trans.split("-", 2)[0]
+                
             # if exist some deprecated transformations
             if hit['deprecated'] == 1:
               deprecated_available = 1
@@ -567,7 +581,8 @@ def index(id):
             'accuracy':hit['accuracy'],
             'code_trans':hit['code'],
             'trans_remarks':hit['remarks'],
-            'default':default})
+            'default':default,
+            'area_trans_trans':area_trans_trans})
       
       # if it has NOT default transformation code
       else:
