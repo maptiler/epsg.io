@@ -291,6 +291,7 @@ def index():
     json_str = []
     
     short_code = 0
+    codes = []
     for r in results[(maxdoc-pagelen):maxdoc]:
       link = str(r['code'])
       
@@ -318,8 +319,6 @@ def index():
       url_map = ""
       ref.ImportFromEPSG(int(short_code[0]))
       wkt = ref.ExportToWkt()
-      proj4 = ref.ExportToProj4().strip()
-      proj4js = '%s["%s:%s"] = "%s";' % ("Proj4js.defs", type_epsg, short_code[0], proj4)
       
       if wkt and r['bbox']:
         # a = ref.ImportFromWkt(r['wkt'])
@@ -328,10 +327,16 @@ def index():
 
         
       result.append({'r':r, 'name':name, 'type_epsg':type_epsg, 'link':link, 'area':short_area, 'short_code':short_code, 'url_map':url_map})
-      if not expanded_trans:
-        json_str.append({'code':r['code'], 'name':name, 'wkt':wkt,'proj4js':proj4js,'default_trans':r['code_trans'],'trans':r['trans'],'area_trans':r['area_trans'],'accuracy':r['accuracy'],'kind':r['kind'], 'bbox':r['bbox']})
+      if not expanded_trans and format == "json":
+        proj4 = ref.ExportToProj4().strip()
+        #proj4js = '%s["%s:%s"] = "%s";' % ("Proj4js.defs", type_epsg, short_code[0], proj4)
+        json_str.append({'code':r['code'], 'name':name, 'wkt':wkt,'proj4':proj4,'default_trans':r['code_trans'],'trans':r['trans'],'area':r['area'],'accuracy':r['accuracy'],'kind':r['kind'], 'bbox':r['bbox']})
       
     
+      elif expanded_trans and format == "json":
+        for trans_codes in r['trans']:
+          if str(trans_codes) not in str(codes):
+            codes.append(trans_codes)
     # number of results from results
     num_results = len(results)
     num_kind = len(res_facets)
@@ -423,23 +428,39 @@ def index():
       
       if expanded_trans:
         json_str = []
+        parser = MultifieldParser(["code","kind"], ix.schema)
+        trans_query = ""
+        for c in codes:
+          trans_query = trans_query +"code:"+str(c)+" OR "
+        myquery = parser.parse(trans_query + " AND kind:COORDOP")
+        
+        transformation = searcher.search(myquery, limit=None)
+        code_with_bbox =  {}
+        for hit in transformation:
+          values = hit['description']          
+          if not re.findall(r'([a-df-zA-Z_])',values):
+            if str(values) != str(0):
+              values = tuple(map(float, values[1:-1].split(',')))
+              # do not change default TOWGS84
+              if int(hit['code_trans']) != int(hit['code']) :
+                if (values != (0.0,0.0,0.0,0.0,0.0,0.0,0.0) and type(values) == tuple and values != (0,) and values != ()):            
+                  ref.ImportFromEPSG(int(r['code']))
+                  ref.SetTOWGS84(*values)
+                  wkt = ref.ExportToWkt().decode('utf-8')
+                  proj4 = ref.ExportToProj4().strip()
+          code_with_bbox[int(hit['code'])] = hit,wkt,proj4
         for r in results[(maxdoc-pagelen):maxdoc]:
           short_code = r['code'].split("-")
           ref.ImportFromEPSG(int(short_code[0]))
           wkt = ref.ExportToWkt()
           proj4 = ref.ExportToProj4().strip()
-          proj4js = '%s["%s:%s"] = "%s";' % ("Proj4js.defs", type_epsg, short_code[0], proj4)
+          #proj4js = '%s["%s:%s"] = "%s";' % ("Proj4js.defs", type_epsg, short_code[0], proj4)
           
           json_bbox = []
           if r['trans']:
             for item in r['trans']:
-              parser = MultifieldParser(["code","kind"], ix.schema)
-              query = "code:"+str(item)+ " kind:COORDOP"
-              myquery = parser.parse(query)
-              transformation = searcher.search(myquery, limit=None)
-              for hit in transformation:
-                json_bbox.append({'trans_code':item, 'bbox': hit['bbox'] })
-          json_str.append({'code':r['code'], 'name':name, 'wkt':wkt,'proj4js':proj4js,'default_trans':r['code_trans'],'accuracy':r['accuracy'],'kind':r['kind'], 'trans':json_bbox})        
+              json_bbox.append({'code_trans':item, 'bbox': code_with_bbox[item][0]['bbox'],'name': code_with_bbox[item][0]['name'],'accuracy': code_with_bbox[item][0]['accuracy'],'wkt':code_with_bbox[item][1], 'proj4':code_with_bbox[item][2],'area':code_with_bbox[item][0]['area'] })
+          json_str.append({'code':r['code'], 'name':name, 'wkt':wkt,'proj4':proj4,'default_trans':r['code_trans'],'accuracy':r['accuracy'],'kind':r['kind'], 'trans':json_bbox,'area':r['area']})        
           
       export['number_result']= num_results
       export['results'] = json_str
