@@ -109,7 +109,7 @@
               <li>
               %for i in [0,8,12,16,17,18,19,24,25,26]:
                 %if facets_list[i][4] != 0:
-                  {{!facets_list[i][2]}}<a href="{{facets_list[i][5]}}" title="">{{facets_list[i][3]}} </a>
+                  <h2><a href="{{facets_list[i][5]}}" title="">{{facets_list[i][6]}}s ({{!facets_list[i][4]}}) </a></h2>
                 %end
               %end
               </li>
