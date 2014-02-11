@@ -811,9 +811,16 @@ def index(id):
            
     # if the CRS its concatenated
     url_concatop=[]
-    if default_trans:
-      for i in range(0,len(default_trans['concatop'])):
-        url_concatop.append(str(default_trans['concatop'][i]))
+    found_concatop = False
+    if 'concatop' in item:
+      if item['concatop']:
+         for i in range(0,len(item['concatop'])):
+           url_concatop.append(str(item['concatop'][i]))
+           
+      elif default_trans:
+        for i in range(0,len(default_trans['concatop'])):
+          url_concatop.append(str(default_trans['concatop'][i]))
+        
     alt_title = ""    
     if 'alt_title' in item:
       if item['alt_title']:
@@ -885,7 +892,7 @@ def index(id):
     # url_area = ""
     alt_title = ""
     bbox_coords = ""
-    
+    url_concatop = []
         
     error_code = 9
     area_trans_item = ""
@@ -976,7 +983,7 @@ def index(id):
         for gcrs_item in gcrs_result[:5]:
           projcrs_by_gcrs.append({'result': gcrs_item})
 
-  return template('./templates/detail', ogpxml_highlight=ogpxml_highlight, area_trans_item=area_trans_item, error_code=error_code, ogpxml=ogpxml, bbox_coords=bbox_coords,more_gcrs_result=more_gcrs_result, deprecated_available=deprecated_available, url_kind=url_kind, type_epsg=type_epsg, name=name, projcrs_by_gcrs=projcrs_by_gcrs, alt_title=alt_title, kind=kind, code_short=code_short,item=item, detail=detail, facets_list=facets_list, nadgrid=nadgrid, trans_lat=trans_lat, trans_lon=trans_lon, trans=trans, url_format=url_format, default_trans=default_trans, center=center,g_coords=g_coords)  
+  return template('./templates/detail', url_concatop=url_concatop, ogpxml_highlight=ogpxml_highlight, area_trans_item=area_trans_item, error_code=error_code, ogpxml=ogpxml, bbox_coords=bbox_coords,more_gcrs_result=more_gcrs_result, deprecated_available=deprecated_available, url_kind=url_kind, type_epsg=type_epsg, name=name, projcrs_by_gcrs=projcrs_by_gcrs, alt_title=alt_title, kind=kind, code_short=code_short,item=item, detail=detail, facets_list=facets_list, nadgrid=nadgrid, trans_lat=trans_lat, trans_lon=trans_lon, trans=trans, url_format=url_format, default_trans=default_trans, center=center,g_coords=g_coords)  
 
 @route('/<id:re:[\d]+(-[a-zA-Z]+)><format:re:[\.]+[gml]+>')
 def index(id, format):

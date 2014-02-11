@@ -58,122 +58,124 @@
       <p>
         %if 'scope' in item:
           %if item['scope']:
-            Scope: {{item['scope']}}<br />
+            <span class="caption">Scope: </span>{{item['scope']}}<br />
           %end
         %end
 
         %if detail:
           %if detail[0]['url_area'] == "":
-            Area of use: <a href="{{detail[0]['url_area']}}"> {{item['area']}}</a><br />
+            <span class="caption">Area of use: </span><a href="{{detail[0]['url_area']}}"> {{item['area']}}</a><br />
           %end
         %else:
           %if item['area']:
-            Area of use: <a href="{{url_area}}">{{area_item}}</a><br />
+            <span class="caption">Area of use: </span><a href="{{url_area}}">{{area_item}}</a><br />
           %end
         %end
 
         %if 'remarks' in item:
           %if item['remarks']:
-            Remarks: {{item['remarks']}}<br />
+            <span class="caption">Remarks: </span>{{item['remarks']}}<br />
           %end
         %end
 
         %if 'information_source' in item:
           %if item['information_source']:
-            Information source: {{item['information_source']}}<br />
+            <span class="caption">Information source: </span>{{item['information_source']}}<br />
           %end
         %end
 
         %if 'revision_date' in item:
           %if item['revision_date']:
-            Revision date: {{item['revision_date']}}<br />
+            <span class="caption">Revision date:  </span>{{item['revision_date']}}<br />
           %end
         %end
 
-        %if 'concatop' in item:
-          %if item['concatop']:
-            Steps of transformation: {{item['concatop']}}<br />
+        %if url_concatop != []:
+          <span class="caption">Steps of transformation: </span>
+          %for url in url_concatop:
+            <a href="{{url}}">{{url}} </a>
           %end
+          <br />
         %end
 
         %if nadgrid:
-          NadGrid file: {{nadgrid}}<br />
+        <span class="caption">NadGrid file: </span>{{nadgrid}}<br />
         %end
 
         %if 'geogcrs' in item:
           %if item['geogcrs']:
-            Geodetic coordinate reference system: <a href="/{{item['geogcrs'][0]}}" title="">{{item['geogcrs'][1]}}</a><br />
+            <span class="caption">Geodetic coordinate reference system: </span><a href="/{{item['geogcrs'][0]}}">{{item['geogcrs'][1]}}</a><br />
           %end
         %end
 
         %if 'datum' in item:
           %if item['datum'] != 0 and item['datum'] :
-            Datum: <a href="/{{item['datum'][0]}}-datum/" title="">{{item['datum'][1]}}</a><br />
+            <span class="caption">Datum: </span><a href="/{{item['datum'][0]}}-datum/">{{item['datum'][1]}}</a><br />
           %end
         %end
 
         %if 'cs' in item:
           %if item['cs']:
-            Coordinate system: <a href="/{{item['cs'][0]}}-cs">{{item['cs'][1]}}</a><br />
+            <span class="caption">Coordinate system: </span><a href="/{{item['cs'][0]}}-cs">{{item['cs'][1]}}</a><br />
           %end
         %end
 
         %if item['target_uom']:
           %if int(code_short[0]) != int(item['target_uom'][0]):
-            Target uom: <a href="/{{item['target_uom'][0]}}-units">{{item['target_uom'][1]}}</a><br />
+            <span class="caption">Target uom: </span><a href="/{{item['target_uom'][0]}}-units">{{item['target_uom'][1]}}</a><br />
           %end
         %end
         %if 'uom_code' in item:
           %if item['uom_code']:
-            Unit: <a href="/{{item['uom_code']}}-units/">{{item['uom']}}</a><br />
+            <span class="caption">Unit: </span><a href="/{{item['uom_code']}}-units/">{{item['uom']}}</a><br />
           %end
         %end
 
         %if item['files']:
-          File: {{item['files']}}<br />
+          <span class="caption">File: </span>{{item['files']}}<br />
         %end
 
         %if item['orientation']:
-          Orientation: {{item['orientation']}}<br />
+          <span class="caption">Orientation: </span>{{item['orientation']}}<br />
         %end
 
         %if item['abbreviation']:
-          Abrev: {{item['abbreviation']}}<br />
+          <span class="caption">Abreviation: </span>{{item['abbreviation']}}<br />
         %end
 
         %if item['order']:
-          Axis order: {{item['order']}}.<br />
+          <span class="caption">Axis order: </span>{{item['order']}}.<br />
         %end
 
         %if 'description' in item:
           %if item['description']:
-            Description: {{item['description']}}<br />
+            <span class="caption">Description: </span>{{item['description']}}<br />
           %end
         %end
 
         %if 'ellipsoid' in item:
           %if item['ellipsoid']:
             %if item['ellipsoid'][0] != "None":
-              Ellipsoid: <a href="/{{item['ellipsoid'][0]}}-ellipsoid">{{item['ellipsoid'][1]}}</a><br />
+              <span class="caption">Ellipsoid: </span><a href="/{{item['ellipsoid'][0]}}-ellipsoid">{{item['ellipsoid'][1]}}</a><br />
             %end
           %end
         %end
 
         %if "method" in item:
           %if item['method']:
-            Method: <a href="/{{item['method'][0]}}-method" title="">{{item['method'][1]}}</a><br />
+            <span class="caption">Method: </span><a href="/{{item['method'][0]}}-method" title="">{{item['method'][1]}}</a><br />
           %end
         %end
 
         %if 'data_source' in item:
           %if item['data_source']:
-            Data source: {{item['data_source']}} <br />
+            <span class="caption">Data source: </span>{{item['data_source']}} <br />
           %end
         %end
 
         %if 'primem' in item:
           %if item['primem']:
-            Prime meridian: <a href="/{{item['primem'][0]}}-primem">{{item['primem'][1]}}</a>
+            <span class="caption">Prime meridian: </span><a href="/{{item['primem'][0]}}-primem">{{item['primem'][1]}}</a>
             %if 'greenwich_longitude' in item:
               %if item['primem'][0] != 8901 and detail != [] and item['greenwich_longitude'] !=0:
                 ({{item['greenwich_longitude']}} degree from Greenwich)<br />
@@ -189,7 +191,7 @@
         %if detail != []:
           %if 'greenwich_longitude' in item:
             %if item['greenwich_longitude'] != 0 and item['greenwich_longitude']:
-              {{item['greenwich_longitude']}} degree from Greenwich<br />
+             <span class="caption">Degree from Greenwich: </span>{{item['greenwich_longitude']}}<br />
             %end
           %end
         %end
@@ -197,7 +199,7 @@
         %if detail != []:
           %if detail[0]['url_axis']:
             %for a in detail[0]['url_axis']:
-              Link to axis : <a href="/{{a['axis_code']}}-axis">{{a['axis_name']}}</a><br />
+              <span class="caption">Link to axis : </span><a href="/{{a['axis_code']}}-axis">{{a['axis_name']}}</a><br />
             %end
           %end
         %end
@@ -206,7 +208,7 @@
         %if 'alt_description' in item:
           %if item['alt_description']:
             %if wkt:
-              Alternative description: {{!item['alt_description']}}<br />
+              <span class="caption">Alternative description: </span>{{!item['alt_description']}}<br />
             %else:
               %found_alt = True
               %if export_html:
@@ -220,7 +222,7 @@
 
         %if 'alt_code' in item:
           %if item['alt_code'] != ['']:
-            Alternatives codes : 
+            <span class="caption">Alternatives codes : </span>
             %for a in item['alt_code']:
               <a href="/{{a}}">{{a}}</a>
             %end
@@ -250,7 +252,11 @@
             %end
           %else:
             %no_map = True
-            <p>NO MAP AVAILABLE</p>
+            %if 'alt_description' in item:
+              %if not item['alt_description']:
+                <p>NO MAP AVAILABLE</p>
+              %end
+            %end
           %end
 
           %if trans_lat and trans_lon:
@@ -431,15 +437,15 @@
           %if trans and default_trans:
             <p>
               %if default_trans['method']:
-                Method: <a href="/{{default_trans['method'][0]}}-method">{{default_trans['method'][1]}}</a><br />
+                <span class="caption">Method: </span><a href="/{{default_trans['method'][0]}}-method">{{default_trans['method'][1]}}</a><br />
               %end
-                Area of use: <a href="{{url_area_trans}}">{{default_trans['area']}}</a><br />
-                Remarks: {{default_trans['remarks']}}<br />
-                Information source: {{default_trans['information_source']}}<br />
-                Revision date: {{default_trans['revision_date']}}<br />
+                <span class="caption">Area of use: </span><a href="{{url_area_trans}}">{{default_trans['area']}}</a><br />
+                <span class="caption">Remarks: </span>{{default_trans['remarks']}}<br />
+                <span class="caption">Information source: </span>{{default_trans['information_source']}}<br />
+                <span class="caption">Revision date: </span>{{default_trans['revision_date']}}<br />
                 
               %if url_concatop != []:
-                Steps of transformation: 
+                <span class="caption">Steps of transformation: </span>
                 %for url in url_concatop:
                   <a href="{{url}}">{{url}} </a>
                 %end
