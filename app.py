@@ -717,8 +717,12 @@ def index(id):
         export['ogcwkt'] = ref.ExportToWkt()
         export['proj4'] = ref.ExportToProj4()
         export['html'] = highlight(ref.ExportToPrettyWkt(), WKTLexer(), HtmlFormatter(cssclass='syntax',nobackground=True))
-        export['xml'] = '<?xml version="1.0" encoding="UTF-8"?>\n %s' % (ref.ExportToXML().replace(">",' xmlns:gml="http://www.opengis.net/gml/3.2">',1))
-        xml_highlight = highlight(export['xml'], XmlLexer(), HtmlFormatter(cssclass='syntax',nobackground=True)) 
+        if ref.ExportToXML() == 0:
+          export['xml'] = '<?xml version="1.0" encoding="UTF-8"?>\n %s' % (ref.ExportToXML().replace(">",' xmlns:gml="http://www.opengis.net/gml/3.2">',1))
+          xml_highlight = highlight(export['xml'], XmlLexer(), HtmlFormatter(cssclass='syntax',nobackground=True)) 
+        else:
+          export['xml'] = ""
+          xml_highlight = "NOT AVAILABLE"
         export['mapfile'] = 'PROJECTION\n\t'+'\n\t'.join(['"'+l.lstrip('+')+'"' for l in ref.ExportToProj4().split()])+'\nEND' ### CSS: white-space: pre-wrap
         proj4 = ref.ExportToProj4().strip()
         export['proj4js'] = '%s["%s:%s"] = "%s";' % ("Proj4js.defs", type_epsg, code, proj4)
@@ -1120,10 +1124,14 @@ def index(id, format):
       response.content_type = 'text/html; charset=UTF-8'
       #return template('./templates/export', export = export, code=rcode)
     elif format == '.xml':
-      export = '<?xml version="1.0" encoding="UTF-8"?>\n %s' % (ref.ExportToXML().replace(">",' xmlns:gml="http://www.opengis.net/gml/3.2" xmlns:xlink="http://www.w3.org/1999/xlink">',1))
-      ct = "text/xml"
-      if request.GET.get('download',1) == "":
-        response['Content-disposition'] = "attachment; filename=%s.xml" % rcode
+      if ref.ExportToXML() == 0:
+        export = '<?xml version="1.0" encoding="UTF-8"?>\n %s' % (ref.ExportToXML().replace(">",' xmlns:gml="http://www.opengis.net/gml/3.2" xmlns:xlink="http://www.w3.org/1999/xlink">',1))
+        ct = "text/xml"
+        if request.GET.get('download',1) == "":
+          response['Content-disposition'] = "attachment; filename=%s.xml" % rcode
+      else:
+        export = "NOT AVAILABLE,PLEASE SELECT OTHER FORMAT"
+        ct = "text/plain"
     elif format == '.gml':
       export = '<?xml version="1.0" encoding="UTF-8"?>\n %s' % (xml)
       ct = "text/xml"
