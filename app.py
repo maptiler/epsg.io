@@ -256,33 +256,35 @@ def index():
     url_facet_statquery ="/?q=" + urllib2.quote(statquery)
     # and through all kinds
     #statquery = setQueryParam(statquery,'kind','*')
-    
     # show query in all kinds
-    catquery = setQueryParam(query,'kind','*')
+    #catquery = setQueryParam(query,'kind','*')
+    #mycatquery = parser.parse(getVerboseQuery(catquery))
+    #mystatquery = parser.parse(getVerboseQuery(statquery))
+
+    # delele kind and deprecated and "*" from query
+    query = query.replace("*","")
+    base_query_kind = re.sub("kind"+r':(\S+)',"", query)
     
+    base_query_kind_deprecated = re.sub("deprecated"+r':(\S+)',"", base_query_kind)
+    
+    if base_query_kind_deprecated == "" or base_query_kind_deprecated == " ":
+      facet_query = Every()
+    else:
+      facet_query = parser.parse(base_query_kind_deprecated)
+      
     # parse and prepare for search
     myquery = parser.parse(getVerboseQuery(query))
-    mycatquery = parser.parse(getVerboseQuery(catquery))
     
-    #mystatquery = parser.parse(getVerboseQuery(statquery))
-    # how long, exactly, it will take 
     start = time.clock()
-    # find a query in all categories 
-    
-    
-    res_facets = searcher.search(mycatquery , groupedby="kind",scored=False,sortedby=None,maptype=sorting.Count)
-    
-    # find a query in inverse deprecated
-    #res_facetss = searcher.search(mystatquery , groupedby="deprecated",scored=False,sortedby=None,maptype=sorting.Count)    
     # result of query
     results = searcher.search(myquery, limit = None) #(pagenum*pagelen)
-    # finish time
+    # how many document include query in each kind
+    res_facets = searcher.search(facet_query, groupedby="kind", scored=False, sortedby=None, maptype=sorting.Count)
+    # "search in" number
     elapsed = (time.clock() - start)
-    
+        
     # kind and count of result from catquery
     groups = res_facets.groups("kind")
-    # deprecated or not deprecated with count of result from statquery
-    #status_groups ={}#res_facetss.groups("deprecated")
     
     # number of results on one page. If change number, edit "paging"
     pagelen = 10
@@ -359,11 +361,13 @@ def index():
     q = re.sub(r'deprecated:\d',"",q)
     q = q.strip()
     kind_low = kind.lower()
-    
+    # more then values in facets_list for condition if exist (selected_kind_index can be 0-30)
+    selected_kind_index = 77
     if num_kind != 0:
       title = "Searching for "+ '"'+ q +'"'
       for i in range(0,len(facets_list)):
         if kind == facets_list[i][1]:
+          selected_kind_index = i
           if kind == "AXIS":
             title = "Axes"
             break
@@ -387,7 +391,7 @@ def index():
       for i in range(0,len(facets_list)):
         if facets_list[i][0] == key:
           facets_list[i][4] = int(value)
-          catquery = setQueryParam(catquery, 'kind', facets_list[i][1])
+          catquery = setQueryParam(base_query_kind, 'kind', facets_list[i][1])
           facets_list[i][5] = "/?q=" + urllib2.quote(catquery)
           
           # index of chose kind 
@@ -397,32 +401,37 @@ def index():
       # sum special kinds
       if key.startswith('CRS-'):
         facets_list[f_crs_index][4] += int(value)
-        catquery = setQueryParam(catquery, 'kind', facets_list[f_crs_index][1])
+        catquery = setQueryParam(base_query_kind, 'kind', facets_list[f_crs_index][1])
         facets_list[f_crs_index][5] = "/?q=" + urllib2.quote(catquery)
 
       if key.startswith('DATUM-'):
         facets_list[f_datum_index][4] += int(value)
-        catquery = setQueryParam(catquery, 'kind', facets_list[f_datum_index][1])
+        catquery = setQueryParam(base_query_kind, 'kind', facets_list[f_datum_index][1])
         facets_list[f_datum_index][5] = "/?q=" + urllib2.quote(catquery)
         
       if key.startswith('CS-'):
         facets_list[f_cs_index][4] += int(value)
-        catquery = setQueryParam(catquery, 'kind', facets_list[f_cs_index][1])
+        catquery = setQueryParam(base_query_kind, 'kind', facets_list[f_cs_index][1])
         facets_list[f_cs_index][5] = "/?q=" + urllib2.quote(catquery)
         
       if key.startswith('UNIT-'):
         facets_list[f_unit_index][4] += int(value)
-        catquery = setQueryParam(catquery, 'kind', facets_list[f_unit_index][1])
+        catquery = setQueryParam(base_query_kind, 'kind', facets_list[f_unit_index][1])
         facets_list[f_unit_index][5] = "/?q=" + urllib2.quote(catquery)
 
       if key.startswith('COORDOP-'):
         facets_list[f_op_index][4] += int(value)
-        catquery = setQueryParam(catquery, 'kind', facets_list[f_op_index][1])
+        catquery = setQueryParam(base_query_kind, 'kind', facets_list[f_op_index][1])
         facets_list[f_op_index][5] = "/?q=" + urllib2.quote(catquery)
     
     # show a clear query (e.g. without kind:CRS, deprecated:0)
     query = setQueryParam(query,'kind',kind)
     query = setQueryParam(query,'deprecated',deprecated)
+    num_deprecated = 0,url_facet_statquery
+    # condition for selected_kind_index have to be lower then initial number
+    if num_kind != 0 and selected_kind_index<77:
+      num_deprecated = abs(num_results - facets_list[selected_kind_index][4]),url_facet_statquery
+    
     export = {}
     if str(format) == "json":
       
@@ -473,7 +482,7 @@ def index():
       
       return json.dumps(json_str)
   
-  return template('./templates/results',show_alt_search=show_alt_search, kind_low=kind_low, num_kind=num_kind, short_code=short_code, title=title, query=query, deprecated=deprecated, num_results=num_results, elapsed=elapsed, facets_list=facets_list, url_facet_statquery=url_facet_statquery, result=result, pagenum=int(pagenum),paging=paging)
+  return template('./templates/results',num_deprecated=num_deprecated, show_alt_search=show_alt_search, kind_low=kind_low, num_kind=num_kind, short_code=short_code, title=title, query=query, deprecated=deprecated, num_results=num_results, elapsed=elapsed, facets_list=facets_list, url_facet_statquery=url_facet_statquery, result=result, pagenum=int(pagenum),paging=paging)
 
 
 

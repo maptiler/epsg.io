@@ -55,7 +55,7 @@
         %if deprecated == 1:
           Found {{num_results}} deprecated records (in {{elapsed}} seconds)
         %else:  
-          Found {{num_results}} valid records (in {{elapsed}} seconds)
+          Found {{num_results}} valid records and {{num_deprecated[0]}}  <a href="{{num_deprecated[1]}}">deprecated</a> records (in {{elapsed}} seconds)
         %end
       </p>
       
@@ -146,14 +146,6 @@
                     <li class="selected">{{!facets_list[i][2]}}<a href="{{facets_list[i][5]}}" title="">{{facets_list[i][3]}} ({{facets_list[i][4]}})</a></li>
                   %end
                 %end
-
-                <li class="last">
-                  %if 'deprecated%3A0' in url_facet_statquery:
-                    <a href="{{url_facet_statquery}}" title="">Show valid</a>
-                  %else:
-                    <a href="{{url_facet_statquery}}" title="">Show deprecated</a>
-                  %end
-                </li>
               </ul>
             %end
         </div>
