@@ -795,9 +795,9 @@ def index(id):
           except:
             trans_lat = ""
             trans_lon = ""
-            bbox_lan1 = ""
+            bbox_lat1 = ""
             bbox_lon1 = ""
-            bbox_lan2 = ""
+            bbox_lat2 = ""
             bbox_lon2 = ""
           
           bbox_coords = (bbox_lon1, bbox_lat1, bbox_lon2, bbox_lat2) #n,e,s,w

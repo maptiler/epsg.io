@@ -277,7 +277,9 @@
           %end
           
           %if bbox_coords and not (trans_lat or trans_lon):
-            <p>WGS84 bounds: {{bbox_coords[3]}} {{bbox_coords[2]}}, {{bbox_coords[1]}} {{bbox_coords[0]}}</p>
+          WGS84 bounds<br />
+          {{bbox_coords[1]}} {{bbox_coords[2]}}<br />
+          {{bbox_coords[3]}} {{bbox_coords[0]}}
           %end
 
         </div>
