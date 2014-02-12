@@ -220,4 +220,19 @@
       </gml:axis>
     </gml:CartesianCS>
   </gml:dictionaryEntry>
+  <gml:dictionaryEntry xmlns:epsg="urn:x-ogp:spec:schema-xsd:EPSG:1.0:dataset" xmlns:gml="http://www.opengis.net/gml/3.2">
+    <epsg:AxisName xmlns:xlink="http://www.w3.org/1999/xlink" gml:id="epsg-axisname-9901">
+      <gml:metaDataProperty>
+        <epsg:CommonMetaData>
+          <epsg:informationSource>OGP</epsg:informationSource>
+          <epsg:revisionDate>2000-03-07</epsg:revisionDate>
+          <epsg:isDeprecated>false</epsg:isDeprecated>
+        </epsg:CommonMetaData>
+      </gml:metaDataProperty>
+      <gml:description>Angle from the equatorial plane to the perpendicular to the ellipsoid through a given point, northwards usually treated as positive.</gml:description>
+      <gml:identifier codeSpace="OGP">urn:ogc:def:axis-name:EPSG::9901</gml:identifier>
+      <gml:name>Geodetic latitude</gml:name>
+      <gml:remarks>Used in geographic 2D and geographic 3D coordinate reference systems.</gml:remarks>
+    </epsg:AxisName>
+  </gml:dictionaryEntry>
 </gml:Dictionary>

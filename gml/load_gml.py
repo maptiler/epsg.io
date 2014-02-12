@@ -2,8 +2,8 @@
 # -*- coding: utf-8 -*-
 
 DATABASE = 'gml.sqlite'
-#XML = 'test_sample.xml'
-XML = 'GmlDictionary.xml'
+XML = 'test_sample.xml'
+#XML = 'GmlDictionary.xml'
 """ids types in sqlite
 
 ogp-uom-1043
@@ -24,6 +24,7 @@ ogp-crs-7414
 epsg-op-8635
 ogp-op-8636
 epsg-area-1024
+ogp-cr-2014.001
 """
 """ urn types in sqlite
 urn:ogc:def:change-request:EPSG::2014.001
@@ -56,7 +57,7 @@ if not con:
   print "Connection to sqlite FAILED"
   sys.exit(1)
 cur = con.cursor()
-cur.execute('CREATE TABLE IF NOT EXISTS gml (urn VARCHAR, id VARCHAR, xml VARCHAR, PRIMARY KEY (urn))')
+cur.execute('CREATE TABLE IF NOT EXISTS gml (urn VARCHAR, id VARCHAR, xml VARCHAR, deprecated BOOLEAN, name VARCHAR, PRIMARY KEY (urn))')
 cur.execute('DELETE FROM gml')
 
 ###############################################################################
@@ -79,5 +80,15 @@ for entry in root.findall('.//*[@{http://www.opengis.net/gml/3.2}id]'):
   id = entry.attrib['{http://www.opengis.net/gml/3.2}id']
   urn =  entry.find('{http://www.opengis.net/gml/3.2}identifier').text
   xml = et.tostring(entry, encoding="utf-8",method="xml")
-  cur.execute('INSERT INTO gml VALUES (?,?,?)', (urn,id,buffer(xml)))
+  deprecated = None
+  if entry.find(".//*[{urn:x-ogp:spec:schema-xsd:EPSG:1.0:dataset}isDeprecated]") != None:
+    deprecated = entry.find('.//*{urn:x-ogp:spec:schema-xsd:EPSG:1.0:dataset}isDeprecated').text
+  name = None
+  if entry.find('.//*{http://www.opengis.net/gml/3.2}name') != None:
+    name = entry.find('.//*{http://www.opengis.net/gml/3.2}name').text
+  elif entry.find('{http://www.opengis.net/gml/3.2}name') != None:
+    name = entry.find('{http://www.opengis.net/gml/3.2}name').text
+    
+
+  cur.execute('INSERT INTO gml VALUES (?,?,?,?,?)', (urn, id, buffer(xml), deprecated, name))
   con.commit()
