@@ -99,7 +99,7 @@ h4, .h4 { margin: 20px 0 13px 0; padding: 0; font-size: 16px; color: #000; }
 #layout-container { margin: 0 auto; padding: 0 5px; width: 990px; }
     #logo-container a { margin: 0; color: #989898; font-size: 12px; }
     #description-message { padding:20px; background-color:#eee; border: 1px solid #ccc; margin-bottom:10px; font-size: 14px; }
-    #spacer {width:100%;height:100px}    
+    #spacer {width:100%;height:140px}    
     
 #homepage #layout-container { padding-top: 94px; }
 #resultspage #layout-container { padding-top: 78px; }
