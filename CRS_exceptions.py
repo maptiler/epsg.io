@@ -153,7 +153,7 @@ if do_it == True:
           except:
             pass
           
-          score = float((1 + boost) * (1 + float(importance)))
+          score = float((1 + boost) * (1 + float(importance)*4))
           doc = {
             'code': result['code'],
             'code_id':result['code_id'],

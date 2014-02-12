@@ -239,7 +239,7 @@ for code, name, scope, remarks, information_source, revision_date,datum_code, ar
     pass
   
   
-  score = float((1 + boost) * (1 + float(importance)))
+  score = float((1 + boost) * (1 + float(importance)*4))
   
   doc = {
     'code': code,
