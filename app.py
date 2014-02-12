@@ -317,15 +317,15 @@ def index():
       
       if len(short_area) > 100:
         short_area = short_area.split("-", 2)[0]
-      
+      wkt = ""
       url_map = ""
-      ref.ImportFromEPSG(int(short_code[0]))
-      wkt = ref.ExportToWkt()
-      
-      if wkt and r['bbox']:
-        # a = ref.ImportFromWkt(r['wkt'])
-        # if a == 0:
-        url_map = "/" + r['code']+ "/map"
+      if r['kind'].startswith("CRS"):
+        ref.ImportFromEPSG(int(short_code[0]))
+        wkt = ref.ExportToWkt()
+        if wkt and r['bbox']:
+          # a = ref.ImportFromWkt(r['wkt'])
+          # if a == 0:
+          url_map = "/" + r['code']+ "/map"
 
         
       result.append({'r':r, 'name':name, 'type_epsg':type_epsg, 'link':link, 'area':short_area, 'short_code':short_code, 'url_map':url_map})
@@ -482,7 +482,7 @@ def index():
       
       return json.dumps(json_str)
   
-  return template('./templates/results',num_deprecated=num_deprecated, show_alt_search=show_alt_search, kind_low=kind_low, num_kind=num_kind, short_code=short_code, title=title, query=query, deprecated=deprecated, num_results=num_results, elapsed=elapsed, facets_list=facets_list, url_facet_statquery=url_facet_statquery, result=result, pagenum=int(pagenum),paging=paging)
+  return template('./templates/results', selected_kind_index=selected_kind_index, num_deprecated=num_deprecated, show_alt_search=show_alt_search, kind_low=kind_low, num_kind=num_kind, short_code=short_code, title=title, query=query, deprecated=deprecated, num_results=num_results, elapsed=elapsed, facets_list=facets_list, url_facet_statquery=url_facet_statquery, result=result, pagenum=int(pagenum),paging=paging)
 
 
 
