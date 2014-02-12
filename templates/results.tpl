@@ -149,9 +149,26 @@
           %if show_alt_search:
             <h3>Type of results</h3>
               <ul id="alt-search">
+                %colored_head = False
                 %for i in range(0,len(facets_list)):
                   %if facets_list[i][4] != 0:
-                    <li class="selected">{{!facets_list[i][2]}}<a href="{{facets_list[i][5]}}" title="">{{facets_list[i][3]}} ({{facets_list[i][4]}})</a></li>
+                    %if facets_list[i][2] == "":
+                      %if selected_kind_index == i:
+                        <li class="head-of-group"><a class="colored" href="{{facets_list[i][5]}}">{{facets_list[i][3]}} ({{facets_list[i][4]}})</a></li>
+                        %colored_head = True
+                      %else:
+                        <li class="head-of-group"><a href="{{facets_list[i][5]}}">{{facets_list[i][3]}} ({{facets_list[i][4]}})</a></li>
+                        %colored_head = False
+                      %end
+                    %else:
+                      %if selected_kind_index == i or colored_head == True:
+                        <li>{{!facets_list[i][2]}}<a class="colored" href="{{facets_list[i][5]}}">{{facets_list[i][3]}} ({{facets_list[i][4]}})</a></li>
+                      %else:
+                        <li>{{!facets_list[i][2]}}<a href="{{facets_list[i][5]}}">{{facets_list[i][3]}} ({{facets_list[i][4]}})</a></li>
+                      %end
+                    %end
+                      
+                    %end
                   %end
                 %end
               </ul>
