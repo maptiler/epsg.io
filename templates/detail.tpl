@@ -58,7 +58,7 @@
       %end
 
       <p>
-        <a href="{{url_kind}}">{{kind}} </a>
+        {{kind}}
       </p>
 
       %if alt_title:
