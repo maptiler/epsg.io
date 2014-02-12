@@ -238,6 +238,7 @@
         %end
       </p>
       
+      %if trans or projcrs_by_gcrs or (center and trans_lat):
       <div id="detail-content-container">
         <div class="map-container">
           %no_map = False
@@ -466,7 +467,7 @@
         
 
       </div>
-      %if no_map and no_trans and no_default and not found_alt:
+      %else:
         %if 'alt_description' in item:
           %if item['alt_description']:
             <div id="description-message">{{!item['alt_description']}}</div>
