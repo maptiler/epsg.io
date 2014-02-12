@@ -720,7 +720,6 @@ def index(id):
       export = {}  
       ref.ImportFromWkt(wkt)  
       export['prettywkt'] = ref.ExportToPrettyWkt()
-      
       if int(error_code) == 0:
         export['usgs'] = str(ref.ExportToUSGS())
         if "(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)" in export['usgs']:
@@ -1113,6 +1112,7 @@ def index(id, format):
     ct = "text/plain"
     if request.GET.get('download',1) == "":
       response['Content-disposition'] = "attachment; filename=%s.prj" % rcode
+    
     if format == ".esriwkt":
       if rcode == "3857":
         wkt_3857 = 'PROJCS["WGS_1984_Web_Mercator_Auxiliary_Sphere",GEOGCS["GCS_WGS_1984",DATUM["D_WGS_1984",SPHEROID["WGS_1984",6378137.0,298.257223563]],PRIMEM["Greenwich",0.0],UNIT["Degree",0.0174532925199433]],PROJECTION["Mercator_Auxiliary_Sphere"],PARAMETER["False_Easting",0.0],PARAMETER["False_Northing",0.0],PARAMETER["Central_Meridian",0.0],PARAMETER["Standard_Parallel_1",0.0],PARAMETER["Auxiliary_Sphere_Type",0.0],UNIT["Meter",1.0],AUTHORITY["EPSG",3857]]'
@@ -1120,16 +1120,21 @@ def index(id, format):
       ref.MorphToESRI()
       export = ref.ExportToWkt()
       ct = "text/x-esriwkt"
+    
     elif format == ".prettywkt":
       export = ref.ExportToPrettyWkt()
+    
     elif format == ".usgs":
       export = str(ref.ExportToUSGS())
+    
     elif format == ".wkt":
       export = ref.ExportToWkt()
+    
     elif format == ".proj4":
       export = ref.ExportToProj4()
       if request.GET.get('download',1) == "":
         response['Content-disposition'] = "attachment; filename=%s.proj4" % rcode
+    
     elif format == '.js':
         export = ref.ExportToProj4().strip()
         if code:
@@ -1137,11 +1142,13 @@ def index(id, format):
             ct = "application/javascript"
             if request.GET.get('download',1) == "":
               response['Content-disposition'] = "attachment; filename=%s.js" % rcode
+    
     elif format == '.html':
       out = ref.ExportToPrettyWkt()
       export = highlight(out, WKTLexer(), HtmlFormatter(cssclass='syntax',nobackground=True))
       response.content_type = 'text/html; charset=UTF-8'
       #return template('./templates/export', export = export, code=rcode)
+    
     elif format == '.xml':
       if ref.ExportToXML() == 0:
         export = '<?xml version="1.0" encoding="UTF-8"?>\n %s' % (ref.ExportToXML().replace(">",' xmlns:gml="http://www.opengis.net/gml/3.2" xmlns:xlink="http://www.w3.org/1999/xlink">',1))
@@ -1151,38 +1158,46 @@ def index(id, format):
       else:
         export = "NOT AVAILABLE,PLEASE SELECT OTHER FORMAT"
         ct = "text/plain"
+    
     elif format == '.gml':
       export = '<?xml version="1.0" encoding="UTF-8"?>\n %s' % (xml)
       ct = "text/xml"
       if request.GET.get('download',1) == "":
         response['Content-disposition'] = "attachment; filename=%s.gml" % rcode
+    
     elif format == '.map':
       export = 'PROJECTION\n\t'+'\n\t'.join(['"'+l.lstrip('+')+'"' for l in ref.ExportToProj4().split()])+'\nEND' ### CSS: white-space: pre-wrap
       if request.GET.get('download',1) == "":
         response['Content-disposition'] = "attachment; filename=%s.map" % rcode
+    
     elif format == '.mapnik': 
       proj4 = ref.ExportToProj4().strip()
       export = '<?xml version="1.0" encoding="utf-8"?>\n<Map srs="%s">\n\t<Layer srs="%s">\n\t</Layer>\n</Map>' % (proj4,proj4)
       ct = "application/xml"
       if request.GET.get('download',1) == "":
         response['Content-disposition'] = "attachment; filename=%s.xml" % rcode 
+    
     elif format == '.mapserverpython':
       mswkt = ref.ExportToWkt()
       export = "wkt = '''%s'''\nm = mapObj('')\nm.setWKTProjection(mswkt)\nlyr = layerObj(m)\nlyr.setWKTProjection(mswkt)" % (mswkt) #from mapscript import mapObj,layerObj\n
       if request.GET.get('download',1) == "":
         response['Content-disposition'] = "attachment; filename=%s.py" % rcode
+    
     elif format == '.mapnikpython': 
       proj4 = ref.ExportToProj4().strip()
       export = "proj4 = '%s'\nm = Map(256,256,proj4)\nlyr = Layer('Name',proj4)" % (proj4) #from mapnik import Map, Layer\n
       if request.GET.get('download',1) == "":
         response['Content-disposition'] = "attachment; filename=%s.py" % rcode
+    
     elif format == '.geoserver':
       export = "%s=%s" % (rcode,ref.ExportToWkt()) # put this custom projection in the 'user_projections' file inside the GEOSERVER_DATA_DIR '\n' # You can further work with your projections via the web admin tool.\n
       # we'll assume Geotools has this SRS...
+    
     elif format == 'sql':                                              
       export = 'INSERT into spatial_ref_sys (srid, auth_name, auth_srid, proj4text, srtext) values ( %s, \'%s\', %s, \'%s\', \'%s\');' % (rcode, type_epsg, rcode, ref.ExportToProj4(), ref.ExportToWkt())                                                  
       if request.GET.get('download',1) == "":
         response['Content-disposition'] = "attachment; filename=%s.sql" % rcode
+    
     elif format == '.ogcwkt':
       export = ref.ExportToWkt()
   
@@ -1322,7 +1337,7 @@ def index(id):
   redirect('/%s' % id)
 
 #handling for urn from sqlite
-@route('/<id:re:(urn:ogc:def:([\w]+-?[\w]+):[\w]+::\d+\.?\d+(\.\d)?)><format:re:(\.gml)?>')
+@route('/<id:re:(urn:?_?ogc:?_?def:?_?([\w]+-?[\w]+):?_?[EPSG]+:?:?_?_?(\d+\.?\d+(\.\d)?))><format:re:(\.gml)?>')
 def index(id,format):
   # if i want gml
   if format == ".gml":
@@ -1338,22 +1353,27 @@ def index(id,format):
       try_url = ""
       return template('./templates/error',error=error, try_url=try_url)
   # exist this urn?
-  cur.execute('SELECT id,urn FROM gml where urn = ?', (id,))
+  cur.execute('SELECT id,urn,xml,deprecated,name FROM gml where urn = ? or id = ?', (id,id,))
   gml = cur.fetchall()
   if len(gml) == 0:
     error = 404
     try_url = ""
-    
+        
     return template('./templates/error',error=error, try_url=try_url)
     
   # if exist than change to our url
-  id_reformated=id.replace("urn:ogc:def:","").replace(":EPSG::"," ")
+  if "_" in id:
+    id_reformated=id.replace("urn_ogc_def_","").replace("_EPSG__"," ")
+  else:  
+    id_reformated=id.replace("urn:ogc:def:","").replace(":EPSG::"," ")
   subject,code = id_reformated.split(" ")
   subject = subject.replace("uom","units")
   if subject == "crs" or subject == "coordinateOperation":
     url = code
   else:
     url = code + "-" + subject
+  
+  code_short = url.split("-",1)
   # try quick question into whoosh if exist the record with "url"
   ix = open_dir(INDEX)
   with ix.searcher(closereader=False) as searcher:
@@ -1362,15 +1382,69 @@ def index(id,format):
     results = searcher.search(myquery)
     #if not exist record in whoosh with "url", redirect to error page without changed url
     if len(results) == 0:
-      error = 404
-      try_url = "/"+id+".gml"
-      return template('./templates/error',error=error, try_url=try_url)
+      #error = 404
+      #try_url = "/"+id+".gml"
+      # Find right GML from sqlite
+      urn = ""
+      ogpxml = ""
+      area_trans_item = ""
+      error_code = 9
+      bbox_coords = ""
+      more_gcrs_result = ""
+      deprecated_available = ""
+      url_kind = ""
+      type_epsg = "EPSG"
+      projcrs_by_gcrs = ""
+      alt_title = ""
+      kind = subject
+      item = {}
+      detail = ""
+      nadgrid = ""
+      trans_lat = ""
+      trans_lon = ""
+      trans = ""
+      url_format = "/"+id
+      default_trans = ""
+      center = ""
+      g_coords = ""
+      url_concatop = []
+      detail = []
+      for id,urn,xml,deprecated,name in gml:
+        #if name == None: name = ""
+        #print name, deprecated
+        item = {'code':code,'area':"", 'remarks':"",'scope':"",'deprecated':deprecated,'target_uom':"",'files':"",'orientation':"",'abbreviation':"",'order':"",'bbox':""}
+        ogpxml = '<?xml version="1.0" encoding="UTF-8"?> %s' % (xml,)
+        ogpxml = ogpxml.strip()
+        ogpxml_highlight = highlight(ogpxml, XmlLexer(), HtmlFormatter(cssclass='syntax',nobackground=True)) 
+      return template('./templates/detail', url_concatop=url_concatop, ogpxml_highlight=ogpxml_highlight, area_trans_item=area_trans_item, error_code=error_code, ogpxml=ogpxml, bbox_coords=bbox_coords, more_gcrs_result=more_gcrs_result, deprecated_available=deprecated_available, url_kind=url_kind, type_epsg=type_epsg, name=name, projcrs_by_gcrs=projcrs_by_gcrs, alt_title=alt_title, kind=kind, code_short=code_short, item=item, detail=detail, nadgrid=nadgrid, trans_lat=trans_lat, trans_lon=trans_lon, trans=trans, url_format=url_format, default_trans=default_trans, center=center,g_coords=g_coords)  
+      
+      #return template('./templates/error',error=error, try_url=try_url)
     else:
       redirect('/%s' % url)
 
 # the same logic as for sqlite urn's
 @route('/<id:re:(\w+-\w+-\d+((\.\d+)?(\.?\d+)?)?)><format:re:((\.)?gml)?>')
-def index(id,format):  
+def index(id,format): 
+  #name_map={}
+  name_map={
+  'cr':"Change request",
+  'vh':"Version history",
+  'param':"Operation parameter",
+  'ns':"Naming system",
+  'axisname':"Axis name",
+  'uom':"Units",
+  'method':"Method",
+  'ellipsoid':"Ellipsoid",
+  'datum':"Datum",
+  'axis':"Axis",
+  'cs':"Coordinate system",
+  'crs':"Coordinate reference system",
+  'op':"Operation",
+  'supersession':"Supersession",
+  'meridian':"Prime meridian",
+  'deprecation':"Deprecation",
+  'area':"Area"
+  } 
   if format ==".gml":
     cur.execute('SELECT id,xml FROM gml where id = ?', (id,))
     gml = cur.fetchall()
@@ -1379,26 +1453,61 @@ def index(id,format):
       response['Content-Type'] = "text/xml" 
       return export
       
-  cur.execute('SELECT id,urn FROM gml where id = ?', (id,))
+  cur.execute('SELECT id,urn,xml,deprecated,name FROM gml where id = ?', (id,))
   gml = cur.fetchall()
   if len(gml) == 0:
     error = 404
     try_url= ""
     return template('./templates/error',error=error, try_url=try_url)
   else:
-    id_reformated = id.replace("ogc-","").replace("epsg-","")
-    id_reformated = id_reformated.split("-")
-    url = id_reformated[1]+"-"+id_reformated[0]
+    id_reformated = id.replace("ogp-","").replace("epsg-","")
+    subject,code = id_reformated.split("-")
+    
+    url = code+"-"+subject
+    subject = name_map[subject]
+    #subject = subject.replace("cr","Change Request").replace("vh","Version History").replace("param","Operation Parameter").replace("ns","Naming System")
     url = url.replace("-crs","").replace("-op","")
+    code_short = url.split("-",1)
     ix = open_dir(INDEX)
     with ix.searcher(closereader=False) as searcher:
       parser = QueryParser("code", ix.schema)
       myquery = parser.parse(url)
       results = searcher.search(myquery)
       if len(results) == 0:
-        error = 404
-        try_url = "/"+id+".gml"
-        return template('./templates/error',error=error, try_url=try_url)
+        # error = 404
+        # try_url = "/"+id+".gml"
+        # return template('./templates/error',error=error, try_url=try_url)
+        urn = ""
+        ogpxml = ""
+        area_trans_item = ""
+        error_code = 9
+        bbox_coords = ""
+        more_gcrs_result = ""
+        deprecated_available = ""
+        url_kind = ""
+        type_epsg = "EPSG"
+        projcrs_by_gcrs = ""
+        alt_title = ""
+        kind = subject
+        item = {}
+        detail = ""
+        nadgrid = ""
+        trans_lat = ""
+        trans_lon = ""
+        trans = ""
+        url_format = "/"+id
+        default_trans = ""
+        center = ""
+        g_coords = ""
+        url_concatop = []
+        detail = []
+        for id,urn,xml,deprecated,name in gml:
+          if name == None: name = ""
+          item = {'code':code,'area':"", 'remarks':"",'scope':"",'deprecated':deprecated,'target_uom':"",'files':"",'orientation':"",'abbreviation':"",'order':"",'bbox':""}
+          ogpxml = '<?xml version="1.0" encoding="UTF-8"?>\n %s' % (xml,)
+          ogpxml_highlight = highlight(ogpxml, XmlLexer(), HtmlFormatter(cssclass='syntax',nobackground=True)) 
+        return template('./templates/detail', url_concatop=url_concatop, ogpxml_highlight=ogpxml_highlight, area_trans_item=area_trans_item, error_code=error_code, ogpxml=ogpxml, bbox_coords=bbox_coords, more_gcrs_result=more_gcrs_result, deprecated_available=deprecated_available, url_kind=url_kind, type_epsg=type_epsg, name=name, projcrs_by_gcrs=projcrs_by_gcrs, alt_title=alt_title, kind=kind, code_short=code_short, item=item, detail=detail, nadgrid=nadgrid, trans_lat=trans_lat, trans_lon=trans_lon, trans=trans, url_format=url_format, default_trans=default_trans, center=center,g_coords=g_coords)  
+        
       else:
         redirect ('/%s' %url)
 
