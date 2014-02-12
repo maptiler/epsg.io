@@ -71,11 +71,11 @@
         %end
 
         %if detail:
-          %if detail[0]['url_area'] == "":
+          %if detail[0]['url_area'] != "" and detail[0]['url_area'] != "/?q=" and item['kind'] != "AREA":
             <span class="caption">Area of use: </span><a href="{{detail[0]['url_area']}}"> {{item['area']}}</a><br />
           %end
         %else:
-          %if item['area']:
+          %if item['area'] != "":
             <span class="caption">Area of use: </span><a href="{{url_area}}">{{area_item}}</a><br />
           %end
         %end
@@ -160,6 +160,12 @@
             <span class="caption">Description: </span>{{item['description']}}<br />
           %end
         %end
+        
+        %if 'area' in item:
+          %if item['kind'] == "AREA":
+            <span class="caption">Area of use: {{item['area']}}<br />
+          %end
+        %end
 
         %if 'ellipsoid' in item:
           %if item['ellipsoid']:
@@ -238,7 +244,7 @@
         %end
       </p>
       
-      %if trans or projcrs_by_gcrs or (center and trans_lat):
+      %if trans or projcrs_by_gcrs or (center and trans_lat) or detail[0]['url_area']!="/?q=":
       <div id="detail-content-container">
         <div class="map-container">
           %no_map = False
