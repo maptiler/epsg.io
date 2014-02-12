@@ -166,12 +166,10 @@
                         <li>{{!facets_list[i][2]}}<a href="{{facets_list[i][5]}}">{{facets_list[i][3]}} ({{facets_list[i][4]}})</a></li>
                       %end
                     %end
-                      
-                    %end
                   %end
                 %end
               </ul>
-            %end
+          %end
         </div>
       </div>
    </div>
