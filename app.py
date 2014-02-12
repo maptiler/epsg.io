@@ -6,7 +6,7 @@ INDEX = "./index"
 DATABASE = "./gml/gml.sqlite"
 
 CRS_EXCEPTIONS = 'CRS_exceptions.csv'
-# ['kind'(in whoosh), 'short kind', 'space for formating', 'explenation of abb', 'link to new query', 'long kind']
+# ['kind'(in whoosh), 'short kind', 'space for formating', 'explenation of abbr', count', 'link to new query', 'long kind']
 facets_list = [
   ['CRS','CRS','','Coordinate reference systems',0,'http://','Coordinate reference system'],
   ['CRS-PROJCRS','PROJCRS','&nbsp; &nbsp;', 'Projected',0,'http://','Projected coordinate system'],
@@ -92,7 +92,7 @@ except:
 
 con = sqlite.connect(DATABASE)
 if not con:
-  print "Connection to sqlite maprank_records FAILED"
+  print "Connection to gml.sqlite FAILED"
   sys.exit(1)
 cur = con.cursor()
 
@@ -702,13 +702,13 @@ def index(id):
       cur.execute('SELECT id,xml FROM gml where urn = ?', (urn,))
       gml = cur.fetchall()
       for id,xml in gml:
-        ogpxml = '<?xml version="1.0" encoding="UTF-8"?>\n %s' % xml
+        ogpxml = '<?xml version="1.0" encoding="UTF-8"?>\n %s' % (xml)
     elif item['kind'].startswith("COORDOP"):
       urn = "urn:ogc:def:coordinateOperation:EPSG::" + code
       cur.execute('SELECT id,xml FROM gml where urn = ?', (urn,))
       gml = cur.fetchall()
       for id,xml in gml:
-        ogpxml = '<?xml version="1.0" encoding="UTF-8"?>\n %s' % xml
+        ogpxml = '<?xml version="1.0" encoding="UTF-8"?>\n %s' % (xml)
     ogpxml_highlight = highlight(ogpxml, XmlLexer(), HtmlFormatter(cssclass='syntax',nobackground=True)) 
     
     # if available wkt, default_trans and wkt has length minimum 100 characters (transformation has length maximum 100 (just a TOWGS84))
@@ -723,6 +723,8 @@ def index(id):
       
       if int(error_code) == 0:
         export['usgs'] = str(ref.ExportToUSGS())
+        if "(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)" in export['usgs']:
+          export['usgs'] = ""
         export['ogcwkt'] = ref.ExportToWkt()
         export['proj4'] = ref.ExportToProj4()
         export['html'] = highlight(ref.ExportToPrettyWkt(), WKTLexer(), HtmlFormatter(cssclass='syntax',nobackground=True))
