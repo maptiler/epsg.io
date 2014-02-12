@@ -3,9 +3,17 @@
   <head>  
     <meta charset="utf-8"/>
 %if alt_title:
+  %if not name:
+    <title>{{alt_title}} - {{type_epsg}}:{{item['code']}}</title>
+  %else:
     <title>{{name}} - {{alt_title}} - {{type_epsg}}:{{item['code']}}</title>
+  %end
 %else:
+  %if not name:
+    <title>{{type_epsg}}:{{item['code']}}</title>
+  %else:
     <title>{{name}} - {{type_epsg}}:{{item['code']}}</title>
+  %end
 %end    
     
     
@@ -43,7 +51,7 @@
     
     <div id="layout-container">
       
-      %if item['deprecated'] == 1:
+      %if item['deprecated'] == 1 or item['deprecated'] == "true" :
         <h1>{{type_epsg}}:{{code_short[0]}} DEPRECATED</h1>
       %else:
         <h1>{{type_epsg}}:{{code_short[0]}}</h1>
@@ -474,11 +482,18 @@
             <li><a class="switcher switcher_selected" id="s_html" href="{{url_format}}.html">Well Known Text as HTML<i></i></a></li>
             <li><a class="switcher" id="s_wkt" href="{{url_format}}.wkt">OGC WKT<i></i></a></li>
             <!-- <li><a class="switcher" id="s_prettywkt" href="{{url_format}}.prettywkt">PrettyWKT<i></i></a></li>-->
-            <li><a class="switcher" id="s_gml" href="{{url_format}}.gml">OGC GML<i></i></a></li>
-            <li><a class="switcher" id="s_xml" href="{{url_format}}.xml">XML<i></i></a></li>
+            %if ogpxml != "":
+              <li><a class="switcher" id="s_gml" href="{{url_format}}.gml">OGC GML<i></i></a></li>
+            %end
+            %if export['xml']!="":
+              <li><a class="switcher" id="s_xml" href="{{url_format}}.xml">XML<i></i></a></li>
+            %end
             <li><a class="switcher" id="s_esriwkt" href="{{url_format}}.esriwkt">ESRI WKT<i></i></a></li>
             <li><a class="switcher" id="s_proj4" href="{{url_format}}.proj4">PROJ.4<i></i></a></li>
-            <li><a class="switcher" id="s_proj4js" href="{{url_format}}.proj4js">JavaScript (PROJ.4js)<i></i></a></li>
+            <li><a class="switcher" id="s_proj4js" href="{{url_format}}.proj4js">JavaScript (Proj4js)<i></i></a></li>
+            %if export['usgs'] != "":
+              <li><a class="switcher" id="s_usgs" href="{{url_format}}.usgs">USGS<i></i></a></li>
+            %end
             <li><a class="switcher" id="s_geoserver" href="{{url_format}}.geoserver">GeoServer<i></i></a></li>
             <li><a class="switcher" id="s_mapfile" href="{{url_format}}.mapfile">MapServer<i></i></a></li>
             <!-- <li><a class="switcher" id="s_mapserverpython" href="{{url_format}}.mapserverpython">MapSever - Python<i></i></a></li> -->
@@ -486,7 +501,6 @@
             <!-- <li><a class="switcher" id="s_mapnikpython" href="{{url_format}}.mapnikpython">Mapnik - Python<i></i></a></li> -->
             <li><a class="switcher" id="s_postgis" href="{{url_format}}.sql">SQL (PostGIS)<i></i></a></li>
             <!-- <li><a class="switcher" id="s_json" href="{{url_format}}.json">JSON<i></i></a></li> -->
-            <li><a class="switcher" id="s_usgs" href="{{url_format}}.usgs">USGS<i></i></a></li>
           </ul>
         </div>
         
@@ -537,7 +551,7 @@
         </div>
         
         <div class="code-definition-container" id="s_proj4js_code">
-          <p>Definition: JavaScript (PROJ.4js) </p>
+          <p>Definition: JavaScript (Proj4js) </p>
           <ul>
             <li><a href="{{url_format}}.js">Open</a></li>
             <li><a id="s_proj4js_copyUrl" class="zeroclipboard" data-clipboard-text="http://epsg.io{{url_format}}.js" href="#">Copy URL</a></li>
@@ -549,41 +563,43 @@
             <pre>{{export['proj4js']}}</pre>
           </div>
         </div>
-        
-        <div class="code-definition-container" id="s_gml_code">
-          <p>Definition: OGC GML</p>
-          <ul>
-            <li><a href="{{url_format}}.gml">Open</a></li>
-            <li><a id="s_gml_copyUrl" class="zeroclipboard" data-clipboard-text="http://epsg.io{{url_format}}.gml" href="#">Copy URL</a></li>
-            <li><a id="s_gml_copyText" class="zeroclipboard" data-clipboard-target="s_gml_text" href="#">Copy TEXT</a></li>
-            <li><a href="{{url_format}}.gml?download">Download</a></li>
+        %if ogpxml != "":
+          <div class="code-definition-container" id="s_gml_code">
+            <p>Definition: OGC GML</p>
+            <ul>
+              <li><a href="{{url_format}}.gml">Open</a></li>
+              <li><a id="s_gml_copyUrl" class="zeroclipboard" data-clipboard-text="http://epsg.io{{url_format}}.gml" href="#">Copy URL</a></li>
+              <li><a id="s_gml_copyText" class="zeroclipboard" data-clipboard-target="s_gml_text" href="#">Copy TEXT</a></li>
+              <li><a href="{{url_format}}.gml?download">Download</a></li>
 
-          </ul>
-          <div class="syntax">
-            {{!ogpxml_highlight}}
+            </ul>
+            <div class="syntax">
+              {{!ogpxml_highlight}}
+            </div>
+            <div class="syntax" id="s_gml_text">
+              {{ogpxml}}
+            </div>
           </div>
-          <div class="syntax" id="s_gml_text">
-            {{ogpxml}}
-          </div>
-        </div>
+        %end
 
-        
-        <div class="code-definition-container" id="s_xml_code">
-          <p>Definition: XML</p>
-          <ul>
-            <li><a href="{{url_format}}.xml">Open</a></li>
-            <li><a id="s_xml_copyUrl" class="zeroclipboard" data-clipboard-text="http://epsg.io{{url_format}}.xml" href="#">Copy URL</a></li>
-            <li><a id="s_xml_copyText" class="zeroclipboard" data-clipboard-target="s_xml_text" href="#">Copy TEXT</a></li>
-            <li><a href="{{url_format}}.xml?download">Download</a></li>
+        %if export['xml']!="":
+          <div class="code-definition-container" id="s_xml_code">
+            <p>Definition: XML</p>
+            <ul>
+              <li><a href="{{url_format}}.xml">Open</a></li>
+              <li><a id="s_xml_copyUrl" class="zeroclipboard" data-clipboard-text="http://epsg.io{{url_format}}.xml" href="#">Copy URL</a></li>
+              <li><a id="s_xml_copyText" class="zeroclipboard" data-clipboard-target="s_xml_text" href="#">Copy TEXT</a></li>
+              <li><a href="{{url_format}}.xml?download">Download</a></li>
             
-          </ul>
-          <div class="syntax">
-            {{!xml_highlight}}
+            </ul>
+            <div class="syntax">
+              {{!xml_highlight}}
+            </div>
+            <div class="syntax" id="s_xml_text">
+              <pre>{{export['xml']}}</pre>
+            </div>
           </div>
-          <div class="syntax" id="s_xml_text">
-            <pre>{{export['xml']}}</pre>
-          </div>
-        </div>
+        %end
         
         <div class="code-definition-container" id="s_geoserver_code">
           <p>Definition: GeoServer</p>
@@ -681,19 +697,22 @@
           </div>
         </div>
         
-        <div class="code-definition-container" id="s_usgs_code">
-          <p>Definition: USGS</p>
-          <ul>
-            <li><a href="{{url_format}}.usgs">Open</a></li>
-            <li><a id="s_usgs_copyUrl" class="zeroclipboard" data-clipboard-text="http://epsg.io{{url_format}}.usgs" href="#">Copy URL</a></li>
-            <li><a id="s_usgs_copyText" class="zeroclipboard" data-clipboard-target="s_usgs_text" href="#">Copy TEXT</a></li>
-            <li><a href="{{url_format}}.usgs?download">Download</a></li>
+        %if export['usgs'] != "":
+          <div class="code-definition-container" id="s_usgs_code">
+            <p>Definition: USGS</p>
+            <ul>
+              <li><a href="{{url_format}}.usgs">Open</a></li>
+              <li><a id="s_usgs_copyUrl" class="zeroclipboard" data-clipboard-text="http://epsg.io{{url_format}}.usgs" href="#">Copy URL</a></li>
+              <li><a id="s_usgs_copyText" class="zeroclipboard" data-clipboard-target="s_usgs_text" href="#">Copy TEXT</a></li>
+              <li><a href="{{url_format}}.usgs?download">Download</a></li>
             
-          </ul>
-          <div id="s_usgs_text" class="syntax">
-            <pre>{{!export['usgs']}}</pre>
+            </ul>
+            <div id="s_usgs_text" class="syntax">
+              <pre>{{!export['usgs']}}</pre>
+            </div>
           </div>
-        </div>
+        %end
+        
         %elif ogpxml:
           <div id="eb-menu-container">
             <h4>Export</h4>
@@ -715,7 +734,7 @@
               {{!ogpxml_highlight}}
             </div>
             <div class="syntax" id="s_gml_text">
-              {{ogpxml}}
+              <pre>{{ogpxml}}</pre>
             </div>
           </div>
 
