@@ -186,12 +186,12 @@ h4, .h4 { margin: 20px 0 13px 0; padding: 0; font-size: 16px; color: #000; }
             #crosshair { position:absolute; top:50%; left:50%; margin-top:-11px; margin-left:-11px;}
         .location-data-container { width: 284px; }
             .location-data-container .btn-link-container { margin: 0 0 25px; padding: 25px 0 0 0; border-top: solid 1px #eee; overflow: hidden; }
-                .btn-link-container a { margin: 0; padding: 7px 22px 0 13px; height: 24px; color: #4295c5; float: left; border: solid 1px #cacaca; 
-                                        border-radius: 15px; -moz-border-radius: 15px; -webkit-border-radius: 15px; }
+                .btn-link-container a { margin: 0; padding: 7px 22px 0 13px; height: 24px; float: left; border: solid 1px #cacaca; 
+                                        border-radius: 15px; -moz-border-radius: 15px; -webkit-border-radius: 15px; color: #fff; background: #4295c5; }
                 .btn-link-container a i { margin: 3px 15px 0 0; border-style: solid; border-width: 5px 7px 5px 0; float: left; height: 1px;
                                           border-color: rgba(255, 255, 255, 0) #4295c5 rgba(255, 255, 255, 0) rgba(255, 255, 255, 0); }
                 
-                .btn-link-container a:hover { color: #fff; background: #4295c5; text-decoration: none; }
+                .btn-link-container a:hover { text-decoration: none; }
                 .btn-link-container a:hover i { border-color: rgba(255, 255, 255, 0) #fff rgba(255, 255, 255, 0) rgba(255, 255, 255, 0); }
                 
         .transformations-container { float: right; width: 350px; }
