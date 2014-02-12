@@ -61,8 +61,11 @@
         <a href="{{url_kind}}">{{kind}} </a>
       </p>
 
+      %if alt_title:
       <h2>{{name}} -- {{alt_title}}</h2>
-
+      %else:
+      <h2>{{name}}</h2>
+      %end
       <p>
         %if 'scope' in item:
           %if item['scope']:
