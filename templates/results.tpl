@@ -44,20 +44,21 @@
           <p><input type="search" name="q" value="{{query}}" /> <input type="submit" name="" value="search" /></p>
         </form>
       </div>
-      
-      %if pagenum == 1:
-        <h1>{{title}}</h1>
-      %else:
-        <h1>{{title}}, page {{pagenum}}</h1>
-      %end
-      
-      <p>
-        %if deprecated == 1:
-          Found {{num_results}} deprecated records (in {{elapsed}} seconds)
-        %else:  
-          Found {{num_results}} valid records and {{num_deprecated[0]}}  <a href="{{num_deprecated[1]}}">deprecated</a> records (in {{elapsed}} seconds)
+      <div id="title-container">
+        %if pagenum == 1:
+          <h1>{{title}}</h1>
+        %else:
+          <h1>{{title}}, page {{pagenum}}</h1>
         %end
-      </p>
+      
+        <p>
+          %if deprecated == 1:
+            Found {{num_results}} deprecated records (in {{elapsed}} seconds)
+          %else:  
+            Found {{num_results}} valid records and {{num_deprecated[0]}}  <a href="{{num_deprecated[1]}}">deprecated</a> records (in {{elapsed}} seconds)
+          %end
+        </p>
+      </div>
       
       <div id="result-content-container">
         <div id="results-container">
@@ -139,7 +140,7 @@
         
         <div id="side-container">
           %if show_alt_search:
-            <h3>Alternatives search</h3>
+            <h3>Type of results</h3>
               <ul id="alt-search">
                 %for i in range(0,len(facets_list)):
                   %if facets_list[i][4] != 0:

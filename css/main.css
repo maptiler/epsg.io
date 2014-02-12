@@ -102,7 +102,7 @@ h4, .h4 { margin: 20px 0 13px 0; padding: 0; font-size: 16px; color: #000; }
     #spacer {width:100%;height:140px}    
     
 #homepage #layout-container { padding-top: 94px; }
-#resultspage #layout-container { padding-top: 78px; }
+#resultspage #layout-container { padding-top: 60px; }
 #detailpage #layout-container { padding-top: 60px; }
 #mappage #layout-container { padding-bottom: 100px; }
 
@@ -117,8 +117,8 @@ h4, .h4 { margin: 20px 0 13px 0; padding: 0; font-size: 16px; color: #000; }
     #detailpage h1 { margin-bottom: 0; }
 
     #search-lat-lg-container { margin: 0; padding: 9px 0 0 0; clear: both; background: url('../img/bg-hatch.png') 0 0 repeat; height: 41px; width: 100%; }
-    
-    #search-container { margin: 0 auto 104px; padding: 0; width: 452px; }
+    #title-container { min-width: 500px;}
+    #search-container { padding: 0; width: 452px; float:right;}
         #search-container p { margin: 0; padding: 0; overflow: hidden; }
             #search-container input[type="search"] { margin: 0 10px 0 0; padding: 2px 20px 0; height: 32px; width: 328px; font-size: 11px; color: #989898; }
             #search-container input[type="submit"] { margin: 0; padding: 2px 0 0; width: 114px; height: 32px; text-align: center; font-size: 14px; text-transform: uppercase; 
@@ -128,7 +128,6 @@ h4, .h4 { margin: 20px 0 13px 0; padding: 0; font-size: 16px; color: #000; }
             #search-container input[type="search"]:hover { border: solid 1px #9A9A9A; }
             #search-container input[type="search"]:focus { border: solid 1px #4295c5; }
             
-    #resultspage #search-container { margin: 0 0 70px; }
     #mappage #search-container { margin: 0 0 0 20px; float: left; }
     
     #lat-lg-container { margin: 0; padding: 0; float: right; width: 458px; overflow: hidden; }
@@ -162,7 +161,7 @@ h4, .h4 { margin: 20px 0 13px 0; padding: 0; font-size: 16px; color: #000; }
         #home-menu-container ul li a:hover { color: #000; }
             
      
-    #result-content-container { margin: 30px 0 80px; padding: 30px 0 0; border-top: solid 1px #eee; overflow: hidden; }
+    #result-content-container { margin: 30px 0 80px; padding: 30px 0 0; border-top: solid 1px #eee; overflow: hidden; clear:both; }
         #results-container { margin: 0; padding: 0; float: left; width: 72%; }
             ul.results { margin: 0; padding: 0; list-style-type: none; }
                 ul.results li { margin: 0 0 50px; padding: 0; display: block; }
@@ -258,7 +257,7 @@ h4, .h4 { margin: 20px 0 13px 0; padding: 0; font-size: 16px; color: #000; }
         ul.paginator li span { margin: 0; padding: 2px 5px 2px; background: #4295c5; color: #fff; }
         
     #footer { position:absolute; width: 100%;bottom: 0;text-align:center;}
-    #foot { margin: 0 auto; padding: 16px 0; overflow: hidden; border-top: solid 1px #e7e7e7;max-width:990px; }
+    #foot { margin: 0 auto; margin-top: 20px; padding: 16px 0; overflow: hidden; border-top: solid 1px #e7e7e7;max-width:990px; }
     #mappage #foot { width: 100%; background: #fff; position: fixed; bottom: 0; left: 0; }
         #foot p { margin: 0 20px 0 0; padding: 0; float: left; font-size: 12px;}
         #foot p#mzk-logo { padding: 0; float: left; }
@@ -353,6 +352,9 @@ pre { background: transparent; border: solid 1px #bdbdbd; font-size: 11px; margi
    #mappage #head #search-lat-lg-container { height: auto; overflow: hidden; padding-bottom: 10px; }
    #mappage #search-container { float: none; margin: 0 auto; }
    #mappage #lat-lg-container { float: none; margin: 10px auto 0; }
+   #resultspage #search-container { float: none; margin-bottom: 10px }
+   
+   
 }
 @media (max-width: 720px) {
    body #home-menu-container { width: 100%; }

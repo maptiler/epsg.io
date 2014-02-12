@@ -43,7 +43,7 @@
       
       <div id="home-menu-container">
         <div class="hm-column lft">
-          <h2>World coordinates systems</h2>
+          <h2>World coordinate systems</h2>
           <ul>
             <li><a href="/4326" title="">WGS84 - World Geodetic System 1984, used in GPS </a></li> 
             <li><a href="/3857" title="">Spherical Mercator, Google Maps Projection, OpenStreetMap, Bing</a></li> 
@@ -53,7 +53,7 @@
           </ul>
         </div>
         <div class="hm-column lft">
-          <h2>Europe coordinates systems</h2>
+          <h2>Europe coordinate systems</h2>
           <ul>
             <li><a href="/?q=United%20Kingdom" title="">United Kingdom</a></li> 
             <li><a href="/?q=France" title="">France</a></li> 
@@ -64,7 +64,7 @@
           </ul>
         </div>
         <div class="hm-column lft last">
-          <h2>Another coordinates systems</h2>
+          <h2>Other coordinate systems</h2>
           <ul>
             <li><a href="/?q=Brazil" title="">Brazil</a></li> 
             <li><a href="/?q=New%20Zealand" title="">New Zealand</a></li> 
