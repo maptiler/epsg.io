@@ -61,7 +61,7 @@
         <a href="{{url_kind}}">{{kind}} </a>
       </p>
 
-      <h2>{{name}}<br /> {{alt_title}}</h2>
+      <h2>{{name}} -- {{alt_title}}</h2>
 
       <p>
         %if 'scope' in item:
