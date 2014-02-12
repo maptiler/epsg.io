@@ -250,6 +250,9 @@ h4, .h4 { margin: 20px 0 13px 0; padding: 0; font-size: 16px; color: #000; }
         #alt-search li.last { margin-top: 5px; }
         #alt-search li.last a { font-size: 11px; }
         #alt-search a:hover { color: #000; }
+        #alt-search .head-of-group {margin-top:5px;}
+        #alt-search .colored { color:#000;}
+        
 
 
     ul.paginator { margin: 0; padding: 0; list-style-type: none; }
