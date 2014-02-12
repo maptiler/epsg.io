@@ -129,7 +129,7 @@ h4, .h4 { margin: 20px 0 13px 0; padding: 0; font-size: 16px; color: #000; }
             #search-container input[type="search"]:hover { border: solid 1px #9A9A9A; }
             #search-container input[type="search"]:focus { border: solid 1px #4295c5; }
 
-#resultspage #search-container { margin: 0 auto; padding: 0; width: 452px; float:right;}
+    #resultspage #search-container { margin: 0 auto; padding: 0; width: 452px; float:right;}
             
     #mappage #search-container { margin: 0 0 0 20px; float: left; }
     
@@ -177,6 +177,7 @@ h4, .h4 { margin: 20px 0 13px 0; padding: 0; font-size: 16px; color: #000; }
                     
     #detail-content-container { margin: 0 0 50px; padding: 41px 0 0 0; overflow: hidden; border-top: solid 1px #eee; }
         #detail-content-container h2 { margin-top: 0; font-size: 18px; }
+        .caption { color: #585858; font-family: OpenSansSemiBold; }
         .map-container, .location-data-container, .transformations-container {  margin: 0; padding: 0; float: left; }
         .map-container { margin-right: 43px; padding-top: 0px; width: 266px; }
             #mini-map { margin-bottom: 15px; width: 235px; height: 190px; display: block; position:relative;}
