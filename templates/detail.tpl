@@ -244,7 +244,7 @@
         %end
       </p>
       
-      %if trans or projcrs_by_gcrs or (center and trans_lat) or detail[0]['url_area']!="/?q=":
+      %if trans or projcrs_by_gcrs or (center and trans_lat) or (detail and detail[0]['url_area']!="/?q="):
       <div id="detail-content-container">
         <div class="map-container">
           %no_map = False
