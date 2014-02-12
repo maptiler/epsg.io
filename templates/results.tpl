@@ -53,7 +53,11 @@
       
         <p>
           %if deprecated == 1:
-            Found {{num_results}} deprecated records (in {{elapsed}} seconds)
+            Found {{num_results}} deprecated records
+            %if num_results>0:
+             and {{num_deprecated[0]}} <a href="{{num_deprecated[1]}}">valid</a> records
+            %end
+              (in {{elapsed}} seconds)
           %else:  
             Found {{num_results}} valid records
             %if num_deprecated[0]>0:
@@ -77,20 +81,10 @@
                         - {{r['r']['alt_title']}}
                       %end
                     %end
-                    </a>
-                    %if r['url_map'] != "":
-                      - <a href="{{r['url_map']}}">coordinates on a map</a></h2>
-                    %else:
-                      </h2>
-                    %end
-                  
+                    </a></h2>
                   <p>
                     {{r['type_epsg']}}:{{r['short_code'][0]}}
-                    %if r['r']['code_trans'] != 0 and r['r']['primary'] == 1:
-                      with transformation: {{r['r']['code_trans']}} (default)
-                    %elif r['r']['code_trans'] == 0 and r['r']['primary'] == 1:
-                      (default)
-                    %elif r['r']['code_trans'] != 0:
+                    %if r['r']['code_trans'] != 0:
                       with transformation: {{r['r']['code_trans']}}
                     %end
                   </p>
@@ -107,6 +101,9 @@
                       %end
                     %end
                   </p>
+                  %if r['url_map'] != "":
+                    <a href="{{r['url_map']}}">Coordinates on a map</a>
+                  %end
                 </li>
               %end
             %elif num_kind != 0:
@@ -123,6 +120,8 @@
             %end
             %if deprecated != 1 and num_deprecated[0]>0:
               <li><a href="{{num_deprecated[1]}}">Search deprecated ({{num_deprecated[0]}})</a></li>
+            %elif deprecated == 1 and num_results>0:
+              <li><a href="{{num_deprecated[1]}}">Search valid ({{num_deprecated[0]}})</a></li>
             %end 
           </ul>
           
