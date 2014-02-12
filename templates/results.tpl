@@ -55,7 +55,11 @@
           %if deprecated == 1:
             Found {{num_results}} deprecated records (in {{elapsed}} seconds)
           %else:  
-            Found {{num_results}} valid records and {{num_deprecated[0]}}  <a href="{{num_deprecated[1]}}">deprecated</a> records (in {{elapsed}} seconds)
+            Found {{num_results}} valid records
+            %if num_deprecated[0]>0:
+              and {{num_deprecated[0]}}  <a href="{{num_deprecated[1]}}">deprecated</a> records 
+            %end  
+              (in {{elapsed}} seconds)
           %end
         </p>
       </div>
@@ -117,6 +121,9 @@
             %else:
               Please change your query.
             %end
+            %if deprecated != 1 and num_deprecated[0]>0:
+              <li><a href="{{num_deprecated[1]}}">Search deprecated ({{num_deprecated[0]}})</a></li>
+            %end 
           </ul>
           
           <ul class="paginator">
