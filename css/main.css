@@ -106,6 +106,7 @@ h4, .h4 { margin: 20px 0 13px 0; padding: 0; font-size: 16px; color: #000; }
 #detailpage #layout-container { padding-top: 60px; }
 #mappage #layout-container { padding-bottom: 100px; }
 
+
     #homepage #logo-container { margin: 0 0 55px 36%; padding: 0; height: 77px; width: auto; display: block; }
         #homepage #logo-container a { padding: 56px 0 0 152px; height: 22px; width: auto; display: block; background: url('../img/logo-232x76.png') 0 0 no-repeat; }
             #logo-container a span { display: none; }
@@ -118,7 +119,7 @@ h4, .h4 { margin: 20px 0 13px 0; padding: 0; font-size: 16px; color: #000; }
 
     #search-lat-lg-container { margin: 0; padding: 9px 0 0 0; clear: both; background: url('../img/bg-hatch.png') 0 0 repeat; height: 41px; width: 100%; }
     #title-container { min-width: 500px;}
-    #search-container { padding: 0; width: 452px; float:right;}
+#homepage #search-container { margin: 0 auto 104px; padding: 0; width: 452px; }
         #search-container p { margin: 0; padding: 0; overflow: hidden; }
             #search-container input[type="search"] { margin: 0 10px 0 0; padding: 2px 20px 0; height: 32px; width: 328px; font-size: 11px; color: #989898; }
             #search-container input[type="submit"] { margin: 0; padding: 2px 0 0; width: 114px; height: 32px; text-align: center; font-size: 14px; text-transform: uppercase; 
@@ -127,6 +128,8 @@ h4, .h4 { margin: 20px 0 13px 0; padding: 0; font-size: 16px; color: #000; }
             #search-container input { float: left; border: solid 1px #cacaca; border-radius: 15px; -moz-border-radius: 15px; -webkit-border-radius: 15px; }
             #search-container input[type="search"]:hover { border: solid 1px #9A9A9A; }
             #search-container input[type="search"]:focus { border: solid 1px #4295c5; }
+
+#resultspage #search-container { padding: 0; width: 452px; float:right;}
             
     #mappage #search-container { margin: 0 0 0 20px; float: left; }
     

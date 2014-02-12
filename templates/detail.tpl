@@ -481,16 +481,17 @@
           <ul id="eb-menu">
             <li><a class="switcher switcher_selected" id="s_html" href="{{url_format}}.html">Well Known Text as HTML<i></i></a></li>
             <li><a class="switcher" id="s_wkt" href="{{url_format}}.wkt">OGC WKT<i></i></a></li>
+            <li><a class="switcher" id="s_esriwkt" href="{{url_format}}.esriwkt">ESRI WKT<i></i></a></li>
+            
             <!-- <li><a class="switcher" id="s_prettywkt" href="{{url_format}}.prettywkt">PrettyWKT<i></i></a></li>-->
             %if ogpxml != "":
               <li><a class="switcher" id="s_gml" href="{{url_format}}.gml">OGC GML<i></i></a></li>
             %end
-            %if export['xml']!="":
+            %if export['xml'] != "":
               <li><a class="switcher" id="s_xml" href="{{url_format}}.xml">XML<i></i></a></li>
             %end
-            <li><a class="switcher" id="s_esriwkt" href="{{url_format}}.esriwkt">ESRI WKT<i></i></a></li>
             <li><a class="switcher" id="s_proj4" href="{{url_format}}.proj4">PROJ.4<i></i></a></li>
-            <li><a class="switcher" id="s_proj4js" href="{{url_format}}.proj4js">JavaScript (Proj4js)<i></i></a></li>
+            <li><a class="switcher" id="s_proj4js" href="{{url_format}}.proj4js">Proj4js<i></i></a></li>
             %if export['usgs'] != "":
               <li><a class="switcher" id="s_usgs" href="{{url_format}}.usgs">USGS<i></i></a></li>
             %end
@@ -499,7 +500,7 @@
             <!-- <li><a class="switcher" id="s_mapserverpython" href="{{url_format}}.mapserverpython">MapSever - Python<i></i></a></li> -->
             <li><a class="switcher" id="s_mapnik" href="{{url_format}}.mapnik">Mapnik<i></i></a></li>
             <!-- <li><a class="switcher" id="s_mapnikpython" href="{{url_format}}.mapnikpython">Mapnik - Python<i></i></a></li> -->
-            <li><a class="switcher" id="s_postgis" href="{{url_format}}.sql">SQL (PostGIS)<i></i></a></li>
+            <li><a class="switcher" id="s_postgis" href="{{url_format}}.sql">PostGIS<i></i></a></li>
             <!-- <li><a class="switcher" id="s_json" href="{{url_format}}.json">JSON<i></i></a></li> -->
           </ul>
         </div>
@@ -516,8 +517,8 @@
           <div class="syntax">
             {{!export_html}}
           </div>
-          <div class="syntax" id="s_html_text">
-            <pre>{{export['prettywkt']}}</pre>
+          <div class="syntax">
+            <pre id="s_html_text">{{export['prettywkt']}}</pre>
           </div>
         </div>
 
@@ -530,8 +531,8 @@
             <li><a href="{{url_format}}.esriwkt?download">Download</a></li>
           
           </ul>
-          <div id="s_esriwkt_text" class="syntax">
-            <pre>{{export['esriwkt']}}</pre>
+          <div class="syntax">
+            <pre id="s_esriwkt_text">{{export['esriwkt']}}</pre>
             
           </div>
         </div>
@@ -545,8 +546,8 @@
             <li><a href="{{url_format}}.proj4?download">Download</a></li>
             
           </ul>
-          <div id="s_proj4_text" class="syntax">
-            <pre>{{export['proj4']}}</pre>
+          <div class="syntax">
+            <pre id="s_proj4_text">{{export['proj4']}}</pre>
           </div>
         </div>
         
@@ -559,8 +560,8 @@
             <li><a href="{{url_format}}.js?download">Download</a></li>
             
           </ul>
-          <div id="s_proj4js_text" class="syntax">
-            <pre>{{export['proj4js']}}</pre>
+          <div class="syntax">
+            <pre id="s_proj4js_text">{{export['proj4js']}}</pre>
           </div>
         </div>
         %if ogpxml != "":
@@ -576,13 +577,13 @@
             <div class="syntax">
               {{!ogpxml_highlight}}
             </div>
-            <div class="syntax" id="s_gml_text">
-              {{ogpxml}}
+            <div class="syntax">
+              <pre id="s_gml_text">{{ogpxml}}</pre>
             </div>
           </div>
         %end
 
-        %if export['xml']!="":
+        %if export['xml'] != "":
           <div class="code-definition-container" id="s_xml_code">
             <p>Definition: XML</p>
             <ul>
@@ -595,8 +596,8 @@
             <div class="syntax">
               {{!xml_highlight}}
             </div>
-            <div class="syntax" id="s_xml_text">
-              <pre>{{export['xml']}}</pre>
+            <div class="syntax">
+              <pre id="s_xml_text">{{export['xml']}}</pre>
             </div>
           </div>
         %end
@@ -610,8 +611,8 @@
             <li><a href="{{url_format}}.geoserver?download">Download</a></li>
             
           </ul>
-          <div id="s_geoserver_text" class="syntax">
-            <pre>{{export['geoserver']}}</pre>
+          <div class="syntax">
+            <pre id="s_geoserver_text">{{export['geoserver']}}</pre>
           </div>
         </div>
         
@@ -624,8 +625,8 @@
             <li><a href="{{url_format}}.mapfile?download">Download</a></li>
             
           </ul>
-          <div id="s_mapfile_text" class="syntax">
-            <pre>{{!export['mapfile']}}</pre>
+          <div class="syntax">
+            <pre id="s_mapfile_text">{{!export['mapfile']}}</pre>
           </div>
      <!--</div>
         <div class="code-definition-container" id="s_mapserverpython_code"> -->
@@ -637,8 +638,8 @@
             <li><a href="{{url_format}}.mapserverpython?download">Download</a></li>
             
           </ul>
-          <div id="s_mapserverpython_text" class="syntax">
-            <pre>{{!export['mapserverpython']}}</pre>
+          <div class="syntax">
+            <pre id="s_mapserverpython_text">{{!export['mapserverpython']}}</pre>
           </div>
         </div>
         
@@ -651,8 +652,8 @@
             <li><a href="{{url_format}}.mapnik?download">Download</a></li>
             
           </ul>
-          <div id="s_mapnik_text" class="syntax">
-            <pre>{{export['mapnik']}}</pre>
+          <div class="syntax">
+            <pre id="s_mapnik_text">{{export['mapnik']}}</pre>
           </div>
      <!--</div>
         <div class="code-definition-container" id="s_mapnikpython_code"> -->
@@ -665,7 +666,7 @@
             
           </ul>
           <div class="syntax">
-            <pre>{{!export['mapnikpython']}}</pre>
+            <pre id="s_mapnikpython_text">{{!export['mapnikpython']}}</pre>
           </div>
         </div>
         
@@ -678,8 +679,8 @@
             <li><a href="{{url_format}}.sql?download">Download</a></li>
             
           </ul>
-          <div id="s_postgis_text" class="syntax">
-            <pre>{{!export['postgis']}}</pre>
+          <div class="syntax">
+            <pre id="s_postgis_text">{{!export['postgis']}}</pre>
           </div>
         </div>
 
@@ -692,8 +693,8 @@
             <li><a href="{{url_format}}.wkt?download">Download</a></li>
             
           </ul>
-          <div id="s_wkt_text" class="syntax">
-            <pre>{{!export['ogcwkt']}}</pre>
+          <div class="syntax">
+            <pre id="s_wkt_text">{{!export['ogcwkt']}}</pre>
           </div>
         </div>
         
@@ -707,8 +708,8 @@
               <li><a href="{{url_format}}.usgs?download">Download</a></li>
             
             </ul>
-            <div id="s_usgs_text" class="syntax">
-              <pre>{{!export['usgs']}}</pre>
+            <div class="syntax">
+              <pre id="s_usgs_text">{{!export['usgs']}}</pre>
             </div>
           </div>
         %end
@@ -733,8 +734,8 @@
             <div class="syntax">
               {{!ogpxml_highlight}}
             </div>
-            <div class="syntax" id="s_gml_text">
-              <pre>{{ogpxml}}</pre>
+            <div class="syntax">
+              <pre id="s_gml_text">{{ogpxml}}</pre>
             </div>
           </div>
 

@@ -728,7 +728,8 @@ def index(id):
         export['ogcwkt'] = ref.ExportToWkt()
         export['proj4'] = ref.ExportToProj4()
         export['html'] = highlight(ref.ExportToPrettyWkt(), WKTLexer(), HtmlFormatter(cssclass='syntax',nobackground=True))
-        if ref.ExportToXML() == 0:
+        #if correct export, then it is string, if error then return 7
+        if ref.ExportToXML() != 7 :
           export['xml'] = '<?xml version="1.0" encoding="UTF-8"?>\n %s' % (ref.ExportToXML().replace(">",' xmlns:gml="http://www.opengis.net/gml/3.2">',1))
           xml_highlight = highlight(export['xml'], XmlLexer(), HtmlFormatter(cssclass='syntax',nobackground=True)) 
         else:
