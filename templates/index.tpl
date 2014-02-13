@@ -43,7 +43,7 @@
       
         <div class="socialicons">
           
-            <a id="share_facebook" href="https://www.facebook.com/sharer/sharer.php?u=http://epsg.ios"><span class="icon-epsg-facebook"></span></a>
+            <a id="share_facebook" href="https://www.facebook.com/sharer/sharer.php?u=http://epsg.io"><span class="icon-epsg-facebook"></span></a>
             
 
         <a id="share_twitterb" href="https://twitter.com/share?original_referer=http://epsg.io&amp;text=Coordinate systems worldwide - &amp;"><span class="icon-epsg-twiter"></span></a>
