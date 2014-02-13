@@ -95,7 +95,7 @@
                   <div id="mini-map">
                     <a href="{{url_format}}/map">
                       <img src="/img/epsg-target-small.png" id="crosshair" alt="" />
-                        <img src="{{url_static_map[1]}}" alt="SimpleMap" height="190" width="235">
+                        <img src="{{url_static_map[1]}}" alt="SimpleMap" width="265">
 
                     </a>
                   </div>
