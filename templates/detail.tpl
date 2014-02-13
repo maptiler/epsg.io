@@ -265,7 +265,7 @@
       
       %if trans or projcrs_by_gcrs or (center and trans_lat) or (detail and detail[0]['url_area']!="/?q="):
       <div id="detail-content-container">
-        <div class="map-container">
+        <div class="covered-area-container">
           %no_map = False
           %if item['bbox']:
             %if center:
