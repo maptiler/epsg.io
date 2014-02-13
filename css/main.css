@@ -396,6 +396,8 @@ pre { background: transparent; border: solid 1px #bdbdbd; font-size: 11px; margi
     #code-definition-container { width: 70%; }
     #eb-menu-container { width: 25%; }
    .transformations-container { float: left; }
+   .covered-area-container { margin: 0; padding-top: 0px; width: 680px; float: none; overflow: hidden; }
+   .cac-inner { margin-right: 2%; float: left; width: 48%; }
 }
 
 @media (max-width: 940px) {
