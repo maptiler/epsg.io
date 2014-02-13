@@ -411,6 +411,7 @@ pre { background: transparent; border: solid 1px #bdbdbd; font-size: 11px; margi
 }
 @media (max-width: 740px) {
    .detail-content-inner-wide, .covered-area-container {  width: 100%; float: none; overflow: hidden; }
+   .location-data-container { float: left; }
 }
 @media (max-width: 720px) {
    body #home-menu-container { width: 100%; }
