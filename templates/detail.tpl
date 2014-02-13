@@ -274,7 +274,7 @@
 
             %if center and trans_lat and trans_lon:
               <p class="btn-link-container">
-                <a href="{{url_format}}/map"><i></i>Get position on a map</a>
+                <a href="{{url_format}}/map">Coordinates on a map<i></i></a>
               </p>
             %end
           
