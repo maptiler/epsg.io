@@ -452,7 +452,7 @@
             %end
           </p>
         
-          <p class="attribute-col2">
+          <p class="attributes-col2">
               
             %if 'scope' in item:
               %if item['scope']:
