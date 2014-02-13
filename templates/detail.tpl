@@ -302,118 +302,121 @@
           <div class="clnr"></div>
             
           <h3 class="underline-style">Attributes</h3>
-          <p class="attributes-col short">            
+          <div class="attributes-col">            
 
             %if 'information_source' in item:
               %if item['information_source']:
-                <span class="caption">Information source: </span>{{item['information_source']}}<br />
+                <p><span class="caption">Information source: </span>{{item['information_source']}}</p>
               %end
             %end
 
             %if 'revision_date' in item:
               %if item['revision_date']:
-                <span class="caption">Revision date:  </span>{{item['revision_date']}}<br />
+                <p><span class="caption">Revision date:  </span>{{item['revision_date']}}</p>
               %end
             %end
 
             %if url_concatop != []:
-              <span class="caption">Steps of transformation: </span>
-              %for url in url_concatop:
-                <a href="{{url}}">{{url}} </a>
-              %end
-              <br />
+              <p>
+                <span class="caption">Steps of transformation: </span>
+                %for url in url_concatop:
+                  <a href="{{url}}">{{url}} </a>
+                %end
+              </p>
             %end
 
             %if nadgrid:
-            <span class="caption">NadGrid file: </span>{{nadgrid}}<br />
+            <p><span class="caption">NadGrid file: </span>{{nadgrid}}</p>
             %end
 
             %if 'geogcrs' in item:
               %if item['geogcrs']:
-                <span class="caption">Geodetic coordinate reference system: </span><a href="/{{item['geogcrs'][0]}}">{{item['geogcrs'][1]}}</a><br />
+                <p><span class="caption">Geodetic coordinate reference system: </span><a href="/{{item['geogcrs'][0]}}">{{item['geogcrs'][1]}}</a></p>
               %end
             %end
 
             %if 'datum' in item:
               %if item['datum'] != 0 and item['datum'] :
-                <span class="caption">Datum: </span><a href="/{{item['datum'][0]}}-datum/">{{item['datum'][1]}}</a><br />
+                <p><span class="caption">Datum: </span><a href="/{{item['datum'][0]}}-datum/">{{item['datum'][1]}}</a></p>
               %end
             %end
             
             %if item['target_uom']:
               %if int(code_short[0]) != int(item['target_uom'][0]):
-                <span class="caption">Target uom: </span><a href="/{{item['target_uom'][0]}}-units">{{item['target_uom'][1]}}</a><br />
+                <p><span class="caption">Target uom: </span><a href="/{{item['target_uom'][0]}}-units">{{item['target_uom'][1]}}</a></p>
               %end
             %end
             %if 'uom_code' in item:
               %if item['uom_code']:
-                <span class="caption">Unit: </span><a href="/{{item['uom_code']}}-units/">{{item['uom']}}</a><br />
+                <p><span class="caption">Unit: </span><a href="/{{item['uom_code']}}-units/">{{item['uom']}}</a></p>
               %end
             %end
 
             %if item['files']:
-              <span class="caption">File: </span>{{item['files']}}<br />
+              <p><span class="caption">File: </span>{{item['files']}}</p>
             %end
 
             %if item['orientation']:
-              <span class="caption">Orientation: </span>{{item['orientation']}}<br />
+              <p><span class="caption">Orientation: </span>{{item['orientation']}}</p>
             %end
 
             %if item['abbreviation']:
-              <span class="caption">Abreviation: </span>{{item['abbreviation']}}<br />
+              <p><span class="caption">Abreviation: </span>{{item['abbreviation']}}</p>
             %end
 
             %if item['order']:
-              <span class="caption">Axis order: </span>{{item['order']}}.<br />
+              <p><span class="caption">Axis order: </span>{{item['order']}}.</p>
             %end
 
             %if 'description' in item:
               %if item['description']:
-                <span class="caption">Description: </span>{{item['description']}}<br />
+                <p><span class="caption">Description: </span>{{item['description']}}</p>
               %end
             %end
 
             %if 'ellipsoid' in item:
               %if item['ellipsoid']:
                 %if item['ellipsoid'][0] != "None":
-                  <span class="caption">Ellipsoid: </span><a href="/{{item['ellipsoid'][0]}}-ellipsoid">{{item['ellipsoid'][1]}}</a><br />
+                  <p><span class="caption">Ellipsoid: </span><a href="/{{item['ellipsoid'][0]}}-ellipsoid">{{item['ellipsoid'][1]}}</a></p>
                 %end
               %end
             %end
 
             %if "method" in item:
               %if item['method']:
-                <span class="caption">Method: </span><a href="/{{item['method'][0]}}-method" title="">{{item['method'][1]}}</a><br />
+                <p><span class="caption">Method: </span><a href="/{{item['method'][0]}}-method" title="">{{item['method'][1]}}</a></p>
               %end
             %end
 
             %if 'data_source' in item:
               %if item['data_source']:
-                <span class="caption">Data source: </span>{{item['data_source']}} <br />
+                <p><span class="caption">Data source: </span>{{item['data_source']}} </p>
               %end
             %end
 
             %gl = False
             %if 'primem' in item:
               %if item['primem']:
-                <span class="caption">Prime meridian: </span><a href="/{{item['primem'][0]}}-primem">{{item['primem'][1]}}</a>
-                %if 'greenwich_longitude' in item:
-                  %if int(item['primem'][0]) != 8901 and str(greenwich_longitude) != str(361):
-                    ({{greenwich_longitude}} degree from Greenwich)<br />
-                    %gl = True
+                <p>
+                  <span class="caption">Prime meridian: </span><a href="/{{item['primem'][0]}}-primem">{{item['primem'][1]}}</a>
+                  %if 'greenwich_longitude' in item:
+                    %if int(item['primem'][0]) != 8901 and str(greenwich_longitude) != str(361):
+                      ({{greenwich_longitude}} degree from Greenwich)<br />
+                      %gl = True
+                    %else:
+                      <br />
+                    %end
                   %else:
                     <br />
                   %end
-                %else:
-                  <br />
-                %end
+                </p>
               %end
             %end
 
             %if detail != [] and not gl:
               %if 'greenwich_longitude' in item:
                 %if item['greenwich_longitude'] != 0 and item['greenwich_longitude'] and str(greenwich_longitude) != str(361):
-                 <span class="caption">Degree from Greenwich: </span>{{greenwich_longitude}}<br />
+                 <p><span class="caption">Degree from Greenwich: </span>{{greenwich_longitude}}</p>
                 %end
               %end
             %end
@@ -421,7 +424,7 @@
             %if detail != []:
               %if detail[0]['url_axis']:
                 %for a in detail[0]['url_axis']:
-                  <span class="caption">Link to axis : </span><a href="/{{a['axis_code']}}-axis">{{a['axis_name']}}</a><br />
+                  <p><span class="caption">Link to axis : </span><a href="/{{a['axis_code']}}-axis">{{a['axis_name']}}</a></p>
                 %end
               %end
             %end
@@ -430,7 +433,7 @@
             %if 'alt_description' in item:
               %if item['alt_description']:
                 %if wkt:
-                  <span class="caption">Alternative description: </span>{{!item['alt_description']}}<br />
+                  <p><span class="caption">Alternative description: </span>{{!item['alt_description']}}</p>
                 %else:
                   %found_alt = True
                   %if export_html:
@@ -444,15 +447,17 @@
 
             %if 'alt_code' in item:
               %if item['alt_code'] != ['']:
+              <p>
                 <span class="caption">Alternatives codes : </span>
                 %for a in item['alt_code']:
                   <a href="/{{a}}">{{a}}</a>
                 %end
+              </p>
               %end
             %end
-          </p>
+          </div>
         
-          <p class="attributes-col2">
+          <div class="attributes-col2">
               
             %if 'scope' in item:
               %if item['scope']:
@@ -499,7 +504,7 @@
                 </p>
               %end
             %end
-          </p>
+          </div>
                   
         </div>
         
