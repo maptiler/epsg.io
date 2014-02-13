@@ -266,6 +266,7 @@
       %if trans or projcrs_by_gcrs or (center and trans_lat) or (detail and detail[0]['url_area']!="/?q="):
       <div id="detail-content-container">
         <div class="covered-area-container">
+          <h3 class="underline-style">Covered area</h3>
           %no_map = False
           %if item['bbox']:
             %if center:
@@ -327,7 +328,7 @@
           <div class="transformations-container">        
             %no_trans = False
             %if trans:
-              <h3>Available transformations:</h3>
+              <h3 class="underline-style">Available transformations:</h3>
               <ul>
                 % i = 0
                 %for r in trans:
@@ -431,6 +432,7 @@
             </div>
           </div>
           <div class="location-data-container">
+            <h3 class="underline-style">Selected transformation</h3>
             %found = False
             %if trans:
               %for r in trans:
