@@ -53,7 +53,7 @@
       <div id="title_kind">
         <div class="socialicons">
 
-            <a id="share_facebook" href="https://www.facebook.com/sharer/sharer.php?u=http://epsg.io/{{code_short[0]}}&amp;"><span class="icon-epsg-facebook"></span></a>
+            <a id="share_facebook" href="https://www.facebook.com/sharer/sharer.php?u=http://epsg.io/{{code_short[0]}}"><span class="icon-epsg-facebook"></span></a>
 
 
         <a id="share_twitterb" href="https://twitter.com/share?original_referer=http://epsg.io/{{code_short[0]}}&amp;text={{name}}&amp;"><span class="icon-epsg-twiter"></span></a>
