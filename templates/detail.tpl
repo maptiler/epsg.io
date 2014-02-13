@@ -146,11 +146,12 @@
 
         </div>
         <div class="detail-content-inner-wide">
-          <div class="transformations-container"> 
+          <div class="transformations-container">  
+              <div class="transformations-container-inner">
               %no_trans = False
               %if trans:
                 <h3 class="underline-style">Available transformations:</h3>
-                <ul class="transformations-container-inner">
+                <ul>
                   % i = 0
                   %for r in trans:
                     %if r['link'] == "" and r['deprecated'] == 0:
@@ -251,6 +252,7 @@
                   <a href="{{more_gcrs_result}}">More</a>
                 %end
               </div>
+            </div>
           </div>
           <div class="location-data-container">
             <h3 class="underline-style">Selected transformation</h3>
