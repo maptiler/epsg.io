@@ -218,6 +218,7 @@ h4, .h4 { margin: 20px 0 13px 0; padding: 0; font-size: 16px; color: #000; }
         .detail-content-inner-wide { margin: 0; padding: 0; float: left; width: 680px; }
         .attributes-col { margin: 0 0 15px; padding: 0; float: left; width: 250px; }
         .attributes-col2 { margin: 0 0 15px; padding: 0; float: right; width: 420px; }
+        .attributes-col p, .attributes-col2 p { margin-bottom: 7px; }
         h3.underline-style { margin: 0 0 20px; padding: 0 0 10px; font-size: 14px; color: #aaa;  border-bottom: solid 1px #eee; }
         .location-data-container, .transformations-container {  margin: 0; padding: 0; float: left; }
         .covered-area-container { margin: 0; padding-top: 0px; width: 266px; float: right; }
