@@ -21,7 +21,7 @@
         <div id="head">
             <div id="head-top">
                 <p id="logo-container">
-                    <a href="http://epsg.io" title=""><span>Epsg.io</span> Coordinate systems worldwide</a>
+                    <a href="http://epsg.io" title=""><span>Epsg.io</span> Coordinate Systems Worldwide</a>
                 </p>
                 <ul id="menu-top">
                     <li><a href="/about" title="">About</a></li>

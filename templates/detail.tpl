@@ -4,22 +4,26 @@
     <meta charset="utf-8"/>
 %if alt_title:
   %if not name:
-    <title>{{alt_title}} - {{type_epsg}}:{{item['code']}}</title>
+    <title>{{alt_title}} - {{type_epsg}}:{{code_short[0]}}</title>
   %else:
-    <title>{{name}} - {{alt_title}} - {{type_epsg}}:{{item['code']}}</title>
+    <title>{{name}} - {{alt_title}} - {{type_epsg}}:{{code_short[0]}}</title>
   %end
 %else:
   %if not name:
-    <title>{{type_epsg}}:{{item['code']}}</title>
+    <title>{{type_epsg}}:{{code_short[0]}}</title>
   %else:
-    <title>{{name}} - {{type_epsg}}:{{item['code']}}</title>
+    <title>{{name}} - {{type_epsg}}:{{code_short[0]}}</title>
   %end
 %end    
     
     
     <meta content="width=device-width, initial-scale=1, maximum-scale=1" name="viewport" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="description" content="EPSG:{{item['code']}} {{kind}} for {{item['area']}} {{item['remarks']}} {{item['scope']}}" />
+  %if item['area'] !="" or item['remarks'] !="" or item['scope']!="":
+    <meta name="description" content="EPSG:{{code_short[0]}} {{kind}} for {{item['area']}} {{item['remarks']}} {{item['scope']}}" />
+  %else:
+    <meta name="description" content="EPSG:{{code_short[0]}} {{kind}}"/>
+  %end
     <meta name="keywords" content="EPSG.io" />
     <meta name="robots" content="ALL,FOLLOW" />
     <link rel="stylesheet" href="/css/main.css" type="text/css" />
@@ -42,7 +46,7 @@
     
     <div id="head">
       <p id="logo-container">
-        <a href="http://epsg.io" title=""><span>Epsg.io</span> Coordinate systems worldwide</a>
+        <a href="http://epsg.io" title=""><span>Epsg.io</span> Coordinate Systems Worldwide</a>      
       </p>
       <ul id="menu-top">
         <li><a href="http://epsg.io/about" title="">About</a></li>
@@ -53,14 +57,14 @@
       <div id="title_kind">
         <div class="socialicons">
 
-            <a id="share_facebook" href="https://www.facebook.com/sharer/sharer.php?u=http://epsg.io/{{code_short[0]}}"><span class="icon-epsg-facebook"></span></a>
+            <a id="share_facebook" href="https://www.facebook.com/sharer/sharer.php?u=http://epsg.io/{{url_social}}"><span class="icon-epsg-facebook"></span></a>
 
 
-        <a id="share_twitterb" href="https://twitter.com/share?original_referer=http://epsg.io/{{code_short[0]}}&amp;text={{name}}&amp;"><span class="icon-epsg-twiter"></span></a>
+        <a id="share_twitterb" href="https://twitter.com/share?original_referer=http://epsg.io/{{url_social}}&amp;text={{name}}&amp;"><span class="icon-epsg-twiter"></span></a>
 
-        <a id="share_pinterest" href="https://pinterest.com/pin/create/button/?url=http%3A%2F%2Fepsg.io&amp;media={{url_static_map[0]}}"><span class="icon-epsg-pinterest"></span></a>
+        <a id="share_pinterest" href="https://pinterest.com/pin/create/button/?url=http%3A%2F%2Fepsg.io/{{url_social}}&amp;media={{url_static_map[0]}}"><span class="icon-epsg-pinterest"></span></a>
 
-        <a id="share_gplusdark" href="https://plus.google.com/share?url=http://epsg.io/{{code_short[0]}}"><span class="icon-epsg-googleplus"></span></a>
+        <a id="share_gplusdark" href="https://plus.google.com/share?url=http://epsg.io/{{url_social}}"><span class="icon-epsg-googleplus"></span></a>
         </div>
       %if item['deprecated'] == 1 or item['deprecated'] == "true" :
         <h1>{{type_epsg}}:{{code_short[0]}} DEPRECATED</h1>

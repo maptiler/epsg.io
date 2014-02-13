@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
   <head>  
     <meta charset="utf-8"/>
-    <title>EPSG.io: Coordinate systems worldwide</title>
+    <title>EPSG.io: Coordinate Systems Worldwide</title>
     <meta content="width=device-width, initial-scale=1, maximum-scale=1" name="viewport" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="description" content="EPSG.io" />
@@ -26,7 +26,7 @@
   <body id="homepage" data-role="page">
     <div id="layout-container">
       <p id="logo-container">
-        <a href="/" title=""><span>Epsg.io</span> Coordinate systems worldwide</a>
+        <a href="http://epsg.io" title=""><span>Epsg.io</span> Coordinate Systems Worldwide</a>
       </p>
       <h1>Find a coordinate system and get position on a map.</h1>
       
