@@ -164,9 +164,6 @@
                       %if r['link'] == "" and r['deprecated'] == 0:
                         <li>
                         
-                        %if r['default'] == True:
-                          DEFAULT
-                        %end
                          <span class="caption">{{r['area_trans_trans']}}</span>
 
                         %if r['accuracy']:
@@ -177,6 +174,10 @@
                           code&nbsp;{{r['code_trans']}} 
                         %end
 
+                        %if r['default'] == True:
+                          <em>(default)</em>
+                        %end
+
                         % i +=1
                         </li>
 
@@ -185,11 +186,10 @@
 
 
                           <a href="/{{r['link']}}" title = "{{r['trans_remarks']}}">
-                            %if r['default'] == True:
-                              DEFAULT
-                            %end
                             <span class="caption">{{r['area_trans_trans']}}</span>, accuracy&nbsp;{{r['accuracy']}}&nbsp;m, code&nbsp;{{r['code_trans']}} 
-
+                            %if r['default'] == True:
+                              <em>(default)</em>
+                            %end
                           </a>
                           %i+=1
                         </li>
