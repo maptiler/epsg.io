@@ -240,9 +240,9 @@
               
           </div>
           <div class="location-data-container">
-            <h3 class="underline-style">Selected transformation</h3>
             %found = False
             %if trans:
+            <h3 class="underline-style">Selected transformation</h3>
               %for r in trans:
                 %if r['link'] == "" and not found:
                     %found = True
