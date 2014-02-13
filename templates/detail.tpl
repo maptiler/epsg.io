@@ -87,62 +87,69 @@
       <div id="detail-content-container">
         <div class="covered-area-container">
           <h3 class="underline-style">Covered area</h3>
-          %no_map = False
-          %if item['bbox']:
-            %if center:
-              %if trans_lat:
-                <div id="mini-map">
-                  <a href="{{url_format}}/map">
+          <div class="cac-inner">
+            %no_map = False
+            %if item['bbox']:
+              %if center:
+                %if trans_lat:
+                  <div id="mini-map">
+                    <a href="{{url_format}}/map">
+                      <img src="/img/epsg-target-small.png" id="crosshair" alt="" />
+                        <img src="{{url_static_map[1]}}" alt="SimpleMap" height="190" width="235">
+
+                    </a>
+                  </div>
+                %else:
+                  <div id="mini-map">
                     <img src="/img/epsg-target-small.png" id="crosshair" alt="" />
                       <img src="{{url_static_map[1]}}" alt="SimpleMap" height="190" width="235">
-              
-                  </a>
-                </div>
-              %else:
-                <div id="mini-map">
-                  <img src="/img/epsg-target-small.png" id="crosshair" alt="" />
-                    <img src="{{url_static_map[1]}}" alt="SimpleMap" height="190" width="235">
-                </div>
-              %end
-            %end
-          %else:
-            %no_map = True
-            %if 'alt_description' in item:
-              %if not item['alt_description']:
-                <p>NO MAP AVAILABLE</p>
-              %end
-            %end
-          %end
-
-          %if trans_lat and trans_lon:
-            <p>
-              Center coordinates<br />
-              <span>{{trans_lat}}</span>  <span>{{trans_lon}}</span> <br />
-              <p>Projected bounds<br />
-                {{bbox_coords[3]}} {{bbox_coords[2]}}<br />
-                {{bbox_coords[1]}} {{bbox_coords[0]}}<br />
-              </p>
-              <p>
-                %if default_trans:
-                  WGS84 bounds<br />
-                  {{default_trans['bbox'][1]}} {{default_trans['bbox'][2]}}<br />
-                  {{default_trans['bbox'][3]}} {{default_trans['bbox'][0]}}
-                %else:
-                  WGS84 bounds<br />
-                  {{item['bbox'][1]}} {{item['bbox'][2]}}<br />
-                  {{item['bbox'][3]}} {{item['bbox'][0]}}
+                  </div>
                 %end
-            
-              </p> 
-            </p>
-          %end
-          
-          %if bbox_coords and not (trans_lat or trans_lon):
-          WGS84 bounds<br />
-          {{bbox_coords[1]}} {{bbox_coords[2]}}<br />
-          {{bbox_coords[3]}} {{bbox_coords[0]}}
-          %end
+              %end
+            %else:
+              %no_map = True
+              %if 'alt_description' in item:
+                %if not item['alt_description']:
+                  <p>NO MAP AVAILABLE</p>
+                %end
+              %end
+            %end
 
+            %if trans_lat and trans_lon:
+              <p>
+                Center coordinates<br />
+                <span>{{trans_lat}}</span>  <span>{{trans_lon}}</span> <br />
+                <p>Projected bounds<br />
+                  {{bbox_coords[3]}} {{bbox_coords[2]}}<br />
+                  {{bbox_coords[1]}} {{bbox_coords[0]}}<br />
+                </p>
+                <p>
+                  %if default_trans:
+                    WGS84 bounds<br />
+                    {{default_trans['bbox'][1]}} {{default_trans['bbox'][2]}}<br />
+                    {{default_trans['bbox'][3]}} {{default_trans['bbox'][0]}}
+                  %else:
+                    WGS84 bounds<br />
+                    {{item['bbox'][1]}} {{item['bbox'][2]}}<br />
+                    {{item['bbox'][3]}} {{item['bbox'][0]}}
+                  %end
+
+                </p> 
+              </p>
+            %end
+
+            %if bbox_coords and not (trans_lat or trans_lon):
+            WGS84 bounds<br />
+            {{bbox_coords[1]}} {{bbox_coords[2]}}<br />
+            {{bbox_coords[3]}} {{bbox_coords[0]}}
+            %end
+          </div>
+          <div class="cac-inner">
+            <!-- 
+                tady by meli byt z toho screenu od Radima nejaky ty souranice nebo texty, 
+                je treba to hodit do tohodle bloku kvuli responsive chovani 
+            -->
+          </div>
         </div>
         <div class="detail-content-inner-wide">
           <div class="transformations-container">  
