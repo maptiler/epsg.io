@@ -456,35 +456,47 @@
               
             %if 'scope' in item:
               %if item['scope']:
-                <span class="caption">Scope: </span>{{item['scope']}}<br />
+              <p>
+                <span class="caption">Scope: </span>{{item['scope']}}
+              </p>
               %end
             %end
 
             %if 'remarks' in item:
               %if item['remarks']:
-                <span class="caption">Remarks: </span>{{item['remarks']}}<br />
+              <p>
+                <span class="caption">Remarks: </span>{{item['remarks']}}
+              </p>
               %end
             %end
               
             %if 'area' in item:
               %if item['kind'] == "AREA":
-                <span class="caption">Area of use: {{item['area']}}<br />
+              <p>
+                <span class="caption">Area of use: {{item['area']}}
+              </p>
               %end
             %end
               
              %if detail:
               %if detail[0]['url_area'] != "" and detail[0]['url_area'] != "/?q=" and item['kind'] != "AREA":
-                <span class="caption">Area of use: </span><a href="{{detail[0]['url_area']}}"> {{item['area']}}</a><br />
+                <p>
+                  <span class="caption">Area of use: </span><a href="{{detail[0]['url_area']}}"> {{item['area']}}</a>
+                </p>
               %end
             %else:
               %if item['area'] != "":
-                <span class="caption">Area of use: </span><a href="{{url_area}}">{{area_item}}</a><br />
+                <p>
+                 <span class="caption">Area of use: </span><a href="{{url_area}}">{{area_item}}</a>
+                </p>
               %end
             %end
             
             %if 'cs' in item:
               %if item['cs']:
-                <span class="caption">Coordinate system: </span><a href="/{{item['cs'][0]}}-cs">{{item['cs'][1]}}</a><br />
+                <p>
+                  <span class="caption">Coordinate system: </span><a href="/{{item['cs'][0]}}-cs">{{item['cs'][1]}}</a>
+                </p>
               %end
             %end
           </p>
