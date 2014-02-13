@@ -232,7 +232,7 @@ h4, .h4 { margin: 20px 0 13px 0; padding: 0; font-size: 16px; color: #000; }
                                           border-color: rgba(255, 255, 255, 0) rgba(255, 255, 255, 0) rgba(255, 255, 255, 0) #4295c5 ; }
                 
                 .btn-link-container a:hover { text-decoration: none; }
-                .btn-link-container a:hover i { border-color: rgba(255, 255, 255, 0) #fff rgba(255, 255, 255, 0) rgba(255, 255, 255, 0); }
+                .btn-link-container a:hover i { border-color: rgba(255, 255, 255, 0) rgba(255, 255, 255, 0) rgba(255, 255, 255, 0) #fff; }
                 
         .transformations-container { width: 350px; }
             .transformations-container-inner { height: 380px; overflow-y: scroll; }
