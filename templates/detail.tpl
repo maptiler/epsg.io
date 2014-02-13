@@ -313,6 +313,8 @@
             %end
         
           </div>
+          
+          <div class="clnr"></div>
             
           <h3 class="underline-style">Attributes</h3>
           <p class="attributes-col short">            
