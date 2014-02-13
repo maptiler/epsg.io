@@ -397,7 +397,7 @@ pre { background: transparent; border: solid 1px #bdbdbd; font-size: 11px; margi
     #eb-menu-container { width: 25%; }
    .transformations-container { float: left; }
    .covered-area-container { margin: 0; padding-top: 0px; width: 680px; float: none; overflow: hidden; }
-   .cac-inner { margin-right: 2%; float: left; width: 48%; }
+   .cac-inner { margin-right: 20px; float: left; width: 320px; }
 }
 
 @media (max-width: 940px) {
@@ -408,6 +408,9 @@ pre { background: transparent; border: solid 1px #bdbdbd; font-size: 11px; margi
    #resultspage #search-container { float: none; margin-bottom: 10px }
    
    
+}
+@media (max-width: 740px) {
+   .detail-content-inner-wide, .covered-area-container {  width: 100%; float: none; overflow: hidden; }
 }
 @media (max-width: 720px) {
    body #home-menu-container { width: 100%; }
