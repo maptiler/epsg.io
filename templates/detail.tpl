@@ -146,91 +146,91 @@
         </div>
         <div class="detail-content-inner-wide">
           <div class="transformations-container">  
-              <div class="transformations-container-inner">
               %no_trans = False
               %if trans:
                 <h3 class="underline-style">Available transformations:</h3>
-                <ul>
-                  % i = 0
-                  %for r in trans:
-                    %if r['link'] == "" and r['deprecated'] == 0:
-                      <li>
-                      %if r['default'] == True:
-                        DEFAULT
-                      %end
-                       {{r['area_trans_trans']}}
-
-                      %if r['accuracy']:
-                        , accuracy&nbsp;{{r['accuracy']}}&nbsp;m, 
-                      %end
-
-                      %if r['code_trans'] != 0:
-                        code&nbsp;{{r['code_trans']}} 
-                      %end
-
-                      % i +=1
-                      </li>
-
-                    %elif r['deprecated'] == 0:
-                      <li>
-
-
-                        <a href="/{{r['link']}}" title = "{{r['trans_remarks']}}">
-                          %if r['default'] == True:
-                            DEFAULT
-                          %end
-                          {{r['area_trans_trans']}}, accuracy&nbsp;{{r['accuracy']}}&nbsp;m, code&nbsp;{{r['code_trans']}} 
-
-                        </a>
-                        %i+=1
-                      </li>
-                    %end
-                  %end
-
-                %if deprecated_available == 1:
-                  %if i == 0:
-                    <p></p>
-
-                    <div id="trans_deprecated">
-                  %else:
-                  <p></p>
-
-                    <a href="#" id="trans_deprecated_link">Show deprecated transformations</a>
-                    <div id="trans_deprecated">
-                  %end
-
-                  %for r in trans:
-                    %if r['deprecated'] == 1:
-                      %if r['link'] == "":
+                <div class="transformations-container-inner">
+                  <ul>
+                    % i = 0
+                    %for r in trans:
+                      %if r['link'] == "" and r['deprecated'] == 0:
                         <li>
-                          %if r['default'] == True:
-                            DEFAULT
-                          %end
-                          {{r['area_trans']}}, accuracy&nbsp;{{r['accuracy']}}&nbsp;m, code&nbsp;{{r['area_trans_trans']}} DEPRECATED
+                        %if r['default'] == True:
+                          DEFAULT
+                        %end
+                         {{r['area_trans_trans']}}
+
+                        %if r['accuracy']:
+                          , accuracy&nbsp;{{r['accuracy']}}&nbsp;m, 
+                        %end
+
+                        %if r['code_trans'] != 0:
+                          code&nbsp;{{r['code_trans']}} 
+                        %end
+
+                        % i +=1
                         </li>
-                      %else:
+
+                      %elif r['deprecated'] == 0:
                         <li>
-                          %if r['default'] == True:
-                            DEFAULT
-                          %end
-                          <a href="/{{r['link']}}" title = "{{r['trans_remarks']}}">{{r['area_trans_trans']}}, accuracy&nbsp;{{r['accuracy']}}&nbsp;m, code&nbsp;{{r['code_trans']}} DEPRECATED
+
+
+                          <a href="/{{r['link']}}" title = "{{r['trans_remarks']}}">
+                            %if r['default'] == True:
+                              DEFAULT
+                            %end
+                            {{r['area_trans_trans']}}, accuracy&nbsp;{{r['accuracy']}}&nbsp;m, code&nbsp;{{r['code_trans']}} 
 
                           </a>
+                          %i+=1
                         </li>
                       %end
                     %end
-                  %end              
-                  </div><p></p>
 
-                %end
-                </ul>
+                  %if deprecated_available == 1:
+                    %if i == 0:
+                      <p></p>
 
+                      <div id="trans_deprecated">
+                    %else:
+                    <p></p>
+
+                      <a href="#" id="trans_deprecated_link">Show deprecated transformations</a>
+                      <div id="trans_deprecated">
+                    %end
+
+                    %for r in trans:
+                      %if r['deprecated'] == 1:
+                        %if r['link'] == "":
+                          <li>
+                            %if r['default'] == True:
+                              DEFAULT
+                            %end
+                            {{r['area_trans']}}, accuracy&nbsp;{{r['accuracy']}}&nbsp;m, code&nbsp;{{r['area_trans_trans']}} DEPRECATED
+                          </li>
+                        %else:
+                          <li>
+                            %if r['default'] == True:
+                              DEFAULT
+                            %end
+                            <a href="/{{r['link']}}" title = "{{r['trans_remarks']}}">{{r['area_trans_trans']}}, accuracy&nbsp;{{r['accuracy']}}&nbsp;m, code&nbsp;{{r['code_trans']}} DEPRECATED
+
+                            </a>
+                          </li>
+                        %end
+                      %end
+                    %end              
+                    </div><p></p>
+
+                  %end
+                  </ul>
+
+                </div>
               %else:
                 %no_trans = True
                 <!--<a href="#" id="trans_deprecated_link"></a><br />-->
               %end
               
-            </div>
           </div>
           <div class="location-data-container">
             <h3 class="underline-style">Selected transformation</h3>
