@@ -8,6 +8,7 @@
     <meta name="description" content="EPSG.io" />
     <meta name="keywords" content="EPSG.io" />
     <meta name="robots" content="ALL,FOLLOW" />
+    <meta property="og:image" content="http://epsg.io/img/epsg-banner-440x280-2.png"/>
     <link rel="stylesheet" href="/css/main.css" type="text/css" />
     <link rel="shortcut icon" href="http://epsg.io/favicon.ico" />
     <link rel="search" href="/opensearch.xml" title="EPSG.io" type="application/opensearchdescription+xml"/>
@@ -39,6 +40,19 @@
         <a href="/?q=Czech%20Republic" id="countryLink">Click to see the coordinates systems of <span id="country">Czech Republic</span></a>
         </div>
       
+        <div class="socialicons">
+          
+            <a id="share_facebook" href="https://www.facebook.com/sharer/sharer.php?u=http://epsg.io&amp;"><span class="icon-epsg-facebook"></span></a>
+            
+
+        <a id="share_twitterb" href="https://twitter.com/share?original_referer=http://epsg.io&amp;text=Coordinate systems worldwide - &amp;"><span class="icon-epsg-twiter"></span></a>
+
+        <a id="share_pinterest" href="https://pinterest.com/pin/create/button/?url=http%3A%2F%2Fepsg.io&amp;media=http%3A%2F%2Fdirect.epsg.io%2Fimg%2Fepsg-banner-440x280-2.png"><span class="icon-epsg-pinterest"></span></a>
+
+        <a id="share_gplusdark" href="https://plus.google.com/share?url=http://epsg.io/"><span class="icon-epsg-googleplus"></span></a>
+        </div>
+      </div>
+
       </div>
       
       <div id="home-menu-container">
@@ -75,6 +89,7 @@
     </div>
     <div id="spacer"><p></p></div>
     <script type="text/javascript">home_init();</script>
+    
 
     <div id="footer">
 

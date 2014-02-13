@@ -50,7 +50,18 @@
     </div>
     
     <div id="layout-container">
-      
+      <div id="title_kind">
+        <div class="socialicons">
+
+            <a id="share_facebook" href="https://www.facebook.com/sharer/sharer.php?u=http://epsg.io/{{code_short[0]}}&amp;"><span class="icon-epsg-facebook"></span></a>
+
+
+        <a id="share_twitterb" href="https://twitter.com/share?original_referer=http://epsg.io/{{code_short[0]}}&amp;text={{name}}&amp;"><span class="icon-epsg-twiter"></span></a>
+
+        <a id="share_pinterest" href="https://pinterest.com/pin/create/button/?url=http%3A%2F%2Fepsg.io&amp;media={{url_static_map[0]}}"><span class="icon-epsg-pinterest"></span></a>
+
+        <a id="share_gplusdark" href="https://plus.google.com/share?url=http://epsg.io/{{code_short[0]}}"><span class="icon-epsg-googleplus"></span></a>
+        </div>
       %if item['deprecated'] == 1 or item['deprecated'] == "true" :
         <h1>{{type_epsg}}:{{code_short[0]}} DEPRECATED</h1>
       %else:
@@ -66,6 +77,7 @@
       %else:
       <h2>{{name}}</h2>
       %end
+      </div>
       <p>
         %if 'scope' in item:
           %if item['scope']:

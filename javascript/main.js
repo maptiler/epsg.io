@@ -7,6 +7,50 @@ goog.require('goog.net.Jsonp');
 goog.require('goog.style');
 
 
+var socials_icons_init = function() {
+  function popup(pageURL, w, h) {
+    var left = (screen.width / 2) - (w / 2);
+    var top = (screen.height / 2) - (h / 2);
+    var targetWin = window.open(pageURL, '_blank', 'toolbar=no,' +
+        'location=no, directories=no, status=no, menubar=no, scrollbars=no,' +
+        'resizable=no, copyhistory=no, width=' + w + ', height=' + h +
+        ', top=' + top + ', left=' + left);
+  }
+  // OnClick facebook
+  var shf = goog.dom.getElement('share_facebook');
+  if (shf) {
+    goog.events.listen(shf, goog.events.EventType.CLICK, function(e) {
+      e.preventDefault();
+      popup(this.href, 645, 353);
+    });
+  }
+  // OnClick twitter
+  var sht = goog.dom.getElement('share_twitterb');
+  if (sht) {
+    goog.events.listen(sht, goog.events.EventType.CLICK, function(e) {
+      e.preventDefault();
+      popup(this.href, 450, 257);
+    });
+  }
+  // OnClick pinterest
+  var shp = goog.dom.getElement('share_pinterest');
+  if (shp) {
+    goog.events.listen(shp, goog.events.EventType.CLICK, function(e) {
+      e.preventDefault();
+      popup(this.href, 620, 280);
+    });
+  }
+  // OnClick G+
+  var shg = goog.dom.getElement('share_gplusdark');
+  if (shg) {
+    goog.events.listen(shg, goog.events.EventType.CLICK, function(e) {
+      e.preventDefault();
+      popup(this.href, 610, 315);
+    });
+  }
+};
+
+
 /**
  * The Home page javascript
  */
@@ -30,6 +74,11 @@ epsg.io.home_init = function() {
       goog.dom.getElement('countryLink').style.display = 'inline';
     });
   }
+  var soc = goog.dom.getElementByClass('socialicons');
+  if (soc) {
+    socials_icons_init();
+  }
+
 };
 
 
@@ -84,6 +133,11 @@ epsg.io.detail_init = function() {
   goog.array.forEach(goog.dom.getElementsByClass('zeroclipboard'),
       function(element) { new ZeroClipboard(element); });
 
+  var soc = goog.dom.getElementByClass('socialicons');
+  if (soc) {
+    socials_icons_init();
+  }
+
 };
 
 
@@ -97,6 +151,7 @@ epsg.io.detail_init = function() {
 epsg.io.map_init = function(srs, bbox, opt_lon, opt_lat) {
   new epsg.io.Coordinates(srs, bbox, opt_lon, opt_lat);
 };
+
 
 goog.exportSymbol('home_init', epsg.io.home_init);
 goog.exportSymbol('results_init', epsg.io.results_init);

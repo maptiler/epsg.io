@@ -14,6 +14,7 @@
     <meta name="description" content="EPSG.io" />
     <meta name="keywords" content="EPSG.io" />
     <meta name="robots" content="ALL,FOLLOW" />
+    <meta property="og:image" content="http://epsg.io/img/epsg-banner-440x280-2.png"/>
     <link rel="stylesheet" href="/css/main.css" type="text/css" />
     <link rel="shortcut icon" href="http://epsg.io/favicon.ico" />
     <script>

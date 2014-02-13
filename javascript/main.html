@@ -10,6 +10,7 @@
     <script src="../js/ZeroClipboard.min.js"></script>
     <script src="http://localhost:9810/compile?id=main"></script>
     
+    
   </head>
   <body>
     <h1>Home page</h1>
@@ -18,10 +19,25 @@
     
     <div id="countryLinkWrapper">
     <a href="/?q=Czech%20Republic" id="countryLink">See coordinate systems of <span id="country">Czech Republic</span></a>
-    </div>
-        
-	<script type="text/javascript">home_init();</script>
     
+    <div id="countryLinkWrapper">
+    <a href="/?q=Czech%20Republic" id="countryLink">Click to see the coordinates systems of <span id="country">Czech Republic</span></a>
+    </div>
+  
+    <div class="socialicons">
+      
+        <a id="share_facebook" href="https://www.facebook.com/sharer/sharer.php?u=http://epsg.io&amp;"><span class="icon-epsg-facebook"></span></a>
+        
+
+    <a id="share_twitterb" href="https://twitter.com/share?original_referer=http://epsg.io&amp;text=Coordinate systems worldwide - &amp;"><span class="icon-epsg-twiter"></span></a>
+
+    <a id="share_pinterest" href="https://pinterest.com/pin/create/button/?url=http%3A%2F%2Fwww.oldmapsonline.org%2F&media=http%3A%2F%2Fwww.oldmapsonline.org%2Fimg%2Flogo-old-maps-online.png"><span class="icon-epsg-pinterest"></span></a>
+
+    <a id="share_gplusdark" href="https://plus.google.com/share?url=http://epsg.io/"><span class="icon-epsg-googleplus"></span></a>
+    </div>
+    </div>
+	<script type="text/javascript">home_init();</script>
+  
     <h1>Results page</h1>
 
     <pre>
@@ -161,9 +177,9 @@
 
 
     <pre>
-    TODO: switching WTK/PROJ4/...
-    TODO: show/hide deprecated transformations
-    TODO: Copy&amp;paste URL or WKT
+    DONE: switching WTK/PROJ4/...
+    DONE: show/hide deprecated transformations
+    DONE: Copy&amp;paste URL or WKT
     </pre>
 
 	<script type="text/javascript">detail_init();</script>
@@ -174,7 +190,7 @@
 
     <pre>
     TODO: DMS, DM, D switching
-    TODO: Copy&amp;paste coordinates
+    DONE: Copy&amp;paste coordinates
     </pre>
     
     

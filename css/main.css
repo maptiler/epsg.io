@@ -46,6 +46,17 @@
     font-style: normal;
 } 
 
+@font-face {
+    font-family: 'epsg';
+    src:url('../fonts/epsg.eot?nq3a1h');
+    src:url('../fonts/epsg.eot?#iefixnq3a1h') format('embedded-opentype'),
+        url('../fonts/epsg.woff?nq3a1h') format('woff'),
+        url('../fonts/epsg.ttf?nq3a1h') format('truetype'),
+        url('../fonts/epsg.svg?nq3a1h#epsg') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
 html { margin: 0; padding: 0; height:100%}
 body { margin: 0; padding: 0; background: #fff; position:relative; min-height:100%;}
 form { margin: 0; padding: 0; }
@@ -106,7 +117,28 @@ h4, .h4 { margin: 20px 0 13px 0; padding: 0; font-size: 16px; color: #000; }
 #detailpage #layout-container { padding-top: 60px; }
 #mappage #layout-container { padding-bottom: 100px; }
 
+.icon-epsg-facebook:before { content: "\e604"; }
+.icon-epsg-twiter:before { content: "\e605"; }
+.icon-epsg-googleplus:before { content: "\e606";}
+.icon-epsg-pinterest:before { content: "\e607";}
+[class^="icon-"], [class*=" icon-"] {
+  font-family: 'epsg';
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}      
+    .socialicons a { font-size: 30px; text-decoration: none; margin: 0 10px 0 0;}
+    .socialicons span:hover { color: #4295c5; text-decoration: none; }
+    #homepage .socialicons {text-align:center; margin-top:15px;}
+    #detailpage .socialicons {float:right;}
 
+    
     #homepage #logo-container { margin: 0 0 55px 36%; padding: 0; height: 77px; width: auto; display: block; }
         #homepage #logo-container a { padding: 56px 0 0 152px; height: 22px; width: auto; display: block; background: url('../img/logo-232x76.png') 0 0 no-repeat; }
             #logo-container a span { display: none; }
@@ -116,7 +148,8 @@ h4, .h4 { margin: 20px 0 13px 0; padding: 0; font-size: 16px; color: #000; }
             
     #homepage h1 { margin: 0 0 47px; padding: 0; text-align: center; font-size: 18px; }
     #detailpage h1 { margin-bottom: 0; }
-
+    
+                
     #search-lat-lg-container { margin: 0; padding: 9px 0 0 0; clear: both; background: url('../img/bg-hatch.png') 0 0 repeat; height: 41px; width: 100%; }
     #title-container { min-width: 500px;}
     #search-container { margin: 0 auto 104px; padding: 0; width: 452px; }
@@ -130,6 +163,7 @@ h4, .h4 { margin: 20px 0 13px 0; padding: 0; font-size: 16px; color: #000; }
 
             #search-container input[type="submit"]:hover { color: #fff; background: #4295c5; }
             #homepage #search-container input[type="submit"] { color: #fff; background: #4295c5; }
+            
 
     #resultspage #search-container { margin: 0 auto; padding: 0; width: 452px; float:right;}
             
