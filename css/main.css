@@ -211,7 +211,7 @@ h4, .h4 { margin: 20px 0 13px 0; padding: 0; font-size: 16px; color: #000; }
                     ul.results li p { margin: 0; color: #aaa; }
                     ul.results li p.area { color: #6d6d6d; }
                     
-    #detail-content-container { margin: 0 0 50px; padding: 41px 0 0 0; overflow: hidden; border-top: solid 1px #eee; }
+    #detail-content-container { margin: 0 0 50px; padding: 41px 0 0 0; overflow: hidden; }
         #detail-content-container h2 { margin-top: 0; font-size: 18px; }
         .caption { color: #585858; font-family: OpenSansSemiBold; }
         .detail-content-inner-wide { margin: 0; padding: 0; float: left; width: 680px; }
