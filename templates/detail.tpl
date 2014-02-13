@@ -117,7 +117,7 @@
 
             %if trans_lat and trans_lon:
               <p>
-                Center coordinates<br />
+                <strong>Center coordinates</strong><br />
                 <span>{{trans_lat}}</span>  <span>{{trans_lon}}</span> <br />
                 <p>Projected bounds<br />
                   {{bbox_coords[3]}} {{bbox_coords[2]}}<br />
@@ -125,11 +125,11 @@
                 </p>
                 <p>
                   %if default_trans:
-                    WGS84 bounds<br />
+                    <strong>WGS84 bounds</strong><br />
                     {{default_trans['bbox'][1]}} {{default_trans['bbox'][2]}}<br />
                     {{default_trans['bbox'][3]}} {{default_trans['bbox'][0]}}
                   %else:
-                    WGS84 bounds<br />
+                    <strong>WGS84 bounds</strong><br />
                     {{item['bbox'][1]}} {{item['bbox'][2]}}<br />
                     {{item['bbox'][3]}} {{item['bbox'][0]}}
                   %end
