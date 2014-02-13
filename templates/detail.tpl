@@ -81,6 +81,7 @@
       <h2>{{name}}</h2>
       %end
       </div>
+<<<<<<< HEAD
       <p>
         %if 'scope' in item:
           %if item['scope']:
@@ -262,10 +263,14 @@
           %end
         %end
       </p>
+=======
+      
+>>>>>>> 01e218d520636995666566ce138aad6d8142fe0e
       
       %if trans or projcrs_by_gcrs or (center and trans_lat) or (detail and detail[0]['url_area']!="/?q="):
       <div id="detail-content-container">
-        <div class="map-container">
+        <div class="covered-area-container">
+          <h3 class="underline-style">Covered area</h3>
           %no_map = False
           %if item['bbox']:
             %if center:
@@ -323,170 +328,363 @@
           %end
 
         </div>
+        <div class="detail-content-inner-wide">
+          <div class="transformations-container">  
+              <div class="transformations-container-inner">
+              %no_trans = False
+              %if trans:
+                <h3 class="underline-style">Available transformations:</h3>
+                <ul>
+                  % i = 0
+                  %for r in trans:
+                    %if r['link'] == "" and r['deprecated'] == 0:
+                      <li>
+                      %if r['default'] == True:
+                        DEFAULT
+                      %end
+                       {{r['area_trans_trans']}}
 
-        <div class="transformations-container">        
-          %no_trans = False
-          %if trans:
-            <h3>Available transformations:</h3>
-            <ul>
-              % i = 0
+                      %if r['accuracy']:
+                        , accuracy&nbsp;{{r['accuracy']}}&nbsp;m, 
+                      %end
+
+                      %if r['code_trans'] != 0:
+                        code&nbsp;{{r['code_trans']}} 
+                      %end
+
+                      % i +=1
+                      </li>
+
+                    %elif r['deprecated'] == 0:
+                      <li>
+
+
+                        <a href="/{{r['link']}}" title = "{{r['trans_remarks']}}">
+                          %if r['default'] == True:
+                            DEFAULT
+                          %end
+                          {{r['area_trans_trans']}}, accuracy&nbsp;{{r['accuracy']}}&nbsp;m, code&nbsp;{{r['code_trans']}} 
+
+                        </a>
+                        %i+=1
+                      </li>
+                    %end
+                  %end
+
+                %if deprecated_available == 1:
+                  %if i == 0:
+                    <p></p>
+
+                    <div id="trans_deprecated">
+                  %else:
+                  <p></p>
+
+                    <a href="#" id="trans_deprecated_link">Show deprecated transformations</a>
+                    <div id="trans_deprecated">
+                  %end
+
+                  %for r in trans:
+                    %if r['deprecated'] == 1:
+                      %if r['link'] == "":
+                        <li>
+                          %if r['default'] == True:
+                            DEFAULT
+                          %end
+                          {{r['area_trans']}}, accuracy&nbsp;{{r['accuracy']}}&nbsp;m, code&nbsp;{{r['area_trans_trans']}} DEPRECATED
+                        </li>
+                      %else:
+                        <li>
+                          %if r['default'] == True:
+                            DEFAULT
+                          %end
+                          <a href="/{{r['link']}}" title = "{{r['trans_remarks']}}">{{r['area_trans_trans']}}, accuracy&nbsp;{{r['accuracy']}}&nbsp;m, code&nbsp;{{r['code_trans']}} DEPRECATED
+
+                          </a>
+                        </li>
+                      %end
+                    %end
+                  %end              
+                  </div><p></p>
+
+                %end
+                </ul>
+
+              %else:
+                %no_trans = True
+                <!--<a href="#" id="trans_deprecated_link"></a><br />-->
+              %end
+              <div id="projected-link">
+                %if projcrs_by_gcrs:
+                  %if kind == "Projected coordinate system":
+                    <h3>Coordinates with same geodetic base (<a href="/{{item['geogcrs'][0]}}">{{item['geogcrs'][1]}}</a>):</h3>
+                  %else:
+                    <h3>Coordinates using this {{kind.lower()}}:</h3>
+                  %end
+                %end
+
+                %for r in projcrs_by_gcrs:
+                  <a href="/{{r['result']['code']}}">EPSG:{{r['result']['code']}} {{r['result']['name']}}</a>
+                  %if r['result']['code_trans']:
+                    <a href="{{r['result']['code']}}/map"> (map)</a> <br />
+                  %else:
+                    <br />
+                  %end
+                %end
+
+                %if more_gcrs_result:
+                  <a href="{{more_gcrs_result}}">More</a>
+                %end
+              </div>
+            </div>
+          </div>
+          <div class="location-data-container">
+            <h3 class="underline-style">Selected transformation</h3>
+            %found = False
+            %if trans:
               %for r in trans:
-                %if r['link'] == "" and r['deprecated'] == 0:
-                  <li>
+                %if r['link'] == "" and not found:
+                    %found = True
+                    <h2>
+                  {{r['area_trans_trans']}} <br />
+                
+                  %if r['code_trans'] != 0:
+                    {{type_epsg}}: <a href="/{{r['code_trans']}}">{{r['code_trans']}}</a>
+                  %end
+
                   %if r['default'] == True:
                     DEFAULT
                   %end
-                   {{r['area_trans_trans']}}
-                
+                  </h2>
                   %if r['accuracy']:
-                    , accuracy&nbsp;{{r['accuracy']}}&nbsp;m, 
-                  %end
-
-                  %if r['code_trans'] != 0:
-                    code&nbsp;{{r['code_trans']}} 
-                  %end
-
-                  % i +=1
-                  </li>
-                
-                %elif r['deprecated'] == 0:
-                  <li>
-
-                    
-                    <a href="/{{r['link']}}" title = "{{r['trans_remarks']}}">
-                      %if r['default'] == True:
-                        DEFAULT
-                      %end
-                      {{r['area_trans_trans']}}, accuracy&nbsp;{{r['accuracy']}}&nbsp;m, code&nbsp;{{r['code_trans']}} 
-                  
-                    </a>
-                    %i+=1
-                  </li>
-                %end
-              %end
-            
-            %if deprecated_available == 1:
-              %if i == 0:
-                <p></p>
-              
-                <div id="trans_deprecated">
-              %else:
-              <p></p>
-              
-                <a href="#" id="trans_deprecated_link">Show deprecated transformations</a>
-                <div id="trans_deprecated">
-              %end
-
-              %for r in trans:
-                %if r['deprecated'] == 1:
-                  %if r['link'] == "":
-                    <li>
-                      %if r['default'] == True:
-                        DEFAULT
-                      %end
-                      {{r['area_trans']}}, accuracy&nbsp;{{r['accuracy']}}&nbsp;m, code&nbsp;{{r['area_trans_trans']}} DEPRECATED
-                    </li>
-                  %else:
-                    <li>
-                      %if r['default'] == True:
-                        DEFAULT
-                      %end
-                      <a href="/{{r['link']}}" title = "{{r['trans_remarks']}}">{{r['area_trans_trans']}}, accuracy&nbsp;{{r['accuracy']}}&nbsp;m, code&nbsp;{{r['code_trans']}} DEPRECATED
-     
-                      </a>
-                    </li>
+                    Accuracy&nbsp;{{r['accuracy']}}&nbsp;m 
                   %end
                 %end
-              %end              
-              </div><p></p>
-              
-            %end
-            </ul>
-            
-          %else:
-            %no_trans = True
-            <!--<a href="#" id="trans_deprecated_link"></a><br />-->
-          %end
-          <div id="projected-link">
-            %if projcrs_by_gcrs:
-              %if kind == "Projected coordinate system":
-                <h3>Coordinates with same geodetic base (<a href="/{{item['geogcrs'][0]}}">{{item['geogcrs'][1]}}</a>):</h3>
-              %else:
-                <h3>Coordinates using this {{kind.lower()}}:</h3>
               %end
             %end
-
-            %for r in projcrs_by_gcrs:
-              <a href="/{{r['result']['code']}}">EPSG:{{r['result']['code']}} {{r['result']['name']}}</a>
-              %if r['result']['code_trans']:
-                <a href="{{r['result']['code']}}/map"> (map)</a> <br />
-              %else:
-                <br />
-              %end
-            %end
-
-            %if more_gcrs_result:
-              <a href="{{more_gcrs_result}}">More</a>
-            %end
-          </div>
-        </div>
-        <div class="location-data-container">
-          %found = False
-          %if trans:
-            %for r in trans:
-              %if r['link'] == "" and not found:
-                  %found = True
-                  <h2>
-                {{r['area_trans_trans']}} <br />
-                
-                %if r['code_trans'] != 0:
-                  {{type_epsg}}: <a href="/{{r['code_trans']}}">{{r['code_trans']}}</a>
-                %end
-
-                %if r['default'] == True:
-                  DEFAULT
-                %end
-                </h2>
-                %if r['accuracy']:
-                  Accuracy&nbsp;{{r['accuracy']}}&nbsp;m 
-                %end
-              %end
-            %end
-          %end
           
-          %no_default = False
-          %if not found:
-            %no_default = True
-            %if not no_trans:
-              <p>NO DEFAULT TRANSFORMATION</p>
+            %no_default = False
+            %if not found:
+              %no_default = True
+              %if not no_trans:
+                <p>NO DEFAULT TRANSFORMATION</p>
+              %end
             %end
-          %end
 
-          %if center and trans_lat and trans_lon:
-            <p class="btn-link-container">
-              <a href="{{url_format}}/map"><i></i>Get position on a map</a>
-            </p>
-          %end
+            %if center and trans_lat and trans_lon:
+              <p class="btn-link-container">
+                <a href="{{url_format}}/map"><i></i>Get position on a map</a>
+              </p>
+            %end
           
-          %if trans and default_trans:
-            <p>
-              %if default_trans['method']:
-                <span class="caption">Method: </span><a href="/{{default_trans['method'][0]}}-method">{{default_trans['method'][1]}}</a><br />
-              %end
-                <span class="caption">Area of use: </span><a href="{{url_area_trans}}">{{default_trans['area']}}</a><br />
-                <span class="caption">Remarks: </span>{{default_trans['remarks']}}<br />
-                <span class="caption">Information source: </span>{{default_trans['information_source']}}<br />
-                <span class="caption">Revision date: </span>{{default_trans['revision_date']}}<br />
-                
-              %if url_concatop != []:
-                <span class="caption">Steps of transformation: </span>
-                %for url in url_concatop:
-                  <a href="{{url}}">{{url}} </a>
+            %if trans and default_trans:
+              <p>
+                %if default_trans['method']:
+                  <span class="caption">Method: </span><a href="/{{default_trans['method'][0]}}-method">{{default_trans['method'][1]}}</a><br />
                 %end
-              %end
-            </p>
-          %end
+                  <span class="caption">Area of use: </span><a href="{{url_area_trans}}">{{default_trans['area']}}</a><br />
+                  <span class="caption">Remarks: </span>{{default_trans['remarks']}}<br />
+                  <span class="caption">Information source: </span>{{default_trans['information_source']}}<br />
+                  <span class="caption">Revision date: </span>{{default_trans['revision_date']}}<br />
+                
+                %if url_concatop != []:
+                  <span class="caption">Steps of transformation: </span>
+                  %for url in url_concatop:
+                    <a href="{{url}}">{{url}} </a>
+                  %end
+                %end
+              </p>
+            %end
         
+          </div>
+          
+          <div class="clnr"></div>
+            
+          <h3 class="underline-style">Attributes</h3>
+          <p class="attributes-col short">            
+
+            %if 'information_source' in item:
+              %if item['information_source']:
+                <span class="caption">Information source: </span>{{item['information_source']}}<br />
+              %end
+            %end
+
+            %if 'revision_date' in item:
+              %if item['revision_date']:
+                <span class="caption">Revision date:  </span>{{item['revision_date']}}<br />
+              %end
+            %end
+
+            %if url_concatop != []:
+              <span class="caption">Steps of transformation: </span>
+              %for url in url_concatop:
+                <a href="{{url}}">{{url}} </a>
+              %end
+              <br />
+            %end
+
+            %if nadgrid:
+            <span class="caption">NadGrid file: </span>{{nadgrid}}<br />
+            %end
+
+            %if 'geogcrs' in item:
+              %if item['geogcrs']:
+                <span class="caption">Geodetic coordinate reference system: </span><a href="/{{item['geogcrs'][0]}}">{{item['geogcrs'][1]}}</a><br />
+              %end
+            %end
+
+            %if 'datum' in item:
+              %if item['datum'] != 0 and item['datum'] :
+                <span class="caption">Datum: </span><a href="/{{item['datum'][0]}}-datum/">{{item['datum'][1]}}</a><br />
+              %end
+            %end
+            
+            %if item['target_uom']:
+              %if int(code_short[0]) != int(item['target_uom'][0]):
+                <span class="caption">Target uom: </span><a href="/{{item['target_uom'][0]}}-units">{{item['target_uom'][1]}}</a><br />
+              %end
+            %end
+            %if 'uom_code' in item:
+              %if item['uom_code']:
+                <span class="caption">Unit: </span><a href="/{{item['uom_code']}}-units/">{{item['uom']}}</a><br />
+              %end
+            %end
+
+            %if item['files']:
+              <span class="caption">File: </span>{{item['files']}}<br />
+            %end
+
+            %if item['orientation']:
+              <span class="caption">Orientation: </span>{{item['orientation']}}<br />
+            %end
+
+            %if item['abbreviation']:
+              <span class="caption">Abreviation: </span>{{item['abbreviation']}}<br />
+            %end
+
+            %if item['order']:
+              <span class="caption">Axis order: </span>{{item['order']}}.<br />
+            %end
+
+            %if 'description' in item:
+              %if item['description']:
+                <span class="caption">Description: </span>{{item['description']}}<br />
+              %end
+            %end
+
+            %if 'ellipsoid' in item:
+              %if item['ellipsoid']:
+                %if item['ellipsoid'][0] != "None":
+                  <span class="caption">Ellipsoid: </span><a href="/{{item['ellipsoid'][0]}}-ellipsoid">{{item['ellipsoid'][1]}}</a><br />
+                %end
+              %end
+            %end
+
+            %if "method" in item:
+              %if item['method']:
+                <span class="caption">Method: </span><a href="/{{item['method'][0]}}-method" title="">{{item['method'][1]}}</a><br />
+              %end
+            %end
+
+            %if 'data_source' in item:
+              %if item['data_source']:
+                <span class="caption">Data source: </span>{{item['data_source']}} <br />
+              %end
+            %end
+
+            %if 'primem' in item:
+              %if item['primem']:
+                <span class="caption">Prime meridian: </span><a href="/{{item['primem'][0]}}-primem">{{item['primem'][1]}}</a>
+                %if 'greenwich_longitude' in item:
+                  %if item['primem'][0] != 8901 and detail != [] and item['greenwich_longitude'] !=0:
+                    ({{item['greenwich_longitude']}} degree from Greenwich)<br />
+                  %else:
+                    <br />
+                  %end
+                %else:
+                  <br />
+                %end
+              %end
+            %end
+
+            %if detail != []:
+              %if 'greenwich_longitude' in item:
+                %if item['greenwich_longitude'] != 0 and item['greenwich_longitude']:
+                 <span class="caption">Degree from Greenwich: </span>{{item['greenwich_longitude']}}<br />
+                %end
+              %end
+            %end
+
+            %if detail != []:
+              %if detail[0]['url_axis']:
+                %for a in detail[0]['url_axis']:
+                  <span class="caption">Link to axis : </span><a href="/{{a['axis_code']}}-axis">{{a['axis_name']}}</a><br />
+                %end
+              %end
+            %end
+
+            %found_alt = False
+            %if 'alt_description' in item:
+              %if item['alt_description']:
+                %if wkt:
+                  <span class="caption">Alternative description: </span>{{!item['alt_description']}}<br />
+                %else:
+                  %found_alt = True
+                  %if export_html:
+                    <div id="description-message">{{!export_html}} </div>
+                  %else:
+                    <div id="description-message">{{!item['alt_description']}} </div>
+                  %end
+                %end
+              %end
+            %end
+
+            %if 'alt_code' in item:
+              %if item['alt_code'] != ['']:
+                <span class="caption">Alternatives codes : </span>
+                %for a in item['alt_code']:
+                  <a href="/{{a}}">{{a}}</a>
+                %end
+              %end
+            %end
+          </p>
+        
+          <p class="attribute-col2">
+              
+            %if 'scope' in item:
+              %if item['scope']:
+                <span class="caption">Scope: </span>{{item['scope']}}<br />
+              %end
+            %end
+
+            %if 'remarks' in item:
+              %if item['remarks']:
+                <span class="caption">Remarks: </span>{{item['remarks']}}<br />
+              %end
+            %end
+              
+            %if 'area' in item:
+              %if item['kind'] == "AREA":
+                <span class="caption">Area of use: {{item['area']}}<br />
+              %end
+            %end
+              
+             %if detail:
+              %if detail[0]['url_area'] != "" and detail[0]['url_area'] != "/?q=" and item['kind'] != "AREA":
+                <span class="caption">Area of use: </span><a href="{{detail[0]['url_area']}}"> {{item['area']}}</a><br />
+              %end
+            %else:
+              %if item['area'] != "":
+                <span class="caption">Area of use: </span><a href="{{url_area}}">{{area_item}}</a><br />
+              %end
+            %end
+            
+            %if 'cs' in item:
+              %if item['cs']:
+                <span class="caption">Coordinate system: </span><a href="/{{item['cs'][0]}}-cs">{{item['cs'][1]}}</a><br />
+              %end
+            %end
+          </p>
+                  
         </div>
         
         

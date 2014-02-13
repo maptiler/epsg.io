@@ -211,14 +211,18 @@ h4, .h4 { margin: 20px 0 13px 0; padding: 0; font-size: 16px; color: #000; }
                     ul.results li p { margin: 0; color: #aaa; }
                     ul.results li p.area { color: #6d6d6d; }
                     
-    #detail-content-container { margin: 0 0 50px; padding: 41px 0 0 0; overflow: hidden; border-top: solid 1px #eee; }
+    #detail-content-container { margin: 0 0 50px; padding: 41px 0 0 0; overflow: hidden; }
         #detail-content-container h2 { margin-top: 0; font-size: 18px; }
         .caption { color: #585858; font-family: OpenSansSemiBold; }
-        .map-container, .location-data-container, .transformations-container {  margin: 0; padding: 0; float: left; }
-        .map-container { margin-right: 43px; padding-top: 0px; width: 266px; }
+        .detail-content-inner-wide { margin: 0; padding: 0; float: left; width: 680px; }
+        .attributes-col { margin: 0 0 15px; padding: 0; float: left; width: 250px; }
+        .attributes-col2 { margin: 0 0 15px; padding: 0; float: right; width: 420px; }
+        h3.underline-style { margin: 0 0 20px; padding: 0 0 10px; font-size: 14px; color: #aaa;  border-bottom: solid 1px #eee; }
+        .location-data-container, .transformations-container {  margin: 0; padding: 0; float: left; }
+        .covered-area-container { margin: 0; padding-top: 0px; width: 266px; float: right; }
             #mini-map { margin-bottom: 15px; width: 235px; height: 190px; display: block; position:relative;}
             #crosshair { position:absolute; top:50%; left:50%; margin-top:-11px; margin-left:-11px;}
-        .location-data-container { width: 284px; }
+        .location-data-container { float: right; width: 284px; }
             .location-data-container .btn-link-container { margin: 0 0 25px; padding: 25px 0 0 0; border-top: solid 1px #eee; overflow: hidden; }
                 .btn-link-container a { margin: 0; padding: 7px 22px 0 13px; height: 24px; float: left; border: solid 1px #cacaca; 
                                         border-radius: 15px; -moz-border-radius: 15px; -webkit-border-radius: 15px; color: #fff; background: #4295c5; }
@@ -228,7 +232,8 @@ h4, .h4 { margin: 20px 0 13px 0; padding: 0; font-size: 16px; color: #000; }
                 .btn-link-container a:hover { text-decoration: none; }
                 .btn-link-container a:hover i { border-color: rgba(255, 255, 255, 0) #fff rgba(255, 255, 255, 0) rgba(255, 255, 255, 0); }
                 
-        .transformations-container { float: right; width: 350px; }
+        .transformations-container { width: 350px; }
+            .transformations-container-inner { height: 380px; overflow-y: scroll; }
             .transformations-container h3 { margin-top: 0; font-size: 14px; }
             .transformations-container ul { margin: 0; list-style-type: none; font-size: 12px; }
             .transformations-container ul li a { color: #9d9d9d; }
