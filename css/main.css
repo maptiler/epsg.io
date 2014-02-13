@@ -230,7 +230,7 @@ h4, .h4 { margin: 20px 0 13px 0; padding: 0; font-size: 16px; color: #000; }
                 .btn-link-container a:hover { text-decoration: none; }
                 .btn-link-container a:hover i { border-color: rgba(255, 255, 255, 0) #fff rgba(255, 255, 255, 0) rgba(255, 255, 255, 0); }
                 
-        .transformations-container { float: right; width: 350px; }
+        .transformations-container { width: 350px; }
             .transformations-container h3 { margin-top: 0; font-size: 14px; }
             .transformations-container ul { margin: 0; list-style-type: none; font-size: 12px; }
             .transformations-container ul li a { color: #9d9d9d; }
