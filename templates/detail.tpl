@@ -188,7 +188,7 @@
                             %if r['default'] == True:
                               DEFAULT
                             %end
-                            {{r['area_trans_trans']}}, accuracy&nbsp;{{r['accuracy']}}&nbsp;m, code&nbsp;{{r['code_trans']}} 
+                            <span class="caption">{{r['area_trans_trans']}}</span>, accuracy&nbsp;{{r['accuracy']}}&nbsp;m, code&nbsp;{{r['code_trans']}} 
 
                           </a>
                           %i+=1
