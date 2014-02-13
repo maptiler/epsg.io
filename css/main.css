@@ -231,7 +231,7 @@ h4, .h4 { margin: 20px 0 13px 0; padding: 0; font-size: 16px; color: #000; }
                 .btn-link-container a i { margin: 3px 0 0 15px; border-style: solid; border-width: 5px 0 5px 7px; float: right; height: 1px;
                                           border-color: rgba(255, 255, 255, 0) rgba(255, 255, 255, 0) rgba(255, 255, 255, 0) #4295c5 ; }
                 
-                .btn-link-container a:hover { text-decoration: none; }
+                .btn-link-container a:hover { text-decoration: none; background: #03639B; }
                 .btn-link-container a:hover i { border-color: rgba(255, 255, 255, 0) rgba(255, 255, 255, 0) rgba(255, 255, 255, 0) #fff; }
                 
         .transformations-container { width: 350px; }
