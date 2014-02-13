@@ -295,6 +295,7 @@ def index():
     short_code = 0
     codes = []
     for r in results[(maxdoc-pagelen):maxdoc]:
+      #print r.score, r['code']
       link = str(r['code'])
       
       short_code = r['code'].split("-")
@@ -871,8 +872,32 @@ def index(id):
             more_gcrs_result = "/?q=geogcrs:"+str(gcrs_code)+" kind:PROJCRS deprecated:0"
           for gcrs_item in gcrs_result:        
             projcrs_by_gcrs.append({'result': gcrs_item})
+    greenwich_longitude = 361
+    # 8903-primem - Paris is correct
+    if str(item['greenwich_longitude']) != str(2.5969213):      
+      toDegree = re.compile(r'(-?)(\d+)(\.?)(\d{0,2})(\d{2})?(\d+)?')
+      a = toDegree.search(str(item['greenwich_longitude']))
+      if a:
+        sign = a.group(1)
+        if sign == None:
+          sign = "+"
+        degree = a.group(2)
+        minutes = a.group(4)
+        if minutes == None:
+          minutes = 0
+        if len(minutes) == 1:
+          minutes = float(minutes) * 10  
+        seconds = a.group(5)
+        if seconds == None: seconds = 0
+        frac_seconds = a.group(6)
+        if frac_seconds == None: frac_seconds = 0
+        result = (float(minutes)/60)+ (float(str(seconds)+"."+str(frac_seconds))/3600)
+        result = float(degree)+float(result)
+        greenwich_longitude = str(sign) + str(result)
+    else:
+      greenwich_longitude = item['greenwich_longitude']
           
-  return template('./templates/detail', url_social=url_social, url_static_map=url_static_map, ogpxml_highlight=ogpxml_highlight, xml_highlight=xml_highlight, area_trans_item=area_trans_item, ogpxml=ogpxml, bbox_coords=bbox_coords, more_gcrs_result=more_gcrs_result, deprecated_available=deprecated_available, url_kind=url_kind, type_epsg=type_epsg, name=name, projcrs_by_gcrs=projcrs_by_gcrs, kind=kind, alt_title=alt_title, area_item=area_item, code_short=code_short, item=item, trans=trans, default_trans=default_trans, num_results=num_results, url_method=url_method, title=title, url_format=url_format, export_html=export_html, url_area_trans=url_area_trans, url_area=url_area, center=center, g_coords=g_coords, trans_lat=trans_lat, trans_lon=trans_lon, wkt=wkt, facets_list=facets_list,url_concatop=url_concatop, nadgrid=nadgrid, detail=detail,export=export, error_code=error_code )  
+  return template('./templates/detail',greenwich_longitude=greenwich_longitude, url_social=url_social, url_static_map=url_static_map, ogpxml_highlight=ogpxml_highlight, xml_highlight=xml_highlight, area_trans_item=area_trans_item, ogpxml=ogpxml, bbox_coords=bbox_coords, more_gcrs_result=more_gcrs_result, deprecated_available=deprecated_available, url_kind=url_kind, type_epsg=type_epsg, name=name, projcrs_by_gcrs=projcrs_by_gcrs, kind=kind, alt_title=alt_title, area_item=area_item, code_short=code_short, item=item, trans=trans, default_trans=default_trans, num_results=num_results, url_method=url_method, title=title, url_format=url_format, export_html=export_html, url_area_trans=url_area_trans, url_area=url_area, center=center, g_coords=g_coords, trans_lat=trans_lat, trans_lon=trans_lon, wkt=wkt, facets_list=facets_list,url_concatop=url_concatop, nadgrid=nadgrid, detail=detail,export=export, error_code=error_code )  
 
 @route('/<id:re:[\d]+(-[a-zA-Z]+)>')
 def index(id):
@@ -962,6 +987,7 @@ def index(id):
     code, spec_code = (id+'-0').split('-')[:2]
     projcrs_by_gcrs = []
     more_gcrs_result = ""
+    greenwich_longitude = 361
     
     # Find right GML from sqlite
     urn = ""
@@ -974,6 +1000,29 @@ def index(id):
     elif item['kind'].startswith("AREA"):urn = "urn:ogc:def:area:EPSG::"+str(code_short[0])
     elif item['kind'].startswith("CS"):urn = "urn:ogc:def:cs:EPSG::"+str(code_short[0])
     elif item['kind'].startswith("PRIMEM"):urn = "urn:ogc:def:meridian:EPSG::"+str(code_short[0])
+    if ('primem' in item and item['primem']) or ('greenwich_longitude' in item and item['greenwich_longitude']):  
+      if str(item['greenwich_longitude']) != str(2.5969213):
+        toDegree = re.compile(r'(-?)(\d+)(\.?)(\d{0,2})(\d{2})?(\d+)?')
+        a = toDegree.search(str(item['greenwich_longitude']))
+        if a:
+          sign = a.group(1)
+          if sign == None:
+            sign = "+"
+          degree = a.group(2)
+          minutes = a.group(4)
+          if minutes == None:
+            minutes = 0
+          if len(minutes) == 1:
+            minutes = float(minutes) * 10  
+          seconds = a.group(5)
+          if seconds == None: seconds = 0
+          frac_seconds = a.group(6)
+          if frac_seconds == None: frac_seconds = 0
+          result = (float(minutes)/60)+ (float(str(seconds)+"."+str(frac_seconds))/3600)
+          result = float(degree)+float(result)
+          greenwich_longitude = str(sign) + str(result)
+      else:
+        greenwich_longitude = item['greenwich_longitude']
     
     if urn != "":
       cur.execute('SELECT id,xml FROM gml where urn = ?', (urn,))
@@ -995,7 +1044,7 @@ def index(id):
         for gcrs_item in gcrs_result[:5]:
           projcrs_by_gcrs.append({'result': gcrs_item})
 
-  return template('./templates/detail',url_social=url_social, url_static_map=url_static_map, url_concatop=url_concatop, ogpxml_highlight=ogpxml_highlight, area_trans_item=area_trans_item, error_code=error_code, ogpxml=ogpxml, bbox_coords=bbox_coords,more_gcrs_result=more_gcrs_result, deprecated_available=deprecated_available, url_kind=url_kind, type_epsg=type_epsg, name=name, projcrs_by_gcrs=projcrs_by_gcrs, alt_title=alt_title, kind=kind, code_short=code_short,item=item, detail=detail, facets_list=facets_list, nadgrid=nadgrid, trans_lat=trans_lat, trans_lon=trans_lon, trans=trans, url_format=url_format, default_trans=default_trans, center=center,g_coords=g_coords)  
+  return template('./templates/detail',greenwich_longitude=greenwich_longitude, url_social=url_social, url_static_map=url_static_map, url_concatop=url_concatop, ogpxml_highlight=ogpxml_highlight, area_trans_item=area_trans_item, error_code=error_code, ogpxml=ogpxml, bbox_coords=bbox_coords,more_gcrs_result=more_gcrs_result, deprecated_available=deprecated_available, url_kind=url_kind, type_epsg=type_epsg, name=name, projcrs_by_gcrs=projcrs_by_gcrs, alt_title=alt_title, kind=kind, code_short=code_short,item=item, detail=detail, facets_list=facets_list, nadgrid=nadgrid, trans_lat=trans_lat, trans_lon=trans_lon, trans=trans, url_format=url_format, default_trans=default_trans, center=center,g_coords=g_coords)  
 
 @route('/<id:re:[\d]+(-[a-zA-Z]+)><format:re:[\.]+[gml]+>')
 def index(id, format):

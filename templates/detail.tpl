@@ -16,7 +16,6 @@
   %end
 %end    
     
-    
     <meta content="width=device-width, initial-scale=1, maximum-scale=1" name="viewport" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   %if item['area'] !="" or item['remarks'] !="" or item['scope']!="":
@@ -60,7 +59,7 @@
             <a id="share_facebook" href="https://www.facebook.com/sharer/sharer.php?u=http://epsg.io/{{url_social}}"><span class="icon-epsg-facebook"></span></a>
 
 
-        <a id="share_twitterb" href="https://twitter.com/share?original_referer=http://epsg.io/{{url_social}}&amp;text={{name}}&amp;"><span class="icon-epsg-twiter"></span></a>
+        <a id="share_twitterb" href="https://twitter.com/share?original_referer=http://epsg.io/{{url_social}}&amp;text={{name}} - {{type_epsg}}:{{code_short[0]}}&amp;"><span class="icon-epsg-twiter"></span></a>
 
         <a id="share_pinterest" href="https://pinterest.com/pin/create/button/?url=http%3A%2F%2Fepsg.io/{{url_social}}&amp;media={{url_static_map[0]}}"><span class="icon-epsg-pinterest"></span></a>
 
@@ -205,13 +204,14 @@
             <span class="caption">Data source: </span>{{item['data_source']}} <br />
           %end
         %end
-
+        %gl = False
         %if 'primem' in item:
           %if item['primem']:
             <span class="caption">Prime meridian: </span><a href="/{{item['primem'][0]}}-primem">{{item['primem'][1]}}</a>
             %if 'greenwich_longitude' in item:
-              %if item['primem'][0] != 8901 and detail != [] and item['greenwich_longitude'] !=0:
-                ({{item['greenwich_longitude']}} degree from Greenwich)<br />
+              %if int(item['primem'][0]) != 8901 and str(greenwich_longitude) != str(361):
+                ({{greenwich_longitude}} degree from Greenwich)<br />
+                %gl = True
               %else:
                 <br />
               %end
@@ -221,10 +221,10 @@
           %end
         %end
 
-        %if detail != []:
+        %if detail != [] and not gl:
           %if 'greenwich_longitude' in item:
-            %if item['greenwich_longitude'] != 0 and item['greenwich_longitude']:
-             <span class="caption">Degree from Greenwich: </span>{{item['greenwich_longitude']}}<br />
+            %if item['greenwich_longitude'] != 0 and item['greenwich_longitude'] and str(greenwich_longitude) != str(361):
+             <span class="caption">Degree from Greenwich: </span>{{greenwich_longitude}}<br />
             %end
           %end
         %end
