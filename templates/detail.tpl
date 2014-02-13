@@ -163,10 +163,11 @@
                     %for r in trans:
                       %if r['link'] == "" and r['deprecated'] == 0:
                         <li>
+                        
                         %if r['default'] == True:
                           DEFAULT
                         %end
-                         {{r['area_trans_trans']}}
+                         <span class="caption">{{r['area_trans_trans']}}</span>
 
                         %if r['accuracy']:
                           , accuracy&nbsp;{{r['accuracy']}}&nbsp;m, 
