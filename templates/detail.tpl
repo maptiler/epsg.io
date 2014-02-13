@@ -279,22 +279,24 @@
             %end
           
             %if trans and default_trans:
-              <p>
+              <div class="attributes">
                 %if default_trans['method']:
-                  <span class="caption">Method: </span><a href="/{{default_trans['method'][0]}}-method">{{default_trans['method'][1]}}</a><br />
+                  <p><span class="caption">Method: </span><a href="/{{default_trans['method'][0]}}-method">{{default_trans['method'][1]}}</a></p>
                 %end
-                  <span class="caption">Area of use: </span><a href="{{url_area_trans}}">{{default_trans['area']}}</a><br />
-                  <span class="caption">Remarks: </span>{{default_trans['remarks']}}<br />
-                  <span class="caption">Information source: </span>{{default_trans['information_source']}}<br />
-                  <span class="caption">Revision date: </span>{{default_trans['revision_date']}}<br />
+                  <p><span class="caption">Area of use: </span><a href="{{url_area_trans}}">{{default_trans['area']}}</a></p>
+                  <p><span class="caption">Remarks: </span>{{default_trans['remarks']}}</p>
+                  <p><span class="caption">Information source: </span>{{default_trans['information_source']}}</p>
+                  <p><span class="caption">Revision date: </span>{{default_trans['revision_date']}}</p>
                 
                 %if url_concatop != []:
-                  <span class="caption">Steps of transformation: </span>
-                  %for url in url_concatop:
-                    <a href="{{url}}">{{url}} </a>
-                  %end
+                  <p>
+                    <span class="caption">Steps of transformation: </span>
+                    %for url in url_concatop:
+                      <a href="{{url}}">{{url}} </a>
+                    %end
+                  </p>
                 %end
-              </p>
+              </div>
             %end
         
           </div>
