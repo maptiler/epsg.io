@@ -222,7 +222,7 @@ h4, .h4 { margin: 20px 0 13px 0; padding: 0; font-size: 16px; color: #000; }
         h3.underline-style { margin: 0 0 20px; padding: 0 0 10px; font-size: 14px; color: #aaa;  border-bottom: solid 1px #eee; }
         .location-data-container, .transformations-container {  margin: 0; padding: 0; float: left; }
         .covered-area-container { margin: 0; padding-top: 0px; width: 266px; float: right; }
-            #mini-map { margin-bottom: 15px; width: 265px; height: 190px; display: block; position:relative;}
+            #mini-map { margin-bottom: 15px; width: 265px; display: block; position:relative;}
             #crosshair { position:absolute; top:50%; left:50%; margin-top:-11px; margin-left:-11px;}
         .location-data-container { float: right; width: 284px; }
             .location-data-container .btn-link-container { margin: 0 0 25px; padding: 25px 0 0 0; overflow: hidden; }
