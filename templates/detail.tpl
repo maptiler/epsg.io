@@ -257,14 +257,14 @@
                 <div id="mini-map">
                   <a href="{{url_format}}/map">
                     <img src="/img/epsg-target-small.png" id="crosshair" alt="" />
-                      <img src="http://maps.googleapis.com/maps/api/staticmap?size=235x190&amp;scale=2&amp;sensor=false&amp;visual_refresh=true&amp;center={{center[0]}},{{center[1]}}&amp;path=color:0xff0000ff|fillcolor:0xff000022|weight:2|{{g_coords}}" alt="SimpleMap" height="190" width="235">
+                      <img src="{{url_static_map[1]}}" alt="SimpleMap" height="190" width="235">
               
                   </a>
                 </div>
               %else:
                 <div id="mini-map">
                   <img src="/img/epsg-target-small.png" id="crosshair" alt="" />
-                    <img src="http://maps.googleapis.com/maps/api/staticmap?size=235x190&amp;scale=2&amp;sensor=false&amp;visual_refresh=true&amp;center={{center[0]}},{{center[1]}}&amp;path=color:0xff0000ff|fillcolor:0xff000022|weight:2|{{g_coords}}" alt="SimpleMap" height="190" width="235">
+                    <img src="{{url_static_map[1]}}" alt="SimpleMap" height="190" width="235">
                 </div>
               %end
             %end
