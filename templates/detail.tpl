@@ -147,10 +147,11 @@
         </div>
         <div class="detail-content-inner-wide">
           <div class="transformations-container">  
-            <div class="transformations-container-inner">
               %no_trans = False
               %if trans:
                 <h3 class="underline-style">Available transformations:</h3>
+                <div class="transformations-container-inner">
+            
                 <ul>
                   % i = 0
                   %for r in trans:
@@ -226,32 +227,32 @@
                 %end
                 </ul>
 
-              %else:
-                %no_trans = True
-                <!--<a href="#" id="trans_deprecated_link"></a><br />-->
-              %end
-              <div id="projected-link">
-                %if projcrs_by_gcrs:
-                  %if kind == "Projected coordinate system":
-                    <h3>Coordinates with same geodetic base (<a href="/{{item['geogcrs'][0]}}">{{item['geogcrs'][1]}}</a>):</h3>
-                  %else:
-                    <h3>Coordinates using this {{kind.lower()}}:</h3>
-                  %end
-                %end
-
-                %for r in projcrs_by_gcrs:
-                  <a href="/{{r['result']['code']}}">EPSG:{{r['result']['code']}} {{r['result']['name']}}</a>
-                  %if r['result']['code_trans']:
-                    <a href="{{r['result']['code']}}/map"> (map)</a> <br />
-                  %else:
-                    <br />
-                  %end
-                %end
-
-                %if more_gcrs_result:
-                  <a href="{{more_gcrs_result}}">More</a>
-                %end
               </div>
+            %else:
+              %no_trans = True
+              <!--<a href="#" id="trans_deprecated_link"></a><br />-->
+            %end
+            <div id="projected-link">
+              %if projcrs_by_gcrs:
+                %if kind == "Projected coordinate system":
+                  <h3>Coordinates with same geodetic base (<a href="/{{item['geogcrs'][0]}}">{{item['geogcrs'][1]}}</a>):</h3>
+                %else:
+                  <h3>Coordinates using this {{kind.lower()}}:</h3>
+                %end
+              %end
+
+              %for r in projcrs_by_gcrs:
+                <a href="/{{r['result']['code']}}">EPSG:{{r['result']['code']}} {{r['result']['name']}}</a>
+                %if r['result']['code_trans']:
+                  <a href="{{r['result']['code']}}/map"> (map)</a> <br />
+                %else:
+                  <br />
+                %end
+              %end
+
+              %if more_gcrs_result:
+                <a href="{{more_gcrs_result}}">More</a>
+              %end
             </div>
           </div>
           <div class="location-data-container">
