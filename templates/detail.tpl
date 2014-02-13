@@ -119,7 +119,8 @@
               <p>
                 <strong>Center coordinates</strong><br />
                 <span>{{trans_lat}}</span>  <span>{{trans_lon}}</span> <br />
-                <p>Projected bounds<br />
+                <p>
+                  <strong>Projected bounds</strong><br />
                   {{bbox_coords[3]}} {{bbox_coords[2]}}<br />
                   {{bbox_coords[1]}} {{bbox_coords[0]}}<br />
                 </p>
