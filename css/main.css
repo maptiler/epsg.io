@@ -214,6 +214,7 @@ h4, .h4 { margin: 20px 0 13px 0; padding: 0; font-size: 16px; color: #000; }
     #detail-content-container { margin: 0 0 50px; padding: 41px 0 0 0; overflow: hidden; border-top: solid 1px #eee; }
         #detail-content-container h2 { margin-top: 0; font-size: 18px; }
         .caption { color: #585858; font-family: OpenSansSemiBold; }
+        .detail-content-inner-wide { margin: 0; padding: 0; float: left; width: 679px;}
         .location-data-container, .transformations-container {  margin: 0; padding: 0; float: left; }
         .covered-area-container { margin: 0 0 0 43px; padding-top: 0px; width: 266px; float: right; }
             #mini-map { margin-bottom: 15px; width: 235px; height: 190px; display: block; position:relative;}
