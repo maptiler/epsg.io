@@ -136,12 +136,12 @@ h4, .h4 { margin: 20px 0 13px 0; padding: 0; font-size: 16px; color: #000; }
     .socialicons a { font-size: 30px; text-decoration: none; margin: 0 10px 0 0;}
     #detailpage .socialicons a { margin-right: 0px; }
     .socialicons span:hover { color: #4295c5; text-decoration: none; }
-    #homepage .socialicons {text-align:center; margin-top:15px;}
+    #homepage .socialicons {text-align:center; margin-top:55px;}
     #detailpage .socialicons {float:right;}
 
     
     #homepage #logo-container { margin: 0 0 55px 36%; padding: 0; height: 77px; width: auto; display: block; }
-        #homepage #logo-container a { padding: 56px 0 0 152px; height: 22px; width: auto; display: block; background: url('../img/logo-232x76.png') 0 0 no-repeat; }
+        #homepage #logo-container a { padding: 62px 0 0 152px; height: 22px; width: auto; display: block; background: url('../img/logo-232x76.png') 0 0 no-repeat; }
             #logo-container a span { display: none; }
         #countryLink { display: none; }
         #countryLinkWrapper { height: 20px; margin-top: 15px; font-size: 14px; text-align: center;}
@@ -153,7 +153,7 @@ h4, .h4 { margin: 20px 0 13px 0; padding: 0; font-size: 16px; color: #000; }
                 
     #search-lat-lg-container { margin: 0; padding: 9px 0 0 0; clear: both; background: url('../img/bg-hatch.png') 0 0 repeat; height: 41px; width: 100%; }
     #title-container { min-width: 500px;}
-    #search-container { margin: 0 auto 104px; padding: 0; width: 475px; }
+    #search-container { margin: 0 auto 50px; padding: 0; width: 475px; }
         #search-container p { margin: 0; padding: 0; overflow: hidden; }
             #search-container input[type="search"] { margin: 0 10px 0 0; padding: 0 10px; height: 32px; width: 328px; font-size: 11px; color: #989898; }
             #search-container input[type="submit"] { margin: 0; width: 114px; height: 32px; text-align: center; font-size: 14px; text-transform: uppercase; 
