@@ -208,7 +208,7 @@ h4, .h4 { margin: 20px 0 13px 0; padding: 0; font-size: 16px; color: #000; }
                 ul.results li h2 { margin: 0; padding: 0; color: #4295c5; font-size: 14px; }
                     ul.results li a { color: #4295c5; }
                     ul.results li a:hover { color: #4295c5; text-decoration: underline; }
-                    ul.results li h2 a { font-size: 14px; text-decoration: underline; }
+                    ul.results li h2 a { font-size: 14px; text-decoration: none; }
                     ul.results li p { margin: 0; color: #aaa; }
                     ul.results li p.area { color: #6d6d6d; }
                     
