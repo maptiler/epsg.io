@@ -62,7 +62,7 @@ body { margin: 0; padding: 0; background: #fff; position:relative; min-height:10
 form { margin: 0; padding: 0; }
 a img { border: 0; }
 a { text-decoration: none; }
-a:hover { text-decoration: underline;  }
+a:hover { text-decoration: underline; color: #4295c5;  }
 input[type="submit"], input[type="image"], label { cursor: pointer; }
 input:focus { outline: none; }
 abbr { cursor: help; }
