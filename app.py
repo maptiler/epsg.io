@@ -717,7 +717,7 @@ def index(id):
     
     url_static_map = ("","")
     if center != "" and g_coords != "":
-      url_static = "http://maps.googleapis.com/maps/api/staticmap?size=235x190&scale=2&sensor=false&visual_refresh=true&center="+str(center[0])+","+str(center[1])+"&path=color:0xff0000ff|fillcolor:0xff000022|weight:2|"+g_coords
+      url_static = "http://maps.googleapis.com/maps/api/staticmap?size=265x215&scale=2&sensor=false&visual_refresh=true&center="+str(center[0])+","+str(center[1])+"&path=color:0xff0000ff|fillcolor:0xff000022|weight:2|"+g_coords
       url_static_map = urllib2.quote(url_static), url_static
     ogpxml = ""
     if item['kind'].startswith("CRS"):
@@ -955,7 +955,6 @@ def index(id):
     for r in results:
       item = r
       url_area = area_to_url(item['area'])
-      
       url_format ="/"+str(item['code'])
       code_short = item['code'].split("-")
       name = item['name']
@@ -983,7 +982,7 @@ def index(id):
         g_coords = str(item['bbox'][2]) + "," + str(item['bbox'][1]) + "|" + str(item['bbox'][0]) + "," + str(item['bbox'][1]) + "|" + str(item['bbox'][0]) + "," + str(item['bbox'][3]) + "|" + str(item['bbox'][2]) + "," + str(item['bbox'][3]) + "|" + str(item['bbox'][2]) + "," + str(item['bbox'][1])
         bbox_coords = (n,e,s,w)
         if center != "" and g_coords != "":
-          url_static = "http://maps.googleapis.com/maps/api/staticmap?size=235x190&scale=2&sensor=false&visual_refresh=true&center="+str(center[0])+","+str(center[1])+"&path=color:0xff0000ff|fillcolor:0xff000022|weight:2|"+g_coords
+          url_static = "http://maps.googleapis.com/maps/api/staticmap?size=265x215&scale=2&sensor=false&visual_refresh=true&center="+str(center[0])+","+str(center[1])+"&path=color:0xff0000ff|fillcolor:0xff000022|weight:2|"+g_coords
           url_static_map = urllib2.quote(url_static), url_static
           
       if 'primem' in r:
@@ -1061,7 +1060,7 @@ def index(id):
         for gcrs_item in gcrs_result[:5]:
           projcrs_by_gcrs.append({'result': gcrs_item})
 
-  return template('./templates/detail',greenwich_longitude=greenwich_longitude, url_social=url_social, url_static_map=url_static_map, url_concatop=url_concatop, ogpxml_highlight=ogpxml_highlight, area_trans_item=area_trans_item, error_code=error_code, ogpxml=ogpxml, bbox_coords=bbox_coords,more_gcrs_result=more_gcrs_result, deprecated_available=deprecated_available, url_kind=url_kind, type_epsg=type_epsg, name=name, projcrs_by_gcrs=projcrs_by_gcrs, alt_title=alt_title, kind=kind, code_short=code_short,item=item, detail=detail, facets_list=facets_list, nadgrid=nadgrid, trans_lat=trans_lat, trans_lon=trans_lon, trans=trans, url_format=url_format, default_trans=default_trans, center=center,g_coords=g_coords)  
+  return template('./templates/detail', url_area=url_area, greenwich_longitude=greenwich_longitude, url_social=url_social, url_static_map=url_static_map, url_concatop=url_concatop, ogpxml_highlight=ogpxml_highlight, area_trans_item=area_trans_item, error_code=error_code, ogpxml=ogpxml, bbox_coords=bbox_coords,more_gcrs_result=more_gcrs_result, deprecated_available=deprecated_available, url_kind=url_kind, type_epsg=type_epsg, name=name, projcrs_by_gcrs=projcrs_by_gcrs, alt_title=alt_title, kind=kind, code_short=code_short,item=item, detail=detail, facets_list=facets_list, nadgrid=nadgrid, trans_lat=trans_lat, trans_lon=trans_lon, trans=trans, url_format=url_format, default_trans=default_trans, center=center,g_coords=g_coords)  
 
 @route('/<id:re:[\d]+(-[a-zA-Z]+)><format:re:[\.]+[gml]+>')
 def index(id, format):
@@ -1461,6 +1460,7 @@ def index(id,format):
       #error = 404
       #try_url = "/"+id+".gml"
       # Find right GML from sqlite
+      url_social = id
       urn = ""
       ogpxml = ""
       area_trans_item = ""
@@ -1485,13 +1485,16 @@ def index(id,format):
       g_coords = ""
       url_concatop = []
       detail = []
+      url_static = "http://epsg.io/img/epsg-banner-440x280-2.png"
+      url_static_map = urllib2.quote(url_static), url_static
+      
       for id,urn,xml,deprecated,name in gml:
         if name == None: name = ""
         item = {'code':code,'area':"", 'remarks':"",'scope':"",'deprecated':deprecated,'target_uom':"",'files':"",'orientation':"",'abbreviation':"",'order':"",'bbox':"",'kind':subject}
         ogpxml = '<?xml version="1.0" encoding="UTF-8"?> %s' % (xml,)
         ogpxml = ogpxml.strip()
         ogpxml_highlight = highlight(ogpxml, XmlLexer(), HtmlFormatter(cssclass='syntax',nobackground=True)) 
-      return template('./templates/detail', url_concatop=url_concatop, ogpxml_highlight=ogpxml_highlight, area_trans_item=area_trans_item, error_code=error_code, ogpxml=ogpxml, bbox_coords=bbox_coords, more_gcrs_result=more_gcrs_result, deprecated_available=deprecated_available, url_kind=url_kind, type_epsg=type_epsg, name=name, projcrs_by_gcrs=projcrs_by_gcrs, alt_title=alt_title, kind=kind, code_short=code_short, item=item, detail=detail, nadgrid=nadgrid, trans_lat=trans_lat, trans_lon=trans_lon, trans=trans, url_format=url_format, default_trans=default_trans, center=center,g_coords=g_coords)  
+      return template('./templates/detail',url_static_map=url_static_map, url_social=url_social, url_concatop=url_concatop, ogpxml_highlight=ogpxml_highlight, area_trans_item=area_trans_item, error_code=error_code, ogpxml=ogpxml, bbox_coords=bbox_coords, more_gcrs_result=more_gcrs_result, deprecated_available=deprecated_available, url_kind=url_kind, type_epsg=type_epsg, name=name, projcrs_by_gcrs=projcrs_by_gcrs, alt_title=alt_title, kind=kind, code_short=code_short, item=item, detail=detail, nadgrid=nadgrid, trans_lat=trans_lat, trans_lon=trans_lon, trans=trans, url_format=url_format, default_trans=default_trans, center=center,g_coords=g_coords)  
       
       #return template('./templates/error',error=error, try_url=try_url)
     else:
@@ -1552,6 +1555,7 @@ def index(id,format):
         # error = 404
         # try_url = "/"+id+".gml"
         # return template('./templates/error',error=error, try_url=try_url)
+        url_social = id
         urn = ""
         ogpxml = ""
         area_trans_item = ""
@@ -1576,12 +1580,14 @@ def index(id,format):
         g_coords = ""
         url_concatop = []
         detail = []
+        url_static = "http://epsg.io/img/epsg-banner-440x280-2.png"
+        url_static_map = urllib2.quote(url_static), url_static
         for id,urn,xml,deprecated,name in gml:
           if name == None: name = ""
           item = {'code':code,'area':"", 'remarks':"",'scope':"",'deprecated':deprecated,'target_uom':"",'files':"",'orientation':"",'abbreviation':"",'order':"",'bbox':"",'kind':subject}
           ogpxml = '<?xml version="1.0" encoding="UTF-8"?>\n %s' % (xml,)
           ogpxml_highlight = highlight(ogpxml, XmlLexer(), HtmlFormatter(cssclass='syntax',nobackground=True)) 
-        return template('./templates/detail', url_concatop=url_concatop, ogpxml_highlight=ogpxml_highlight, area_trans_item=area_trans_item, error_code=error_code, ogpxml=ogpxml, bbox_coords=bbox_coords, more_gcrs_result=more_gcrs_result, deprecated_available=deprecated_available, url_kind=url_kind, type_epsg=type_epsg, name=name, projcrs_by_gcrs=projcrs_by_gcrs, alt_title=alt_title, kind=kind, code_short=code_short, item=item, detail=detail, nadgrid=nadgrid, trans_lat=trans_lat, trans_lon=trans_lon, trans=trans, url_format=url_format, default_trans=default_trans, center=center,g_coords=g_coords)  
+        return template('./templates/detail',url_static_map=url_static_map, url_social=url_social, url_concatop=url_concatop, ogpxml_highlight=ogpxml_highlight, area_trans_item=area_trans_item, error_code=error_code, ogpxml=ogpxml, bbox_coords=bbox_coords, more_gcrs_result=more_gcrs_result, deprecated_available=deprecated_available, url_kind=url_kind, type_epsg=type_epsg, name=name, projcrs_by_gcrs=projcrs_by_gcrs, alt_title=alt_title, kind=kind, code_short=code_short, item=item, detail=detail, nadgrid=nadgrid, trans_lat=trans_lat, trans_lon=trans_lon, trans=trans, url_format=url_format, default_trans=default_trans, center=center,g_coords=g_coords)  
         
       else:
         redirect ('/%s' %url)
