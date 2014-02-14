@@ -503,6 +503,7 @@ def index(id):
     results = searcher.search(myquery, limit=None) #default limit is 10 , reverse = True
     
     detail = []
+    trans_unsorted = []
     trans = []
     url_trans = []
     trans_item = []
@@ -597,7 +598,20 @@ def index(id):
             default = False
             if int(r['code_trans'])== int(hit['code']): 
               default = True
+            try:
+              values = tuple(map(float, hit['description'][1:-1].split(',')))
+            except:
+              values = hit['description']
               
+            num_param = ""
+            if values[3:7] == (0,0,0,0) or values == (0,0,0,0,0,0,0):
+              num_param = 3
+            elif type(values) != tuple and str(values) != "0":
+              num_param = 'grid'
+            elif str(values) == '0':
+              num_param = ""
+            else:
+              num_param = 7
             area_trans_trans = hit['area']
             if item['area'].startswith("World:"):
               area_trans_trans = "World"
@@ -612,7 +626,7 @@ def index(id):
             if hit['deprecated'] == 1:
               deprecated_available = 1
             # safe the main information about each transformation
-            trans.append({
+            trans_unsorted.append({
             'link':link,
             'code':hit['code'],
             'deprecated':hit['deprecated'],
@@ -621,8 +635,11 @@ def index(id):
             'code_trans':hit['code'],
             'trans_remarks':hit['remarks'],
             'default':default,
-            'area_trans_trans':area_trans_trans})
-      
+            'area_trans_trans':area_trans_trans,
+            'num_param':num_param })
+          
+          trans = sorted(trans_unsorted, key=lambda k: k['area_trans']) 
+
       # if it has NOT default transformation code
       else:
         ref.ImportFromEPSG(int(r['code']))

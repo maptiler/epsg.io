@@ -162,7 +162,7 @@
                     % i = 0
                     %for r in trans:
                       %if r['link'] == "" and r['deprecated'] == 0:
-                        <li>
+                        <li><i></i>
                         
                          <span class="caption">{{r['area_trans_trans']}}</span>
 
@@ -177,6 +177,9 @@
                         %if r['default'] == True:
                           <em>(default)</em>
                         %end
+                        %if r['num_param']:
+                          [{{r['num_param']}}]
+                        %end
 
                         % i +=1
                         </li>
@@ -190,8 +193,12 @@
                             %if r['default'] == True:
                               <em>(default)</em>
                             %end
+                            %if r['num_param']:
+                              [{{r['num_param']}}]
+                            %end
                           </a>
                           %i+=1
+
                         </li>
                       %end
                     %end
@@ -211,18 +218,24 @@
                     %for r in trans:
                       %if r['deprecated'] == 1:
                         %if r['link'] == "":
-                          <li>
+                          <li><i></i>
                             %if r['default'] == True:
-                              DEFAULT
+                              <em>(default)</em>
                             %end
-                            {{r['area_trans']}}, accuracy&nbsp;{{r['accuracy']}}&nbsp;m, code&nbsp;{{r['area_trans_trans']}} DEPRECATED
+                            {{r['area_trans']}}, accuracy&nbsp;{{r['accuracy']}}&nbsp;m, code&nbsp;{{r['area_trans_trans']}} <em>(deprecated)</em>
+                            %if r['num_param']:
+                              [{{r['num_param']}}]
+                            %end
                           </li>
                         %else:
                           <li>
                             %if r['default'] == True:
-                              DEFAULT
+                              <em>(default)</em>
                             %end
-                            <a href="/{{r['link']}}" title = "{{r['trans_remarks']}}">{{r['area_trans_trans']}}, accuracy&nbsp;{{r['accuracy']}}&nbsp;m, code&nbsp;{{r['code_trans']}} DEPRECATED
+                            <a href="/{{r['link']}}" title = "{{r['trans_remarks']}}">{{r['area_trans_trans']}}, accuracy&nbsp;{{r['accuracy']}}&nbsp;m, code&nbsp;{{r['code_trans']}} <em>(deprecated)</em> 
+                            %if r['num_param']:
+                              [{{r['num_param']}}]
+                            %end
 
                             </a>
                           </li>
@@ -256,11 +269,16 @@
                   %end
 
                   %if r['default'] == True:
-                    DEFAULT
+                    (default)
                   %end
                   </h2>
                   %if r['accuracy']:
-                    Accuracy&nbsp;{{r['accuracy']}}&nbsp;m 
+                    Accuracy&nbsp;{{r['accuracy']}}&nbsp;m <br />
+                  %end
+                  %if r['num_param'] != "grid" and r['num_param']:
+                    {{r['num_param']}} parameters
+                  %elif r['num_param'] == "grid":
+                    Grid file
                   %end
                 %end
               %end
