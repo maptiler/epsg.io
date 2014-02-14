@@ -248,6 +248,9 @@ def index():
     callback = request.GET.get('callback',False)
     expanded_trans = request.GET.get('trans',False)
     
+    if query == None:
+      return template('./templates/index')
+    
     kind = getQueryParam(query, 'kind')
     deprecated = getQueryParam(query, 'deprecated')
     
