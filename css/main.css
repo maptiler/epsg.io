@@ -311,7 +311,7 @@ h4, .h4 { margin: 20px 0 13px 0; padding: 0; font-size: 16px; color: #000; }
         ul.paginator li span { margin: 0; padding: 2px 5px 2px; background: #4295c5; color: #fff; }
         
     #footer { position:absolute; width: 100%;bottom: 0;text-align:center;}
-    #foot { margin: 0 auto; margin-top: 20px; padding: 16px 0; overflow: hidden; border-top: solid 1px #e7e7e7;max-width:990px; }
+    #foot { margin: 0 auto; margin-top: 40px; padding: 16px 0; overflow: hidden; border-top: solid 1px #e7e7e7;max-width:990px; }
     #mappage #foot { width: 100%; background: #fff; position: fixed; bottom: 0; left: 0; }
         #foot p { margin: 0 20px 0 0; padding: 0; float: left; font-size: 12px;}
         #foot p#mzk-logo { padding: 0; float: left; }
