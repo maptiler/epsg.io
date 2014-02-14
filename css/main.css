@@ -114,7 +114,7 @@ h4, .h4 { margin: 20px 0 13px 0; padding: 0; font-size: 16px; color: #000; }
     
 #homepage #layout-container { padding-top: 94px; }
 #resultspage #layout-container { padding-top: 60px; }
-#detailpage #layout-container { padding-top: 60px; }
+#detailpage #layout-container { padding-top: 60px; padding-bottom: 60px; }
 #mappage #layout-container { padding-bottom: 100px; }
 
 .icon-epsg-facebook:before { content: "\e604"; }
