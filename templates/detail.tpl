@@ -23,6 +23,9 @@
   %else:
     <meta name="description" content="EPSG:{{code_short[0]}} {{kind}}"/>
   %end
+    %if not url_static_map[1]:
+    <meta property="og:image" content="http://epsg.io/img/epsg-banner-440x280-2.png"/>
+    %end
     <meta name="keywords" content="EPSG.io" />
     <meta name="robots" content="ALL,FOLLOW" />
     <link rel="stylesheet" href="/css/main.css" type="text/css" />
@@ -81,7 +84,6 @@
       <h2>{{name}}</h2>
       %end
       </div>
-      %print trans,"trans", center,"center",trans_lat,"trans_lat",detail,"detail",item
       %if trans != [] or (center and trans_lat) or (detail !=[] and detail[0]['url_area']!="/?q=") or (item['kind']=="PRIMEM" or item['kind']=="AXIS") or item['data_source']:
       <div id="detail-content-container">
         <div class="covered-area-container">
@@ -146,13 +148,6 @@
             %elif item['area'] and (url_area):
               <a href="{{url_area}}">{{item['area']}}</a>
             %end
-            
-            
-            
-            <!-- 
-                tady by meli byt z toho screenu od Radima nejaky ty souranice nebo texty, 
-                je treba to hodit do tohodle bloku kvuli responsive chovani 
-            -->
           </div>
         </div>
         <div class="detail-content-inner-wide">
