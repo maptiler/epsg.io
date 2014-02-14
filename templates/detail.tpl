@@ -81,38 +81,33 @@
       <h2>{{name}}</h2>
       %end
       </div>
-
-      
-      %if trans or projcrs_by_gcrs or (center and trans_lat) or (detail and detail[0]['url_area']!="/?q="):
+      %print trans,"trans", center,"center",trans_lat,"trans_lat",detail,"detail",item
+      %if trans != [] or (center and trans_lat) or (detail !=[] and detail[0]['url_area']!="/?q=") or (item['kind']=="PRIMEM" or item['kind']=="AXIS") or item['data_source']:
       <div id="detail-content-container">
         <div class="covered-area-container">
-          <h3 class="underline-style">Covered area</h3>
           <div class="cac-inner">
             %no_map = False
             %if item['bbox']:
+            <h3 class="underline-style">Covered area</h3>
+            
               %if center:
                 %if trans_lat:
                   <div id="mini-map">
                     <a href="{{url_format}}/map">
                       <img src="/img/epsg-target-small.png" id="crosshair" alt="" />
-                        <img src="{{url_static_map[1]}}" alt="SimpleMap" width="265">
+                        <img src="{{url_static_map[1]}}" alt="SimpleMap" width="265" height="215">
 
                     </a>
                   </div>
                 %else:
                   <div id="mini-map">
                     <img src="/img/epsg-target-small.png" id="crosshair" alt="" />
-                      <img src="{{url_static_map[1]}}" alt="SimpleMap" height="190" width="235">
+                      <img src="{{url_static_map[1]}}" alt="SimpleMap" width="265" height="215">
                   </div>
                 %end
               %end
             %else:
               %no_map = True
-              %if 'alt_description' in item:
-                %if not item['alt_description']:
-                  <p>NO MAP AVAILABLE</p>
-                %end
-              %end
             %end
 
             %if trans_lat and trans_lon:
@@ -120,17 +115,17 @@
                 <span class="caption">Center coordinates</span><br />
                 <span>{{trans_lat}}</span>  <span>{{trans_lon}}</span> <br />
                 <p>
-                  <span class="caption">Projected bounds</span><br />
+                  <span class="caption">Projected bounds:</span><br />
                   {{bbox_coords[3]}} {{bbox_coords[2]}}<br />
                   {{bbox_coords[1]}} {{bbox_coords[0]}}<br />
                 </p>
                 <p>
                   %if default_trans:
-                    <span class="caption">WGS84 bounds</span><br />
+                    <span class="caption">WGS84 bounds:</span><br />
                     {{default_trans['bbox'][1]}} {{default_trans['bbox'][2]}}<br />
                     {{default_trans['bbox'][3]}} {{default_trans['bbox'][0]}}
                   %else:
-                    <span class="caption">WGS84 bounds</span><br />
+                    <span class="caption">WGS84 bounds:</span><br />
                     {{item['bbox'][1]}} {{item['bbox'][2]}}<br />
                     {{item['bbox'][3]}} {{item['bbox'][0]}}
                   %end
@@ -140,12 +135,20 @@
             %end
 
             %if bbox_coords and not (trans_lat or trans_lon):
-            WGS84 bounds<br />
+            <span class="caption">WGS84 bounds:</span><br />
             {{bbox_coords[1]}} {{bbox_coords[2]}}<br />
             {{bbox_coords[3]}} {{bbox_coords[0]}}
             %end
           </div>
           <div class="cac-inner">
+            %if default_trans:
+              <a href="{{url_area_trans}}">{{default_trans['area']}}</a>
+            %elif item['area'] and (url_area):
+              <a href="{{url_area}}">{{item['area']}}</a>
+            %end
+            
+            
+            
             <!-- 
                 tady by meli byt z toho screenu od Radima nejaky ty souranice nebo texty, 
                 je treba to hodit do tohodle bloku kvuli responsive chovani 
@@ -220,9 +223,9 @@
                         %if r['link'] == "":
                           <li><i></i>
                             %if r['default'] == True:
-                              <em>(default)</em>
+                              <span class="caption"><em>(default)</em></span>
                             %end
-                            {{r['area_trans']}}, accuracy&nbsp;{{r['accuracy']}}&nbsp;m, code&nbsp;{{r['area_trans_trans']}} <em>(deprecated)</em>
+                            <span class="caption">{{r['area_trans']}}</span>, accuracy&nbsp;{{r['accuracy']}}&nbsp;m, code&nbsp;{{r['area_trans_trans']}} <em>(deprecated)</em>
                             %if r['num_param']:
                               [{{r['num_param']}}]
                             %end
@@ -230,9 +233,9 @@
                         %else:
                           <li>
                             %if r['default'] == True:
-                              <em>(default)</em>
+                              <span class="caption"><em>(default)</em></span>
                             %end
-                            <a href="/{{r['link']}}" title = "{{r['trans_remarks']}}">{{r['area_trans_trans']}}, accuracy&nbsp;{{r['accuracy']}}&nbsp;m, code&nbsp;{{r['code_trans']}} <em>(deprecated)</em> 
+                            <a href="/{{r['link']}}" title = "{{r['trans_remarks']}}"><span class="caption">{{r['area_trans_trans']}}</span>, accuracy&nbsp;{{r['accuracy']}}&nbsp;m, code&nbsp;{{r['code_trans']}} <em>(deprecated)</em> 
                             %if r['num_param']:
                               [{{r['num_param']}}]
                             %end
@@ -250,6 +253,31 @@
                 </div>
               %else:
                 %no_trans = True
+                %if 'alt_description' in item:
+                  %if item['alt_description']:
+                    %if wkt:
+                      <p>
+                        <div id="description-message">{{!item['alt_description']}}</div></p>
+                    %else:
+                      %if export_html:
+                        <div id="description-message">{{!export_html}} </div>
+                      %else:
+                        <div id="description-message">{{!item['alt_description']}} </div>
+                      %end
+                    %end
+                  %end
+                %end
+
+                %if 'alt_code' in item:
+                  %if item['alt_code'] != ['']:
+                  <p>
+                    <span class="caption">Alternatives codes : </span>
+                    %for a in item['alt_code']:
+                      <a href="/{{a}}">{{a}}</a>
+                    %end
+                  </p>
+                  %end
+                %end
                 <!--<a href="#" id="trans_deprecated_link"></a><br />-->
               %end
               
@@ -260,26 +288,28 @@
             <h3 class="underline-style">Selected transformation</h3>
               %for r in trans:
                 %if r['link'] == "" and not found:
-                    %found = True
-                    <h2>
-                  {{r['area_trans_trans']}} <br />
-                
+                  %found = True
+                  <h2>
+                    {{r['area_trans_trans']}}
+                  </h2>
                   %if r['code_trans'] != 0:
-                    {{type_epsg}}: <a href="/{{r['code_trans']}}">{{r['code_trans']}}</a>
+                    code <a href="/{{r['code_trans']}}">{{r['code_trans']}}</a>
+                  %end
+                  <p><p></p>
+                  %if r['accuracy']:
+                    Accuracy&nbsp;{{r['accuracy']}}&nbsp;m
                   %end
 
                   %if r['default'] == True:
                     (default)
                   %end
-                  </h2>
-                  %if r['accuracy']:
-                    Accuracy&nbsp;{{r['accuracy']}}&nbsp;m <br />
-                  %end
+                  <br />
                   %if r['num_param'] != "grid" and r['num_param']:
                     {{r['num_param']}} parameters
                   %elif r['num_param'] == "grid":
-                    Grid file
+                    grid file
                   %end
+                  </p>
                 %end
               %end
             %end
@@ -303,7 +333,6 @@
                 %if default_trans['method']:
                   <p><span class="caption">Method: </span><a href="/{{default_trans['method'][0]}}-method">{{default_trans['method'][1]}}</a></p>
                 %end
-                  <p><span class="caption">Area of use: </span><a href="{{url_area_trans}}">{{default_trans['area']}}</a></p>
                   <p><span class="caption">Remarks: </span>{{default_trans['remarks']}}</p>
                   <p><span class="caption">Information source: </span>{{default_trans['information_source']}}</p>
                   <p><span class="caption">Revision date: </span>{{default_trans['revision_date']}}</p>
@@ -318,6 +347,7 @@
                 %end
               </div>
             %end
+            
         
           </div>
           
@@ -325,7 +355,62 @@
             
           <h3 class="underline-style">Attributes</h3>
           <div class="attributes-col">            
+            %if 'uom_code' in item:
+              %if item['uom_code']:
+                <p><span class="caption">Unit: </span>{{item['uom']}}</p>
+              %end
+            %end
+            
 
+            
+            %if 'geogcrs' in item:
+              %if item['geogcrs']:
+                <p><span class="caption">Geodetic CRS: </span><a href="/{{item['geogcrs'][0]}}">{{item['geogcrs'][1]}}</a></p>
+              %end
+            %end
+            
+            %if 'datum' in item:
+              %if item['datum'] != 0 and item['datum'] :
+                <p><span class="caption">Datum: </span><a href="/{{item['datum'][0]}}-datum/">{{item['datum'][1]}}</a></p>
+              %end
+            %end
+            
+            %if 'ellipsoid' in item:
+              %if item['ellipsoid']:
+                %if item['ellipsoid'][0] != "None":
+                  <p><span class="caption">Ellipsoid: </span><a href="/{{item['ellipsoid'][0]}}-ellipsoid">{{item['ellipsoid'][1]}}</a></p>
+                %end
+              %end
+            %end
+            
+            %gl = False
+            %if 'primem' in item:
+              %if item['primem']:
+                <p>
+                  <span class="caption">Prime meridian: </span><a href="/{{item['primem'][0]}}-primem">{{item['primem'][1]}}</a>
+                  %if 'greenwich_longitude' in item:
+                    %if int(item['primem'][0]) != 8901 and str(greenwich_longitude) != str(361):
+                      ({{greenwich_longitude}} degree from Greenwich)
+                      %gl = True
+                    %end
+                  %end
+              %end
+            %end
+
+            %if detail != [] and not gl:
+              %if 'greenwich_longitude' in item:
+                %if item['greenwich_longitude'] != 0 and item['greenwich_longitude'] and str(greenwich_longitude) != str(361):
+                 <p><span class="caption">Degree from Greenwich: </span>{{greenwich_longitude}}</p>
+                %end
+              %end
+            %end
+            
+            %if 'data_source' in item:
+              %if item['data_source']:
+                <p><span class="caption">Data source: </span>{{item['data_source']}} </p>
+              %end
+            %end
+            
             %if 'information_source' in item:
               %if item['information_source']:
                 <p><span class="caption">Information source: </span>{{item['information_source']}}</p>
@@ -337,6 +422,9 @@
                 <p><span class="caption">Revision date:  </span>{{item['revision_date']}}</p>
               %end
             %end
+
+
+
 
             %if url_concatop != []:
               <p>
@@ -351,32 +439,16 @@
             <p><span class="caption">NadGrid file: </span>{{nadgrid}}</p>
             %end
 
-            %if 'geogcrs' in item:
-              %if item['geogcrs']:
-                <p><span class="caption">Geodetic coordinate reference system: </span><a href="/{{item['geogcrs'][0]}}">{{item['geogcrs'][1]}}</a></p>
-              %end
-            %end
-
-            %if 'datum' in item:
-              %if item['datum'] != 0 and item['datum'] :
-                <p><span class="caption">Datum: </span><a href="/{{item['datum'][0]}}-datum/">{{item['datum'][1]}}</a></p>
-              %end
-            %end
-            
             %if item['target_uom']:
               %if int(code_short[0]) != int(item['target_uom'][0]):
-                <p><span class="caption">Target uom: </span><a href="/{{item['target_uom'][0]}}-units">{{item['target_uom'][1]}}</a></p>
-              %end
-            %end
-            %if 'uom_code' in item:
-              %if item['uom_code']:
-                <p><span class="caption">Unit: </span><a href="/{{item['uom_code']}}-units/">{{item['uom']}}</a></p>
+                <p><span class="caption">Target unit: </span><a href="/{{item['target_uom'][0]}}-units">{{item['target_uom'][1]}}</a></p>
               %end
             %end
 
             %if item['files']:
               <p><span class="caption">File: </span>{{item['files']}}</p>
             %end
+
 
             %if item['orientation']:
               <p><span class="caption">Orientation: </span>{{item['orientation']}}</p>
@@ -390,59 +462,6 @@
               <p><span class="caption">Axis order: </span>{{item['order']}}.</p>
             %end
 
-            %if 'description' in item:
-              %if item['description']:
-                <p><span class="caption">Description: </span>{{item['description']}}</p>
-              %end
-            %end
-
-            %if 'ellipsoid' in item:
-              %if item['ellipsoid']:
-                %if item['ellipsoid'][0] != "None":
-                  <p><span class="caption">Ellipsoid: </span><a href="/{{item['ellipsoid'][0]}}-ellipsoid">{{item['ellipsoid'][1]}}</a></p>
-                %end
-              %end
-            %end
-
-            %if "method" in item:
-              %if item['method']:
-                <p><span class="caption">Method: </span><a href="/{{item['method'][0]}}-method" title="">{{item['method'][1]}}</a></p>
-              %end
-            %end
-
-            %if 'data_source' in item:
-              %if item['data_source']:
-                <p><span class="caption">Data source: </span>{{item['data_source']}} </p>
-              %end
-            %end
-
-            %gl = False
-            %if 'primem' in item:
-              %if item['primem']:
-                <p>
-                  <span class="caption">Prime meridian: </span><a href="/{{item['primem'][0]}}-primem">{{item['primem'][1]}}</a>
-                  %if 'greenwich_longitude' in item:
-                    %if int(item['primem'][0]) != 8901 and str(greenwich_longitude) != str(361):
-                      ({{greenwich_longitude}} degree from Greenwich)<br />
-                      %gl = True
-                    %else:
-                      <br />
-                    %end
-                  %else:
-                    <br />
-                  %end
-                </p>
-              %end
-            %end
-
-            %if detail != [] and not gl:
-              %if 'greenwich_longitude' in item:
-                %if item['greenwich_longitude'] != 0 and item['greenwich_longitude'] and str(greenwich_longitude) != str(361):
-                 <p><span class="caption">Degree from Greenwich: </span>{{greenwich_longitude}}</p>
-                %end
-              %end
-            %end
-
             %if detail != []:
               %if detail[0]['url_axis']:
                 %for a in detail[0]['url_axis']:
@@ -451,32 +470,7 @@
               %end
             %end
 
-            %found_alt = False
-            %if 'alt_description' in item:
-              %if item['alt_description']:
-                %if wkt:
-                  <p><span class="caption">Alternative description: </span>{{!item['alt_description']}}</p>
-                %else:
-                  %found_alt = True
-                  %if export_html:
-                    <div id="description-message">{{!export_html}} </div>
-                  %else:
-                    <div id="description-message">{{!item['alt_description']}} </div>
-                  %end
-                %end
-              %end
-            %end
-
-            %if 'alt_code' in item:
-              %if item['alt_code'] != ['']:
-              <p>
-                <span class="caption">Alternatives codes : </span>
-                %for a in item['alt_code']:
-                  <a href="/{{a}}">{{a}}</a>
-                %end
-              </p>
-              %end
-            %end
+            
           </div>
         
           <div class="attributes-col2">
@@ -496,12 +490,10 @@
               </p>
               %end
             %end
-              
-            %if 'area' in item:
-              %if item['kind'] == "AREA":
-              <p>
-                <span class="caption">Area of use: {{item['area']}}
-              </p>
+            
+            %if "method" in item:
+              %if item['method']:
+                <p><span class="caption">Method: </span><a href="/{{item['method'][0]}}-method" title="">{{item['method'][1]}}</a></p>
               %end
             %end
               
@@ -526,6 +518,13 @@
                 </p>
               %end
             %end
+            
+            %if 'description' in item:
+              %if item['description']:
+                <p><span class="caption">Description: </span>{{item['description']}}</p>
+              %end
+            %end
+            
           </div>
                   
         </div>
@@ -805,10 +804,6 @@
               <pre id="s_gml_text">{{ogpxml}}</pre>
             </div>
           </div>
-
-
-
-
         %end
       </div>
             

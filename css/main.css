@@ -213,7 +213,7 @@ h4, .h4 { margin: 20px 0 13px 0; padding: 0; font-size: 16px; color: #000; }
                     ul.results li p.area { color: #6d6d6d; }
                     
     #detail-content-container { margin: 0 0 50px; padding: 41px 0 0 0; overflow: hidden; }
-        #detail-content-container h2 { margin-top: 0; font-size: 18px; }
+        #detail-content-container h2 { margin-top: 0; margin-bottom: 0;font-size: 18px; }
         .caption { color: #585858; font-family: OpenSansSemiBold; }
         .detail-content-inner-wide { margin: 0; padding: 0; float: left; width: 680px; }
         .attributes-col { margin: 0 0 15px; padding: 0; float: left; width: 250px; }
@@ -240,9 +240,9 @@ h4, .h4 { margin: 20px 0 13px 0; padding: 0; font-size: 16px; color: #000; }
             .transformations-container h3 { margin-top: 0; font-size: 14px; }
             .transformations-container ul { margin: 0; list-style-type: none; font-size: 12px; }
             .transformations-container ul li a { color: #9d9d9d; }
-            .transformations-container ul li a:hover { color: #4295c5; text-decoration: none; }
-            .transformations-container-inner i { margin: 3px 4px 0 0; border-style: solid; border-width: 5px 0 5px 7px; float: left; height: 1px;
-                                      border-color: rgba(255, 255, 255, 0) rgba(255, 255, 255, 0) rgba(255, 255, 255, 0) #4295c5 ; }
+            .transformations-container ul li a:hover, .transformations-container ul li a:hover span { color: #4295c5; text-decoration: none; }
+            .transformations-container-inner i { margin: 3px 7px 0 0; border-style: solid; border-width: 5px 0 5px 7px; float: left; height: 1px;
+                                      border-color: rgba(255, 255, 255, 0) rgba(255, 255, 255, 0) rgba(255, 255, 255, 0) #585858 ; }
             #trans_deprecated { display:none; }
             
     #edit-box-container { margin: 0 0 50px; padding: 40px 0 0 0; border-top: solid 1px #eee; overflow: hidden; }
