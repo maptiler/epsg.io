@@ -133,7 +133,7 @@ h4, .h4 { margin: 20px 0 13px 0; padding: 0; font-size: 16px; color: #000; }
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }      
-    .socialicons a { font-size: 30px; text-decoration: none; margin: 0 55px 0 0;}
+    .socialicons a { font-size: 30px; text-decoration: none; margin: 0 5px 0 0;}
     #detailpage .socialicons a { margin-right: 0px; }
     .socialicons span:hover { color: #4295c5; text-decoration: none; }
     #homepage .socialicons {text-align:center; margin-top:55px;}
