@@ -883,9 +883,9 @@ def index(id):
           sign = "+"
         degree = a.group(2)
         minutes = a.group(4)
-        if minutes == None:
+        if minutes == None or minutes == "":
           minutes = 0
-        if len(minutes) == 1:
+        if len(str(minutes)) == 1:
           minutes = float(minutes) * 10  
         seconds = a.group(5)
         if seconds == None: seconds = 0
@@ -1010,9 +1010,9 @@ def index(id):
             sign = "+"
           degree = a.group(2)
           minutes = a.group(4)
-          if minutes == None:
+          if minutes == None or minutes == "":
             minutes = 0
-          if len(minutes) == 1:
+          if len(str(minutes)) == 1:
             minutes = float(minutes) * 10  
           seconds = a.group(5)
           if seconds == None: seconds = 0
