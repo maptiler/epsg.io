@@ -144,7 +144,7 @@ h4, .h4 { margin: 20px 0 13px 0; padding: 0; font-size: 16px; color: #000; }
         #homepage #logo-container a { padding: 62px 0 0 152px; height: 22px; width: auto; display: block; background: url('../img/logo-232x76.png') 0 0 no-repeat; }
             #logo-container a span { display: none; }
         #countryLink { display: none; }
-        #countryLinkWrapper { height: 20px; margin-top: 15px; font-size: 14px; text-align: center;}
+        #countryLinkWrapper { height: 20px; margin-top: 45px; font-size: 12px; text-align: center;}
             #countryLinkWrapper a {text-decoration: underline;}
             
     #homepage h1 { margin: 0 0 47px; padding: 0; text-align: center; font-size: 18px; }
