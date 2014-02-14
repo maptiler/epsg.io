@@ -143,10 +143,33 @@
             %end
           </div>
           <div class="cac-inner">
+            
             %if default_trans:
               <a href="{{url_area_trans}}">{{default_trans['area']}}</a>
             %elif item['area'] and (url_area):
               <a href="{{url_area}}">{{item['area']}}</a>
+            %end
+          
+            %found_trans = False
+            %if item['kind'].startswith("COORDOP"):
+            <p></p>
+              %found_trans = True
+              <div id="projected-link-trans">
+                  %if projcrs_by_gcrs:
+
+                      <h3 class="underline-style">Coordinates on a map</h3>
+                  %end
+
+                  %for r in projcrs_by_gcrs:
+                    <a href="/{{r['result']['code']}}/map"><span class="caption">{{r['result']['name']}}</span></a>
+                    
+                     code <a href="{{r['result']['code']}}">{{r['result']['code']}}</a><br />
+                  %end
+
+                  %if more_gcrs_result:
+                    <a href="{{more_gcrs_result}}">More</a>
+                  %end
+              </div>
             %end
           </div>
         </div>
@@ -801,29 +824,30 @@
           </div>
         %end
       </div>
-            
-      <div id="projected-link">
-          %if projcrs_by_gcrs:
-            %if kind == "Projected coordinate system":
-              <h3>Coordinates with same geodetic base (<a href="/{{item['geogcrs'][0]}}">{{item['geogcrs'][1]}}</a>):</h3>
-            %else:
-              <h3>Coordinates using this {{kind.lower()}}:</h3>
+      %if found_trans == False:      
+        <div id="projected-link">
+            %if projcrs_by_gcrs:
+              %if kind == "Projected coordinate system":
+                <h3>Coordinates with same geodetic base (<a href="/{{item['geogcrs'][0]}}">{{item['geogcrs'][1]}}</a>):</h3>
+              %else:
+                <h3>Coordinates using this {{kind.lower()}}:</h3>
+              %end
             %end
-          %end
 
-          %for r in projcrs_by_gcrs:
-            <a href="/{{r['result']['code']}}">EPSG:{{r['result']['code']}} {{r['result']['name']}}</a>
-            %if r['result']['code_trans']:
-              <a href="{{r['result']['code']}}/map"> (map)</a> <br />
-            %else:
-              <br />
+            %for r in projcrs_by_gcrs:
+              <a href="/{{r['result']['code']}}">EPSG:{{r['result']['code']}} {{r['result']['name']}}</a>
+              %if r['result']['code_trans']:
+                <a href="{{r['result']['code']}}/map"> (map)</a> <br />
+              %else:
+                <br />
+              %end
             %end
-          %end
 
-          %if more_gcrs_result:
-            <a href="{{more_gcrs_result}}">More</a>
-          %end
-        </div>
+            %if more_gcrs_result:
+              <a href="{{more_gcrs_result}}">More</a>
+            %end
+          </div>
+        %end
             
     </div>
       
