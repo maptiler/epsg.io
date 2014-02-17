@@ -137,9 +137,11 @@
             %end
 
             %if bbox_coords and not (trans_lat or trans_lon):
+            <p>
             <span class="caption">WGS84 bounds:</span><br />
             {{bbox_coords[1]}} {{bbox_coords[2]}}<br />
             {{bbox_coords[3]}} {{bbox_coords[0]}}
+            </p>
             %end
           </div>
           <div class="cac-inner">

@@ -1,0 +1,18 @@
+{
+  "name": "EPSG.io: Coordinates",
+  "description": "Coordinate Systems Worldwide.",
+  "version": "1",
+  "manifest_version": 2,
+  "app": {
+    "urls": [
+      "http://epsg.io/"
+    ],
+    "launch": {
+      "web_url": "http://epsg.io/"
+    }
+  },
+  "icons": {
+    "128": "epsg-128x128.png"
+  },
+  "permissions": ["geolocation", "notifications"]
+}

@@ -1252,7 +1252,7 @@ def index(id, format):
       #return template('./templates/export', export = export, code=rcode)
     
     elif format == '.xml':
-      if ref.ExportToXML() == 0:
+      if ref.ExportToXML() != 7 :
         export = '<?xml version="1.0" encoding="UTF-8"?>\n %s' % (ref.ExportToXML().replace(">",' xmlns:gml="http://www.opengis.net/gml/3.2" xmlns:xlink="http://www.w3.org/1999/xlink">',1))
         ct = "text/xml"
         if request.GET.get('download',1) == "":
