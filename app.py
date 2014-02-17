@@ -685,12 +685,21 @@ def index(id):
         else:
           n, w, s, e = item['bbox']
           
+          if n == 90.0: n = 85.0
+          if w == -180.0: w = -179.9
+          if s == -90.0: s = -85.0
+          if e == 180.0: e = 179.9
+
+          #(51.05, 12.09, 47.74, 22.56)
           center = (n-s)/2.0 + s, (e-w)/2.0 + w
           if (e < w):
             center = (n-s)/2.0+s, (w+180 + (360-(w+180)+e+180) / 2.0 ) % 360-180
             
-          g_coords = str(item['bbox'][2]) + "," + str(item['bbox'][1]) + "|" + str(item['bbox'][0]) + "," + str(item['bbox'][1]) + "|" + str(item['bbox'][0]) + "," + str(item['bbox'][3]) + "|" + str(item['bbox'][2]) + "," + str(item['bbox'][3]) + "|" + str(item['bbox'][2]) + "," + str(item['bbox'][1])
     
+          if n == 85.0 and w == -179.9 and s == -85.0 and e == 179.9:
+            g_coords = "-85,-179.9|85,-179.9|85,0|85,179.9|-85,179.9|-85,0|-85,-179.9"
+          else:  
+            g_coords = str(s) + "," + str(w) + "|" + str(n) + "," + str(w) + "|" + str(n) + "," + str(e) + "|" + str(s) + "," + str(e) + "|" + str(s) + "," + str(w)
     # if it CRS (not transformation)
     if str(item['kind']).startswith('CRS'):
       if wkt:
@@ -711,12 +720,19 @@ def index(id):
       g_coords = ""
       if default_trans['bbox']:
         n, w, s, e = default_trans['bbox']
+        if n == 90.0: n = 85.0
+        if w == -180.0: w = -179.9
+        if s == -90.0: s = -85.0
+        if e == 180.0: e = 179.9
         
         #(51.05, 12.09, 47.74, 22.56)
         center = (n-s)/2.0 + s, (e-w)/2.0 + w
         if (e < w):
           center = (n-s)/2.0+s, (w+180 + (360-(w+180)+e+180) / 2.0 ) % 360-180
-        g_coords = str(default_trans['bbox'][2]) + "," + str(default_trans['bbox'][1]) + "|" + str(default_trans['bbox'][0]) + "," + str(default_trans['bbox'][1]) + "|" + str(default_trans['bbox'][0]) + "," + str(default_trans['bbox'][3]) + "|" + str(default_trans['bbox'][2]) + "," + str(default_trans['bbox'][3]) + "|" + str(default_trans['bbox'][2]) + "," + str(default_trans['bbox'][1])
+        if (n == 85.0 and w == -179.9 and s == -85.0 and e == 179.9) or item['code'] == "3857":
+          g_coords = "-85,-179.9|85,-179.9|85,0|85,179.9|-85,179.9|-85,0|-85,-179.9"
+        else:  
+          g_coords = str(s) + "," + str(w) + "|" + str(n) + "," + str(w) + "|" + str(n) + "," + str(e) + "|" + str(s) + "," + str(e) + "|" + str(s) + "," + str(w)
     
     url_static_map = ("","")
     if center != "" and g_coords != "":
@@ -977,12 +993,20 @@ def index(id):
       
       if item['bbox']:
         n, w, s, e = item['bbox']
+        if n == 90.0: n = 85.0
+        if w == -180.0: w = -179.9
+        if s == -90.0: s = -85.0
+        if e == 180.0: e = 179.9
+        
+        #(51.05, 12.09, 47.74, 22.56)
         center = (n-s)/2.0 + s, (e-w)/2.0 + w
         if (e < w):
           center = (n-s)/2.0+s, (w+180 + (360-(w+180)+e+180) / 2.0 ) % 360-180
+        if n == 85.0 and w == -179.9 and s == -85.0 and e == 179.9:
+          g_coords = "-85,-179.9|85,-179.9|85,0|85,179.9|-85,179.9|-85,0|-85,-179.9"
+        else:  
+          g_coords = str(s) + "," + str(w) + "|" + str(n) + "," + str(w) + "|" + str(n) + "," + str(e) + "|" + str(s) + "," + str(e) + "|" + str(s) + "," + str(w)
         
-        #(51.05, 12.09, 47.74, 22.56)
-        g_coords = str(item['bbox'][2]) + "," + str(item['bbox'][1]) + "|" + str(item['bbox'][0]) + "," + str(item['bbox'][1]) + "|" + str(item['bbox'][0]) + "," + str(item['bbox'][3]) + "|" + str(item['bbox'][2]) + "," + str(item['bbox'][3]) + "|" + str(item['bbox'][2]) + "," + str(item['bbox'][1])
         bbox_coords = (n,e,s,w)
         if center != "" and g_coords != "":
           url_static = "http://maps.googleapis.com/maps/api/staticmap?size=265x215&scale=2&sensor=false&visual_refresh=true&center="+str(center[0])+","+str(center[1])+"&path=color:0xff0000ff|fillcolor:0xff000022|weight:2|"+g_coords
