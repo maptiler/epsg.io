@@ -64,8 +64,12 @@
 
         <a id="share_twitterb" href="https://twitter.com/share?original_referer=http://epsg.io/{{url_social}}&amp;text={{name}} - {{type_epsg}}:{{code_short[0]}}&amp;"><span class="icon-epsg-twiter"></span></a>
 
+        %if url_static_map[0]:
         <a id="share_pinterest" href="https://pinterest.com/pin/create/button/?url=http%3A%2F%2Fepsg.io/{{url_social}}&amp;media={{url_static_map[0]}}"><span class="icon-epsg-pinterest"></span></a>
 
+        %else:
+        <a id="share_pinterest" href="https://pinterest.com/pin/create/button/?url=http%3A%2F%2Fepsg.io/{{url_social}}&amp;media=http%3A%2F%2Fepsg.io%2Fimg%2Fepsg-banner-440x280-2.png"><span class="icon-epsg-pinterest"></span></a>
+        %end
         <a id="share_gplusdark" href="https://plus.google.com/share?url=http://epsg.io/{{url_social}}"><span class="icon-epsg-googleplus"></span></a>
         </div>
       %if item['deprecated'] == 1 or item['deprecated'] == "true" :
