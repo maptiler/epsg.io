@@ -319,9 +319,9 @@
               %end
               
           </div>
+          %if trans:
           <div class="location-data-container">
             %found = False
-            %if trans:
             <h3 class="underline-style">Selected transformation</h3>
               %for r in trans:
                 %if r['link'] == "" and not found:
@@ -349,7 +349,6 @@
                   </p>
                 %end
               %end
-            %end
           
             %no_default = False
             %if not found:
@@ -388,6 +387,7 @@
         
           </div>
           
+          %end
           <div class="clnr"></div>
             
           <h3 class="underline-style">Attributes</h3>
@@ -397,8 +397,6 @@
                 <p><span class="caption">Unit: </span>{{item['uom']}}</p>
               %end
             %end
-            
-
             
             %if 'geogcrs' in item:
               %if item['geogcrs']:
@@ -460,9 +458,6 @@
               %end
             %end
 
-
-
-
             %if url_concatop != []:
               <p>
                 <span class="caption">Steps of transformation: </span>
@@ -492,7 +487,7 @@
             %end
 
             %if item['abbreviation']:
-              <p><span class="caption">Abreviation: </span>{{item['abbreviation']}}</p>
+              <p><span class="caption">Abbreviation: </span>{{item['abbreviation']}}</p>
             %end
 
             %if item['order']:
@@ -506,10 +501,19 @@
                 %end
               %end
             %end
-
             
           </div>
         
+          %if not trans:
+            %if center and trans_lat and trans_lon:
+              <div class="location-data-container">
+                <p class="btn-link-container">
+                  <a href="{{url_format}}/map">Coordinates on a map<i></i></a>
+                </p>
+              </div>
+            %end
+          %end
+          
           <div class="attributes-col2">
               
             %if 'scope' in item:
