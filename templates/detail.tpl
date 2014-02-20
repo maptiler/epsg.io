@@ -88,6 +88,7 @@
       <h2>{{name}}</h2>
       %end
       </div>
+      %found_trans = False
       %if trans != [] or (center and trans_lat) or (detail !=[] and detail[0]['url_area']!="/?q=") or (item['kind']=="PRIMEM" or item['kind']=="AXIS") or item['data_source']:
       <div id="detail-content-container">
         <div class="covered-area-container">
@@ -289,7 +290,9 @@
                   </ul>
 
                 </div>
+              </div>
               %else:
+              </div>
                 %no_trans = True
                 %if 'alt_description' in item:
                   %if item['alt_description']:
@@ -318,7 +321,6 @@
                 %end
               %end
               
-          </div>
           %if trans:
           <div class="location-data-container">
             %found = False
@@ -577,6 +579,16 @@
         %if 'alt_description' in item:
           %if item['alt_description']:
             <div id="description-message">{{!item['alt_description']}}</div>
+          %end
+        %end
+        %if 'alt_code' in item:
+          %if item['alt_code'] != ['']:
+          <p>
+            <span class="caption">Alternatives codes : </span>
+            %for a in item['alt_code']:
+              <a href="/{{a}}">{{a}}</a>
+            %end
+          </p>
           %end
         %end
       %end
