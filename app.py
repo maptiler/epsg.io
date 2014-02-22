@@ -88,12 +88,12 @@ try:
     #print crs_ex_line['4326'][2]
 except:
   print "!!! FAILED: NO CRS_EXCEPTIONS !!!"
-  sys.exit(1)
+  #sys.exit(1)
 
 con = sqlite.connect(DATABASE)
 if not con:
   print "Connection to gml.sqlite FAILED"
-  sys.exit(1)
+  #sys.exit(1)
 cur = con.cursor()
 
 def getQueryParam(q, param):
