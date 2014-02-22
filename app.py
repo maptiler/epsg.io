@@ -1310,6 +1310,8 @@ def index(id, format):
 def index():
   tcode_trans_values = None
   scode_trans_values = None
+  swkt = None
+  twkt = None
   ix = open_dir(INDEX)
   
   x = float(request.GET.get('x',0))
@@ -1388,11 +1390,16 @@ def index():
         ref.SetTOWGS84(*values) 
         twkt = ref.ExportToWkt().decode('utf-8')
 
-    s_srs = osr.SpatialReference()
-    s_srs.ImportFromWkt(swkt.encode('utf-8'))
-
-    t_srs = osr.SpatialReference()
-    t_srs.ImportFromWkt(twkt.encode('utf-8'))
+    if swkt:
+      s_srs = osr.SpatialReference()
+      s_srs.ImportFromWkt(swkt.encode('utf-8'))
+    else:
+     return "Not possible transform from source epsg"
+    if twkt:
+      t_srs = osr.SpatialReference()
+      t_srs.ImportFromWkt(twkt.encode('utf-8'))
+    else:
+     return "Not possible transform to target epsg"
     
     
     xform = osr.CoordinateTransformation(s_srs, t_srs)
