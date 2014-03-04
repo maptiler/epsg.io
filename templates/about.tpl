@@ -33,7 +33,18 @@
     
     <div id="layout-container">
       <p>
-        TODO:
+        <a href=https://github.com/klokantech/epsg.io>Project page</a> & <a href=https://github.com/klokantech/epsg.io/issues>GitHub Issues</a> - open-source project.
+      </p>
+      <p>
+        Credits to:
+        <ul>
+        <li> <span class="caption">Klokan Technologies GmbH, Switzerland </span></li>
+        <li> <span class="caption">Moravian Library in Brno (research project TEMAP.cz)</span></li>
+        <p></p>
+        <li>Petr Pridal (KlokanTech + MZK, PhD candidate at Czech Technical University of Technology - Geodesy and Cartography)</li>
+        <li>Tomas Pohanka (Internship at KlokanTech, Master degree candiate at Palacky University Olomouc - Geoinformatics)</li>
+        <li>Radim Kacer (designer)</li>
+        </ul>
       </p>
     </div>
 
