@@ -1629,6 +1629,14 @@ def index(id,format):
 @route('/about')
 def index():
   return template('./templates/about')
+  
+@route('/press/announcement-first-pilot')
+def index():
+	return template ('./templates/press')
+
+@route('/press/<filename>')
+def static(filename):
+    return static_file(filename, root='./press/')
 
 @route('/css/main.css')
 def static():
