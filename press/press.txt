@@ -1,0 +1,5 @@
+Coordinate Systems Worldwide
+EPSG.io helps to discover cartographic coordinate systems used all over the world for creating maps and geodata.
+With an easy to use map application it is possible to choose a location anywhere on the planet and transform coordinates between latitude & longitude (WGS84) and the selected reference system - while showing the place on a map.
+Each coordinate system and transformation has a short permanent link and is exportable in various data formats (WKT, XML, OGC GML, Proj4, JavaScript, SQL).
+The website is build around a powerful fulltext search indexing the official EPSG database full of detailed geodetic data from a range of sources and authorities. EPSG.io simplifies access to precise geodetic parameters for thousands of Spatial Reference Systems and Geodetic Datums, for attributes of transformations, ellipsoids, meridians, etc. It is a practical tool for anybody interested in cartography and map making.
