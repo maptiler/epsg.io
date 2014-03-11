@@ -24,7 +24,7 @@
   <body id="detailpage" data-role="page">
     <div id="head">
       <p id="logo-container">
-        <a href="/" title=""><span>Epsg.io</span> Coordinate systems worldwide</a>
+        <a href="/" title=""><span>Epsg.io</span> Coordinate Systems Worldwide</a>
       </p>
       <ul id="menu-top">
         <li><a href="/about" title="">About</a></li>
