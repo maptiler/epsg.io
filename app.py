@@ -440,6 +440,10 @@ def index():
     if str(format) == "json":
       
       if expanded_trans:
+        wkt = ""
+        proj4 = ""
+        wkt_parent = ""
+        proj4_parent = ""
         json_str = []
         parser = MultifieldParser(["code","kind"], ix.schema)
         trans_query = ""
