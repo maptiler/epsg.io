@@ -5,7 +5,7 @@
     <title>EPSG.io: Coordinate Systems Worldwide</title>
     <meta content="width=device-width, initial-scale=1, maximum-scale=1" name="viewport" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="description" content="EPSG.io" />
+    <meta name="description" content="EPSG.io: Coordinate systems worldwide (EPSG/ESRI), preview location on a map, get transformation, WKT, OGC GML, Proj.4. http://EPSG.io/ made by @klokantech" />
     <meta name="keywords" content="EPSG.io" />
     <meta name="robots" content="ALL,FOLLOW" />
     <meta property="og:image" content="http://epsg.io/img/epsg-banner-440x280-2.png"/>
@@ -45,9 +45,9 @@
             <a id="share_facebook" href="https://www.facebook.com/sharer/sharer.php?u=http://epsg.io"><span class="icon-epsg-facebook"></span></a>
             
 
-        <a id="share_twitterb" href="https://twitter.com/share?original_referer=http://epsg.io&amp;text=Coordinate systems worldwide - &amp;"><span class="icon-epsg-twiter"></span></a>
+        <a id="share_twitterb" href="https://twitter.com/share?original_referer=http://epsg.io&amp;text=EPSG.io: Coordinate systems worldwide, view location on a map, get transformation, WKT, Proj.4. made by @klokantech"><span class="icon-epsg-twiter"></span></a>
 
-        <a id="share_pinterest" href="https://pinterest.com/pin/create/button/?url=http%3A%2F%2Fepsg.io&amp;media=http%3A%2F%2Fdirect.epsg.io%2Fimg%2Fepsg-banner-440x280-2.png"><span class="icon-epsg-pinterest"></span></a>
+        <a id="share_pinterest" href="https://pinterest.com/pin/create/button/?url=http%3A%2F%2Fepsg.io&amp;media=http%3A%2F%2Fdirect.epsg.io%2Fimg%2Fepsg-banner-440x280-2.png&description=EPSG.io:%20Coordinate%20systems%20worldwide%20(EPSG/ESRI),%20preview%20location%20on%20a%20map,%20get%20transformation,%20WKT,%20OGC%20GML,%20Proj.4.%20http://EPSG.io/%20made%20by%20@klokantech"><span class="icon-epsg-pinterest"></span></a>
 
         <a id="share_gplusdark" href="https://plus.google.com/share?url=http://epsg.io/"><span class="icon-epsg-googleplus"></span></a>
         </div>
