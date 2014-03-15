@@ -98,7 +98,7 @@
 				    <ul>
 						<li>Petr Pridal (managing director KlokanTech.com, work done as part of PhD thesis at Czech Technical University of Technology - Geodesy and Cartography)</li>
 						<li>Tomas Pohanka (internship at KlokanTech.com, Masters degree candidate at Palacky University Olomouc - Geoinformatics)</li>
-						<li>Radim Kacer (designer at KlokanTech.com))</li>
+						<li>Radim Kacer (designer at KlokanTech.com)</li>
 					</ul>
 				</p>
 				<p>
