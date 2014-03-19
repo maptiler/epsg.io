@@ -550,9 +550,9 @@ def index(id):
         name = item['name'].replace("ESRI: ","").strip()
         type_epsg = "ESRI"
         if a != 0:
-          a = ref.ImportFromProj4(item['description'])
+          a = ref.ImportFromProj4(str(item['description']))
           if a != 0:
-            alt_description = proj
+            alt_description = item['description']
           else:
             ref.ExportToWkt()
             ref.SetProjCS(name.replace(" ", "_"))
@@ -1209,10 +1209,13 @@ def index(id, format):
     
     # One of the formats is a map (because /coordinates/ was redirect on /coordinates and then catch by <format>)
     if format == "/map":      
-      n, w, s, e = bbox
-      center = (n-s)/2.0 + s, (e-w)/2.0 + w
-      if (e < w):
-        center = (n-s)/2.0+s, (w+180 + (360-(w+180)+e+180) / 2.0 ) % 360-180
+      if bbox:
+        n, w, s, e = bbox
+        center = (n-s)/2.0 + s, (e-w)/2.0 + w
+        if (e < w):
+          center = (n-s)/2.0+s, (w+180 + (360-(w+180)+e+180) / 2.0 ) % 360-180
+      else:
+	    center = 0,0
       return template ('./templates/map', name=rname, code=rcode, center=center, bbox=mbbox)
     
     ref.ImportFromWkt(wkt)
