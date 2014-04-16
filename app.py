@@ -783,7 +783,7 @@ def index(id):
           xml_highlight = "NOT AVAILABLE"
         export['mapfile'] = 'PROJECTION\n\t'+'\n\t'.join(['"'+l.lstrip('+')+'"' for l in ref.ExportToProj4().split()])+'\nEND' ### CSS: white-space: pre-wrap
         proj4 = ref.ExportToProj4().strip()
-        export['proj4js'] = '%s["%s:%s"] = "%s";' % ("Proj4js.defs", type_epsg, code, proj4)
+        export['proj4js'] = '%s("%s:%s","%s");' % ("proj4.defs", type_epsg, code, proj4)
         export['mapnik'] = '<?xml version="1.0" encoding="utf-8"?>\n<Map srs="%s">\n\t<Layer srs="%s">\n\t</Layer>\n</Map>' % (proj4,proj4)
         export['mapserverpython'] = "wkt = '''%s'''\nm = mapObj('')\nm.setWKTProjection(ref.ExportToWkt())\nlyr = layerObj(m)\nlyr.setWKTProjection(ref.ExportToWkt())" % (ref.ExportToWkt()) #from mapscript import mapObj,layerObj\n
         export['mapnikpython'] = "proj4 = '%s'\nm = Map(256,256,proj4)\nlyr = Layer('Name',proj4)" % (proj4) #from mapnik import Map, Layer\n
@@ -1248,7 +1248,7 @@ def index(id, format):
     elif format == '.js':
         export = ref.ExportToProj4().strip()
         if code:
-            export = '%s["%s:%s"] = "%s";' % ("Proj4js.defs", type_epsg, code, export)
+            export = '%s("%s:%s","%s");' % ("proj4.defs", type_epsg, code, proj4)
             ct = "application/javascript"
             if request.GET.get('download',1) == "":
               response['Content-disposition'] = "attachment; filename=%s.js" % rcode
