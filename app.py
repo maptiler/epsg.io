@@ -1303,7 +1303,7 @@ def index(id, format):
       export = "%s=%s" % (rcode,ref.ExportToWkt()) # put this custom projection in the 'user_projections' file inside the GEOSERVER_DATA_DIR '\n' # You can further work with your projections via the web admin tool.\n
       # we'll assume Geotools has this SRS...
     
-    elif format == 'sql':                                              
+    elif format == '.sql':                                              
       export = 'INSERT into spatial_ref_sys (srid, auth_name, auth_srid, proj4text, srtext) values ( %s, \'%s\', %s, \'%s\', \'%s\');' % (rcode, type_epsg, rcode, ref.ExportToProj4(), ref.ExportToWkt())                                                  
       if request.GET.get('download',1) == "":
         response['Content-disposition'] = "attachment; filename=%s.sql" % rcode
