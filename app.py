@@ -1246,7 +1246,7 @@ def index(id, format):
         response['Content-disposition'] = "attachment; filename=%s.proj4" % rcode
     
     elif format == '.js':
-        export = ref.ExportToProj4().strip()
+        proj4 = ref.ExportToProj4().strip()
         if code:
             export = '%s("%s:%s","%s");' % ("proj4.defs", type_epsg, code, proj4)
             ct = "application/javascript"
