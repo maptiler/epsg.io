@@ -1320,11 +1320,14 @@ def index():
   scode_trans_values = None
   swkt = None
   twkt = None
+  export = []
+  single_points = []
   ix = open_dir(INDEX)
   
   x = float(request.GET.get('x',0))
   y = float(request.GET.get('y',0))
   z = float(request.GET.get('z',0))
+  data = request.query_string
   s_srs = request.GET.get('s_srs',4326)
   t_srs = request.GET.get('t_srs',4326)
   callback = str(request.GET.get('callback',0))
@@ -1333,6 +1336,14 @@ def index():
   scode, scode_trans = (str(s_srs)+'-0').split('-')[:2]
   tcode, tcode_trans = (str(t_srs)+'-0').split('-')[:2]
   ref = osr.SpatialReference()
+  if data == "data=":
+	data = ""
+	
+  if data.startswith("data="):
+	data = data.replace('data=','').replace("s_srs="+str(s_srs),"").replace("t_srs="+str(t_srs),"").replace("callback="+callback,"").replace("&","")
+	single_points = data.split(';')
+  else:
+	single_points = [str(x) +","+ str(y)+","+str(z)]
   
   with ix.searcher(closereader=False) as searcher:
     parser = QueryParser("code", ix.schema)
@@ -1409,33 +1420,48 @@ def index():
     else:
      return "Not possible transform to target epsg"
     
-    
     xform = osr.CoordinateTransformation(s_srs, t_srs)
-    transformation = xform.TransformPoint(x, y, z)
-    if type(transformation[0]) != float:
-      trans_lat = "%s" % transformation[0]
-      trans_lon = "%s" % transformation[1]
-      trans_h = "%s" % transformation[2]
-    else:
-      trans_lat = "%.8f" % transformation[0]
-      trans_lon = "%.8f" % transformation[1]
-      trans_h = "%.8f" % transformation[2]
-    if t_srs.GetAuthorityCode('UNIT') == str(9001):
-      trans_lat = "%.2f" % transformation[0]
-      trans_lon = "%.2f" % transformation[1]
-      trans_h = "%.2f" % transformation[2]    
-    
-    export = {}
-    export["x"] = trans_lat
-    export["y"] = trans_lon
-    export["z"] = trans_h
-    response['Content-Type'] = "text/json"
-    
+
+    for points in single_points:		
+		point_coords = points.split(',')
+		point_coords = [float(i) for i in point_coords] #from string to float
+	
+		if len(point_coords) == 2:
+			point_coords.append(int(0))
+		elif len(point_coords) == 1:
+			point_coords.extend((0,0))
+		elif len(point_coords) == 0:
+			point_coords.extend((0,0,0))
+		
+		x,y,z = point_coords
+	
+	
+		transformation = xform.TransformPoint(x, y, z)
+		if type(transformation[0]) != float:
+		  trans_lat = "%s" % transformation[0]
+		  trans_lon = "%s" % transformation[1]
+		  trans_h = "%s" % transformation[2]
+		else:
+		  trans_lat = "%.8f" % transformation[0]
+		  trans_lon = "%.8f" % transformation[1]
+		  trans_h = "%.8f" % transformation[2]
+		if t_srs.GetAuthorityCode('UNIT') == str(9001):
+		  trans_lat = "%.2f" % transformation[0]
+		  trans_lon = "%.2f" % transformation[1]
+		  trans_h = "%.2f" % transformation[2]    
+		
+		export.append({'x':trans_lat, 'y':trans_lon, 'z':trans_h})
+		#export["x"] = trans_lat
+		#export["y"] = trans_lon
+		#export["z"] = trans_h
+    json_str = export
+    response['Content-Type'] = "application/json"
     if callback != str(0):
-      export = str(callback) + "(" + json.dumps(export) + ")"
-      response['Content-Type'] = "application/javascript"
-      
-    return export
+		json_str = str(callback) + "(" + json.dumps(json_str) + ")"
+		response['Content-Type'] = "application/javascript"
+		return json_str
+		  
+    return json.dumps(json_str)
 
 @error(code=404)
 def error404(error):
