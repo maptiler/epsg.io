@@ -1342,7 +1342,9 @@ def index():
   if data.startswith("data="):
 	data = data.replace('data=','').replace("s_srs="+str(s_srs),"").replace("t_srs="+str(t_srs),"").replace("callback="+callback,"").replace("&","")
 	single_points = data.split(';')
+	one_point = False
   else:
+	one_point = True
 	single_points = [str(x) +","+ str(y)+","+str(z)]
   
   with ix.searcher(closereader=False) as searcher:
@@ -1451,11 +1453,13 @@ def index():
 		  trans_h = "%.2f" % transformation[2]    
 		
 		export.append({'x':trans_lat, 'y':trans_lon, 'z':trans_h})
-		#export["x"] = trans_lat
-		#export["y"] = trans_lon
-		#export["z"] = trans_h
+		if one_point == True:
+			export = {}
+			export["x"] = trans_lat
+			export["y"] = trans_lon
+			export["z"] = trans_h
     json_str = export
-    response['Content-Type'] = "application/json"
+    response['Content-Type'] = "text/json"
     if callback != str(0):
 		json_str = str(callback) + "(" + json.dumps(json_str) + ")"
 		response['Content-Type'] = "application/javascript"
