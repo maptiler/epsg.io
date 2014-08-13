@@ -977,60 +977,61 @@ def index(id):
       return template('./templates/error', error=error, try_url=try_url)
       
     for r in results:
-      item = r
-      url_area = area_to_url(item['area'])
-      url_format ="/"+str(item['code'])
-      code_short = item['code'].split("-")
-      name = item['name']
-      type_epsg = "EPSG"
-      if item['information_source'] == "ESRI":
-        name = item['name'].replace("ESRI: ","").strip()
-        type_epsg = "ESRI"
+      if str(id) in str(r):
+        item = r
+        url_area = area_to_url(item['area'])
+        url_format ="/"+str(item['code'])
+        code_short = item['code'].split("-")
+        name = item['name']
+        type_epsg = "EPSG"
+        if item['information_source'] == "ESRI":
+          name = item['name'].replace("ESRI: ","").strip()
+          type_epsg = "ESRI"
       
-      center = ""
-      g_coords = ""
-      url_static_map = ("","")
+        center = ""
+        g_coords = ""
+        url_static_map = ("","")
       
-      for i in range(0,len(facets_list)):
-        if facets_list[i][0] == item['kind']:
-          kind = facets_list[i][6]
-          url_kind = "/?q=kind:" + facets_list[i][1]
+        for i in range(0,len(facets_list)):
+          if facets_list[i][0] == item['kind']:
+            kind = facets_list[i][6]
+            url_kind = "/?q=kind:" + facets_list[i][1]
       
-      if item['bbox']:
-        n, w, s, e = item['bbox']
-        if n == 90.0: n = 85.0
-        if w == -180.0: w = -179.9
-        if s == -90.0: s = -85.0
-        if e == 180.0: e = 179.9
+        if item['bbox']:
+          n, w, s, e = item['bbox']
+          if n == 90.0: n = 85.0
+          if w == -180.0: w = -179.9
+          if s == -90.0: s = -85.0
+          if e == 180.0: e = 179.9
         
-        #(51.05, 12.09, 47.74, 22.56)
-        center = (n-s)/2.0 + s, (e-w)/2.0 + w
-        if (e < w):
-          center = (n-s)/2.0+s, (w+180 + (360-(w+180)+e+180) / 2.0 ) % 360-180
-        if n == 85.0 and w == -179.9 and s == -85.0 and e == 179.9:
-          g_coords = "-85,-179.9|85,-179.9|85,0|85,179.9|-85,179.9|-85,0|-85,-179.9"
-        else:  
-          g_coords = str(s) + "," + str(w) + "|" + str(n) + "," + str(w) + "|" + str(n) + "," + str(e) + "|" + str(s) + "," + str(e) + "|" + str(s) + "," + str(w)
+          #(51.05, 12.09, 47.74, 22.56)
+          center = (n-s)/2.0 + s, (e-w)/2.0 + w
+          if (e < w):
+            center = (n-s)/2.0+s, (w+180 + (360-(w+180)+e+180) / 2.0 ) % 360-180
+          if n == 85.0 and w == -179.9 and s == -85.0 and e == 179.9:
+            g_coords = "-85,-179.9|85,-179.9|85,0|85,179.9|-85,179.9|-85,0|-85,-179.9"
+          else:  
+            g_coords = str(s) + "," + str(w) + "|" + str(n) + "," + str(w) + "|" + str(n) + "," + str(e) + "|" + str(s) + "," + str(e) + "|" + str(s) + "," + str(w)
         
-        bbox_coords = (n,e,s,w)
-        if center != "" and g_coords != "":
-          url_static = "http://maps.googleapis.com/maps/api/staticmap?size=265x215&scale=2&sensor=false&visual_refresh=true&center="+str(center[0])+","+str(center[1])+"&path=color:0xff0000ff|fillcolor:0xff000022|weight:2|"+g_coords
-          url_static_map = urllib2.quote(url_static), url_static
+          bbox_coords = (n,e,s,w)
+          if center != "" and g_coords != "":
+            url_static = "http://maps.googleapis.com/maps/api/staticmap?size=265x215&scale=2&sensor=false&visual_refresh=true&center="+str(center[0])+","+str(center[1])+"&path=color:0xff0000ff|fillcolor:0xff000022|weight:2|"+g_coords
+            url_static_map = urllib2.quote(url_static), url_static
           
-      if 'primem' in r:
-        if r['primem']:
-          url_prime = str(r['primem'])+ "-primem"
+        if 'primem' in r:
+          if r['primem']:
+            url_prime = str(r['primem'])+ "-primem"
 
-      if 'cs' in r:
-        if r['kind'] == "AXIS":
-          url_children = str(r['cs'][0]) +"-cs"
+        if 'cs' in r:
+          if r['kind'] == "AXIS":
+            url_children = str(r['cs'][0]) +"-cs"
       
-      if r['kind'].startswith("CS"):
-          for c in r['axis']:
-            #url = str(c['axis_code'])+"-axis"
-            url_axis.append(c) #url
+        if r['kind'].startswith("CS"):
+            for c in r['axis']:
+              #url = str(c['axis_code'])+"-axis"
+              url_axis.append(c) #url
       
-      detail.append({'url_prime': url_prime,'url_axis':url_axis, 'url_area' : url_area}) #'url_uom':url_uom,  'url_children':url_children
+        detail.append({'url_prime': url_prime,'url_axis':url_axis, 'url_area' : url_area}) #'url_uom':url_uom,  'url_children':url_children
     
     code, spec_code = (id+'-0').split('-')[:2]
     projcrs_by_gcrs = []
