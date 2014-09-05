@@ -341,7 +341,7 @@ def index():
     
       elif expanded_trans and format == "json":
         for trans_codes in r['trans']:
-          if str(trans_codes) not in str(codes):
+          if int(trans_codes) not in codes:
             codes.append(trans_codes)
     # number of results from results
     num_results = len(results)
