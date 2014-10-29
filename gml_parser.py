@@ -467,10 +467,10 @@ for entry in root.findall('.//*[@{http://www.opengis.net/gml/3.2}id]'):
                 '{http://www.opengis.net/gml/3.2}domainOfValidity').get('{http://www.w3.org/1999/xlink}href')
             area = area.split("::")[1]
 
-        accuracy = ""
+        accuracy = u"unknown"
         if entry.find(".//*{http://www.isotc211.org/2005/gco}Decimal") is not None:
-            accuracy = entry.find(
-                ".//*{http://www.isotc211.org/2005/gco}Decimal").text
+            accuracy = float(entry.find(
+                ".//*{http://www.isotc211.org/2005/gco}Decimal").text)
 
         method_code = ""
         if entry.find('{http://www.opengis.net/gml/3.2}method') is not None:
@@ -1024,8 +1024,8 @@ for entry in root.findall('.//*[@{http://www.opengis.net/gml/3.2}id]'):
                 '{http://www.opengis.net/gml/3.2}scope').text).encode('UTF-8').decode('UTF-8')
 
         if entry.find(".//*{http://www.isotc211.org/2005/gco}Decimal") is not None:
-            doc['accuracy'] = (entry.find(
-                ".//*{http://www.isotc211.org/2005/gco}Decimal").text).encode('UTF-8').decode('UTF-8')
+            doc['accuracy'] = float(entry.find(
+                ".//*{http://www.isotc211.org/2005/gco}Decimal").text)
 
         sourceCRS = int(dict_op[int(doc['code'])][0])
 
@@ -1160,8 +1160,8 @@ for entry in root.findall('.//*[@{http://www.opengis.net/gml/3.2}id]'):
             doc['uom'] = (dict_uom[int(uom)]).encode('UTF-8').decode('UTF-8')
 
         if entry.find(".//*{http://www.isotc211.org/2005/gco}Decimal") is not None:
-            doc['accuracy'] = entry.find(
-                ".//*{http://www.isotc211.org/2005/gco}Decimal").text
+            doc['accuracy'] = float(entry.find(
+                ".//*{http://www.isotc211.org/2005/gco}Decimal").text)
 
         sourceCRS = dict_crs[int(doc['code'])][2]
         if sourceCRS != "":
@@ -1209,7 +1209,7 @@ for entry in root.findall('.//*[@{http://www.opengis.net/gml/3.2}id]'):
             for crs_op in list_crs_op:
                 if crs_op[0] != "":
                     if int(crs_op[0]) == int(sourceCRS):
-                        op.append(crs_op[1])
+                        op.append(int(crs_op[1]))
         ref.ImportFromEPSG(int(doc['code']))
         op_code_original = 0
         op_code_trans = {}
@@ -1232,10 +1232,10 @@ for entry in root.findall('.//*[@{http://www.opengis.net/gml/3.2}id]'):
                     op_code_original = operation
                     doc['area_trans'] = area_name.encode('UTF-8').decode('UTF-8')
                     doc['area_trans_code'] = area_code
-                    doc['accuracy'] = accuracy.encode('UTF-8').decode('UTF-8')
+                    doc['accuracy'] = accuracy
                     doc['primary'] = 1
                     doc['method'] = method_code.encode('UTF-8').decode('UTF-8'), method_name.encode('UTF-8').decode('UTF-8')
-                    doc['code_trans'] = str(operation).decode('UTF-8')
+                    doc['code_trans'] = int(operation)
 
                 transformations.append(operation)
             if operation == op_code_original:
