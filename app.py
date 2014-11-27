@@ -341,7 +341,7 @@ def index():
     
       elif expanded_trans and format == "json":
         for trans_codes in r['trans']:
-          if str(trans_codes) not in str(codes):
+          if int(trans_codes) not in codes:
             codes.append(trans_codes)
     # number of results from results
     num_results = len(results)
@@ -461,7 +461,7 @@ def index():
           for hit in transformation:
             values = hit['description']          
             if not re.findall(r'([a-df-zA-Z_])',values):
-              if str(values) != str(0):
+              if str(values) != str('(0,)'):
                 values = tuple(map(float, values[1:-1].split(',')))
                 # do not change default TOWGS84
                 if int(hit['code_trans']) != int(hit['code']) :
@@ -913,30 +913,34 @@ def index(id):
             more_gcrs_result = "/?q=geogcrs:"+str(gcrs_code)+" kind:PROJCRS deprecated:0"
           for gcrs_item in gcrs_result:        
             projcrs_by_gcrs.append({'result': gcrs_item})
-    greenwich_longitude = 361
+    # greenwich longitude is corrected by import from gml
+    # greenwich_longitude = 361
     # 8903-primem - Paris is correct
-    if str(item['greenwich_longitude']) != str(2.5969213):      
-      toDegree = re.compile(r'(-?)(\d+)(\.?)(\d{0,2})(\d{2})?(\d+)?')
-      a = toDegree.search(str(item['greenwich_longitude']))
-      if a:
-        sign = a.group(1)
-        if sign == None:
-          sign = "+"
-        degree = a.group(2)
-        minutes = a.group(4)
-        if minutes == None or minutes == "":
-          minutes = 0
-        if len(str(minutes)) == 1:
-          minutes = float(minutes) * 10  
-        seconds = a.group(5)
-        if seconds == None: seconds = 0
-        frac_seconds = a.group(6)
-        if frac_seconds == None: frac_seconds = 0
-        result = (float(minutes)/60)+ (float(str(seconds)+"."+str(frac_seconds))/3600)
-        result = float(degree)+float(result)
-        greenwich_longitude = str(sign) + str(result)
-    else:
-      greenwich_longitude = item['greenwich_longitude']
+    # if str(item['greenwich_longitude']) != str(2.5969213):      
+      # toDegree = re.compile(r'(-?)(\d+)(\.?)(\d{0,2})(\d{2})?(\d+)?')
+      # a = toDegree.search(str(item['greenwich_longitude']))
+      # if a:
+
+        # sign = a.group(1)
+        # if sign == None:
+          # sign = "+"
+        # degree = a.group(2)
+        # minutes = a.group(4)
+        # if minutes == None or minutes == "":
+          # minutes = 0
+        # if len(str(minutes)) == 1:
+          # minutes = float(minutes) * 10  
+        # seconds = a.group(5)
+        # if seconds == None: seconds = 0
+        # frac_seconds = a.group(6)
+        # if frac_seconds == None: frac_seconds = 0
+        # result = (float(minutes)/60)+ (float(str(seconds)+"."+str(frac_seconds))/3600)
+        # result = float(degree)+float(result)
+        # greenwich_longitude = str(sign) + str(result)
+    # else:
+
+    greenwich_longitude = item['greenwich_longitude']
+   
           
   return template('./templates/detail',greenwich_longitude=greenwich_longitude, url_social=url_social, url_static_map=url_static_map, ogpxml_highlight=ogpxml_highlight, xml_highlight=xml_highlight, area_trans_item=area_trans_item, ogpxml=ogpxml, bbox_coords=bbox_coords, more_gcrs_result=more_gcrs_result, deprecated_available=deprecated_available, url_kind=url_kind, type_epsg=type_epsg, name=name, projcrs_by_gcrs=projcrs_by_gcrs, kind=kind, alt_title=alt_title, area_item=area_item, code_short=code_short, item=item, trans=trans, default_trans=default_trans, num_results=num_results, url_method=url_method, title=title, url_format=url_format, export_html=export_html, url_area_trans=url_area_trans, url_area=url_area, center=center, g_coords=g_coords, trans_lat=trans_lat, trans_lon=trans_lon, wkt=wkt, facets_list=facets_list,url_concatop=url_concatop, nadgrid=nadgrid, detail=detail,export=export, error_code=error_code )  
 
@@ -977,60 +981,61 @@ def index(id):
       return template('./templates/error', error=error, try_url=try_url)
       
     for r in results:
-      item = r
-      url_area = area_to_url(item['area'])
-      url_format ="/"+str(item['code'])
-      code_short = item['code'].split("-")
-      name = item['name']
-      type_epsg = "EPSG"
-      if item['information_source'] == "ESRI":
-        name = item['name'].replace("ESRI: ","").strip()
-        type_epsg = "ESRI"
+      if str(id) in str(r):
+        item = r
+        url_area = area_to_url(item['area'])
+        url_format ="/"+str(item['code'])
+        code_short = item['code'].split("-")
+        name = item['name']
+        type_epsg = "EPSG"
+        if item['information_source'] == "ESRI":
+          name = item['name'].replace("ESRI: ","").strip()
+          type_epsg = "ESRI"
       
-      center = ""
-      g_coords = ""
-      url_static_map = ("","")
+        center = ""
+        g_coords = ""
+        url_static_map = ("","")
       
-      for i in range(0,len(facets_list)):
-        if facets_list[i][0] == item['kind']:
-          kind = facets_list[i][6]
-          url_kind = "/?q=kind:" + facets_list[i][1]
+        for i in range(0,len(facets_list)):
+          if facets_list[i][0] == item['kind']:
+            kind = facets_list[i][6]
+            url_kind = "/?q=kind:" + facets_list[i][1]
       
-      if item['bbox']:
-        n, w, s, e = item['bbox']
-        if n == 90.0: n = 85.0
-        if w == -180.0: w = -179.9
-        if s == -90.0: s = -85.0
-        if e == 180.0: e = 179.9
+        if item['bbox']:
+          n, w, s, e = item['bbox']
+          if n == 90.0: n = 85.0
+          if w == -180.0: w = -179.9
+          if s == -90.0: s = -85.0
+          if e == 180.0: e = 179.9
         
-        #(51.05, 12.09, 47.74, 22.56)
-        center = (n-s)/2.0 + s, (e-w)/2.0 + w
-        if (e < w):
-          center = (n-s)/2.0+s, (w+180 + (360-(w+180)+e+180) / 2.0 ) % 360-180
-        if n == 85.0 and w == -179.9 and s == -85.0 and e == 179.9:
-          g_coords = "-85,-179.9|85,-179.9|85,0|85,179.9|-85,179.9|-85,0|-85,-179.9"
-        else:  
-          g_coords = str(s) + "," + str(w) + "|" + str(n) + "," + str(w) + "|" + str(n) + "," + str(e) + "|" + str(s) + "," + str(e) + "|" + str(s) + "," + str(w)
+          #(51.05, 12.09, 47.74, 22.56)
+          center = (n-s)/2.0 + s, (e-w)/2.0 + w
+          if (e < w):
+            center = (n-s)/2.0+s, (w+180 + (360-(w+180)+e+180) / 2.0 ) % 360-180
+          if n == 85.0 and w == -179.9 and s == -85.0 and e == 179.9:
+            g_coords = "-85,-179.9|85,-179.9|85,0|85,179.9|-85,179.9|-85,0|-85,-179.9"
+          else:  
+            g_coords = str(s) + "," + str(w) + "|" + str(n) + "," + str(w) + "|" + str(n) + "," + str(e) + "|" + str(s) + "," + str(e) + "|" + str(s) + "," + str(w)
         
-        bbox_coords = (n,e,s,w)
-        if center != "" and g_coords != "":
-          url_static = "http://maps.googleapis.com/maps/api/staticmap?size=265x215&scale=2&sensor=false&visual_refresh=true&center="+str(center[0])+","+str(center[1])+"&path=color:0xff0000ff|fillcolor:0xff000022|weight:2|"+g_coords
-          url_static_map = urllib2.quote(url_static), url_static
+          bbox_coords = (n,e,s,w)
+          if center != "" and g_coords != "":
+            url_static = "http://maps.googleapis.com/maps/api/staticmap?size=265x215&scale=2&sensor=false&visual_refresh=true&center="+str(center[0])+","+str(center[1])+"&path=color:0xff0000ff|fillcolor:0xff000022|weight:2|"+g_coords
+            url_static_map = urllib2.quote(url_static), url_static
           
-      if 'primem' in r:
-        if r['primem']:
-          url_prime = str(r['primem'])+ "-primem"
+        if 'primem' in r:
+          if r['primem']:
+            url_prime = str(r['primem'])+ "-primem"
 
-      if 'cs' in r:
-        if r['kind'] == "AXIS":
-          url_children = str(r['cs'][0]) +"-cs"
+        if 'cs' in r:
+          if r['kind'] == "AXIS":
+            url_children = str(r['cs'][0]) +"-cs"
       
-      if r['kind'].startswith("CS"):
-          for c in r['axis']:
-            #url = str(c['axis_code'])+"-axis"
-            url_axis.append(c) #url
+        if r['kind'].startswith("CS"):
+            for c in r['axis']:
+              #url = str(c['axis_code'])+"-axis"
+              url_axis.append(c) #url
       
-      detail.append({'url_prime': url_prime,'url_axis':url_axis, 'url_area' : url_area}) #'url_uom':url_uom,  'url_children':url_children
+        detail.append({'url_prime': url_prime,'url_axis':url_axis, 'url_area' : url_area}) #'url_uom':url_uom,  'url_children':url_children
     
     code, spec_code = (id+'-0').split('-')[:2]
     projcrs_by_gcrs = []
@@ -1048,29 +1053,34 @@ def index(id):
     elif item['kind'].startswith("AREA"):urn = "urn:ogc:def:area:EPSG::"+str(code_short[0])
     elif item['kind'].startswith("CS"):urn = "urn:ogc:def:cs:EPSG::"+str(code_short[0])
     elif item['kind'].startswith("PRIMEM"):urn = "urn:ogc:def:meridian:EPSG::"+str(code_short[0])
-    if ('primem' in item and item['primem']) or ('greenwich_longitude' in item and item['greenwich_longitude']):  
-      if str(item['greenwich_longitude']) != str(2.5969213):
-        toDegree = re.compile(r'(-?)(\d+)(\.?)(\d{0,2})(\d{2})?(\d+)?')
-        a = toDegree.search(str(item['greenwich_longitude']))
-        if a:
-          sign = a.group(1)
-          if sign == None:
-            sign = "+"
-          degree = a.group(2)
-          minutes = a.group(4)
-          if minutes == None or minutes == "":
-            minutes = 0
-          if len(str(minutes)) == 1:
-            minutes = float(minutes) * 10  
-          seconds = a.group(5)
-          if seconds == None: seconds = 0
-          frac_seconds = a.group(6)
-          if frac_seconds == None: frac_seconds = 0
-          result = (float(minutes)/60)+ (float(str(seconds)+"."+str(frac_seconds))/3600)
-          result = float(degree)+float(result)
-          greenwich_longitude = str(sign) + str(result)
-      else:
-        greenwich_longitude = item['greenwich_longitude']
+    if ('primem' in item and item['primem']) or ('greenwich_longitude' in item and item['greenwich_longitude']):
+      greenwich_longitude = item['greenwich_longitude']
+      # greenwich longitude is corrected by import from gml
+      # if str(item['greenwich_longitude']) != str(2.5969213):
+        # toDegree = re.compile(r'(-?)(\d+)(\.?)(\d{0,2})(\d{2})?(\d+)?')
+        # a = toDegree.search(str(item['greenwich_longitude']))
+
+        # if a:
+
+          # sign = a.group(1)
+          # if sign == None:
+            # sign = "+"
+
+          # degree = a.group(2)
+          # minutes = a.group(4)
+          # if minutes == None or minutes == "":
+            # minutes = 0
+          # if len(str(minutes)) == 1:
+            # minutes = float(minutes) * 10  
+          # seconds = a.group(5)
+          # if seconds == None: seconds = 0
+          # frac_seconds = a.group(6)
+          # if frac_seconds == None: frac_seconds = 0
+          # result = (float(minutes)/60)+ (float(str(seconds)+"."+str(frac_seconds))/3600)
+          # result = float(degree)+float(result)
+          # greenwich_longitude = str(sign) + str(result)
+      # else:
+      #  greenwich_longitude = item['greenwich_longitude']
     
     if urn != "":
       cur.execute('SELECT id,xml FROM gml where urn = ?', (urn,))
