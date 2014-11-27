@@ -157,7 +157,7 @@
          <p id="mzk-logo">
            <a href="http://www.mzk.cz/" title=""><img src="./img/hzk-logo.png" alt="" /></a>
          </p>
-         <p>Find a coordinate system and get position on a map. Powered by EPSG database 8.3</p>
+         <p>Find a coordinate system and get position on a map. Powered by EPSG database 8.5.5</p>
          <p id="copyright">Copyright &copy; 2014</p>
        </div>
      </div>
