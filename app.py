@@ -55,7 +55,7 @@ import urllib2
 import urllib
 import sys
 import os
-from whoosh.index import create_in, open_dir
+from whoosh.index import open_dir
 from whoosh.fields import *
 from whoosh.qparser import QueryParser, MultifieldParser
 from whoosh.query import *
@@ -233,7 +233,7 @@ def index():
     return template('./templates/index', version=VERSION)
   
   
-  ix = open_dir(INDEX)
+  ix = open_dir(INDEX, readonly=True)
   result = []
 
   ref = osr.SpatialReference()
@@ -499,7 +499,7 @@ def index():
 @route('/<id:re:[\d]+(-[\d]+)?>')
 def index(id):
   ref = osr.SpatialReference()
-  ix = open_dir(INDEX)
+  ix = open_dir(INDEX, readonly=True)
   url_social = id
    
   with ix.searcher(closereader=False) as searcher:
@@ -948,7 +948,7 @@ def index(id):
 @route('/<id:re:[\d]+(-[a-zA-Z]+)>')
 def index(id):
   url_social = id
-  ix = open_dir(INDEX)
+  ix = open_dir(INDEX, readonly=True)
   with ix.searcher(closereader=False) as searcher:
     
     parser = QueryParser("code", ix.schema)
@@ -1135,7 +1135,7 @@ def index(id, format):
 
 @route('/<id:re:[\d]+(-[\d]+)?><format:re:[\/\.]+[\w]+>')
 def index(id, format):
-  ix = open_dir(INDEX)
+  ix = open_dir(INDEX, readonly=True)
   result = []
   export = ""
   values = ""
@@ -1333,7 +1333,7 @@ def index():
   twkt = None
   export = []
   single_points = []
-  ix = open_dir(INDEX)
+  ix = open_dir(INDEX, readonly=True)
   
   x = float(request.GET.get('x',0))
   y = float(request.GET.get('y',0))
@@ -1533,7 +1533,7 @@ def index(id,format):
   
   code_short = url.split("-",1)
   # try quick question into whoosh if exist the record with "url"
-  ix = open_dir(INDEX)
+  ix = open_dir(INDEX, readonly=True)
   with ix.searcher(closereader=False) as searcher:
     parser = QueryParser("code", ix.schema)
     myquery = parser.parse(url)
@@ -1629,7 +1629,7 @@ def index(id,format):
     #subject = subject.replace("cr","Change Request").replace("vh","Version History").replace("param","Operation Parameter").replace("ns","Naming System")
     url = url.replace("-crs","").replace("-op","")
     code_short = url.split("-",1)
-    ix = open_dir(INDEX)
+    ix = open_dir(INDEX, readonly=True)
     with ix.searcher(closereader=False) as searcher:
       parser = QueryParser("code", ix.schema)
       myquery = parser.parse(url)
