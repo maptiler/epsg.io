@@ -24,6 +24,7 @@
     </script>
   </head>
   <body id="homepage" data-role="page">
+	<a href="https://github.com/klokantech/epsg.io"><img style="position: absolute; top: 0; right: 0; border: 0; width: 149px; height: 149px;" src="http://aral.github.com/fork-me-on-github-retina-ribbons/right-dusk-blue@2x.png" alt="Fork me on GitHub"></a>
     <div id="layout-container">
       <p id="logo-container">
         <a href="http://epsg.io" title=""><span>Epsg.io</span> Coordinate Systems Worldwide</a>
