@@ -105,6 +105,9 @@
       </script>
 
       <div id="foot">
+		<p id="klokan-logo">
+          <a href="http://www.klokantech.com/" title=""><img src="./img/klokan-logo-grey.png" alt="" /></a>
+        </p>
         <p id="mzk-logo">
           <a href="http://www.mzk.cz/" title=""><img src="./img/hzk-logo.png" alt="" /></a>
         </p>
