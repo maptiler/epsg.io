@@ -671,7 +671,7 @@ def index(id):
           values = default_trans['description']          
           if re.findall(r'([a-df-zA-Z_])',values):
             nadgrid = default_trans['description']
-          elif str(values) != str(0):
+          elif str(values) != "(0,)":
             # num =[]
             values = tuple(map(float, values[1:-1].split(',')))
                       # 
@@ -1203,8 +1203,7 @@ def index(id, format):
       trans_result = code_result
       url_coords = rcode
     if not re.findall(r'([a-df-zA-Z_])',values):
-      
-      if str(values) != str(0) and str(values) != "":
+      if str(values) != "(0,)" and str(values) != "":
         values = tuple(map(float, values[1:-1].split(',')))
         # w = re.findall(r'(-?\d*\.\d*[e]?-?\d*)',values)
         #       num =[]
