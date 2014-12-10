@@ -1317,3 +1317,5 @@ for extra_file in FILES:
         # Write into Whoosh index
         with ix.writer(limitmb=1048, multisegment=True) as writer:
             writer.add_document(**doc)
+# import CRS_exceptions immediately after index the EPSG gml and load ESRI codes
+import CRS_exceptions
