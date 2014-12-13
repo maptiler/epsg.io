@@ -711,7 +711,7 @@ def index(id):
         url_format = "/"+str(item['code'])
         if default_trans:
           # if the actual transformation is different code then basic transformation and basic transformation is not 0 (geodetic systems hasnt got any transformation (4326 - not showing link 4326-4326))
-          if int(default_trans['code']) != int(item['code_trans']): # and int(item['code_trans']) != 0: -> default transformation / some of system do not have default transformation in crs, but have some other
+          if int(default_trans['code']) != int(item['code_trans']) and int(item['code_trans']) != 0:
             url_format = "/"+str(item['code'])+"-"+str(default_trans['code'])
     elif str(item['kind']).startswith('COORDOP'):
       url_format = "/"+str(item['code'])
@@ -1225,7 +1225,7 @@ def index(id, format):
           center = (n-s)/2.0+s, (w+180 + (360-(w+180)+e+180) / 2.0 ) % 360-180
       else:
 	    center = 0,0
-      return template ('./templates/map', name=rname, code=url_coords, center=center, bbox=mbbox)
+      return template ('./templates/map', name=rname, code=rcode, center=center, bbox=mbbox)
     
     ref.ImportFromWkt(wkt)
     ct = "text/plain"
