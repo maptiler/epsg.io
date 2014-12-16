@@ -88,7 +88,7 @@ if do_it == True:
         'kind': u"CRS",
         'area': u"",
         'deprecated': deprecated,
-        'trans' : 0,
+        'trans' : [],
         'primary' : 0,
         'description': u"",
       

@@ -46,7 +46,7 @@ dict_index = {
     'area': u"",
     'area_trans': u"",
     'deprecated': 0,
-    'trans': 0,
+    'trans': [],
     'trans_alt_name': u"",
     'trans_remarks': u"",
     'accuracy': u"",
