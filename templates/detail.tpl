@@ -897,7 +897,6 @@ dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
 })();
 </script>
 <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
     </div>
       
        <div id="spacer"><p></p></div>
