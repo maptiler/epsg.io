@@ -923,7 +923,7 @@ dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
               <a href="http://www.mzk.cz/" title=""><img src="./img/hzk-logo.png" alt="" /></a>
             </p>
             <p>Find a coordinate system and get position on a map. Powered by EPSG database {{version}}</p>
-            <p id="copyright">Copyright &copy; 2014</p>
+            <p id="copyright">Copyright &copy; 2015</p>
           </div>
         </div>
 
