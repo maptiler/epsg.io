@@ -19,22 +19,15 @@ or use the gunicorn startup scripts (`./epsgio start`)
 
 Note: This is not required, as you can easily download the ready-to-use index from releases.
 
-1. Download PostgreSQL script for import epsg database from [http://www.epsg.org/]
-2. Unzip file (`v8_3 Nov 2013EPSG_v8_3.mdb_Data_PostgreSQL.sql`, `v8_3 Nov 2013EPSG_v8_3.mdb_FKeys_PostgreSQL.sql`, `v8_3 Nov 2013EPSG_v8_3.mdb_Tables_PostgreSQL.sql`)
-3. Rename the sql files (no spaces)
-4. Into `EPSG_v8_3.mdb_Data_PostgreSQL.sql` to first line input `SET client_encoding TO 'LATIN1';`
-5. Install PostgreSQL ([http://postgresapp.com/documentation] and Python Install the psycopg2 library with with pip install psycopg2 or add it to your pip requirements file.)
-6. Start PostgreSQL in command-line(for easy way be in a folder with sql files (2.))
-  * a. `psql` PostgreSQL create a database with user name
-  * b. `CREATE DATABASE <name>;` create a new database for epsg
-  * c. `\c <name>` active database
-  * d. `\d` list of tables (it should be empty)
-  * e. `\ir v8_3.mdb_Tables_PostgreSQL.sql`  `\ir` - relative path `\i` - absolute path
-  * f. `\ir v8_3.mdb_Data_PostgreSQL.sql` with set encoding in first line
-  * g. `\ir v8_3.mdb_FKeys_PostgreSQL.sql`
-  * h. `\d` check if in database is everthing
-  
-7. Open `create_index.py` and change properties of `DATABASE`
+1. Download the newest EPSG database from [http://epsg-registry.org]
+2. Make sure that these files(folder) are in one folder
+    * a. folder `extra_codes_proj4_4.8.0.2`
+    * b. file `CRS_exceptions.csv`
+    * c. file `CRS_exceptions.py`
+    * d. file `gml_parser.py`
+    * e. file `GmlDictionary.xml` (downloaded EPSG database from [http://epsg-registry.org])
+3. Start indexing via `python gml_parser.py`
+4. Move created `gml.sqlite` into `gml` folder
 
 ## Types of URLs:
  * [http://epsg.io/] > main page
@@ -71,7 +64,7 @@ where:
   
 ## API for /trans
 
-for example
+###For one point
 [http://epsg.io/trans?x=50&y=17&z=0&s_srs=4326&t_srs=5514&callback=jsonpFunction]
 
 where everything is optional:
@@ -81,6 +74,15 @@ where everything is optional:
  * `callback=jsonpFunction` is for jsonp where "jsonpFunction" is name of JavaScript function
 
 e.g. [http://epsg.io/trans] will transform point on coordinates 0,0,0 from EPSG:4326 to EPSG:4326
+
+###For many points
+[http://epsg.io/trans?data=17,50;17,50,300;17.132,50.456&s_srs=4326&&t_srs=5514]
+
+Where
+* data=x,y;x,y,z;x.x,y.y (for example)
+* Delimiter between points is `;`
+* Delimiter between x,y,z is `,`
+* Delimiter between decimal is `.`
 
 ## Types of queries
 

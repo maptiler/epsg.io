@@ -24,6 +24,7 @@
     </script>
   </head>
   <body id="homepage" data-role="page">
+	<a href="https://github.com/klokantech/epsg.io"><img style="position: absolute; top: 0; right: 0; border: 0; width: 149px; height: 149px;" src="http://aral.github.com/fork-me-on-github-retina-ribbons/right-dusk-blue@2x.png" alt="Fork me on GitHub"></a>
     <div id="layout-container">
       <p id="logo-container">
         <a href="http://epsg.io" title=""><span>Epsg.io</span> Coordinate Systems Worldwide</a>
@@ -104,10 +105,13 @@
       </script>
 
       <div id="foot">
+		<p id="klokan-logo">
+          <a href="http://www.klokantech.com/" title=""><img src="./img/klokan-logo-grey.png" alt="" /></a>
+        </p>
         <p id="mzk-logo">
           <a href="http://www.mzk.cz/" title=""><img src="./img/hzk-logo.png" alt="" /></a>
         </p>
-        <p>Find a coordinate system and get position on a map. Powered by EPSG database 8.5.5</p>
+        <p>Find a coordinate system and get position on a map. Powered by EPSG database {{version}}</p>
         <p id="copyright">Copyright &copy; 2014</p>
       </div>
     </div>
