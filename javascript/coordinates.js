@@ -17,7 +17,7 @@ goog.require('goog.net.Jsonp');
  * @type {string}
  * @const
  */
-epsg.io.TRANS_SERVICE_URL = 'http://epsg.io/trans';
+epsg.io.TRANS_SERVICE_URL = '//epsg.io/trans';
 
 
 
