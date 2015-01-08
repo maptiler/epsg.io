@@ -742,7 +742,7 @@ def index(id):
     
     url_static_map = ("","")
     if center != "" and g_coords != "":
-      url_static = "http://maps.googleapis.com/maps/api/staticmap?size=265x215&scale=2&sensor=false&visual_refresh=true&center="+str(center[0])+","+str(center[1])+"&path=color:0xff0000ff|fillcolor:0xff000022|weight:2|"+g_coords
+      url_static = "https://maps.googleapis.com/maps/api/staticmap?size=265x215&scale=2&sensor=false&visual_refresh=true&center="+str(center[0])+","+str(center[1])+"&path=color:0xff0000ff|fillcolor:0xff000022|weight:2|"+g_coords
       url_static_map = urllib2.quote(url_static), url_static
     ogpxml = ""
     if item['kind'].startswith("CRS"):
