@@ -20,6 +20,7 @@ or use the gunicorn startup scripts (`./epsgio start`)
 Note: This is not required, as you can easily download the ready-to-use index from releases.
 
 1. Download the newest EPSG database from [http://epsg-registry.org]
+   * a. After `login` it will able to `export registry` as `Export GML 3.2.1 with EPSG metadata`
 2. Make sure that these files(folder) are in one folder
     * a. folder `extra_codes_proj4_4.8.0.2`
     * b. file `CRS_exceptions.csv`
