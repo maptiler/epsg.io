@@ -84,10 +84,14 @@
 				</p>
 			</div>
 			<div class="covered-area-container">
-				<img src="./press/epsg-banner-1400-560-2.png" width="260">
+				<img src="./press/gsoc2015-300x270.jpg" width="260">
 				<p></p>
 				<p>
-					<span class="caption">EPSG.io visuals</span>
+					<a href="http://www.github.com/klokantech/epsg.io/">GitHub - Source Code</a></span>
+				</p>
+				<p></p>
+				<p>
+					<span class="caption">EPSG.io identity</span>
 				</p>
 				<ul>Logo
 				<a href="./press/epsg-banner-1400-560-2.png"><img src="./press/epsg-banner-1400-560-2.png" height="90" width="205"></a>
@@ -109,7 +113,6 @@
 	</div>
 
     <div id="spacer"><p></p></div>
-    <script type="text/javascript">home_init();</script>
 
      <div id="footer">
 
