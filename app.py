@@ -1678,6 +1678,10 @@ def index(id,format):
 def index():
   return template('./templates/about', version=VERSION)
 
+@route('/gsoc')
+def index():
+  return template('./templates/gsoc', version=VERSION)
+
 @route('/press/<filename>')
 def static(filename):
     return static_file(filename, root='./press/')
