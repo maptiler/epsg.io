@@ -45,7 +45,9 @@
 					EPSG.io (<a href="http://epsg.io/">http://epsg.io/</a>) simplifies discovery of coordinate reference systems utilized all over the world for creating maps and geodata and for identifying geo-position. It is a practical tool for anybody interested in cartography and digital map making, who needs to know exact latitude and longitude values for numerical coordinates in different spatial reference systems. Included map application powered by Google Maps API allows to show the precise location anywhere on the planet also visually. The functionality of the portal is exposed via an API. Read more <a href="http://epsg.io/about">about the service</a> and explore the source code on <a href="http://www.github.com/klokantech/epsg.io/">GitHub</a>.
 				</p>
 				<p>
-					
+                EPSG.io is available under Simplified BSD License.</br>
+				</p>
+				<p>
 				</p>
 				<p>
 					<h4>Idea #1: EPSG.io improvements</h4>
@@ -65,6 +67,8 @@
 					<h4>The mentorship provided by Klokan Technologies GmbH</h4>
 				    <ul>
 						<li>Petr Pridal, Ph.D. (CEO of KlokanTech.com)</li>
+						<li>Petr Sloup</li>
+						<li>Vaclav Klusak</li>
 					</ul>
 				</p>
 				<p>
@@ -78,11 +82,11 @@
                 <p>
                 <a href="http://www.klokantech.com/"><img src="http://www.klokantech.com/img/klokantech.png" width="260" border="0"></a>
                 </p>
-				<p><a href="http://www.klokantech.com/">www.klokantech.com</a></p>
+				<p style="text-align:center"><a href="http://www.klokantech.com/">www.klokantech.com</a></p>
                 <p>
 				<a href="https://www.google-melange.com/gsoc/homepage/google/gsoc2015"><img src="./press/gsoc2015-300x270.jpg" width="260" border="0"></a>
                 </p>
-				<p><a href="https://www.google-melange.com/gsoc/homepage/google/gsoc2015">Google Summer of Code 2015</a></p>
+				<p style="text-align:center"><a href="https://www.google-melange.com/gsoc/homepage/google/gsoc2015">Google Summer of Code 2015</a></p>
 				<p></p>
 				<p>
 					<span class="caption">EPSG.io identity</span>
@@ -109,16 +113,6 @@
     <div id="spacer"><p></p></div>
 
      <div id="footer">
-
-       <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-       <!-- EPSG.io -->
-       <ins class="adsbygoogle"
-            style="display:inline-block;width:728px;height:90px"
-            data-ad-client="ca-pub-0328423815528922"
-            data-ad-slot="6564733120"></ins>
-       <script>
-       (adsbygoogle = window.adsbygoogle || []).push({});
-       </script>
 
        <div id="foot">
          <p id="klokan-logo">
