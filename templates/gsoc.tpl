@@ -15,10 +15,12 @@
       (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
       m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
       })(window,document,'script','//www.google-analytics.com/analytics.js','__gaTracker');
-
       __gaTracker('create', 'UA-47718358-1', 'epsg.io');
       __gaTracker('send', 'pageview');
     </script>
+    <style>
+    a { color: #4295c5 !important; }
+    </style>
   </head>
   
   <body id="detailpage" data-role="page">
@@ -34,46 +36,35 @@
     <div id="layout-container">
 		<div id="detail-content-container">
 			<div class="detail-content-inner-wide">
-				<h1>Google Summer of Code 2007 - Ideas</h1>
+				<h1>Google Summer of Code 2015 - Ideas</h1>
 				<p></p>
 				<p>
 					Klokan Technologies GmbH, Switzerland (<a href="http://www.klokantech.com/">http://www.klokantech.com/</a>) propose improvement of the open-source EPSG.io project (<a href="http://epsg.io/">http://epsg.io/</a>) - the web service with a database of coordinates systems used in maps worldwide.
 				</p>
 				<p>
-					EPSG.io (<a href="http://epsg.io/">http://epsg.io/</a>) simplifies discovery of coordinate reference systems utilized all over the world for creating maps and geodata and for identifying geo-position. It is a practical tool for anybody interested in cartography and digital map making, who needs to know exact latitude and longitude values for numerical coordinates in different spatial reference systems. Included map application powered by Google Maps API allows to show the precise location anywhere on the planet also visually. Read more <a href="http://epsg.io/about">about the service</a> and explore the source code on <a href="http://www.github.com/klokantech/epsg.io/">GitHub</a>.
+					EPSG.io (<a href="http://epsg.io/">http://epsg.io/</a>) simplifies discovery of coordinate reference systems utilized all over the world for creating maps and geodata and for identifying geo-position. It is a practical tool for anybody interested in cartography and digital map making, who needs to know exact latitude and longitude values for numerical coordinates in different spatial reference systems. Included map application powered by Google Maps API allows to show the precise location anywhere on the planet also visually. The functionality of the portal is exposed via an API. Read more <a href="http://epsg.io/about">about the service</a> and explore the source code on <a href="http://www.github.com/klokantech/epsg.io/">GitHub</a>.
 				</p>
 				<p>
 					
 				</p>
 				<p>
-					<h4>The main features</h4>
-					<ul>
-						<li>Fulltext search for the complete database of coordinate systems from EPSG</li>
-						<li>Short rememberable URLs, i.e. <a href="http://epsg.io/4326">http://epsg.io/4326</a></li>
-						<li>Type GPS latitude/longitude and get projected coordinates or vice versa</li>
-						<li>Precise numerical location on a map / aerial photo for any place on the planet</li>
-						<li>Export definitions in various formats, including WKT, OGC GML, XML, Proj.4, SQL, JS, etc.</li>
-						<li>Facets for retrieval of alternative record types from the official EPSG database</li>
-						<li>API for the search in EPSG database and for transformations</li>
-					</ul>
-				</p>
-				<p>
-					<h4>Frequently answered questions</h4>
-					<i>How does the system differ from spatialreference.org and epsg-registry.org?</i>
+					<h4>Idea #1: EPSG.io improvements</h4>
+					A student of cartography with a practical knowledge of programming in Python and JavaScript (ideally with experience with Closure Tools, Google OpenLayers V3 and Google Maps API) will work on a set of tasks further improving the project and adding new exciting functionality.
 					<p></p>
-					<p>
-					It is much easier to find the coordinate systems (for example query "utm wgs norway" gives list of all UTM zones with WGS covering area of Norway). 
-					All available transformations for selected coordinate reference system are visible and applicable (it is possible to find alternative 7 parameter transformation for Proj4js replacing a default grid transformation, or choose a transformation with higher accuracy for a selected area).
-					Preview location for any numerical coordinates on a detailed map - with copy&paste functionality.
-					Complete EPSG database with codes for datums, units, transformations, etc is indexed and searchable, and the individual EPSG records are linked from every detail page.
-					</p>
+					<ul>
+						<li><img src="https://cloud.githubusercontent.com/assets/59284/6268870/09afd3b6-b850-11e4-92e2-f4ece69197fe.png" border="0" width="250"><br/>Overview map for each coordinate system - with visual representation of map projection, meridian, etc. Details in: <a href="https://github.com/klokantech/epsg.io/issues/62">#62</a></li>
+						<li>Automate the update of the EPSG database to ensure the latest version is always indexed <a href="https://github.com/klokantech/epsg.io/issues/77">#77</a></li>
+                        <li>Deploy via Docker - allowing an easy one-command start by anybody, even offline <a href="https://github.com/klokantech/epsg.io/issues/75">#75</a></li>
+                        <li>Grid transformation and related Proj4js improment <a href="https://github.com/klokantech/epsg.io/issues/6">#6</a></li>
+                        <li>Import ESRI specific codes <a href="https://github.com/klokantech/epsg.io/issues/24">#24</a></li>
+                        <li>User-defined SRS indexing <a href="https://github.com/klokantech/epsg.io/issues/78">#78</a></li>
+					</ul>
+                    New ideas and inputs from the student are very welcome. See and use <a href="https://github.com/klokantech/epsg.io/milestones/gsoc">GitHub Issues</a>.
 				</p>
 				<p>
-					<h4>Main contributors for Klokan Technologies GmbH</h4>
+					<h4>The mentorship provided by Klokan Technologies GmbH</h4>
 				    <ul>
-						<li>Petr Pridal (managing director KlokanTech.com, work done as part of PhD thesis at Czech Technical University of Technology - Geodesy and Cartography)</li>
-						<li>Tomas Pohanka (internship at KlokanTech.com, Masters degree candidate at Palacky University Olomouc - Geoinformatics)</li>
-						<li>Radim Kacer (designer at KlokanTech.com)</li>
+						<li>Petr Pridal, Ph.D. (CEO of KlokanTech.com)</li>
 					</ul>
 				</p>
 				<p>
@@ -84,11 +75,14 @@
 				</p>
 			</div>
 			<div class="covered-area-container">
-				<img src="./press/gsoc2015-300x270.jpg" width="260">
-				<p></p>
-				<p>
-					<a href="http://www.github.com/klokantech/epsg.io/">GitHub - Source Code</a></span>
-				</p>
+                <p>
+                <a href="http://www.klokantech.com/"><img src="http://www.klokantech.com/img/klokantech.png" width="260" border="0"></a>
+                </p>
+				<p><a href="http://www.klokantech.com/">www.klokantech.com</a></p>
+                <p>
+				<a href="https://www.google-melange.com/gsoc/homepage/google/gsoc2015"><img src="./press/gsoc2015-300x270.jpg" width="260" border="0"></a>
+                </p>
+				<p><a href="https://www.google-melange.com/gsoc/homepage/google/gsoc2015">Google Summer of Code 2015</a></p>
 				<p></p>
 				<p>
 					<span class="caption">EPSG.io identity</span>
