@@ -51,8 +51,8 @@
 				</p>
 				<p>
 					<h4>Idea #1: EPSG.io improvements</h4>
-					Requirements: practical knowledge of programming in Python and JavaScript (experience with Closure Tools, Google OpenLayers V3 and Google Maps API is welcome).
-					<p>The student will work on a set of tasks improving the open-source EPSG.io project and adding new exciting functionality to the online service.
+					<p>Requirements: practical knowledge of programming in Python and JavaScript (experience with Closure Tools, Google OpenLayers V3 and Google Maps API is welcome).</p>
+					<p>The student will work on a set of tasks improving the open-source EPSG.io project and adding new exciting functionality to the online service.</p>
 					<p></p>
 					<ul>
 						<li><img src="https://cloud.githubusercontent.com/assets/59284/6268870/09afd3b6-b850-11e4-92e2-f4ece69197fe.png" border="0" width="250"><br/>Overview map for each coordinate system - with visual representation of map projection, meridian, etc. Details in: <a href="https://github.com/klokantech/epsg.io/issues/62">#62</a></li>
@@ -67,7 +67,7 @@
 				<p>
 					<h4>The mentorship provided by Klokan Technologies GmbH</h4>
 				    <ul>
-						<li>Petr Pridal, Ph.D.</li>
+						<li>Petr Pridal, Ph.D. (<a href="http://linkedin.com/in/klokan">CV</a>)</li>
 						<li>Vaclav Klusak</li>
 						<li>Petr Sloup</li>
 					</ul>
