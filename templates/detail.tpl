@@ -24,12 +24,12 @@
     <meta name="description" content="EPSG:{{code_short[0]}} {{kind}}"/>
   %end
     %if not url_static_map[1]:
-    <meta property="og:image" content="http://epsg.io/img/epsg-banner-440x280-2.png"/>
+    <meta property="og:image" content="//epsg.io/img/epsg-banner-440x280-2.png"/>
     %end
     <meta name="keywords" content="EPSG.io" />
     <meta name="robots" content="ALL,FOLLOW" />
     <link rel="stylesheet" href="/css/main.css" type="text/css" />
-    <link rel="shortcut icon" href="http://epsg.io/favicon.ico" />
+    <link rel="shortcut icon" href="//epsg.io/favicon.ico" />
     <script src="/js/ZeroClipboard.min.js"></script>
     <script src="/js/index.js"></script>
     <script>
@@ -48,10 +48,10 @@
     
     <div id="head">
       <p id="logo-container">
-        <a href="http://epsg.io" title=""><span>Epsg.io</span> Coordinate Systems Worldwide</a>      
+        <a href="//epsg.io" title=""><span>Epsg.io</span> Coordinate Systems Worldwide</a>      
       </p>
       <ul id="menu-top">
-        <li><a href="http://epsg.io/about" title="">About</a></li>
+        <li><a href="//epsg.io/about" title="">About</a></li>
       </ul>
     </div>
     
@@ -59,18 +59,18 @@
       <div id="title_kind">
         <div class="socialicons">
 
-            <a id="share_facebook" href="https://www.facebook.com/sharer/sharer.php?u=http://epsg.io/{{url_social}}"><span class="icon-epsg-facebook"></span></a>
+            <a id="share_facebook" href="https://www.facebook.com/sharer/sharer.php?u=//epsg.io/{{url_social}}"><span class="icon-epsg-facebook"></span></a>
 
 
-        <a id="share_twitterb" href="https://twitter.com/share?original_referer=http://epsg.io/{{url_social}}&amp;text={{name}} - {{type_epsg}}:{{code_short[0]}}&amp;"><span class="icon-epsg-twiter"></span></a>
+        <a id="share_twitterb" href="https://twitter.com/share?original_referer=//epsg.io/{{url_social}}&amp;text={{name}} - {{type_epsg}}:{{code_short[0]}}&amp;"><span class="icon-epsg-twiter"></span></a>
 
         %if url_static_map[0]:
-        <a id="share_pinterest" href="https://pinterest.com/pin/create/button/?url=http%3A%2F%2Fepsg.io/{{url_social}}&amp;media={{url_static_map[0]}}"><span class="icon-epsg-pinterest"></span></a>
+        <a id="share_pinterest" href="https://pinterest.com/pin/create/button/?url=%2F%2Fepsg.io/{{url_social}}&amp;media={{url_static_map[0]}}"><span class="icon-epsg-pinterest"></span></a>
 
         %else:
-        <a id="share_pinterest" href="https://pinterest.com/pin/create/button/?url=http%3A%2F%2Fepsg.io/{{url_social}}&amp;media=http%3A%2F%2Fepsg.io%2Fimg%2Fepsg-banner-440x280-2.png"><span class="icon-epsg-pinterest"></span></a>
+        <a id="share_pinterest" href="https://pinterest.com/pin/create/button/?url=%2F%2Fepsg.io/{{url_social}}&amp;media=http%3A%2F%2Fepsg.io%2Fimg%2Fepsg-banner-440x280-2.png"><span class="icon-epsg-pinterest"></span></a>
         %end
-        <a id="share_gplusdark" href="https://plus.google.com/share?url=http://epsg.io/{{url_social}}"><span class="icon-epsg-googleplus"></span></a>
+        <a id="share_gplusdark" href="https://plus.google.com/share?url=//epsg.io/{{url_social}}"><span class="icon-epsg-googleplus"></span></a>
         </div>
       %if item['deprecated'] == 1 or item['deprecated'] == "true" :
         <h1>{{type_epsg}}:{{code_short[0]}} DEPRECATED</h1>
@@ -628,7 +628,7 @@
           <p>Definition: Well Known Text (WKT)</p>
           <ul>
             <li><a href="{{url_format}}.prettywkt">Open</a></li>
-            <li><a id="s_html_copyUrl" class="zeroclipboard" data-clipboard-text="http://epsg.io{{url_format}}.prettywkt" href="#">Copy URL</a></li>
+            <li><a id="s_html_copyUrl" class="zeroclipboard" data-clipboard-text="//epsg.io{{url_format}}.prettywkt" href="#">Copy URL</a></li>
             <li><a id="s_html_copyText" class="zeroclipboard" data-clipboard-target="s_html_text" href="#">Copy TEXT</a></li>
             <li><a href="{{url_format}}.prettywkt?download">Download</a></li>
             
@@ -645,7 +645,7 @@
           <p>Definition: ESRI WKT</p>
           <ul>
             <li><a href="{{url_format}}.esriwkt">Open</a></li>
-            <li><a id="s_esriwkt_copyUrl" class="zeroclipboard" data-clipboard-text="http://epsg.io{{url_format}}.esriwkt" href="#">Copy URL</a></li>
+            <li><a id="s_esriwkt_copyUrl" class="zeroclipboard" data-clipboard-text="//epsg.io{{url_format}}.esriwkt" href="#">Copy URL</a></li>
             <li><a id="s_esriwkt_copyText" class="zeroclipboard" data-clipboard-target="s_esriwkt_text" href="#">Copy TEXT</a></li>
             <li><a href="{{url_format}}.esriwkt?download">Download</a></li>
           
@@ -660,7 +660,7 @@
           <p>Definition: PROJ.4</p>
           <ul>
             <li><a href="{{url_format}}.proj4">Open</a></li>
-            <li><a id="s_proj4_copyUrl" class="zeroclipboard" data-clipboard-text="http://epsg.io{{url_format}}.proj4" href="#">Copy URL</a></li>
+            <li><a id="s_proj4_copyUrl" class="zeroclipboard" data-clipboard-text="//epsg.io{{url_format}}.proj4" href="#">Copy URL</a></li>
             <li><a id="s_proj4_copyText" class="zeroclipboard" data-clipboard-target="s_proj4_text" href="#">Copy TEXT</a></li>
             <li><a href="{{url_format}}.proj4?download">Download</a></li>
             
@@ -674,7 +674,7 @@
           <p>Definition: JavaScript (Proj4js) </p>
           <ul>
             <li><a href="{{url_format}}.js">Open</a></li>
-            <li><a id="s_proj4js_copyUrl" class="zeroclipboard" data-clipboard-text="http://epsg.io{{url_format}}.js" href="#">Copy URL</a></li>
+            <li><a id="s_proj4js_copyUrl" class="zeroclipboard" data-clipboard-text="//epsg.io{{url_format}}.js" href="#">Copy URL</a></li>
             <li><a id="s_proj4js_copyText" class="zeroclipboard" data-clipboard-target="s_proj4js_text" href="#">Copy TEXT</a></li>
             <li><a href="{{url_format}}.js?download">Download</a></li>
             
@@ -688,7 +688,7 @@
             <p>Definition: OGC GML</p>
             <ul>
               <li><a href="{{url_format}}.gml">Open</a></li>
-              <li><a id="s_gml_copyUrl" class="zeroclipboard" data-clipboard-text="http://epsg.io{{url_format}}.gml" href="#">Copy URL</a></li>
+              <li><a id="s_gml_copyUrl" class="zeroclipboard" data-clipboard-text="//epsg.io{{url_format}}.gml" href="#">Copy URL</a></li>
               <li><a id="s_gml_copyText" class="zeroclipboard" data-clipboard-target="s_gml_text" href="#">Copy TEXT</a></li>
               <li><a href="{{url_format}}.gml?download">Download</a></li>
 
@@ -707,7 +707,7 @@
             <p>Definition: XML</p>
             <ul>
               <li><a href="{{url_format}}.xml">Open</a></li>
-              <li><a id="s_xml_copyUrl" class="zeroclipboard" data-clipboard-text="http://epsg.io{{url_format}}.xml" href="#">Copy URL</a></li>
+              <li><a id="s_xml_copyUrl" class="zeroclipboard" data-clipboard-text="//epsg.io{{url_format}}.xml" href="#">Copy URL</a></li>
               <li><a id="s_xml_copyText" class="zeroclipboard" data-clipboard-target="s_xml_text" href="#">Copy TEXT</a></li>
               <li><a href="{{url_format}}.xml?download">Download</a></li>
             
@@ -725,7 +725,7 @@
           <p>Definition: GeoServer</p>
           <ul>
             <li><a href="{{url_format}}.geoserver">Open</a></li>
-            <li><a id="s_geoserver_copyUrl" class="zeroclipboard" data-clipboard-text="http://epsg.io{{url_format}}.geoserver" href="#">Copy URL</a></li>
+            <li><a id="s_geoserver_copyUrl" class="zeroclipboard" data-clipboard-text="//epsg.io{{url_format}}.geoserver" href="#">Copy URL</a></li>
             <li><a id="s_geoserver_copyText" class="zeroclipboard" data-clipboard-target="s_geoserver_text" href="#">Copy TEXT</a></li>
             <li><a href="{{url_format}}.geoserver?download">Download</a></li>
             
@@ -739,7 +739,7 @@
           <p>Definition: MapServer - MAPfile</p>
           <ul>
             <li><a href="{{url_format}}.mapfile">Open</a></li>
-            <li><a id="s_mapfile_copyUrl" class="zeroclipboard" data-clipboard-text="http://epsg.io{{url_format}}.mapfile" href="#">Copy URL</a></li>
+            <li><a id="s_mapfile_copyUrl" class="zeroclipboard" data-clipboard-text="//epsg.io{{url_format}}.mapfile" href="#">Copy URL</a></li>
             <li><a id="s_mapfile_copyText" class="zeroclipboard" data-clipboard-target="s_mapfile_text" href="#">Copy TEXT</a></li>
             <li><a href="{{url_format}}.mapfile?download">Download</a></li>
             
@@ -752,7 +752,7 @@
           <p>Definition: MapServer - Python</p>
           <ul>
             <li><a href="{{url_format}}.mapserverpython">Open</a></li>
-            <li><a id="s_mapserverpython_copyUrl" class="zeroclipboard" data-clipboard-text="http://epsg.io{{url_format}}.mapserverpython" href="#">Copy URL</a></li>
+            <li><a id="s_mapserverpython_copyUrl" class="zeroclipboard" data-clipboard-text="//epsg.io{{url_format}}.mapserverpython" href="#">Copy URL</a></li>
             <li><a id="s_mapserverpython_copyText" class="zeroclipboard" data-clipboard-target="s_mapserverpython_text" href="#">Copy TEXT</a></li>
             <li><a href="{{url_format}}.mapserverpython?download">Download</a></li>
             
@@ -766,7 +766,7 @@
           <p>Definition: Mapnik</p>
           <ul>
             <li><a href="{{url_format}}.mapnik">Open in new page</a></li>
-            <li><a id="s_mapnik_copyUrl" class="zeroclipboard" data-clipboard-text="http://epsg.io{{url_format}}.mapnik" href="#">Copy URL</a></li>
+            <li><a id="s_mapnik_copyUrl" class="zeroclipboard" data-clipboard-text="//epsg.io{{url_format}}.mapnik" href="#">Copy URL</a></li>
             <li><a id="s_mapnik_copyText" class="zeroclipboard" data-clipboard-target="s_mapnik_text" href="#">Copy TEXT</a></li>
             <li><a href="{{url_format}}.mapnik?download">Download</a></li>
             
@@ -779,7 +779,7 @@
           <p>Definition: Mapnik - Python</p>
           <ul>
             <li><a href="{{url_format}}.mapnikpython">Open</a></li>
-            <li><a id="s_mapnikpython_copyUrl" class="zeroclipboard" data-clipboard-text="http://epsg.io{{url_format}}.mapnikpython" href="#">Copy URL</a></li>
+            <li><a id="s_mapnikpython_copyUrl" class="zeroclipboard" data-clipboard-text="//epsg.io{{url_format}}.mapnikpython" href="#">Copy URL</a></li>
             <li><a id="s_mapnikpython_copyText" class="zeroclipboard" data-clipboard-target="s_mapnikpython_text" href="#">Copy TEXT</a></li>
             <li><a href="{{url_format}}.mapnikpython?download">Download</a></li>
             
@@ -793,7 +793,7 @@
           <p>Definition: SQL (PostGIS)</p>
           <ul>
             <li><a href="{{url_format}}.sql">Open</a></li>
-            <li><a id="s_postgis_copyUrl" class="zeroclipboard" data-clipboard-text="http://epsg.io{{url_format}}.sql" href="#">Copy URL</a></li>
+            <li><a id="s_postgis_copyUrl" class="zeroclipboard" data-clipboard-text="//epsg.io{{url_format}}.sql" href="#">Copy URL</a></li>
             <li><a id="s_postgis_copyText" class="zeroclipboard" data-clipboard-target="s_postgis_text" href="#">Copy TEXT</a></li>
             <li><a href="{{url_format}}.sql?download">Download</a></li>
             
@@ -807,7 +807,7 @@
           <p>Definition: OGC WKT</p>
           <ul>
             <li><a href="{{url_format}}.wkt">Open</a></li>
-            <li><a id="s_wkt_copyUrl" class="zeroclipboard" data-clipboard-text="http://epsg.io{{url_format}}.wkt" href="#">Copy URL</a></li>
+            <li><a id="s_wkt_copyUrl" class="zeroclipboard" data-clipboard-text="//epsg.io{{url_format}}.wkt" href="#">Copy URL</a></li>
             <li><a id="s_wkt_copyText" class="zeroclipboard" data-clipboard-target="s_wkt_text" href="#">Copy TEXT</a></li>
             <li><a href="{{url_format}}.wkt?download">Download</a></li>
             
@@ -822,7 +822,7 @@
             <p>Definition: USGS</p>
             <ul>
               <li><a href="{{url_format}}.usgs">Open</a></li>
-              <li><a id="s_usgs_copyUrl" class="zeroclipboard" data-clipboard-text="http://epsg.io{{url_format}}.usgs" href="#">Copy URL</a></li>
+              <li><a id="s_usgs_copyUrl" class="zeroclipboard" data-clipboard-text="//epsg.io{{url_format}}.usgs" href="#">Copy URL</a></li>
               <li><a id="s_usgs_copyText" class="zeroclipboard" data-clipboard-target="s_usgs_text" href="#">Copy TEXT</a></li>
               <li><a href="{{url_format}}.usgs?download">Download</a></li>
             
@@ -845,7 +845,7 @@
             <p>Definition: OGP XML</p>
             <ul>
               <li><a href="{{url_format}}.gml">Open</a></li>
-              <li><a id="s_gml_copyUrl" class="zeroclipboard" data-clipboard-text="http://epsg.io{{url_format}}.gml" href="#">Copy URL</a></li>
+              <li><a id="s_gml_copyUrl" class="zeroclipboard" data-clipboard-text="//epsg.io{{url_format}}.gml" href="#">Copy URL</a></li>
               <li><a id="s_gml_copyText" class="zeroclipboard" data-clipboard-target="s_gml_text" href="#">Copy TEXT</a></li>
               <li><a href="{{url_format}}.gml?download">Download</a></li>
 
@@ -896,7 +896,7 @@ dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
 (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
 })();
 </script>
-<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
     </div>
       
        <div id="spacer"><p></p></div>
@@ -916,10 +916,10 @@ dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
 
           <div id="foot">
 			<p id="klokan-logo">
-			  <a href="http://www.klokantech.com/" title=""><img src="./img/klokan-logo-grey.png" alt="" /></a>
+			  <a href="//www.klokantech.com/" title=""><img src="./img/klokan-logo-grey.png" alt="" /></a>
 			</p>
             <p id="mzk-logo">
-              <a href="http://www.mzk.cz/" title=""><img src="./img/hzk-logo.png" alt="" /></a>
+              <a href="//www.mzk.cz/" title=""><img src="./img/hzk-logo.png" alt="" /></a>
             </p>
             <p>Find a coordinate system and get position on a map. Powered by EPSG database {{version}}</p>
             <p id="copyright">Copyright &copy; 2015</p>

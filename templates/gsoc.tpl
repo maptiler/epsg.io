@@ -9,7 +9,7 @@
     <meta name="keywords" content="EPSG.io" />
     <meta name="robots" content="ALL,FOLLOW" />
     <link rel="stylesheet" href="/css/main.css" type="text/css" />
-    <link rel="shortcut icon" href="http://epsg.io/favicon.ico" />
+    <link rel="shortcut icon" href="//epsg.io/favicon.ico" />
     <script>
       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
       (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -39,10 +39,10 @@
 				<h1>Google Summer of Code 2015 - Ideas</h1>
 				<p></p>
 				<p>
-					Klokan Technologies GmbH, Switzerland (<a href="http://www.klokantech.com/">http://www.klokantech.com/</a>) propose improvement of the open-source EPSG.io project (<a href="http://epsg.io/">http://epsg.io/</a>) - the web service with a database of coordinates systems used in maps worldwide.
+					Klokan Technologies GmbH, Switzerland (<a href="//www.klokantech.com/">http://www.klokantech.com/</a>) propose improvement of the open-source EPSG.io project (<a href="//epsg.io/">http://epsg.io/</a>) - the web service with a database of coordinates systems used in maps worldwide.
 				</p>
 				<p>
-					EPSG.io (<a href="http://epsg.io/">http://epsg.io/</a>) simplifies discovery of coordinate reference systems utilized all over the world for creating maps and geodata and for identifying geo-position. It is a practical tool for anybody interested in cartography and digital map making, who needs to know exact latitude and longitude values for numerical coordinates in different spatial reference systems. Included map application powered by Google Maps API allows to show the precise location anywhere on the planet also visually. The functionality of the portal is exposed via an API. Read more <a href="http://epsg.io/about">about the service</a> and explore the source code on <a href="http://www.github.com/klokantech/epsg.io/">GitHub</a>.
+					EPSG.io (<a href="//epsg.io/">http://epsg.io/</a>) simplifies discovery of coordinate reference systems utilized all over the world for creating maps and geodata and for identifying geo-position. It is a practical tool for anybody interested in cartography and digital map making, who needs to know exact latitude and longitude values for numerical coordinates in different spatial reference systems. Included map application powered by Google Maps API allows to show the precise location anywhere on the planet also visually. The functionality of the portal is exposed via an API. Read more <a href="//epsg.io/about">about the service</a> and explore the source code on <a href="//www.github.com/klokantech/epsg.io/">GitHub</a>.
 				</p>
 				<p>
                 EPSG.io is available under Simplified BSD License.</br>
@@ -67,7 +67,7 @@
 				<p>
 					<h4>The mentorship provided by Klokan Technologies GmbH</h4>
 				    <ul>
-						<li>Petr Pridal, Ph.D. (<a href="http://linkedin.com/in/klokan">CV</a>)</li>
+						<li>Petr Pridal, Ph.D. (<a href="//linkedin.com/in/klokan">CV</a>)</li>
 						<li>Vaclav Klusak</li>
 						<li>Petr Sloup</li>
 					</ul>
@@ -81,9 +81,9 @@
 			</div>
 			<div class="covered-area-container">
                 <p>
-                <a href="http://www.klokantech.com/"><img src="http://www.klokantech.com/img/klokantech.png" width="260" border="0"></a>
+                <a href="//www.klokantech.com/"><img src="//www.klokantech.com/img/klokantech.png" width="260" border="0"></a>
                 </p>
-				<p style="text-align:center"><a href="http://www.klokantech.com/">www.klokantech.com</a></p>
+				<p style="text-align:center"><a href="//www.klokantech.com/">www.klokantech.com</a></p>
                 <p>
 				<a href="https://www.google-melange.com/gsoc/homepage/google/gsoc2015"><img src="./press/gsoc2015-300x270.jpg" width="260" border="0"></a>
                 </p>
@@ -117,10 +117,10 @@
 
        <div id="foot">
          <p id="klokan-logo">
-           <a href="http://www.klokantech.com/" title=""><img src="./img/klokan-logo-grey.png" alt="" /></a>
+           <a href="//www.klokantech.com/" title=""><img src="./img/klokan-logo-grey.png" alt="" /></a>
 		 </p>
          <p id="mzk-logo">
-           <a href="http://www.mzk.cz/" title=""><img src="./img/hzk-logo.png" alt="" /></a>
+           <a href="//www.mzk.cz/" title=""><img src="./img/hzk-logo.png" alt="" /></a>
          </p>
          <p>Find a coordinate system and get position on a map. Powered by EPSG database {{version}}</p>
          <p id="copyright">Copyright &copy; 2015</p>

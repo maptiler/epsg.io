@@ -14,9 +14,9 @@
     <meta name="description" content="EPSG.io" />
     <meta name="keywords" content="EPSG.io" />
     <meta name="robots" content="ALL,FOLLOW" />
-    <meta property="og:image" content="http://epsg.io/img/epsg-banner-440x280-2.png"/>
+    <meta property="og:image" content="//epsg.io/img/epsg-banner-440x280-2.png"/>
     <link rel="stylesheet" href="/css/main.css" type="text/css" />
-    <link rel="shortcut icon" href="http://epsg.io/favicon.ico" />
+    <link rel="shortcut icon" href="//epsg.io/favicon.ico" />
     <script>
       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
       (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -190,10 +190,10 @@
 
       <div id="foot">
         <p id="klokan-logo">
-          <a href="http://www.klokantech.com/" title=""><img src="./img/klokan-logo-grey.png" alt="" /></a>
+          <a href="//www.klokantech.com/" title=""><img src="./img/klokan-logo-grey.png" alt="" /></a>
         </p>
         <p id="mzk-logo">
-          <a href="http://www.mzk.cz/" title=""><img src="./img/hzk-logo.png" alt="" /></a>
+          <a href="//www.mzk.cz/" title=""><img src="./img/hzk-logo.png" alt="" /></a>
         </p>
         <p>Find a coordinate system and get position on a map. Powered by EPSG database {{version}}</p>
         <p id="copyright">Copyright &copy; 2015</p>

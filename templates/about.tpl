@@ -9,7 +9,7 @@
     <meta name="keywords" content="EPSG.io" />
     <meta name="robots" content="ALL,FOLLOW" />
     <link rel="stylesheet" href="/css/main.css" type="text/css" />
-    <link rel="shortcut icon" href="http://epsg.io/favicon.ico" />
+    <link rel="shortcut icon" href="//epsg.io/favicon.ico" />
     <script>
       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
       (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -37,10 +37,10 @@
 				<h1>EPSG.io: Find Coordinate Systems Worldwide</h1>
 				<p></p>
 				<p>
-					Klokan Technologies GmbH, Switzerland (<a href="http://www.klokantech.com/">http://www.klokantech.com/</a>) is pleased to announce a new open-source web service with a database of coordinates systems used in maps worldwide.
+					Klokan Technologies GmbH, Switzerland (<a href="//www.klokantech.com/">www.klokantech.com/</a>) is pleased to announce a new open-source web service with a database of coordinates systems used in maps worldwide.
 				</p>
 				<p>
-					EPSG.io (<a href="http://epsg.io/">http://epsg.io/</a>) simplifies discovery of coordinate reference systems utilized all over the world for creating maps and geodata and for identifying geo-position. It is a practical tool for anybody interested in cartography and digital map making, who needs to know exact latitude and longitude values for numerical coordinates in different spatial reference systems. Included map application allows to show the precise location anywhere on the planet also visually.
+					EPSG.io (<a href="//epsg.io/">http://epsg.io/</a>) simplifies discovery of coordinate reference systems utilized all over the world for creating maps and geodata and for identifying geo-position. It is a practical tool for anybody interested in cartography and digital map making, who needs to know exact latitude and longitude values for numerical coordinates in different spatial reference systems. Included map application allows to show the precise location anywhere on the planet also visually.
 				</p>
 				<p>
 					The website comes with a fulltext search indexing over 6000 coordinate systems. The search starts by typing the name of the system, name of covered country, state or any of the combinations of these. Searching for EPSG and ESRI codes is supported as well.
@@ -52,10 +52,10 @@
 					The web has also API allowing integration of the search functionality and transformations in third party applications.
 				</p>
 				<p>
-					Soon this functionality will be used the by the MapTiler (<a href="http://www.maptiler.com">http://www.maptiler.com</a>) to simplify the transformation or existing raster geodata and images into Google Maps and OGC WMTS compatible tiles. MapTiler is the easiest way how to prepare custom maps for mobile devices and web presentation.
+					Soon this functionality will be used the by the MapTiler (<a href="//www.maptiler.com">http://www.maptiler.com</a>) to simplify the transformation or existing raster geodata and images into Google Maps and OGC WMTS compatible tiles. MapTiler is the easiest way how to prepare custom maps for mobile devices and web presentation.
 				</p>
 				<p>
-					Georeferencer (<a href="http://www.klokantech.com/georeferencer/">http://www.klokantech.com/georeferencer/</a>), the online service for turning scanned maps into geodata in a web browser, will soon utilize EPSG.io service as well - allowing a user-friendly selection of any coordinate system and map projection during the georeferencing process.
+					Georeferencer (<a href="//www.klokantech.com/georeferencer/">http://www.klokantech.com/georeferencer/</a>), the online service for turning scanned maps into geodata in a web browser, will soon utilize EPSG.io service as well - allowing a user-friendly selection of any coordinate system and map projection during the georeferencing process.
 				</p>
 				<p>
 					The EPSG.io website is built around the official EPSG database maintained by OGP Geomatics Committee (<a href="http://www.epsg.org/">http://www.epsg.org/</a>). The database comprises of very detailed geodetic parameters from a range of sources and authorities. EPSG.io simplifies access to exact parameters for thousands of spatial reference systems, transformations and conversions, datums, ellipsoids, meridians, units, etc.
@@ -68,13 +68,13 @@
 				The web supports OpenSearch protocol. In Chrome web browser it is possible to type into address bar "epsg.io" then <tab> and your search phrase. Firefox can add the system to the list of supported search engines as well. Web site is available as Google Chrome OS application (<a href="http://goo.gl/frnJxu">http://goo.gl/frnJxu</a>). The website availability and performance is improved by a CDN with over 20 caching servers worldwide.
 				</p>
 				<p>
-					The initial version of this open-source project has been developed by the Moravian Library in Brno, Czech Republic (<a href="http://www.mzk.cz/">http://www.mzk.cz/</a>) thanks to support from the Programme of Applied Research and Development of the National and Cultural Identity (NAKI) from the Ministry of Culture of the Czech Republic, project No. DF11P01OVV003 - TEMAP - Technology for access to Czech map collections: methodology and software for protection and re-use of national cartographic heritage (<a href="http://www.temap.cz/en/">http://www.temap.cz/en/</a>).
+					The initial version of this open-source project has been developed by the Moravian Library in Brno, Czech Republic (<a href="//www.mzk.cz/">http://www.mzk.cz/</a>) thanks to support from the Programme of Applied Research and Development of the National and Cultural Identity (NAKI) from the Ministry of Culture of the Czech Republic, project No. DF11P01OVV003 - TEMAP - Technology for access to Czech map collections: methodology and software for protection and re-use of national cartographic heritage (<a href="//www.temap.cz/en/">http://www.temap.cz/en/</a>).
 				</p>
 				<p>
 					<h4>The main features</h4>
 					<ul>
 						<li>Fulltext search for the complete database of coordinate systems from EPSG</li>
-						<li>Short rememberable URLs, i.e. <a href="http://epsg.io/4326">http://epsg.io/4326</a></li>
+						<li>Short rememberable URLs, i.e. <a href="//epsg.io/4326">http://epsg.io/4326</a></li>
 						<li>Type GPS latitude/longitude and get projected coordinates or vice versa</li>
 						<li>Precise numerical location on a map / aerial photo for any place on the planet</li>
 						<li>Export definitions in various formats, including WKT, OGC GML, XML, Proj.4, SQL, JS, etc.</li>
@@ -155,10 +155,10 @@
 
        <div id="foot">
          <p id="klokan-logo">
-           <a href="http://www.klokantech.com/" title=""><img src="./img/klokan-logo-grey.png" alt="" /></a>
+           <a href="//www.klokantech.com/" title=""><img src="./img/klokan-logo-grey.png" alt="" /></a>
 		 </p>
          <p id="mzk-logo">
-           <a href="http://www.mzk.cz/" title=""><img src="./img/hzk-logo.png" alt="" /></a>
+           <a href="//www.mzk.cz/" title=""><img src="./img/hzk-logo.png" alt="" /></a>
          </p>
          <p>Find a coordinate system and get position on a map. Powered by EPSG database {{version}}</p>
          <p id="copyright">Copyright &copy; 2015</p>
