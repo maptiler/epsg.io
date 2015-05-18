@@ -708,8 +708,8 @@ def index(id):
             g_coords = str(s) + "," + str(w) + "|" + str(n) + "," + str(w) + "|" + str(n) + "," + str(e) + "|" + str(s) + "," + str(e) + "|" + str(s) + "," + str(w)
     # if it CRS (not transformation)
     if str(item['kind']).startswith('CRS'):
+      url_format = "/"+str(item['code'])
       if wkt:
-        url_format = "/"+str(item['code'])
         if default_trans:
           # if the actual transformation is different code then basic transformation and basic transformation is not 0 (geodetic systems hasnt got any transformation (4326 - not showing link 4326-4326))
           if int(default_trans['code']) != int(item['code_trans']) and int(item['code_trans']) != 0:
