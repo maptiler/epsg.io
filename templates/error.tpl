@@ -7,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="keywords" content="EPSG.io" />
     <meta name="robots" content="ALL,FOLLOW" />
-    <meta property="og:image" content="http://epsg.io/img/epsg-banner-440x280-2.png"/>
+    <meta property="og:image" content="//epsg.io/img/epsg-banner-440x280-2.png"/>
     <link rel="stylesheet" href="/css/main.css" type="text/css" />
     <link rel="shortcut icon" href="/favicon.ico" />
 
@@ -29,7 +29,7 @@
  <body id="errorpage" data-role="page">
    <div id="head">
      <p id="logo-container">
-       <a href="http://epsg.io" title=""><span>Epsg.io</span> Coordinate Systems Worldwide</a>
+       <a href="//epsg.io" title=""><span>Epsg.io</span> Coordinate Systems Worldwide</a>
      </p>
      <ul id="menu-top">
        <li><a href="/about" title="">About</a></li>
@@ -47,7 +47,7 @@
       %if try_url:
         <h2>Try to searching below or go to <a href="{{try_url}}">GML</a></h2>
       %else:
-        <h2>Try to searching below or go to <a href="http://epsg.io">epsg.io</a></h2>
+        <h2>Try to searching below or go to <a href="//epsg.io">epsg.io</a></h2>
       %end
      
      <div id="error-content-container">
@@ -76,10 +76,10 @@
 
       <div id="foot">
 		<p id="klokan-logo">
-          <a href="http://www.klokantech.com/" title=""><img src="./img/klokan-logo-grey.png" alt="" /></a>
+          <a href="//www.klokantech.com/" title=""><img src="./img/klokan-logo-grey.png" alt="" /></a>
         </p>
         <p id="mzk-logo">
-          <a href="http://www.mzk.cz/" title=""><img src="./img/hzk-logo.png" alt="" /></a>
+          <a href="//www.mzk.cz/" title=""><img src="./img/hzk-logo.png" alt="" /></a>
         </p>
         <p>Find a coordinate system and get position on a map. Powered by EPSG database {{version}}</p>
         <p id="copyright">Copyright &copy; 2015</p>

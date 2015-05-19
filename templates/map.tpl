@@ -9,7 +9,7 @@
         <meta name="keywords" content="EPSG.io" />
         <meta name="robots" content="ALL,FOLLOW" />
         <link rel="stylesheet" href="/css/main.css" type="text/css" />
-        <link rel="shortcut icon" href="http://epsg.io/favicon.ico" />
+        <link rel="shortcut icon" href="//epsg.io/favicon.ico" />
         <link rel="search" href="/opensearch.xml" title="EPSG.io" type="application/opensearchdescription+xml"/>
         <script src="https://maps.googleapis.com/maps/api/js?sensor=false&amp;libraries=places"></script>
         <script src="/js/ZeroClipboard.min.js"></script>
@@ -21,7 +21,7 @@
         <div id="head">
             <div id="head-top">
                 <p id="logo-container">
-                    <a href="http://epsg.io" title=""><span>Epsg.io</span> Coordinate Systems Worldwide</a>
+                    <a href="//epsg.io" title=""><span>Epsg.io</span> Coordinate Systems Worldwide</a>
                 </p>
                 <ul id="menu-top">
                     <li><a href="/about" title="">About</a></li>
@@ -44,8 +44,8 @@
                 <div id="mc-info-container">
                     <h1>EPSG:{{code}} {{name}}</h1>
                     <p>
-                        <a href="http://epsg.io/" title="">Change coordinate system</a>
-                        <a class="right" href="http://epsg.io/{{code}}" title="">Show details</a>
+                        <a href="//epsg.io/" title="">Change coordinate system</a>
+                        <a class="right" href="//epsg.io/{{code}}" title="">Show details</a>
                     </p>
                 </div>
                 <div id="copy-clipboard-container">
