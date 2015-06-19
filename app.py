@@ -1482,7 +1482,14 @@ def index():
 			export["x"] = trans_lat
 			export["y"] = trans_lon
 			export["z"] = trans_h
-    return jsonResponse(export, None if callback == str(0) else callback)
+    json_str = export
+    response['Content-Type'] = "text/json"
+    if callback != str(0):
+        json_str = str(callback) + "(" + json.dumps(json_str) + ")"
+        response['Content-Type'] = "application/javascript"
+        return json_str
+
+    return json.dumps(json_str)
 
 @error(code=404)
 def error404(error):
