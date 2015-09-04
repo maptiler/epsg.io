@@ -518,7 +518,13 @@ def index(id):
     query = "code:" + code + " kind:CRS OR kind:COORDOP" #1068-datum, 1068-area,1068 (transformation)
     myquery = parser.parse(query)
     results = searcher.search(myquery, limit=None) #default limit is 10 , reverse = True
-
+    
+    # For no result, better error message
+    if len(results) == 0:
+      error = 404
+      try_url= ""
+      return template('./templates/error', error=error, try_url=try_url, version=VERSION)	
+    
     detail = []
     trans_unsorted = []
     trans = []
