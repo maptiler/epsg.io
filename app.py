@@ -1240,7 +1240,7 @@ def index(id, format):
           center = (n-s)/2.0+s, (w+180 + (360-(w+180)+e+180) / 2.0 ) % 360-180
       else:
 	    center = 0,0
-      return template ('./templates/map', name=rname, code=rcode, center=center, bbox=mbbox)
+      return template ('./templates/map', name=rname, code=rcode, url_coords=url_coords, center=center, bbox=mbbox)
 
     ref.ImportFromWkt(wkt)
     ct = "text/plain"

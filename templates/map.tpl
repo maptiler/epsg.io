@@ -45,7 +45,7 @@
                     <h1>EPSG:{{code}} {{name}}</h1>
                     <p>
                         <a href="//epsg.io/" title="">Change coordinate system</a>
-                        <a class="right" href="//epsg.io/{{code}}" title="">Show details</a>
+                        <a class="right" href="//epsg.io/{{url_coords}}" title="">Show details</a>
                     </p>
                 </div>
                 <div id="copy-clipboard-container">
@@ -62,6 +62,6 @@
         </div>
     <script type="text/javascript">
     
-map_init('{{code}}', {{bbox}}, {{center[1]}}, {{center[0]}});</script>
+map_init('{{url_coords}}', {{bbox}}, {{center[1]}}, {{center[0]}});</script>
     </body>
 </html>
