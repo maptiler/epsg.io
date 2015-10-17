@@ -16,4 +16,4 @@ RUN pip install -q -r requirements.txt
 
 EXPOSE 8080
 
-CMD gunicorn --workers 4 --bind 127.0.0.1:8080 --log-level info app:app
+CMD gunicorn --workers 4 --bind 0.0.0.0:8080 --log-level info app:app
