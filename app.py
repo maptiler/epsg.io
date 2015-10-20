@@ -53,6 +53,7 @@ import bottle
 from bottle import route, run, template, request, response, static_file, redirect, error
 import urllib2
 import urllib
+import urlparse
 import sys
 import os
 from whoosh.index import open_dir
@@ -1348,24 +1349,24 @@ def index():
   single_points = []
   ix = open_dir(INDEX, readonly=True)
 
-  x = float(request.GET.get('x',0))
-  y = float(request.GET.get('y',0))
-  z = float(request.GET.get('z',0))
-  data = request.query_string
-  s_srs = request.GET.get('s_srs',4326)
-  t_srs = request.GET.get('t_srs',4326)
-  callback = str(request.GET.get('callback',0))
+  query_string = request.query_string.replace(';', '%3B')
+  params = urlparse.parse_qs(query_string)
+
+  x = float(params.get('x',[0])[0])
+  y = float(params.get('y',[0])[0])
+  z = float(params.get('z',[0])[0])
+
+  s_srs = params.get('s_srs',[4326])[0]
+  t_srs = params.get('t_srs',[4326])[0]
+  callback = str(params.get('callback',[0])[0])
 
   #print x,y,z,s_srs,t_srs,callback
   scode, scode_trans = (str(s_srs)+'-0').split('-')[:2]
   tcode, tcode_trans = (str(t_srs)+'-0').split('-')[:2]
   ref = osr.SpatialReference()
-  if data == "data=":
-	data = ""
 
-  if data.startswith("data="):
-	data = data.replace('data=','').replace("s_srs="+str(s_srs),"").replace("t_srs="+str(t_srs),"").replace("callback="+callback,"").replace("&","")
-	single_points = data.split(';')
+  if 'data' in params:
+	single_points = params['data'][0].split(';')
 	one_point = False
   else:
 	one_point = True
