@@ -341,9 +341,10 @@ def index():
       wkt = ""
       url_map = ""
       if r['kind'].startswith("CRS"):
-        ref.ImportFromEPSG(int(short_code[0]))
+        ref_code = ref.ImportFromEPSG(int(short_code[0]))
         wkt = ref.ExportToWkt()
-        if wkt and r['bbox']:
+        # e.g. epsg::5225 has wkt with towgs84 but not function in /map and raise error in OGR => ref_code = 0 (withnout error)
+        if r['bbox'] and ref_code == 0:
           # a = ref.ImportFromWkt(r['wkt'])
           # if a == 0:
           url_map = "/" + r['code']+ "/map"
@@ -1179,7 +1180,7 @@ def index(id, format):
       for b in bbox:
         mbbox.append(b)
 
-      ref.ImportFromEPSG(int(rcode))
+      ref_code = ref.ImportFromEPSG(int(rcode))
       wkt = ref.ExportToWkt()
 
       type_epsg = "EPSG"
@@ -1233,7 +1234,8 @@ def index(id, format):
             wkt = ref.ExportToWkt().decode('utf-8')
 
     # One of the formats is a map (because /coordinates/ was redirect on /coordinates and then catch by <format>)
-    if format == "/map":
+    # epsg::5225 has wkt with towgs84 but not function in map and raise error in OGR => ref_code = 0 (withnout error)
+    if format == "/map"  and ref_code == 0:
       if bbox:
         n, w, s, e = bbox
         center = (n-s)/2.0 + s, (e-w)/2.0 + w
@@ -1242,6 +1244,10 @@ def index(id, format):
       else:
 	    center = 0,0
       return template ('./templates/map', name=rname, code=rcode, url_coords=url_coords, center=center, bbox=mbbox)
+    else:
+      error = 404
+      try_url= ""
+      return template('./templates/error', error=error, try_url=try_url, version=VERSION)	
 
     ref.ImportFromWkt(wkt)
     ct = "text/plain"
