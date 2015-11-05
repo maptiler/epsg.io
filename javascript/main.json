@@ -1,8 +1,8 @@
 {
   "id": "main",
 
-  "inputs": "main.js",
-  "paths": ['.'],
+  "inputs": "src/main.js",
+  "paths": ["src"],
 
   "externs": [
     "//google_maps_api_v3.js"
