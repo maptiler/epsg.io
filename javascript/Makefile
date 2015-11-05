@@ -9,6 +9,10 @@ all: build
 plovr: $(PLOVR)
 $(PLOVR):
 	wget --no-check-certificate https://github.com/bolinfest/plovr/releases/download/v$(PLOVR_VERSION)/plovr.jar
+ol3-init:
+	git submodule init
+	git submodule update
+	cd ol3 && npm install
 
 # build
 .PHONY: build

@@ -29,7 +29,7 @@
             </div>
             <div id="search-lat-lg-container">
                 <div id="search-container">
-                    <p><input type="search" name="geocoder" id="geocoder" placeholder="Place or address" /> <input type="submit" name="send" value="search" /></p>
+                    <p><form><input type="search" name="geocoder" id="geocoder" placeholder="Place or address" /> <input type="submit" name="send" value="search" /></form></p>
                 </div>
                 <div id="lat-lg-container">
                     <form id="lonlat_form" method="post" action="#">

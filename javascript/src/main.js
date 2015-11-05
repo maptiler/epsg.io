@@ -1,9 +1,9 @@
 goog.provide('epsg.io');
 
 goog.require('goog.array');
+goog.require('goog.dom.classlist');
 goog.require('goog.events');
 goog.require('goog.events.EventType');
-goog.require('goog.dom.classlist');
 goog.require('goog.net.Jsonp');
 goog.require('goog.style');
 

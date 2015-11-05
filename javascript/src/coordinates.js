@@ -11,6 +11,12 @@ goog.provide('epsg.io.Coordinates');
 goog.require('goog.Timer');
 goog.require('goog.dom');
 goog.require('goog.net.Jsonp');
+goog.require('kt.Nominatim');
+goog.require('ol.Map');
+goog.require('ol.View');
+goog.require('ol.extent');
+goog.require('ol.layer.Tile');
+goog.require('ol.source.MapQuest');
 
 
 /**
@@ -56,9 +62,11 @@ epsg.io.Coordinates = function(srs, bbox, opt_lon, opt_lat) {
   this.eastNorthFormElement = goog.dom.getElement('eastnorth_form');
   this.eastNorthCopyElement = goog.dom.getElement('eastnorth_copy');
 
+  this.lonLatMutex = false;
+
   // Force preservation of user typed values on recalculation
-  this.forceLonLat = false;
-  this.forceEastNorth = false;
+  this.keepLonLat = false;
+  this.keepEastNorth = false;
 
   /**
    * @type {?number}
@@ -72,125 +80,92 @@ epsg.io.Coordinates = function(srs, bbox, opt_lon, opt_lat) {
    */
   this.jsonp_ = new goog.net.Jsonp(epsg.io.TRANS_SERVICE_URL);
 
-  var latlng = new google.maps.LatLng(this.lat_, this.lon_);
-  // BoundingBox
-  var swlatlng = new google.maps.LatLng(bbox[2], bbox[1]);
-  var nelatlng = new google.maps.LatLng(bbox[0], bbox[3]);
-  var bounds = new google.maps.LatLngBounds(swlatlng, nelatlng);
-  var myOptions = {
+  this.view_ = new ol.View({
+    center: ol.proj.fromLonLat([this.lon_, this.lat_]),
     zoom: 8,
-    center: latlng,
-    tilt: 0,
-    mapTypeId: google.maps.MapTypeId.ROADMAP,
-    disableDefaultUI: true,
-    zoomControl: true,
-    zoomControlOptions: {
-      // style: google.maps.ZoomControlStyle.SMALL,
-      position: google.maps.ControlPosition.LEFT_CENTER
-    },
-    mapTypeControl: true,
-    mapTypeControlOptions: {
-      style: google.maps.MapTypeControlStyle.DROPDOWN_MENU,
-      position: google.maps.ControlPosition.RIGHT_BOTTOM
-    }
-  };
+    maxZoom: 18
+  });
 
-  this.map = new google.maps.Map(this.mapElement, myOptions);
+  this.map = new ol.Map({
+    target: this.mapElement,
+    view: this.view_,
+    layers: [
+      new ol.layer.Tile({
+        source: new ol.source.MapQuest({layer: 'osm'})
+      })
+    ]
+  });
 
-  //this.map.setCenter(bounds.getCenter());
-  this.map.fitBounds(bounds);
-  this.map.setCenter(latlng);
-  google.maps.event.addListener(this.map, 'center_changed',
-      goog.bind(function() {
-        var pos = this.map.getCenter();
-        var latitude_element = this.latitudeElement;
-        var longitude_element = this.longitudeElement;
-        this.lat_ = pos.lat();
-        this.lon_ = pos.lng();
-        if (!this.forceLonLat) {
-          latitude_element.value = this.lat_;
-          longitude_element.value = this.lon_;
-        } else {
-          this.forceLonLat = false;
-        }
-        if (!this.forceEastNorth) {
-          this.makeQuery();
-        } else {
-          this.forceEastNorth = false;
-        }
-      }, this));
+  var size = this.map.getSize();
+  if (size) {
+    this.view_.fit(
+        ol.proj.transformExtent([bbox[1], bbox[2], bbox[3], bbox[0]],
+        'EPSG:4326', 'EPSG:3857'), size);
+  }
 
+  this.updateLonLat_([this.lon_, this.lat_]);
 
-  this.map.setCenter(latlng);
+  this.view_.on('change:center', function(e) {
+    var pos = ol.proj.toLonLat(this.view_.getCenter());
+    this.updateLonLat_(pos);
+  }, this);
+
 
   // The user can type latitude / longitude and hit Enter
   goog.events.listen(this.lonlatFormElement, goog.events.EventType.SUBMIT,
-      goog.bind(function(e) {
-        e.preventDefault();
+      function(e) {
         var latitude = goog.string.toNumber(this.latitudeElement.value);
         var longitude = goog.string.toNumber(this.longitudeElement.value);
-        if (isNaN(latitude) || isNaN(longitude)) return;
-        this.lat_ = latitude;
-        this.lon_ = longitude;
-        var newlatlng = new google.maps.LatLng(latitude, longitude);
-        this.forceLonLat = true;
-        this.map.setCenter(newlatlng);
-      }, this));
+        if (!isNaN(latitude) && !isNaN(longitude)) {
+          this.keepLonLat = true;
+          this.updateLonLat_([longitude, latitude]);
+          this.keepLonLat = false;
+        }
+        e.preventDefault();
+      }, false, this);
 
   // The user can type easting / northing and hit Enter
   goog.events.listen(this.eastNorthFormElement, goog.events.EventType.SUBMIT,
-      goog.bind(function(e) {
-        e.preventDefault();
+      function(e) {
         var easting = goog.string.toNumber(this.eastingElement.value);
         var northing = goog.string.toNumber(this.northingElement.value);
-        if (isNaN(easting) || isNaN(northing)) return;
-        this.east_ = easting;
-        this.north_ = northing;
-        // Make the query to epsg.io/trans to get new lat/lon
-        this.latitudeElement.value = '';
-        this.longitudeElement.value = '';
-        this.jsonp_.send({
-          'x': this.east_, 'y': this.north_, 's_srs': this.srs_
-        }, goog.bind(function(result) {
-          var latitude = goog.string.toNumber(result['y']);
-          var longitude = goog.string.toNumber(result['x']);
-          var newlatlng = new google.maps.LatLng(latitude, longitude);
-          this.latitudeElement.value = latitude;
-          this.longitudeElement.value = longitude;
-          this.forceEastNorth = true;
-          this.forceLonLat = true;
-          this.map.setCenter(newlatlng);
-        }, this));
-      }, this));
-
-
-  // Geocoder via Places Search Box
-  var searchbox = new google.maps.places.SearchBox(this.geocoderElement);
-
-  google.maps.event.addListener(searchbox, 'places_changed',
-      goog.bind(function() {
-        var place = searchbox.getPlaces()[0];
-        if (!place.geometry) {
-          // on Enter key we can't help the user
-          return;
+        if (!isNaN(easting) && !isNaN(northing)) {
+          this.east_ = easting;
+          this.north_ = northing;
+          // Make the query to epsg.io/trans to get new lat/lon
+          this.latitudeElement.value = '';
+          this.longitudeElement.value = '';
+          this.jsonp_.send({
+            'x': this.east_,
+            'y': this.north_,
+            's_srs': this.srs_
+          }, goog.bind(function(result) {
+            var latitude = goog.string.toNumber(result['y']);
+            var longitude = goog.string.toNumber(result['x']);
+            this.keepEastNorth = true;
+            this.updateLonLat_([longitude, latitude]);
+            this.keepEastNorth = false;
+          }, this));
         }
-        this.geocoderElement.value = '';
-        // If the place has a geometry, then present it on a map.
-        if (place.geometry.viewport) {
-          this.map.fitBounds(place.geometry.viewport);
-        } else {
-          this.map.setZoom(17);
-        }
-        this.map.setCenter(place.geometry.location);
-      }, this));
+        e.preventDefault();
+      }, false, this);
 
-  // Bias the SearchBox results towards places that are within the bounds of the
-  // current map's viewport.
-  google.maps.event.addListener(this.map, 'bounds_changed',
-      goog.bind(function() {
-        var bounds = this.map.getBounds();
-        searchbox.setBounds(bounds);
-      }, this));
+  if (this.geocoderElement) {
+    var nominatim = new kt.Nominatim(this.geocoderElement,
+        'http://nominatim.klokantech.com/');
+    nominatim.registerCallback(goog.bind(function(bnds) {
+      this.geocoderElement.value = '';
+      var size = this.map.getSize();
+      if (size && ol.extent.getArea(bnds) > 1e-5) {
+        this.view_.fit(
+            ol.proj.transformExtent(bnds, 'EPSG:4326', 'EPSG:3857'), size);
+      } else {
+        this.view_.setCenter(ol.proj.fromLonLat(ol.extent.getCenter(bnds)));
+        this.view_.setZoom(15);
+      }
+    }, this));
+  }
+
 
   // ZeroClipboard initialization
   var ZeroClipboard = window['ZeroClipboard'];
@@ -227,11 +202,33 @@ epsg.io.Coordinates.prototype.makeQuery = function() {
   //   but wait for 500 ms if the user doesn't make a new one.
   this.queryTimer_ = goog.Timer.callOnce(function() {
     var data = { 'x': this.lon_, 'y': this.lat_, 't_srs': this.srs_ };
-    if (this.srs_ == '4326') // no need to transform
+    if (this.srs_ == '4326') {// no need to transform
       this.showResult(data);
-    else
+    } else {
       this.jsonp_.send(data, goog.bind(this.showResult, this));
+    }
   }, 500, this);
+};
+
+
+/**
+ * @param {ol.Coordinate} lonlat
+ * @private
+ */
+epsg.io.Coordinates.prototype.updateLonLat_ = function(lonlat) {
+  if (this.lonLatMutex) return;
+  this.lonLatMutex = true;
+  this.lat_ = lonlat[1];
+  this.lon_ = lonlat[0];
+  if (!this.keepLonLat) {
+    this.latitudeElement.value = this.lat_;
+    this.longitudeElement.value = this.lon_;
+  }
+  if (!this.keepEastNorth) {
+    this.makeQuery();
+  }
+  this.view_.setCenter(ol.proj.fromLonLat([this.lon_, this.lat_]));
+  this.lonLatMutex = false;
 };
 
 
@@ -241,7 +238,7 @@ epsg.io.Coordinates.prototype.makeQuery = function() {
  */
 epsg.io.Coordinates.prototype.showResult = function(result) {
 
-  if (!this.forceEastNorth) {
+  if (!this.keepEastNorth) {
     // SHOW THE RESULT
     this.eastingElement.value = result.x;
     this.northingElement.value = result.y;
