@@ -1,0 +1,11 @@
+{
+  "id": "map",
+  "inherits": "base.json",
+
+  "inputs": "src/map.js",
+  "paths": ["src"],
+
+  "externs": [
+    "//externs/maps/google_maps_api_v3.js"
+  ]
+}

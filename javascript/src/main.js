@@ -1,7 +1,8 @@
 goog.provide('epsg.io');
 
-goog.require('epsg.io.Coordinates');
 goog.require('goog.array');
+goog.require('goog.events');
+goog.require('goog.events.EventType');
 goog.require('goog.dom.classlist');
 goog.require('goog.net.Jsonp');
 goog.require('goog.style');
@@ -141,19 +142,7 @@ epsg.io.detail_init = function() {
 };
 
 
-/**
- * The Map page javascript
- * @param {!string} srs Spatial Reference System (usually EPSG code)
- * @param {Array.<number>} bbox [n,w,s,e]
- * @param {number=} opt_lon Longitude of map center (defaults to 0)
- * @param {number=} opt_lat Latitude of map center (defaults to 0)
- */
-epsg.io.map_init = function(srs, bbox, opt_lon, opt_lat) {
-  new epsg.io.Coordinates(srs, bbox, opt_lon, opt_lat);
-};
-
 
 goog.exportSymbol('home_init', epsg.io.home_init);
 goog.exportSymbol('results_init', epsg.io.results_init);
 goog.exportSymbol('detail_init', epsg.io.detail_init);
-goog.exportSymbol('map_init', epsg.io.map_init);

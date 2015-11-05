@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"  lang="en" xml:lang="en">
-    <head>    
+    <head>
         <meta charset="utf-8"/>
         <title>WGS84 and {{name}} - transform coordinates for position on a map - converting latitude / longitude degrees</title>
         <meta content="width=device-width, initial-scale=1, maximum-scale=1" name="viewport" />
@@ -13,7 +13,7 @@
         <link rel="search" href="/opensearch.xml" title="EPSG.io" type="application/opensearchdescription+xml"/>
         <script src="https://maps.googleapis.com/maps/api/js?sensor=false&amp;libraries=places"></script>
         <script src="/js/ZeroClipboard.min.js"></script>
-        <script src="/js/index.js"></script>
+        <script src="/js/map.js"></script>
     </head>
     <body id="mappage" data-role="page">
         <div id="map"></div>
@@ -61,7 +61,6 @@
             </div>
         </div>
     <script type="text/javascript">
-    
-map_init('{{url_coords}}', {{bbox}}, {{center[1]}}, {{center[0]}});</script>
+      map_init('{{url_coords}}', {{bbox}}, {{center[1]}}, {{center[0]}});</script>
     </body>
 </html>

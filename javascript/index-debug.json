@@ -1,0 +1,10 @@
+{
+  "id": "index-debug",
+  "inherits": "index.json",
+
+  "define": {
+    "goog.DEBUG": true
+  },
+  "pretty-print": true,
+  "debug": true
+}

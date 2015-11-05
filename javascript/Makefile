@@ -12,17 +12,17 @@ $(PLOVR):
 
 # build
 .PHONY: build
-build: ../js/index.js
+build: ../js/index.js ../js/map.js
 ../js/%.js: %.json
 	java -jar $(PLOVR) build $< > $@
 
 # development
 .PHONY: serve
 serve:
-	java -jar $(PLOVR) serve *.json
+	java -jar $(PLOVR) serve *-debug.json
 .PHONY: webserver
 webserver:
-	python -m SimpleHTTPServer
+	cd .. && python -m SimpleHTTPServer
 .PHONY: lint
 lint:
 	fixjsstyle --strict -r src
