@@ -2,7 +2,7 @@ goog.provide('epsg.io');
 
 goog.require('epsg.io.Coordinates');
 goog.require('goog.array');
-goog.require('goog.dom.classes');
+goog.require('goog.dom.classlist');
 goog.require('goog.net.Jsonp');
 goog.require('goog.style');
 
@@ -117,10 +117,10 @@ epsg.io.detail_init = function() {
     var future_code = goog.dom.getElement(future_switcher.id + '_code');
     var old_switcher = goog.dom.getElementByClass('switcher_selected');
     var old_code = goog.dom.getElementByClass('code_visible');
-    goog.dom.classes.remove(old_switcher, 'switcher_selected');
-    goog.dom.classes.remove(old_code, 'code_visible');
-    goog.dom.classes.add(future_switcher, 'switcher_selected');
-    goog.dom.classes.add(future_code, 'code_visible');
+    goog.dom.classlist.remove(old_switcher, 'switcher_selected');
+    goog.dom.classlist.remove(old_code, 'code_visible');
+    goog.dom.classlist.add(future_switcher, 'switcher_selected');
+    goog.dom.classlist.add(future_code, 'code_visible');
   };
   goog.array.forEach(goog.dom.getElementsByClass('switcher'), function(e) {
     goog.events.listen(e, goog.events.EventType.CLICK, switcherClicked);

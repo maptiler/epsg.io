@@ -1,11 +1,11 @@
 {
-  "id": "main",
+  "id": "index",
 
   "inputs": "src/main.js",
   "paths": ["src"],
 
   "externs": [
-    "//google_maps_api_v3.js"
+    "//externs/maps/google_maps_api_v3.js"
   ],
 
   "define": {
