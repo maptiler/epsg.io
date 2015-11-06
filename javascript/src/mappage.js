@@ -6,7 +6,7 @@
  * All rights reserved.
  */
 
-goog.provide('epsg.io.Coordinates');
+goog.provide('epsg.io.MapPage');
 
 goog.require('goog.Timer');
 goog.require('goog.dom');
@@ -28,14 +28,13 @@ epsg.io.TRANS_SERVICE_URL = '//epsg.io/trans';
 
 
 /**
- * The main Coordinates object
  * @param {!string} srs Spatial Reference System (usually EPSG code)
  * @param {Array.<number>} bbox [n,w,s,e]
  * @param {number=} opt_lon Longitude of map center (defaults to 0)
  * @param {number=} opt_lat Latitude of map center (defaults to 0)
  * @constructor
  */
-epsg.io.Coordinates = function(srs, bbox, opt_lon, opt_lat) {
+epsg.io.MapPage = function(srs, bbox, opt_lon, opt_lat) {
 
   // srs
   this.srs_ = srs || '4326';
@@ -186,7 +185,7 @@ epsg.io.Coordinates = function(srs, bbox, opt_lon, opt_lat) {
  * The throttled call for the coordinates transformation via JSONP
  * @protected
  */
-epsg.io.Coordinates.prototype.makeQuery = function() {
+epsg.io.MapPage.prototype.makeQuery = function() {
 
   this.eastingElement.value = '';
   this.northingElement.value = '';
@@ -215,7 +214,7 @@ epsg.io.Coordinates.prototype.makeQuery = function() {
  * @param {ol.Coordinate} lonlat
  * @private
  */
-epsg.io.Coordinates.prototype.updateLonLat_ = function(lonlat) {
+epsg.io.MapPage.prototype.updateLonLat_ = function(lonlat) {
   if (this.lonLatMutex) return;
   this.lonLatMutex = true;
   this.lat_ = lonlat[1];
@@ -236,7 +235,7 @@ epsg.io.Coordinates.prototype.updateLonLat_ = function(lonlat) {
  * Display results
  * @param {Object} result
  */
-epsg.io.Coordinates.prototype.showResult = function(result) {
+epsg.io.MapPage.prototype.showResult = function(result) {
 
   if (!this.keepEastNorth) {
     // SHOW THE RESULT
@@ -247,3 +246,5 @@ epsg.io.Coordinates.prototype.showResult = function(result) {
   // Stop the timer
   this.queryTimer_ = null;
 };
+
+goog.exportSymbol('MapPage', epsg.io.MapPage);

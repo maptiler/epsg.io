@@ -61,6 +61,6 @@
             </div>
         </div>
     <script type="text/javascript">
-      map_init('{{url_coords}}', {{bbox}}, {{center[1]}}, {{center[0]}});</script>
+      new MapPage('{{url_coords}}', {{bbox}}, {{center[1]}}, {{center[0]}});</script>
     </body>
 </html>

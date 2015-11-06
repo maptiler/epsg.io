@@ -2,7 +2,7 @@
   "id": "map",
   "inherits": "base.json",
 
-  "inputs": "src/map.js",
+  "inputs": "src/mappage.js",
   "paths": ["src", "library/src", "ol3/src", "ol3/build/ol.ext"],
 
   "externs": [
