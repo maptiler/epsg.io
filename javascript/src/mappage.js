@@ -18,6 +18,8 @@ goog.require('ol.View');
 goog.require('ol.extent');
 goog.require('ol.layer.Tile');
 goog.require('ol.source.MapQuest');
+goog.require('ol.source.OSM');
+goog.require('ol.source.TileJSON');
 
 
 /**
@@ -49,6 +51,8 @@ epsg.io.MapPage = function(srs, bbox, opt_lon, opt_lat) {
   // LOAD ALL THE EXPECTED ELEMENTS ON THE PAGE
 
   this.mapElement = /** @type {!Element} */(goog.dom.getElement('map'));
+  this.mapTypeElement_ = /** @type {!HTMLSelectElement} */
+                         (goog.dom.getElement('mapType'));
 
   this.geocoderElement = /** @type {!HTMLInputElement} */
       (goog.dom.getElement('geocoder'));
@@ -87,17 +91,13 @@ epsg.io.MapPage = function(srs, bbox, opt_lon, opt_lat) {
     maxZoom: 19
   });
 
-  this.map = new ol.Map({
+  this.map_ = new ol.Map({
     target: this.mapElement,
     view: this.view_,
-    layers: [
-      new ol.layer.Tile({
-        source: new ol.source.MapQuest({layer: 'osm'})
-      })
-    ]
+    layers: []
   });
 
-  var size = this.map.getSize();
+  var size = this.map_.getSize();
   if (size) {
     this.view_.fit(
         ol.proj.transformExtent([bbox[1], bbox[2], bbox[3], bbox[0]],
@@ -111,6 +111,16 @@ epsg.io.MapPage = function(srs, bbox, opt_lon, opt_lat) {
     this.updateLonLat_(pos);
   }, this);
 
+  this.parseHash_();
+
+  goog.events.listen(this.mapTypeElement_, goog.events.EventType.CHANGE,
+      function(e) {
+        this.updateMapType_();
+        this.updateHash_();
+      }, false, this);
+  this.updateMapType_();
+
+  this.keepHash = false;
 
   // The user can type latitude / longitude and hit Enter
   goog.events.listen(this.lonlatFormElement, goog.events.EventType.SUBMIT,
@@ -156,7 +166,7 @@ epsg.io.MapPage = function(srs, bbox, opt_lon, opt_lat) {
         'http://nominatim.klokantech.com/');
     nominatim.registerCallback(goog.bind(function(bnds) {
       this.geocoderElement.value = '';
-      var size = this.map.getSize();
+      var size = this.map_.getSize();
       if (size && ol.extent.getArea(bnds) > 1e-5) {
         this.view_.fit(
             ol.proj.transformExtent(bnds, 'EPSG:4326', 'EPSG:3857'), size);
@@ -179,9 +189,32 @@ epsg.io.MapPage = function(srs, bbox, opt_lon, opt_lat) {
             this.northingElement.value;
         client['setText'](eastNorthText);
       }, this));
+};
 
-  this.parseHash_();
-  this.keepHash = false;
+
+/**
+ * @private
+ */
+epsg.io.MapPage.prototype.updateMapType_ = function() {
+  var newLayers = [];
+  var src;
+
+  var tilejson = this.mapTypeElement_.options[
+      this.mapTypeElement_.selectedIndex].getAttribute('data-tilejson');
+  if (tilejson) {
+    src = new ol.source.TileJSON({url: tilejson});
+  } else {
+    var mapType = this.mapTypeElement_.value;
+    if (mapType == 'mqosm') {
+      src = new ol.source.MapQuest({layer: 'osm'});
+    } else if (mapType == 'osm') {
+      src = new ol.source.OSM();
+    }
+  }
+  newLayers = [new ol.layer.Tile({source: src})];
+
+  this.map_.getLayerGroup().setLayers(new ol.Collection(newLayers));
+  this.map_.updateSize();
 };
 
 
@@ -253,6 +286,13 @@ epsg.io.MapPage.prototype.updateHash_ = function() {
   qd.set('lon', this.lon_.toFixed(6));
   qd.set('lat', this.lat_.toFixed(6));
   qd.set('z', this.view_.getZoom());
+
+  var layer = this.mapTypeElement_.value;
+  if (layer != 'mqosm') {
+    // do not include default value to shorten the url
+    qd.set('layer', this.mapTypeElement_.value);
+  }
+
   window.location.hash = qd.toString();
 };
 
@@ -263,12 +303,17 @@ epsg.io.MapPage.prototype.updateHash_ = function() {
 epsg.io.MapPage.prototype.parseHash_ = function() {
   var qd = new goog.Uri.QueryData(window.location.hash.substr(1));
   var lon = parseFloat(qd.get('lon')), lat = parseFloat(qd.get('lat'));
-  var z = parseInt(qd.get('z'), 10);
   if (goog.math.isFiniteNumber(lon) && goog.math.isFiniteNumber(lat)) {
     this.updateLonLat_([lon, lat]);
   }
+  var z = parseInt(qd.get('z'), 10);
   if (goog.math.isFiniteNumber(z)) {
     this.view_.setZoom(z);
+  }
+  var layer = qd.get('layer');
+  if (layer) {
+    this.mapTypeElement_.value = /** @type {string} */(layer);
+    this.updateMapType_();
   }
 };
 

@@ -17,6 +17,12 @@
     </head>
     <body id="mappage" data-role="page">
         <div id="map"></div>
+        <select id="mapType">
+          <option value="mqosm">OSM MapQuest</option>
+          <option value="osm">OSM</option>
+          <option value="streets" data-tilejson="http://api.tiles.mapbox.com/v3/klokantech.icij6jpi.jsonp">MapBox Streets</option>
+          <option value="satellite" data-tilejson="http://api.tiles.mapbox.com/v3/klokantech.iciigjd2.jsonp">MapBox Satellite</option>
+        </select>
         <div id="mapsight"></div>
         <div id="head">
             <div id="head-top">
