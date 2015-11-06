@@ -38,9 +38,26 @@
                     <p><form><input type="search" name="geocoder" id="geocoder" placeholder="Place or address" /> <input type="submit" name="send" value="search" /></form></p>
                 </div>
                 <div id="lat-lg-container">
-                    <form id="lonlat_form" method="post" action="#">
-                    <p id="lg"><label for="longitude">Longitude:</labeL> <input id="longitude" name="longitude" value="0" /></p>
-                    <p id="lat"><label for="latitude">Latitude:</label> <input id="latitude" name="latitude" value="0" /></p>
+                    <form id="lonlat_form" class="dec" method="post" action="#">
+                    <select id="lonlat_format">
+                      <option value="dec">Decimal</option>
+                      <option value="dm">DM</option>
+                      <option value="dms">DMS</option>
+                    </select>
+                    <p id="lg">
+                      <label for="longitude">Longitude:</label>
+                      <select id="longitude_sign"><option value="+">E</option><option value="-">W</option></select>
+                      <input id="longitude_d" value="0" />°
+                      <input id="longitude_m" class="lonlat_min" value="0" /><span class="lonlat_min">'</span>
+                      <input id="longitude_s" class="lonlat_sec" value="0" /><span class="lonlat_sec">''</span>
+                    </p>
+                    <p id="lat">
+                      <label for="latitude">Latitude:</label>
+                      <select id="latitude_sign"><option value="+">N</option><option value="-">S</option></select>
+                      <input id="latitude_d" value="0" />°
+                      <input id="latitude_m" class="lonlat_min" value="0" /><span class="lonlat_min">'</span>
+                      <input id="latitude_s" class="lonlat_sec" value="0" /><span class="lonlat_sec">''</span>
+                    </p>
                     <input type="submit" id="lonlat_submit" value="">
                     </form>
                 </div>

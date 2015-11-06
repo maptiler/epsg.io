@@ -171,13 +171,23 @@ h4, .h4 { margin: 20px 0 13px 0; padding: 0; font-size: 16px; color: #000; }
 
     #mappage #search-container { margin: 0 0 0 20px; float: left; }
 
-    #lat-lg-container { margin: 0; padding: 0; float: right; width: 458px; overflow: hidden; }
+    #lat-lg-container { margin: 0; padding: 0; float: right; overflow: hidden; }
         #lat-lg-container p { margin: 0; padding-top: 6px; float: left; height: 24px; border: solid 1px #ccc; background: #fff; }
-        #lg { padding-left: 27px; width: 202px; -webkit-border-top-left-radius: 15px; -webkit-border-bottom-left-radius: 15px; -moz-border-radius-topleft: 15px; -moz-border-radius-bottomleft: 15px;
+        #lonlat_format { float:left; padding:3px 1px; margin:4px;}
+        #lg { padding-left: 27px; width: 207px; -webkit-border-top-left-radius: 15px; -webkit-border-bottom-left-radius: 15px; -moz-border-radius-topleft: 15px; -moz-border-radius-bottomleft: 15px;
               border-top-left-radius: 15px; border-bottom-left-radius: 15px; border-right: 0; }
         #lat { padding-left: 18px; width: 207px; -webkit-border-top-right-radius: 15px; -webkit-border-bottom-right-radius: 15px; -moz-border-radius-topright: 15px; -moz-border-radius-bottomright: 15px;
               border-top-right-radius: 15px; border-bottom-right-radius: 15px; }
-        #lat-lg-container input { margin: 0; padding: 0; border: 0; width: 135px; font-size: 12px; }
+        #lonlat_form.dec input {width:110px;}
+        #lonlat_form.dm input {width:20px;}
+        #lonlat_form.dm input.lonlat_min {width:60px;}
+        #lonlat_form.dms input {width:18px;}
+        #lonlat_form.dms input.lonlat_sec {width:36px;}
+        #lonlat_form.dec #longitude_sign, #lonlat_form.dec #latitude_sign {display:none;}
+        #lonlat_form.dec .lonlat_min {display:none;}
+        #lonlat_form.dec .lonlat_sec, #lonlat_form.dm .lonlat_sec {display:none;}
+        #lat-lg-container select { font-size: 12px; background:#fff;}
+        #lat-lg-container input { margin: 0; padding: 0; border: 0; font-size: 12px; text-align:right; border-bottom:1px solid #ccc;}
         #lat-lg-container input:focus { color: #cc0000; }
         #lonlat_submit { position: absolute; left: -9999px; width: 1px; height: 1px; }
 

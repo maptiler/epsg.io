@@ -8,6 +8,7 @@
 
 goog.provide('epsg.io.MapPage');
 
+goog.require('epsg.io.DegreeFormatter');
 goog.require('goog.Timer');
 goog.require('goog.Uri.QueryData');
 goog.require('goog.dom');
@@ -57,9 +58,7 @@ epsg.io.MapPage = function(srs, bbox, opt_lon, opt_lat) {
   this.geocoderElement = /** @type {!HTMLInputElement} */
       (goog.dom.getElement('geocoder'));
 
-  this.latitudeElement = goog.dom.getElement('latitude');
-  this.longitudeElement = goog.dom.getElement('longitude');
-  this.lonlatFormElement = goog.dom.getElement('lonlat_form');
+  this.degreeFormatter = new epsg.io.DegreeFormatter();
 
   this.eastingElement = goog.dom.getElement('easting');
   this.northingElement = goog.dom.getElement('northing');
@@ -122,17 +121,11 @@ epsg.io.MapPage = function(srs, bbox, opt_lon, opt_lat) {
 
   this.keepHash = false;
 
-  // The user can type latitude / longitude and hit Enter
-  goog.events.listen(this.lonlatFormElement, goog.events.EventType.SUBMIT,
+  goog.events.listen(this.degreeFormatter, goog.events.EventType.CHANGE,
       function(e) {
-        var latitude = goog.string.toNumber(this.latitudeElement.value);
-        var longitude = goog.string.toNumber(this.longitudeElement.value);
-        if (!isNaN(latitude) && !isNaN(longitude)) {
-          this.keepLonLat = true;
-          this.updateLonLat_([longitude, latitude]);
-          this.keepLonLat = false;
-        }
-        e.preventDefault();
+        this.keepLonLat = true;
+        this.updateLonLat_(e.lonlat);
+        this.keepLonLat = false;
       }, false, this);
 
   // The user can type easting / northing and hit Enter
@@ -144,8 +137,7 @@ epsg.io.MapPage = function(srs, bbox, opt_lon, opt_lat) {
           this.east_ = easting;
           this.north_ = northing;
           // Make the query to epsg.io/trans to get new lat/lon
-          this.latitudeElement.value = '';
-          this.longitudeElement.value = '';
+          this.degreeFormatter.setLonLat(null, null);
           this.jsonp_.send({
             'x': this.east_,
             'y': this.north_,
@@ -264,8 +256,7 @@ epsg.io.MapPage.prototype.updateLonLat_ = function(lonlat) {
   this.lat_ = lonlat[1];
   this.lon_ = lonlat[0];
   if (!this.keepLonLat) {
-    this.latitudeElement.value = this.lat_;
-    this.longitudeElement.value = this.lon_;
+    this.degreeFormatter.setLonLat(this.lon_, this.lat_);
   }
   if (!this.keepEastNorth) {
     this.makeQuery();
@@ -283,8 +274,8 @@ epsg.io.MapPage.prototype.updateLonLat_ = function(lonlat) {
 epsg.io.MapPage.prototype.updateHash_ = function() {
   if (this.keepHash) return;
   var qd = new goog.Uri.QueryData();
-  qd.set('lon', this.lon_.toFixed(6));
-  qd.set('lat', this.lat_.toFixed(6));
+  qd.set('lon', this.lon_.toFixed(7));
+  qd.set('lat', this.lat_.toFixed(7));
   qd.set('z', this.view_.getZoom());
 
   var layer = this.mapTypeElement_.value;
