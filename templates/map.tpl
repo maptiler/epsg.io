@@ -11,7 +11,6 @@
         <link rel="stylesheet" href="/css/main.css" type="text/css" />
         <link rel="shortcut icon" href="//epsg.io/favicon.ico" />
         <link rel="search" href="/opensearch.xml" title="EPSG.io" type="application/opensearchdescription+xml"/>
-        <script src="https://maps.googleapis.com/maps/api/js?sensor=false&amp;libraries=places"></script>
         <script src="/js/ZeroClipboard.min.js"></script>
         <script src="/js/map.js"></script>
     </head>
