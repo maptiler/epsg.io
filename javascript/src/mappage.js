@@ -32,25 +32,34 @@ epsg.io.TRANS_SERVICE_URL = '//epsg.io/trans';
 
 
 /**
- * @param {!string} srs Spatial Reference System (usually EPSG code)
- * @param {Array.<number>} bbox [n,w,s,e]
+ * @param {string=} opt_srs Spatial Reference System (usually EPSG code)
+ * @param {Array.<number>=} opt_bbox [n,w,s,e]
  * @param {number=} opt_lon Longitude of map center (defaults to 0)
  * @param {number=} opt_lat Latitude of map center (defaults to 0)
  * @constructor
  */
-epsg.io.MapPage = function(srs, bbox, opt_lon, opt_lat) {
+epsg.io.MapPage = function(opt_srs, opt_bbox, opt_lon, opt_lat) {
 
-  // srs
-  this.srs_ = srs || '4326';
-  // lonlat - longitude and latitude
+  /**
+   * @type {string}
+   * @private
+   */
+  this.srs_ = opt_srs || '4326';
+  var bbox = opt_bbox || [85, -180, -85, 180];
+
+  /**
+   * @type {number}
+   * @private
+   */
   this.lon_ = opt_lon || 0;
+
+  /**
+   * @type {number}
+   * @private
+  */
   this.lat_ = opt_lat || 0;
-  // eastnoth
-  this.east_ = 0;
-  this.north_ = 0;
 
   // LOAD ALL THE EXPECTED ELEMENTS ON THE PAGE
-
   this.mapElement = /** @type {!Element} */(goog.dom.getElement('map'));
   this.mapTypeElement_ = /** @type {!HTMLSelectElement} */
                          (goog.dom.getElement('mapType'));
@@ -134,13 +143,11 @@ epsg.io.MapPage = function(srs, bbox, opt_lon, opt_lat) {
         var easting = goog.string.toNumber(this.eastingElement.value);
         var northing = goog.string.toNumber(this.northingElement.value);
         if (!isNaN(easting) && !isNaN(northing)) {
-          this.east_ = easting;
-          this.north_ = northing;
           // Make the query to epsg.io/trans to get new lat/lon
           this.degreeFormatter.setLonLat(null, null);
           this.jsonp_.send({
-            'x': this.east_,
-            'y': this.north_,
+            'x': easting,
+            'y': northing,
             's_srs': this.srs_
           }, goog.bind(function(result) {
             var latitude = goog.string.toNumber(result['y']);

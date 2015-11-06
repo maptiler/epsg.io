@@ -2,7 +2,11 @@
 <html xmlns="http://www.w3.org/1999/xhtml"  lang="en" xml:lang="en">
     <head>
         <meta charset="utf-8"/>
+%if defined('name'):
         <title>WGS84 and {{name}} - transform coordinates for position on a map - converting latitude / longitude degrees</title>
+%else:
+        <title>Transform coordinates for position on a map - converting latitude / longitude degrees</title>
+%end
         <meta content="width=device-width, initial-scale=1, maximum-scale=1" name="viewport" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="description" content="Transform coordinates for position on a map - converting latitude / longitude degrees" />
@@ -64,11 +68,13 @@
         </div>
         <div id="map-clipboard-container">
                 <div id="mc-info-container">
+%if defined('name'):
                     <h1>EPSG:{{code}} {{name}}</h1>
                     <p>
                         <a href="//epsg.io/" title="">Change coordinate system</a>
                         <a class="right" href="//epsg.io/{{url_coords}}" title="">Show details</a>
                     </p>
+%end
                 </div>
                 <div id="copy-clipboard-container">
                     <p>
@@ -83,6 +89,11 @@
             </div>
         </div>
     <script type="text/javascript">
-      new MapPage('{{url_coords}}', {{bbox}}, {{center[1]}}, {{center[0]}});</script>
+%if defined('url_coords'):
+      new MapPage('{{url_coords}}', {{bbox}}, {{center[1]}}, {{center[0]}});
+%else:
+      new MapPage;
+%end
+    </script>
     </body>
 </html>
