@@ -9,6 +9,7 @@
 goog.provide('epsg.io.MapPage');
 
 goog.require('epsg.io.DegreeFormatter');
+goog.require('epsg.io.SRSSearch');
 goog.require('goog.Timer');
 goog.require('goog.Uri.QueryData');
 goog.require('goog.dom');
@@ -39,6 +40,59 @@ epsg.io.TRANS_SERVICE_URL = '//epsg.io/trans';
  * @constructor
  */
 epsg.io.MapPage = function(opt_srs, opt_bbox, opt_lon, opt_lat) {
+
+  /**
+   * @type {boolean}
+   * @private
+   */
+  this.dynamicMode_ = !goog.isDef(opt_srs);
+
+  // additional handling, if running on /map -- allow srs to be changed
+  if (this.dynamicMode_) {
+    this.srsTitleEl_ = goog.dom.getElement('crs-title');
+    this.srsSearchEl_ = goog.dom.getElement('crs-search');
+    this.srsDetailLinkEl_ = goog.dom.getElement('crs-detail-link');
+    this.copyClipboardContainerEl_ = /** @type {!Element} */
+        (goog.dom.getElement('copy-clipboard-container'));
+
+    goog.style.setElementShown(this.copyClipboardContainerEl_, false);
+    goog.style.setElementShown(this.srsDetailLinkEl_, false);
+
+    this.srsSearch_ = new epsg.io.SRSSearch('crs-search', undefined, true);
+
+    this.srsSearch_.listen(epsg.io.SRSSearch.EventType.SRS_SELECTED,
+        function(e) {
+          this.srs_ = e.data.code;
+          this.keepEastNorth = false;
+          this.makeQuery();
+
+          goog.dom.setTextContent(this.srsTitleEl_,
+              'EPSG:' + e.data.code + ' ' + e.data.name);
+          this.srsDetailLinkEl_.href = '/' + e.data.code;
+          goog.style.setElementShown(this.copyClipboardContainerEl_, true);
+          goog.style.setElementShown(this.srsDetailLinkEl_, true);
+
+          /*
+          if (goog.isArray(e.data.bbox) && e.data.bbox.length == 4) {
+            var extent = ol.proj.transformExtent(
+                [e.data.bbox[1], e.data.bbox[2],
+                 e.data.bbox[3], e.data.bbox[0]],
+                'EPSG:4326', 'EPSG:3857');
+            var center = this.view_.getCenter();
+            // only recenter when outside extent
+            if (extent && center &&
+                !ol.extent.containsCoordinate(extent, center)) {
+              var size = this.map_.getSize();
+              if (size) {
+                this.view_.fit(extent, size);
+              }
+            }
+          }
+          */
+
+          this.updateHash_();
+        }, false, this);
+  }
 
   /**
    * @type {string}
@@ -281,6 +335,11 @@ epsg.io.MapPage.prototype.updateLonLat_ = function(lonlat) {
 epsg.io.MapPage.prototype.updateHash_ = function() {
   if (this.keepHash) return;
   var qd = new goog.Uri.QueryData();
+
+  if (this.dynamicMode_) {
+    qd.set('srs', this.srs_);
+  }
+
   qd.set('lon', this.lon_.toFixed(7));
   qd.set('lat', this.lat_.toFixed(7));
   qd.set('z', this.view_.getZoom());
@@ -300,6 +359,15 @@ epsg.io.MapPage.prototype.updateHash_ = function() {
  */
 epsg.io.MapPage.prototype.parseHash_ = function() {
   var qd = new goog.Uri.QueryData(window.location.hash.substr(1));
+
+
+  if (this.dynamicMode_) {
+    var srs = qd.get('srs');
+    if (srs) {
+      this.srsSearch_.select(/** @type {string} */(srs));
+    }
+  }
+
   var lon = parseFloat(qd.get('lon')), lat = parseFloat(qd.get('lat'));
   if (goog.math.isFiniteNumber(lon) && goog.math.isFiniteNumber(lat)) {
     this.updateLonLat_([lon, lat]);

@@ -74,6 +74,12 @@
                         <a href="//epsg.io/" title="">Change coordinate system</a>
                         <a class="right" href="//epsg.io/{{url_coords}}" title="">Show details</a>
                     </p>
+%else:
+                    <h1 id="crs-title">Choose coordinate system</h1>
+                    <p>
+                        Find a coordinate system: <input type="search" id="crs-search" placeholder="Country, code or name of a coordinate system" />
+                        <a id="crs-detail-link" class="right" href="#" title="">Show details</a>
+                    </p>
 %end
                 </div>
                 <div id="copy-clipboard-container">
