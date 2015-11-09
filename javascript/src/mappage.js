@@ -224,11 +224,16 @@ epsg.io.MapPage = function(opt_srs, opt_bbox, opt_lon, opt_lat, opt_proj4) {
 
   this.keepHash = false;
 
-  goog.events.listen(this.degreeFormatter, goog.events.EventType.CHANGE,
-      function(e) {
+  goog.events.listen(this.degreeFormatter,
+      epsg.io.DegreeFormatter.EventType.CHANGE, function(e) {
         this.keepLonLat = true;
         this.updateLonLat_(e.lonlat);
         this.keepLonLat = false;
+      }, false, this);
+
+  goog.events.listen(this.degreeFormatter,
+      epsg.io.DegreeFormatter.EventType.FORMAT_CHANGE, function(e) {
+        this.updateHash_();
       }, false, this);
 
   // The user can type easting / northing and hit Enter
@@ -429,6 +434,12 @@ epsg.io.MapPage.prototype.updateHash_ = function() {
     qd.set('layer', this.mapTypeElement_.value);
   }
 
+  var format = this.degreeFormatter.getFormat();
+  if (format != epsg.io.DegreeFormatter.Format.DECIMAL) {
+    // do not include default value to shorten the url
+    qd.set('format', format);
+  }
+
   window.location.hash = qd.toString();
 };
 
@@ -459,6 +470,11 @@ epsg.io.MapPage.prototype.parseHash_ = function() {
   if (layer) {
     this.mapTypeElement_.value = /** @type {string} */(layer);
     this.updateMapType_();
+  }
+  var format = qd.get('format');
+  if (format) {
+    this.degreeFormatter.setFormat(
+        /** @type {epsg.io.DegreeFormatter.Format} */(format));
   }
 };
 

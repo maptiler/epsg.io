@@ -6,6 +6,8 @@
  */
 
 goog.provide('epsg.io.DegreeFormatter');
+goog.provide('epsg.io.DegreeFormatter.EventType');
+goog.provide('epsg.io.DegreeFormatter.Format');
 
 goog.require('goog.events.EventTarget');
 goog.require('goog.events.EventType');
@@ -110,6 +112,7 @@ epsg.io.DegreeFormatter = function() {
   goog.events.listen(this.formatElement_, goog.events.EventType.CHANGE,
       function(e) {
         this.updateFormat_();
+        this.dispatchEvent(epsg.io.DegreeFormatter.EventType.FORMAT_CHANGE);
       }, false, this);
   this.updateFormat_();
 };
@@ -177,13 +180,30 @@ epsg.io.DegreeFormatter.prototype.getLonLat = function() {
 
 
 /**
+ * @return {epsg.io.DegreeFormatter.Format}
+ */
+epsg.io.DegreeFormatter.prototype.getFormat = function() {
+  return this.format_;
+};
+
+
+/**
+ * @param {epsg.io.DegreeFormatter.Format} format
+ */
+epsg.io.DegreeFormatter.prototype.setFormat = function(format) {
+  this.formatElement_.value = format;
+  this.updateFormat_();
+};
+
+
+/**
  * @private
  */
 epsg.io.DegreeFormatter.prototype.dispatchChange_ = function() {
   var ll = this.getLonLat();
   if (!isNaN(ll[0]) && !isNaN(ll[1])) {
     this.dispatchEvent({
-      type: goog.events.EventType.CHANGE,
+      type: epsg.io.DegreeFormatter.EventType.CHANGE,
       lonlat: ll
     });
   }
@@ -209,6 +229,15 @@ epsg.io.DegreeFormatter.prototype.updateFormat_ = function() {
   goog.style.setElementShown(this.latMinEl_, showMins);
 
   this.setLonLat(lonlat[0], lonlat[1]);
+};
+
+
+/**
+ * @enum {string}
+ */
+epsg.io.DegreeFormatter.EventType = {
+  CHANGE: goog.events.EventType.CHANGE,
+  FORMAT_CHANGE: 'format_change'
 };
 
 
