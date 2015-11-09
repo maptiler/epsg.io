@@ -127,7 +127,10 @@ epsg.io.SRSSearch.prototype.show = function(show) {
  */
 epsg.io.SRSSearch.prototype.requestMatchingRows =
     function(token, maxMatches, matchCallback) {
-  if (token.length < 2) matchCallback([]);
+  if (token.length < 2) {
+    matchCallback(token, []);
+    return;
+  }
   this.jsonp_.send({'format': 'json', 'q': token}, function(e) {
     matchCallback(token, e['results']);
   });
