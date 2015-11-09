@@ -16,6 +16,7 @@
         <link rel="shortcut icon" href="//epsg.io/favicon.ico" />
         <link rel="search" href="/opensearch.xml" title="EPSG.io" type="application/opensearchdescription+xml"/>
         <script src="/js/ZeroClipboard.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.3.12/proj4.js"></script>
         <script src="/js/map.js"></script>
     </head>
     <body id="mappage" data-role="page">
@@ -42,6 +43,9 @@
                 </div>
                 <div id="lat-lg-container">
                     <form id="lonlat_form" class="dec" method="post" action="#">
+                    <div id="reproject_map_container">
+                      <input type="checkbox" id="reproject_map" /><label for="reproject_map">Reproject Map BETA</label>
+                    </div>
                     <select id="lonlat_format">
                       <option value="dec">Decimal</option>
                       <option value="dm">DM</option>
@@ -96,7 +100,7 @@
         </div>
     <script type="text/javascript">
 %if defined('url_coords'):
-      new MapPage('{{url_coords}}', {{bbox}}, {{center[1]}}, {{center[0]}});
+      new MapPage('{{url_coords}}', {{bbox}}, {{center[1]}}, {{center[0]}}, '{{proj4}}');
 %else:
       new MapPage;
 %end
