@@ -181,7 +181,7 @@ h4, .h4 { margin: 20px 0 13px 0; padding: 0; font-size: 16px; color: #000; }
         #lonlat_form.dec input {width:110px;}
         #lonlat_form.dm input {width:20px;}
         #lonlat_form.dm input.lonlat_min {width:60px;}
-        #lonlat_form.dms input {width:18px;}
+        #lonlat_form.dms input {width:20px;}
         #lonlat_form.dms input.lonlat_sec {width:36px;}
         #lonlat_form.dec #longitude_sign, #lonlat_form.dec #latitude_sign {display:none;}
         #lonlat_form.dec .lonlat_min {display:none;}
