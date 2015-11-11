@@ -503,8 +503,8 @@ def index():
 
   return template('./templates/results', selected_kind_index=selected_kind_index, num_deprecated=num_deprecated, show_alt_search=show_alt_search, kind_low=kind_low, num_kind=num_kind, short_code=short_code, title=title, query=query, deprecated=deprecated, num_results=num_results, elapsed=elapsed, facets_list=facets_list, url_facet_statquery=url_facet_statquery, result=result, pagenum=int(pagenum),paging=paging, version=VERSION)
 
-
-
+  
+  
 @route('/<id:re:[\d]+(-[\d]+)?>')
 def index(id):
   ref = osr.SpatialReference()
@@ -1698,6 +1698,10 @@ def index(id,format):
 @route('/map')
 def index():
   return template('./templates/map', version=VERSION)
+
+@route('/transform')
+def index():
+  return template('./templates/transform', version=VERSION)
 
 @route('/about')
 def index():
