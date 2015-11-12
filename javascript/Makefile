@@ -16,7 +16,7 @@ ol3-init:
 
 # build
 .PHONY: build
-build: ../js/index.js ../js/map.js
+build: ../js/index.js ../js/map.js ../js/transform.js
 ../js/%.js: %.json
 	java -jar $(PLOVR) build $< > $@
 

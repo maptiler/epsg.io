@@ -1,0 +1,10 @@
+{
+  "id": "transform-debug",
+  "inherits": "transform.json",
+
+  "define": {
+    "goog.DEBUG": true
+  },
+  "pretty-print": true,
+  "debug": true
+}
