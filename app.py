@@ -353,7 +353,7 @@ def index():
       if not expanded_trans and format == "json":
         proj4 = ref.ExportToProj4().strip()
         #proj4js = '%s["%s:%s"] = "%s";' % ("Proj4js.defs", type_epsg, short_code[0], proj4)
-        json_str.append({'code':r['code'], 'name':name, 'wkt':wkt,'proj4':proj4,'default_trans':r['code_trans'],'trans':r['trans'],'area':r['area'],'accuracy':r['accuracy'],'kind':r['kind'], 'bbox':r['bbox']})
+        json_str.append({'code':r['code'], 'name':name, 'wkt':wkt,'proj4':proj4,'default_trans':r['code_trans'],'trans':r['trans'],'area':r['area'],'accuracy':r['accuracy'],'kind':r['kind'], 'bbox':r['bbox'], 'unit':r['uom']})
 
 
       elif expanded_trans and format == "json":
@@ -494,8 +494,8 @@ def index():
           json_bbox = []
           if r['trans']:
             for item in r['trans']:
-              json_bbox.append({'code_trans':item, 'bbox': code_with_bbox[item][0]['bbox'],'name': code_with_bbox[item][0]['name'],'accuracy': code_with_bbox[item][0]['accuracy'],'wkt':code_with_bbox[item][1], 'proj4':code_with_bbox[item][2],'area':code_with_bbox[item][0]['area'] })
-          json_str.append({'code':r['code'], 'name':r['name'], 'wkt':wkt_parent,'proj4':proj4_parent,'default_trans':r['code_trans'],'accuracy':r['accuracy'],'kind':r['kind'], 'trans':json_bbox,'area':r['area']})
+              json_bbox.append({'code_trans':item, 'bbox': code_with_bbox[item][0]['bbox'],'name': code_with_bbox[item][0]['name'],'accuracy': code_with_bbox[item][0]['accuracy'],'wkt':code_with_bbox[item][1], 'proj4':code_with_bbox[item][2],'area':code_with_bbox[item][0]['area'],'unit':r['uom']})
+          json_str.append({'code':r['code'], 'name':r['name'], 'wkt':wkt_parent,'proj4':proj4_parent,'default_trans':r['code_trans'],'accuracy':r['accuracy'],'kind':r['kind'], 'trans':json_bbox,'area':r['area'],'unit':r['uom']})
 
       export['number_result']= num_results
       export['results'] = json_str
@@ -503,8 +503,7 @@ def index():
 
   return template('./templates/results', selected_kind_index=selected_kind_index, num_deprecated=num_deprecated, show_alt_search=show_alt_search, kind_low=kind_low, num_kind=num_kind, short_code=short_code, title=title, query=query, deprecated=deprecated, num_results=num_results, elapsed=elapsed, facets_list=facets_list, url_facet_statquery=url_facet_statquery, result=result, pagenum=int(pagenum),paging=paging, version=VERSION)
 
-  
-  
+
 @route('/<id:re:[\d]+(-[\d]+)?>')
 def index(id):
   ref = osr.SpatialReference()
