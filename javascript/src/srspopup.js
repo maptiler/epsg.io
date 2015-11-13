@@ -150,6 +150,7 @@ epsg.io.SRSPopup.prototype.getSRS = function(code, callback) {
       goog.array.forEach(result['trans'], function(el) {
         if (el['code_trans'] == trans) {
           el['code'] = result['code'] + '-' + trans;
+          el['name'] = result['name'];
           result = el;
         }
       });
@@ -226,6 +227,7 @@ epsg.io.SRSPopup.prototype.search_ = function() {
       goog.array.forEach(transes, function(trans) {
         var code_trans = trans['code_trans'];
         trans['code'] = result['code'] + '-' + code_trans;
+        trans['name'] = result['name'];
         code = '  ' + code_trans;
 
         var transRow = addRow(

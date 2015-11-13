@@ -39,6 +39,8 @@
       margin: 0 0 10px 0;
       }
 
+      #srs-in-change, #srs-out-change {color:#4295c5;}
+
       .popup-bg{position:fixed;top:0;bottom:0;left:0;right:0;background-color:rgba(55,55,55,0.8);z-index:101}.popup{z-index:111;position:absolute;width:400px;min-height:100px;top:30%;left:50%;margin-left:-200px;padding:25px;background:#fff}.popup .popup-title{display:block;font-weight:bold;padding:0 0 10px 0;font-size:120%}.popup .popup-close{position:absolute;top:10px;right:10px;font-family:'icons';cursor:pointer;color:#898989}.popup .popup-close:hover{text-decoration:none;color:#565656}.popup .popup-content{display:block}.popup .popup-actions{display:block;margin-top:10px}.popup .popup-actions div{margin-right:10px}
 
       .srsdialog-table, .srsdialog-table td {border:1px solid #ccc;border-spacing:0;border-collapse:collapse;}

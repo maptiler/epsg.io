@@ -91,11 +91,13 @@ epsg.io.TransformPage = function() {
  */
 epsg.io.TransformPage.prototype.handleSRSChange_ = function() {
   if (this.srsIn_) {
-    goog.dom.setTextContent(this.srsInName_, 'EPSG:' + this.srsIn_['code']);
+    goog.dom.setTextContent(this.srsInName_,
+        'EPSG:' + this.srsIn_['code'] + ' ' + this.srsIn_['name']);
   }
 
   if (this.srsOut_) {
-    goog.dom.setTextContent(this.srsOutName_, 'EPSG:' + this.srsOut_['code']);
+    goog.dom.setTextContent(this.srsOutName_,
+        'EPSG:' + this.srsOut_['code'] + ' ' + this.srsOut_['name']);
   }
 
   this.transform_();
@@ -150,7 +152,6 @@ epsg.io.TransformPage.prototype.updateHash_ = function() {
     qd.set('x', x);
     qd.set('y', y);
   }
-  window['console']['log'](qd.toString());
   window.location.hash = qd.toString();
 };
 
