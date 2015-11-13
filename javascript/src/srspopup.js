@@ -130,20 +130,32 @@ epsg.io.SRSPopup.prototype.show = function() {
 
 
 /**
- * Selects the SRS (loads it's data) without showing the dialog.
- * Dispatched the selected event when done.
+ * Gets the SRS (loads it's data) without showing the dialog.
  * @param {string} code Code possibly with transform id separated by minus sign.
+ * @param {function(Object)} callback
  */
-epsg.io.SRSPopup.prototype.select = function(code) {
-  // TODO:
-  /*
-  this.jsonp_.send({'format': 'json', 'q': value}, goog.bind(function(e) {
-    this.dispatchEvent({
-      type: epsg.io.SRSPopup.EventType.SRS_SELECTED,
-      data: e['results'][0]
-    });
-  }, this));
-  */
+epsg.io.SRSPopup.prototype.getSRS = function(code, callback) {
+  var parts = code.split('-');
+  if (parts.length < 1) return;
+  var system = parts[0];
+  var trans = (parts.length > 1) ? parseInt(parts[1], 10) : null;
+
+  this.jsonp_.send({
+    'format': 'json',
+    'q': system,
+    'trans': !goog.isNull(trans)
+  }, function(e) {
+    var result = e['results'][0];
+    if (!goog.isNull(trans)) {
+      goog.array.forEach(result['trans'], function(el) {
+        if (el['code_trans'] == trans) {
+          el['code'] = result['code'] + '-' + trans;
+          result = el;
+        }
+      });
+    }
+    callback(result);
+  });
 };
 
 

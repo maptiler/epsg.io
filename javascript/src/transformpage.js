@@ -35,6 +35,8 @@ epsg.io.TransformPage = function() {
   this.srsIn_ = null;
   this.srsOut_ = null;
 
+  this.keepHash_ = true;
+
   goog.events.listen(this.srsInChange_, goog.events.EventType.CLICK,
       function(e) {
         goog.events.removeAll(this.srsPopup_);
@@ -74,22 +76,13 @@ epsg.io.TransformPage = function() {
 
   goog.events.listen(this.srsTransform_, goog.events.EventType.CLICK,
       function(e) {
-        if (this.srsIn_ && this.srsOut_) {
-          this.jsonp_.send({
-            'x': parseFloat(this.srsInX_.value),
-            'y': parseFloat(this.srsInY_.value),
-            's_srs': this.srsIn_['code'],
-            't_srs': this.srsOut_['code']
-          }, goog.bind(function(data) {
-            this.srsOutX_.value = data['x'];
-            this.srsOutY_.value = data['y'];
-          }, this));
-        } else {
-          kt.alert('Select coordinate systems before transforming!', 'Error');
-        }
-
+        this.transform_(true);
         e.preventDefault();
       }, false, this);
+
+  this.parseHash_(goog.bind(function() {
+    this.keepHash_ = false;
+  }, this));
 };
 
 
@@ -105,9 +98,98 @@ epsg.io.TransformPage.prototype.handleSRSChange_ = function() {
     goog.dom.setTextContent(this.srsOutName_, 'EPSG:' + this.srsOut_['code']);
   }
 
-  this.srsOutX_.value = '';
-  this.srsOutY_.value = '';
+  this.transform_();
 };
 
+
+/**
+ * @param {boolean=} opt_manual Did the user initiate this?
+ * @private
+ */
+epsg.io.TransformPage.prototype.transform_ = function(opt_manual) {
+  this.srsOutX_.value = '';
+  this.srsOutY_.value = '';
+  if (this.srsIn_ && this.srsOut_) {
+    var x = parseFloat(this.srsInX_.value);
+    var y = parseFloat(this.srsInY_.value);
+    if (goog.math.isFiniteNumber(x) && goog.math.isFiniteNumber(y)) {
+      this.jsonp_.send({
+        'x': x,
+        'y': y,
+        's_srs': this.srsIn_['code'],
+        't_srs': this.srsOut_['code']
+      }, goog.bind(function(data) {
+        this.srsOutX_.value = data['x'];
+        this.srsOutY_.value = data['y'];
+      }, this));
+    }
+  } else if (opt_manual) {
+    kt.alert('Select coordinate systems before transforming!', 'Error');
+  }
+  this.updateHash_();
+};
+
+
+/**
+ * @private
+ */
+epsg.io.TransformPage.prototype.updateHash_ = function() {
+  if (this.keepHash_) return;
+  var qd = new goog.Uri.QueryData();
+
+  if (this.srsIn_) {
+    qd.set('s_srs', this.srsIn_['code']);
+  }
+  if (this.srsOut_) {
+    qd.set('t_srs', this.srsOut_['code']);
+  }
+
+  var x = parseFloat(this.srsInX_.value);
+  var y = parseFloat(this.srsInY_.value);
+  if (goog.math.isFiniteNumber(x) && goog.math.isFiniteNumber(y)) {
+    qd.set('x', x);
+    qd.set('y', y);
+  }
+  window['console']['log'](qd.toString());
+  window.location.hash = qd.toString();
+};
+
+
+/**
+ * @param {Function} callback Called when transforms from the hash are loaded.
+ * @private
+ */
+epsg.io.TransformPage.prototype.parseHash_ = function(callback) {
+  var qd = new goog.Uri.QueryData(window.location.hash.substr(1));
+
+  var toBeLoaded = 0;
+
+  var s_srs = qd.get('s_srs');
+  if (s_srs) {
+    toBeLoaded++;
+    this.srsPopup_.getSRS(/** @type {string} */(s_srs),
+        goog.bind(function(data) {
+          this.srsIn_ = data;
+          this.handleSRSChange_();
+          if (--toBeLoaded <= 0) callback();
+        }, this));
+  }
+  var t_srs = qd.get('t_srs');
+  if (t_srs) {
+    toBeLoaded++;
+    this.srsPopup_.getSRS(/** @type {string} */(t_srs),
+        goog.bind(function(data) {
+          this.srsOut_ = data;
+          this.handleSRSChange_();
+          if (--toBeLoaded <= 0) callback();
+        }, this));
+  }
+
+  var x = parseFloat(qd.get('x')), y = parseFloat(qd.get('y'));
+  if (goog.math.isFiniteNumber(x) && goog.math.isFiniteNumber(y)) {
+    this.srsInX_.value = x;
+    this.srsInY_.value = y;
+  }
+};
 
 goog.exportSymbol('TransformPage', epsg.io.TransformPage);
