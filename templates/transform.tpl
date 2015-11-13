@@ -75,7 +75,7 @@
           <label>Y</label>
           <input type="text" id="srs-in-y" /><br><br>
 
-          <h3 class="underline-style">Input oordinate system</h3>
+          <h3 class="underline-style">Input coordinate system</h3>
           <span id="srs-in-name">Not selected</span>
           <a href="#"n id="srs-in-change">Change</a>
 
@@ -93,7 +93,7 @@
             <label>Y</label>
             <input type="text" id="srs-out-y" /><br><br>
 
-            <h3 class="underline-style">Output oordinate system</h3>
+            <h3 class="underline-style">Output coordinate system</h3>
             <span id="srs-out-name">Not selected</span>
             <a href="#"n id="srs-out-change">Change</a>
 
