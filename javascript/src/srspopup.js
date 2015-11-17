@@ -205,6 +205,8 @@ epsg.io.SRSPopup.prototype.search_ = function() {
       return row;
     }, this);
 
+    this.clearTable_();
+
     var code, name, area, accuracy;
     var results = e['results'];
     goog.array.forEach(results, function(result) {

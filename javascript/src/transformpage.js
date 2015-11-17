@@ -11,6 +11,7 @@ goog.require('epsg.io.SRSPopup');
 goog.require('goog.Uri.QueryData');
 goog.require('goog.dom');
 goog.require('goog.net.Jsonp');
+goog.require('kt.CoordinateInput');
 goog.require('kt.alert');
 
 
@@ -66,11 +67,10 @@ epsg.io.TransformPage = function() {
       }, false, this);
 
 
-
-  this.srsInX_ = goog.dom.getElement('srs-in-x');
-  this.srsInY_ = goog.dom.getElement('srs-in-y');
-  this.srsOutX_ = goog.dom.getElement('srs-out-x');
-  this.srsOutY_ = goog.dom.getElement('srs-out-y');
+  this.srsInX_ = new kt.CoordinateInput('srs-in-x');
+  this.srsInY_ = new kt.CoordinateInput('srs-in-y');
+  this.srsOutX_ = new kt.CoordinateInput('srs-out-x');
+  this.srsOutY_ = new kt.CoordinateInput('srs-out-y');
 
   this.srsTransform_ = goog.dom.getElement('srs-transform');
 
@@ -93,11 +93,17 @@ epsg.io.TransformPage.prototype.handleSRSChange_ = function() {
   if (this.srsIn_) {
     goog.dom.setTextContent(this.srsInName_,
         'EPSG:' + this.srsIn_['code'] + ' ' + this.srsIn_['name']);
+    var isDegrees = /^degree/.test(this.srsIn_['unit']);
+    this.srsInX_.enableDegrees(isDegrees);
+    this.srsInY_.enableDegrees(isDegrees);
   }
 
   if (this.srsOut_) {
     goog.dom.setTextContent(this.srsOutName_,
         'EPSG:' + this.srsOut_['code'] + ' ' + this.srsOut_['name']);
+    var isDegrees = /^degree/.test(this.srsOut_['unit']);
+    this.srsOutX_.enableDegrees(isDegrees);
+    this.srsOutY_.enableDegrees(isDegrees);
   }
 
   this.transform_();
@@ -109,11 +115,11 @@ epsg.io.TransformPage.prototype.handleSRSChange_ = function() {
  * @private
  */
 epsg.io.TransformPage.prototype.transform_ = function(opt_manual) {
-  this.srsOutX_.value = '';
-  this.srsOutY_.value = '';
+  this.srsOutX_.setValue(NaN);
+  this.srsOutY_.setValue(NaN);
   if (this.srsIn_ && this.srsOut_) {
-    var x = parseFloat(this.srsInX_.value);
-    var y = parseFloat(this.srsInY_.value);
+    var x = this.srsInX_.getValue();
+    var y = this.srsInY_.getValue();
     if (goog.math.isFiniteNumber(x) && goog.math.isFiniteNumber(y)) {
       this.jsonp_.send({
         'x': x,
@@ -121,8 +127,8 @@ epsg.io.TransformPage.prototype.transform_ = function(opt_manual) {
         's_srs': this.srsIn_['code'],
         't_srs': this.srsOut_['code']
       }, goog.bind(function(data) {
-        this.srsOutX_.value = data['x'];
-        this.srsOutY_.value = data['y'];
+        this.srsOutX_.setValue(data['x']);
+        this.srsOutY_.setValue(data['y']);
       }, this));
     }
   } else if (opt_manual) {
@@ -146,11 +152,11 @@ epsg.io.TransformPage.prototype.updateHash_ = function() {
     qd.set('t_srs', this.srsOut_['code']);
   }
 
-  var x = parseFloat(this.srsInX_.value);
-  var y = parseFloat(this.srsInY_.value);
+  var x = this.srsInX_.getValue();
+  var y = this.srsInY_.getValue();
   if (goog.math.isFiniteNumber(x) && goog.math.isFiniteNumber(y)) {
-    qd.set('x', x);
-    qd.set('y', y);
+    qd.set('x', x.toFixed(7));
+    qd.set('y', y.toFixed(7));
   }
   window.location.hash = qd.toString();
 };
@@ -185,11 +191,12 @@ epsg.io.TransformPage.prototype.parseHash_ = function(callback) {
           if (--toBeLoaded <= 0) callback();
         }, this));
   }
+  if (toBeLoaded <= 0) callback();
 
   var x = parseFloat(qd.get('x')), y = parseFloat(qd.get('y'));
   if (goog.math.isFiniteNumber(x) && goog.math.isFiniteNumber(y)) {
-    this.srsInX_.value = x;
-    this.srsInY_.value = y;
+    this.srsInX_.setValue(x);
+    this.srsInY_.setValue(y);
   }
 };
 
