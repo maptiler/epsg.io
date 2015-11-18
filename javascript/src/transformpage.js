@@ -10,6 +10,7 @@ goog.provide('epsg.io.TransformPage');
 goog.require('epsg.io.SRSPopup');
 goog.require('goog.Uri.QueryData');
 goog.require('goog.dom');
+goog.require('goog.format.JsonPrettyPrinter');
 goog.require('goog.net.Jsonp');
 goog.require('kt.CoordinateInput');
 goog.require('kt.alert');
@@ -30,8 +31,10 @@ epsg.io.TransformPage = function() {
 
   this.srsInName_ = goog.dom.getElement('srs-in-name');
   this.srsInChange_ = goog.dom.getElement('srs-in-change');
+  this.srsInDetails_ = goog.dom.getElement('srs-in-details');
   this.srsOutName_ = goog.dom.getElement('srs-out-name');
   this.srsOutChange_ = goog.dom.getElement('srs-out-change');
+  this.srsOutDetails_ = goog.dom.getElement('srs-out-details');
 
   this.srsIn_ = null;
   this.srsOut_ = null;
@@ -90,12 +93,16 @@ epsg.io.TransformPage = function() {
  * @private
  */
 epsg.io.TransformPage.prototype.handleSRSChange_ = function() {
+  var printer = new goog.format.JsonPrettyPrinter(null);
+
   if (this.srsIn_) {
     goog.dom.setTextContent(this.srsInName_,
         'EPSG:' + this.srsIn_['code'] + ' ' + this.srsIn_['name']);
     var isDegrees = /^degree/.test(this.srsIn_['unit']);
     this.srsInX_.enableDegrees(isDegrees);
     this.srsInY_.enableDegrees(isDegrees);
+
+    goog.dom.setTextContent(this.srsInDetails_, printer.format(this.srsIn_));
   }
 
   if (this.srsOut_) {
@@ -104,6 +111,8 @@ epsg.io.TransformPage.prototype.handleSRSChange_ = function() {
     var isDegrees = /^degree/.test(this.srsOut_['unit']);
     this.srsOutX_.enableDegrees(isDegrees);
     this.srsOutY_.enableDegrees(isDegrees);
+
+    goog.dom.setTextContent(this.srsOutDetails_, printer.format(this.srsOut_));
   }
 
   this.transform_();
