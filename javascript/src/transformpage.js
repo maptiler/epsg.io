@@ -151,9 +151,16 @@ epsg.io.TransformPage.prototype.transform_ = function(opt_manual) {
         's_srs': this.srsIn_['code'],
         't_srs': this.srsOut_['code']
       }, goog.bind(function(data) {
-        this.srsOutX_.setValue(data['x']);
-        this.srsOutY_.setValue(data['y']);
+        if (opt_manual && data['status'] == 'error') {
+          kt.alert(data['message'], 'Error (' + data['error_type'] + ')');
+        }
+        if (goog.isDef(data['x']) && goog.isDef(data['x'])) {
+          this.srsOutX_.setValue(data['x']);
+          this.srsOutY_.setValue(data['y']);
+        }
       }, this));
+    } else if (opt_manual) {
+      kt.alert('Please enter valid input coordinates!', 'Error');
     }
   } else if (opt_manual) {
     kt.alert('Select coordinate systems before transforming!', 'Error');
