@@ -30,6 +30,9 @@
         display: inline-block;
         padding: 4px 5px;
       }
+      input[type=text] {
+        width:220px;
+      }
       h3.underline-style{
         margin: 15px 0 10px 0;
       }
@@ -70,11 +73,11 @@
           <h3 class="underline-style">Input coordinates</h3>
           <form id="srs-in-form">
             <label for="srs-in-x">X:</label>
-            <input type="text" id="srs-in-x" data-placeholder="" data-placeholder-degrees="e.g. 8°33'10&quot;, 8.55, 8 33 10" />
+            <input type="text" id="srs-in-x" data-placeholder="Decimal value of X coordinate" data-placeholder-degrees="e.g. 8°33'10&quot;, 8.55, 8 33 10" />
             <br>
 
             <label for="srs-in-y">Y:</label>
-            <input type="text" id="srs-in-y" data-placeholder="" data-placeholder-degrees="e.g. 47°22'00&quot;, 47.36666, 47 22 00" /><br><br>
+            <input type="text" id="srs-in-y" data-placeholder="Decimal value of Y coordinate" data-placeholder-degrees="e.g. 47°22'00&quot;, 47.36666, 47 22 00" /><br><br>
 
             <input type="submit" value="Transform" />
             <input type="button" id="srs-swap" value="Swap &#x21C4;" />
