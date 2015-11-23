@@ -1340,6 +1340,10 @@ def index(id, format):
 
 @route('/trans')
 def index():
+
+  if (len(request.GET.keys()) == 0):
+    return redirect('/transform')
+
   tcode_trans_values = None
   scode_trans_values = None
   swkt = None
