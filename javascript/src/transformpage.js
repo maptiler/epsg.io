@@ -83,6 +83,21 @@ epsg.io.TransformPage = function() {
         e.preventDefault();
       }, false, this);
 
+  this.srsSwap_ = goog.dom.getElement('srs-swap');
+  goog.events.listen(this.srsSwap_, goog.events.EventType.CLICK,
+      function(e) {
+        var tmpSrs = this.srsOut_;
+        this.srsOut_ = this.srsIn_;
+        this.srsIn_ = tmpSrs;
+
+        this.srsInX_.setValue(this.srsOutX_.getValue());
+        this.srsInY_.setValue(this.srsOutY_.getValue());
+
+        this.handleSRSChange_();
+
+        e.preventDefault();
+      }, false, this);
+
   this.parseHash_(goog.bind(function() {
     this.keepHash_ = false;
   }, this));

@@ -35,6 +35,7 @@
       }
 
       #srs-in-form input[type=submit] {float:right;margin-top:-75px;}
+      #srs-swap {float:right;}
 
       #srs-in-change, #srs-out-change {color:#4295c5;}
 
@@ -76,6 +77,7 @@
             <input type="text" id="srs-in-y" data-placeholder="" data-placeholder-degrees="e.g. 47°22'00&quot;, 47.36666, 47 22 00" /><br><br>
 
             <input type="submit" value="Transform" />
+            <input type="button" id="srs-swap" value="Swap &#x21C4;" />
           </form>
 
           <h3 class="underline-style">Input coordinate system</h3>
