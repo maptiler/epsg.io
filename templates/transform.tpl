@@ -25,11 +25,6 @@
         display: inline-block;
         float: left;
       }
-      .btn-link-container{
-        position: absolute;
-        margin-left: -212px;
-        margin-top: 22px;
-      }
       input, textarea{
         margin: 5px 0;
         display: inline-block;
@@ -38,6 +33,8 @@
       h3.underline-style{
         margin: 15px 0 10px 0;
       }
+
+      #srs-in-form input[type=submit] {float:right;margin-top:-75px;}
 
       #srs-in-change, #srs-out-change {color:#4295c5;}
 
@@ -70,12 +67,16 @@
         <br><br>
         <div class="trans-box">
           <h3 class="underline-style">Input coordinates</h3>
-          <label for="srs-in-x">X:</label>
-          <input type="text" id="srs-in-x" data-placeholder="" data-placeholder-degrees="e.g. 8°33'10&quot;, 8.55, 8 33 10" />
-          <br>
+          <form id="srs-in-form">
+            <label for="srs-in-x">X:</label>
+            <input type="text" id="srs-in-x" data-placeholder="" data-placeholder-degrees="e.g. 8°33'10&quot;, 8.55, 8 33 10" />
+            <br>
 
-          <label for="srs-in-y">Y:</label>
-          <input type="text" id="srs-in-y" data-placeholder="" data-placeholder-degrees="e.g. 47°22'00&quot;, 47.36666, 47 22 00" /><br><br>
+            <label for="srs-in-y">Y:</label>
+            <input type="text" id="srs-in-y" data-placeholder="" data-placeholder-degrees="e.g. 47°22'00&quot;, 47.36666, 47 22 00" /><br><br>
+
+            <input type="submit" value="Transform" />
+          </form>
 
           <h3 class="underline-style">Input coordinate system</h3>
           <span id="srs-in-name">Not selected</span>
@@ -87,9 +88,6 @@
         </div>
         <div class="trans-box">
           <h3 class="underline-style">Output</h3>
-          <p class="btn-link-container">
-            <a href="#" id="srs-transform">Transform<i></i></a>
-          </p>
 
           <label for="srs-out-x">X:</label>
           <input type="text" id="srs-out-x" data-placeholder="" data-placeholder-degrees="" readonly="readonly" /><br>

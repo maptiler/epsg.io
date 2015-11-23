@@ -75,9 +75,9 @@ epsg.io.TransformPage = function() {
   this.srsOutX_ = new kt.CoordinateInput('srs-out-x');
   this.srsOutY_ = new kt.CoordinateInput('srs-out-y');
 
-  this.srsTransform_ = goog.dom.getElement('srs-transform');
+  this.srsInForm_ = goog.dom.getElement('srs-in-form');
 
-  goog.events.listen(this.srsTransform_, goog.events.EventType.CLICK,
+  goog.events.listen(this.srsInForm_, goog.events.EventType.SUBMIT,
       function(e) {
         this.transform_(true);
         e.preventDefault();
