@@ -87,8 +87,13 @@
           <span id="srs-in-name">Not selected</span>
           <a href="#"n id="srs-in-change">Change</a>
 
-          <h3 class="underline-style">Details</h3>
-          <pre id="srs-in-details"></pre>
+          <div id="srs-in-details" style="display:none;">
+            <h3 class="underline-style">Details</h3>
+            <a id="srs-in-details-link" href="#" target="_blank">show full details in new window</a><br />
+            Unit: <span id="srs-in-unit"></span><br />
+            Area: <span id="srs-in-area"></span><br />
+            Accuracy: <span id="srs-in-accuracy"></span>
+          </div>
 
         </div>
         <div class="trans-box">
@@ -104,8 +109,13 @@
           <span id="srs-out-name">Not selected</span>
           <a href="#"n id="srs-out-change">Change</a>
 
-          <h3 class="underline-style">Details</h3>
-          <pre id="srs-out-details"></pre>
+          <div id="srs-out-details" style="display:none;">
+            <h3 class="underline-style">Details</h3>
+            <a id="srs-out-details-link" href="#" target="_blank">show full details in new window</a><br />
+            Unit: <span id="srs-out-unit"></span><br />
+            Area: <span id="srs-out-area"></span><br />
+            Accuracy: <span id="srs-out-accuracy"></span>
+          </div>
         </div>
       </div>
 

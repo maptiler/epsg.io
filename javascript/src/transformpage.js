@@ -10,8 +10,8 @@ goog.provide('epsg.io.TransformPage');
 goog.require('epsg.io.SRSPopup');
 goog.require('goog.Uri.QueryData');
 goog.require('goog.dom');
-goog.require('goog.format.JsonPrettyPrinter');
 goog.require('goog.net.Jsonp');
+goog.require('goog.style');
 goog.require('kt.CoordinateInput');
 goog.require('kt.alert');
 
@@ -31,10 +31,23 @@ epsg.io.TransformPage = function() {
 
   this.srsInName_ = goog.dom.getElement('srs-in-name');
   this.srsInChange_ = goog.dom.getElement('srs-in-change');
+
   this.srsInDetails_ = goog.dom.getElement('srs-in-details');
+  this.srsInDetailsLink_ = goog.dom.getElement('srs-in-details-link');
+  this.srsInUnit_ = goog.dom.getElement('srs-in-unit');
+  this.srsInArea_ = goog.dom.getElement('srs-in-area');
+  this.srsInAccuracy_ = goog.dom.getElement('srs-in-accuracy');
+
+
   this.srsOutName_ = goog.dom.getElement('srs-out-name');
   this.srsOutChange_ = goog.dom.getElement('srs-out-change');
+
   this.srsOutDetails_ = goog.dom.getElement('srs-out-details');
+  this.srsOutDetailsLink_ = goog.dom.getElement('srs-out-details-link');
+  this.srsOutUnit_ = goog.dom.getElement('srs-out-unit');
+  this.srsOutArea_ = goog.dom.getElement('srs-out-area');
+  this.srsOutAccuracy_ = goog.dom.getElement('srs-out-accuracy');
+
 
   this.srsIn_ = null;
   this.srsOut_ = null;
@@ -108,8 +121,6 @@ epsg.io.TransformPage = function() {
  * @private
  */
 epsg.io.TransformPage.prototype.handleSRSChange_ = function() {
-  var printer = new goog.format.JsonPrettyPrinter(null);
-
   if (this.srsIn_) {
     goog.dom.setTextContent(this.srsInName_,
         'EPSG:' + this.srsIn_['code'] + ' ' + this.srsIn_['name']);
@@ -117,8 +128,13 @@ epsg.io.TransformPage.prototype.handleSRSChange_ = function() {
     this.srsInX_.enableDegrees(isDegrees);
     this.srsInY_.enableDegrees(isDegrees);
 
-    goog.dom.setTextContent(this.srsInDetails_, printer.format(this.srsIn_));
+    this.srsInDetailsLink_.href = '/' + this.srsIn_['code'];
+    goog.dom.setTextContent(this.srsInUnit_, this.srsIn_['unit']);
+    goog.dom.setTextContent(this.srsInArea_, this.srsIn_['area']);
+    var acc = this.srsIn_['accuracy'];
+    goog.dom.setTextContent(this.srsInAccuracy_, acc ? acc + ' m' : 'Unknown');
   }
+  goog.style.setElementShown(this.srsInDetails_, this.srsIn_);
 
   if (this.srsOut_) {
     goog.dom.setTextContent(this.srsOutName_,
@@ -127,8 +143,13 @@ epsg.io.TransformPage.prototype.handleSRSChange_ = function() {
     this.srsOutX_.enableDegrees(isDegrees);
     this.srsOutY_.enableDegrees(isDegrees);
 
-    goog.dom.setTextContent(this.srsOutDetails_, printer.format(this.srsOut_));
+    this.srsOutDetailsLink_.href = '/' + this.srsOut_['code'];
+    goog.dom.setTextContent(this.srsOutUnit_, this.srsOut_['unit']);
+    goog.dom.setTextContent(this.srsOutArea_, this.srsOut_['area']);
+    var acc = this.srsOut_['accuracy'];
+    goog.dom.setTextContent(this.srsOutAccuracy_, acc ? acc + ' m' : 'Unknown');
   }
+  goog.style.setElementShown(this.srsOutDetails_, this.srsOut_);
 
   this.srsSwap_.disabled = !(this.srsIn_ && this.srsOut_);
 
