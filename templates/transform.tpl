@@ -72,11 +72,11 @@
         <div class="trans-box">
           <h3 class="underline-style">Input coordinates</h3>
           <form id="srs-in-form">
-            <label for="srs-in-x">X:</label>
+            <label for="srs-in-x" data-value="X:" data-value-degrees="Longitude:">X:</label>
             <input type="text" id="srs-in-x" data-placeholder="Decimal value of X coordinate" data-placeholder-degrees="e.g. 8°33'10&quot;, 8.55, 8 33 10" />
             <br>
 
-            <label for="srs-in-y">Y:</label>
+            <label for="srs-in-y" data-value="Y:" data-value-degrees="Latitude:">Y:</label>
             <input type="text" id="srs-in-y" data-placeholder="Decimal value of Y coordinate" data-placeholder-degrees="e.g. 47°22'00&quot;, 47.36666, 47 22 00" /><br><br>
 
             <input type="submit" value="Transform" />
@@ -94,10 +94,10 @@
         <div class="trans-box">
           <h3 class="underline-style">Output</h3>
 
-          <label for="srs-out-x">X:</label>
+          <label for="srs-out-x" data-value="X:" data-value-degrees="Longitude:">X:</label>
           <input type="text" id="srs-out-x" data-placeholder="" data-placeholder-degrees="" readonly="readonly" /><br>
 
-          <label for="srs-out-y">Y:</label>
+          <label for="srs-out-y" data-value="Y:" data-value-degrees="Latitude:">Y:</label>
           <input type="text" id="srs-out-y" data-placeholder="" data-placeholder-degrees="" readonly="readonly" /><br><br>
 
           <h3 class="underline-style">Output coordinate system</h3>

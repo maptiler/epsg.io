@@ -130,6 +130,8 @@ epsg.io.TransformPage.prototype.handleSRSChange_ = function() {
     goog.dom.setTextContent(this.srsOutDetails_, printer.format(this.srsOut_));
   }
 
+  this.srsSwap_.disabled = !(this.srsIn_ && this.srsOut_);
+
   this.transform_();
 };
 
