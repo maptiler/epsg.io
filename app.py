@@ -67,7 +67,7 @@ from pygments.lexer import RegexLexer
 from pygments.token import *
 from pygments import highlight
 from pygments.formatters import HtmlFormatter
-#from osgeo import gdal, osr, ogr
+from osgeo import gdal, osr, ogr
 import time
 import math
 import json
@@ -1744,4 +1744,4 @@ def static():
 
 if __name__ == "__main__":
   #run(host='0.0.0.0', port=82)
-  run(host='0.0.0.0', port=8081, server='gunicorn', workers=4)
+  run(host='0.0.0.0', port=8080, server='gunicorn', workers=4)
