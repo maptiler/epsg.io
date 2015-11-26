@@ -26,7 +26,7 @@
         float: left;
       }
       .trans-box.right{
-        margin: 0 0 0 10%;      
+        margin: 0 0 0 10%;
       }
       input, textarea{
         margin: 5px 0;
@@ -45,13 +45,13 @@
         margin-top:-145px;
         margin-right: -150px;
       }
-      #srs-swap { 
+      #srs-swap {
         float:right;
-        margin-right: -142px; 
+        margin-right: -142px;
         margin-top:-100px;
       }
 
-      #srs-in-change, #srs-out-change { color:#4295c5; }
+      #srs-in-change, #srs-out-change, #srs-in-details-link, #srs-out-details-link { color:#4295c5; }
 
       @media(max-width: 800px){
         .trans-box, .trans-box.right{
@@ -123,12 +123,12 @@
           <h3 class="underline-style">Input coordinates</h3>
           <form id="srs-in-form">
             <label for="srs-in-x" data-value="X:" data-value-degrees="Longitude:">X:</label>
-            <input type="text" id="srs-in-x" data-placeholder="Decimal value of X coordinate" 
+            <input type="text" id="srs-in-x" data-placeholder="Decimal value of X coordinate"
                    data-placeholder-degrees="e.g. 8°33'10&quot;, 8.55, 8 33 10" />
             <br>
 
             <label for="srs-in-y" data-value="Y:" data-value-degrees="Latitude:">Y:</label>
-            <input type="text" id="srs-in-y" data-placeholder="Decimal value of Y coordinate" 
+            <input type="text" id="srs-in-y" data-placeholder="Decimal value of Y coordinate"
                    data-placeholder-degrees="e.g. 47°22'00&quot;, 47.36666, 47 22 00" /><br /><br />
 
 
@@ -139,10 +139,10 @@
 
             <div id="srs-in-details" style="display:none;">
               <h3 class="underline-style">Details</h3>
-              <a id="srs-in-details-link" href="#" target="_blank">show full details in new window</a><br />
-              Unit: <span id="srs-in-unit"></span><br />
-              Area: <span id="srs-in-area"></span><br />
-              Accuracy: <span id="srs-in-accuracy"></span>
+              <a id="srs-in-details-link" href="#" target="_blank">show more details</a><br /><br />
+              <span class="caption">Unit: </span><span id="srs-in-unit"></span><br />
+              <span class="caption">Area of use: </span><span id="srs-in-area"></span><br />
+              <span class="caption">Accuracy: </span><span id="srs-in-accuracy"></span>
             </div>
             <input type="submit" value="Transform" class="btn" />
             <input type="button" id="srs-swap" value="Swap &#x21C4;"  class="btn-dark" />
@@ -167,10 +167,10 @@
 
           <div id="srs-out-details" style="display:none;">
             <h3 class="underline-style">Details</h3>
-            <a id="srs-out-details-link" href="#" target="_blank">show full details in new window</a><br />
-            Unit: <span id="srs-out-unit"></span><br />
-            Area: <span id="srs-out-area"></span><br />
-            Accuracy: <span id="srs-out-accuracy"></span>
+            <a id="srs-out-details-link" href="#" target="_blank">show more details</a><br /><br />
+            <span class="caption">Unit: </span><span id="srs-out-unit"></span><br />
+            <span class="caption">Area of use: </span><span id="srs-out-area"></span><br />
+            <span class="caption">Accuracy: </span><span id="srs-out-accuracy"></span>
           </div>
         </div>
       </div>
