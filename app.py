@@ -346,7 +346,7 @@ def index():
         if wkt and r['bbox']:
           # a = ref.ImportFromWkt(r['wkt'])
           # if a == 0:
-          url_map = "/" + r['code']+ "/map"
+          url_map = "/map#srs=" + r['code']
 
 
       result.append({'r':r, 'name':name, 'type_epsg':type_epsg, 'link':link, 'area':short_area, 'short_code':short_code, 'url_map':url_map})
@@ -1233,14 +1233,7 @@ def index(id, format):
 
     # One of the formats is a map (because /coordinates/ was redirect on /coordinates and then catch by <format>)
     if format == "/map":
-      if bbox:
-        n, w, s, e = bbox
-        center = (n-s)/2.0 + s, (e-w)/2.0 + w
-        if (e < w):
-          center = (n-s)/2.0+s, (w+180 + (360-(w+180)+e+180) / 2.0 ) % 360-180
-      else:
-	    center = 0,0
-      return template ('./templates/map', name=rname, code=rcode, url_coords=url_coords, center=center, bbox=mbbox, proj4=ref.ExportToProj4().strip())
+      return redirect("/map#srs=" + rcode);
 
     ref.ImportFromWkt(wkt)
     ct = "text/plain"
