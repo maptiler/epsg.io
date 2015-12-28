@@ -140,11 +140,14 @@ epsg.io.SRSPopup.prototype.getSRS = function(code, callback) {
   var system = parts[0];
   var trans = (parts.length > 1) ? parseInt(parts[1], 10) : null;
 
-  this.jsonp_.send({
+  var params = {
     'format': 'json',
-    'q': system,
-    'trans': !goog.isNull(trans)
-  }, function(e) {
+    'q': system
+  };
+  if (!goog.isNull(trans)) {
+    params['trans'] = '1';
+  }
+  this.jsonp_.send(params, function(e) {
     var result = e['results'][0];
     if (!goog.isNull(trans)) {
       goog.array.forEach(result['trans'], function(el) {
@@ -231,6 +234,10 @@ epsg.io.SRSPopup.prototype.search_ = function() {
         trans['code'] = result['code'] + '-' + code_trans;
         trans['name'] = result['name'];
         code = '  ' + code_trans;
+
+        if (defaultTrans == code_trans) {
+          result['bbox'] = trans['bbox'];
+        }
 
         var transRow = addRow(
             'trans hidden' + (defaultTrans == code_trans ? ' default' : ''),

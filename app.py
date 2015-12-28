@@ -495,7 +495,7 @@ def index():
           if r['trans']:
             for item in r['trans']:
               json_bbox.append({'code_trans':item, 'bbox': code_with_bbox[item][0]['bbox'],'name': code_with_bbox[item][0]['name'],'accuracy': code_with_bbox[item][0]['accuracy'],'wkt':code_with_bbox[item][1], 'proj4':code_with_bbox[item][2],'area':code_with_bbox[item][0]['area'],'unit':r['uom']})
-          json_str.append({'code':r['code'], 'name':r['name'], 'wkt':wkt_parent,'proj4':proj4_parent,'default_trans':r['code_trans'],'accuracy':r['accuracy'],'kind':r['kind'], 'trans':json_bbox,'area':r['area'],'unit':r['uom']})
+          json_str.append({'code':r['code'], 'name':r['name'], 'wkt':wkt_parent,'proj4':proj4_parent,'default_trans':r['code_trans'],'accuracy':r['accuracy'],'kind':r['kind'], 'trans':json_bbox,'area':r['area'],'bbox':r['bbox'],'unit':r['uom']})
 
       export['number_result']= num_results
       export['results'] = json_str

@@ -68,39 +68,6 @@
         }
         #srs-swap { float: none; margin-right: 0; margin-top: 0; display: block; margin: 8px;}
       }
-
-      .srsdialog-input{
-        margin: 0 10px 20px 0;
-        padding: 0 10px;
-        height: 28px;
-        width: 200px;
-        font-size: 11px;
-        color: #989898;
-        float: left;
-        border: solid 1px #cacaca;
-        border-radius: 15px;
-      }
-
-      .popup-bg{ position:fixed;top:0;bottom:0;left:0;right:0;background-color:rgba(55,55,55,0.8);z-index:101}
-      .popup{ z-index:111;position:absolute;width:400px;min-height:100px;top:15%;left:50%;margin-left:-200px;padding:25px;background:#fff}
-      .popup .popup-title{ display:block;padding:0 0 10px 0;font-size:26px;color: #000;font-family: OpenSansBold, Arial, "Geneva CE", lucida, sans-serif;font-weight: normal;}
-      .popup .popup-close{ position:absolute;top:10px;right:10px;font-family:'epsg';cursor:pointer;color:#898989}
-      .popup .popup-close:hover{ text-decoration:none;color:#565656; }
-      .popup .popup-content{ display:block }
-      .popup .popup-actions{ display:block;margin-top:20px }
-      .popup .popup-actions div{ margin-right:10px }
-
-      .srsdialog-table, .srsdialog-table td { border:1px solid #ccc;border-spacing:0;border-collapse:collapse;padding: 2px 5px;}
-      .srsdialog-table tr { cursor:pointer;}
-      .srsdialog-table tr.hidden { display:none;}
-      .srsdialog-table tr:not(.expandable) .srsdialog-transshower { display:none;}
-      .srsdialog-table tr.selected * { background:#4295c5;color:#fff;}
-      .srsdialog-table tr.trans :first-child { padding-left:10px;}
-      .srsdialog-table tr.trans.default { font-weight:bold;}
-      .srsdialog-form{
-        overflow-y: auto;
-        height: 300px;
-      }
     </style>
   </head>
 

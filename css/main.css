@@ -171,27 +171,10 @@ h4, .h4 { margin: 20px 0 13px 0; padding: 0; font-size: 16px; color: #000; }
 
 #mappage #search-container { margin: 0 0 0 20px; float: left; }
 
-#lat-lg-container { margin: 0; padding: 0; float: right; overflow: hidden; }
-#reproject_map_container {float:left;background:#fff;color:#333;padding:3px 6px;margin:4px;}
+#reproject_map_container {float:right;background:#fff;color:#333;padding:3px 6px;margin:4px;}
 #reproject_map_container input {width:16px !important;}
-#lat-lg-container p { margin: 0; padding-top: 6px; float: left; height: 24px; border: solid 1px #ccc; background: #fff; }
-#lonlat_format { float:left; padding:3px 1px; margin:4px;}
-#lg { padding-left: 27px; width: 207px; -webkit-border-top-left-radius: 15px; -webkit-border-bottom-left-radius: 15px; -moz-border-radius-topleft: 15px; -moz-border-radius-bottomleft: 15px;
-      border-top-left-radius: 15px; border-bottom-left-radius: 15px; border-right: 0; }
-#lat { padding-left: 18px; width: 207px; -webkit-border-top-right-radius: 15px; -webkit-border-bottom-right-radius: 15px; -moz-border-radius-topright: 15px; -moz-border-radius-bottomright: 15px;
-       border-top-right-radius: 15px; border-bottom-right-radius: 15px; }
-#lonlat_form.dec input {width:110px;}
-#lonlat_form.dm input {width:20px;}
-#lonlat_form.dm input.lonlat_min {width:60px;}
-#lonlat_form.dms input {width:20px;}
-#lonlat_form.dms input.lonlat_sec {width:36px;}
-#lonlat_form.dec #longitude_sign, #lonlat_form.dec #latitude_sign {display:none;}
-#lonlat_form.dec .lonlat_min {display:none;}
-#lonlat_form.dec .lonlat_sec, #lonlat_form.dm .lonlat_sec {display:none;}
-#lat-lg-container select { font-size: 12px; background:#fff;}
 #lat-lg-container input { margin: 0; padding: 0; border: 0; font-size: 12px; text-align:right; border-bottom:1px solid #ccc;vertical-align:middle;}
-#lat-lg-container input:focus { color: #cc0000; }
-#lonlat_submit { position: absolute; left: -9999px; width: 1px; height: 1px; }
+#eastnorth_submit { position: absolute; left: -9999px; width: 1px; height: 1px; }
 
 #head { margin: 0; padding: 0; width: 100%; height: 79px; background: url('../img/bg-head-wide.png') 0 0 no-repeat; border-bottom: solid 1px #d0e1eb; overflow: hidden; }
 #mappage #head-top { margin: 0; padding: 0; width: 100%; height: 79px; background: #fff url('../img/bg-head-wide.png') 0 0 no-repeat; overflow: hidden; }
@@ -238,21 +221,21 @@ h3.underline-style { margin: 0 0 20px; padding: 0 0 10px; font-size: 14px; color
 #mini-map { margin-bottom: 15px; width: 265px; display: block; position:relative;}
 #crosshair { position:absolute; top:50%; left:50%; margin-top:-11px; margin-left:-11px;}
 .location-data-container { float: right; width: 284px; }
-.location-data-container .btn-link-container, .btn, .btn-light, .btn-dark, input[type=submit].srsdialog-table{ 
-  margin: 0 0 25px; padding: 25px 0 0 0; overflow: hidden; 
+.location-data-container .btn-link-container, .btn, .btn-light, .btn-dark, input[type=submit].srsdialog-table{
+  margin: 0 0 25px; padding: 25px 0 0 0; overflow: hidden;
 }
-.btn-link-container a, .btn, .btn-light, .btn-dark, input[type=submit].srsdialog-table{ 
+.btn-link-container a, .btn, .btn-light, .btn-dark, input[type=submit].srsdialog-table{
   margin: 0; padding: 7px 13px 0 22px; height: 24px; float: left; border: solid 1px #cacaca;
-  border-radius: 15px; -moz-border-radius: 15px; -webkit-border-radius: 15px; color: #fff; background: #4295c5; 
+  border-radius: 15px; -moz-border-radius: 15px; -webkit-border-radius: 15px; color: #fff; background: #4295c5;
 }
-.btn-link-container a i, .btn i{ 
+.btn-link-container a i, .btn i{
   margin: 3px 0 0 15px; border-style: solid; border-width: 5px 0 5px 7px; float: right; height: 1px;
-  border-color: rgba(255, 255, 255, 0) rgba(255, 255, 255, 0) rgba(255, 255, 255, 0) #4295c5 ; 
+  border-color: rgba(255, 255, 255, 0) rgba(255, 255, 255, 0) rgba(255, 255, 255, 0) #4295c5 ;
 }
 .btn, .btn-light, .btn-dark, input[type=submit].srsdialog-table{
   height: 22px;
-  vertical-align: middle; 
-  line-height: 22px; 
+  vertical-align: middle;
+  line-height: 22px;
   padding: 4px 25px;
   cursor: pointer;
 }
@@ -443,7 +426,6 @@ pre { background: transparent; border: solid 1px #bdbdbd; font-size: 11px; margi
   #mappage #head { height: auto; }
   #mappage #head #search-lat-lg-container { height: auto; overflow: hidden; padding-bottom: 10px; }
   #mappage #search-container { float: none; margin: 0 auto; }
-  #mappage #lat-lg-container { float: none; margin: 10px auto 0; }
   #resultspage #search-container { float: none; margin-bottom: 10px }
 
 
@@ -485,6 +467,40 @@ pre { background: transparent; border: solid 1px #bdbdbd; font-size: 11px; margi
 }
 
 .plovr-error-report { position:absolute; top:0; left:0; z-index: 60000;}
+
+/* srs popup */
+.srsdialog-input{
+  margin: 0 10px 20px 0;
+  padding: 0 10px;
+  height: 28px;
+  width: 200px;
+  font-size: 11px;
+  color: #989898;
+  float: left;
+  border: solid 1px #cacaca;
+  border-radius: 15px;
+}
+
+.popup-bg{ position:fixed;top:0;bottom:0;left:0;right:0;background-color:rgba(55,55,55,0.8);z-index:101}
+.popup{ z-index:111;position:absolute;width:400px;min-height:100px;top:15%;left:50%;margin-left:-200px;padding:25px;background:#fff}
+.popup .popup-title{ display:block;padding:0 0 10px 0;font-size:26px;color: #000;font-family: OpenSansBold, Arial, "Geneva CE", lucida, sans-serif;font-weight: normal;}
+.popup .popup-close{ position:absolute;top:10px;right:10px;font-family:'epsg';cursor:pointer;color:#898989}
+.popup .popup-close:hover{ text-decoration:none;color:#565656; }
+.popup .popup-content{ display:block }
+.popup .popup-actions{ display:block;margin-top:20px }
+.popup .popup-actions div{ margin-right:10px }
+
+.srsdialog-table, .srsdialog-table td { border:1px solid #ccc;border-spacing:0;border-collapse:collapse;padding: 2px 5px;}
+.srsdialog-table tr { cursor:pointer;}
+.srsdialog-table tr.hidden { display:none;}
+.srsdialog-table tr:not(.expandable) .srsdialog-transshower { display:none;}
+.srsdialog-table tr.selected * { background:#4295c5;color:#fff;}
+.srsdialog-table tr.trans :first-child { padding-left:10px;}
+.srsdialog-table tr.trans.default { font-weight:bold;}
+.srsdialog-form{
+  overflow-y: auto;
+  height: 300px;
+}
 
 /* autocomplete */
 

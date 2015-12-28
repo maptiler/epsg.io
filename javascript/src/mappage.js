@@ -8,8 +8,7 @@
 
 goog.provide('epsg.io.MapPage');
 
-goog.require('epsg.io.DegreeFormatter');
-goog.require('epsg.io.SRSSearch');
+goog.require('epsg.io.SRSPopup');
 goog.require('goog.Timer');
 goog.require('goog.Uri.QueryData');
 goog.require('goog.dom');
@@ -28,114 +27,53 @@ goog.require('ol.source.TileJSON');
  * @type {string}
  * @const
  */
-epsg.io.TRANS_SERVICE_URL = '//epsg.io/trans';
+epsg.io.TRANS_SERVICE_URL = '/trans';
 
 
 
 /**
- * @param {string=} opt_srs Spatial Reference System (usually EPSG code)
- * @param {Array.<number>=} opt_bbox [n,w,s,e]
- * @param {number=} opt_lon Longitude of map center (defaults to 0)
- * @param {number=} opt_lat Latitude of map center (defaults to 0)
- * @param {string=} opt_proj4 Proj4 definition of opt_srs
  * @constructor
  */
-epsg.io.MapPage = function(opt_srs, opt_bbox, opt_lon, opt_lat, opt_proj4) {
+epsg.io.MapPage = function() {
 
-  /**
-   * @type {boolean}
-   * @private
-   */
-  this.dynamicMode_ = !goog.isDef(opt_srs);
+  this.srsTitleEl_ = goog.dom.getElement('crs-title');
+  this.srsSearchEl_ = goog.dom.getElement('crs-search');
+  this.srsDetailLinkEl_ = goog.dom.getElement('crs-detail-link');
+  this.copyClipboardContainerEl_ = /** @type {!Element} */
+      (goog.dom.getElement('copy-clipboard-container'));
 
-  // additional handling, if running on /map -- allow srs to be changed
-  if (this.dynamicMode_) {
-    this.srsTitleEl_ = goog.dom.getElement('crs-title');
-    this.srsSearchEl_ = goog.dom.getElement('crs-search');
-    this.srsDetailLinkEl_ = goog.dom.getElement('crs-detail-link');
-    this.copyClipboardContainerEl_ = /** @type {!Element} */
-        (goog.dom.getElement('copy-clipboard-container'));
+  goog.style.setElementShown(this.copyClipboardContainerEl_, false);
+  goog.style.setElementShown(this.srsDetailLinkEl_, false);
 
-    goog.style.setElementShown(this.copyClipboardContainerEl_, false);
-    goog.style.setElementShown(this.srsDetailLinkEl_, false);
+  this.srs_ = null;
 
-    this.srsSearch_ = new epsg.io.SRSSearch('crs-search', undefined, true);
+  this.srsPopup_ = new epsg.io.SRSPopup();
+  this.srsPopup_.listen(epsg.io.SRSPopup.EventType.SRS_SELECTED,
+      function(e) {
+        if (e.data) {
+          this.srs_ = e.data;
+          this.handleSRSChange_();
+        }
+      }, false, this);
 
-    this.srsSearch_.listen(epsg.io.SRSSearch.EventType.SRS_SELECTED,
-        function(e) {
-          this.srs_ = e.data['code'];
-          this.keepEastNorth = false;
-          this.makeQuery();
-
-          goog.dom.setTextContent(this.srsTitleEl_,
-              'EPSG:' + e.data['code'] + ' ' + e.data['name']);
-          this.srsDetailLinkEl_.href = '/' + e.data['code'];
-          goog.style.setElementShown(this.copyClipboardContainerEl_, true);
-          goog.style.setElementShown(this.srsDetailLinkEl_, true);
-
-          var newProj;
-          var bbox = e.data['bbox'];
-          if (e.data['proj4'].length > 0 &&
-              goog.isArray(bbox) && bbox.length == 4) {
-            var newProjCode = 'EPSG:' + e.data['code'];
-            proj4.defs(newProjCode, e.data['proj4']);
-            newProj = ol.proj.get(newProjCode);
-            var fromLonLat = ol.proj.getTransform('EPSG:4326', newProj);
-
-            // very approximate calculation of projection extent
-            var extent = ol.extent.applyTransform(
-                [bbox[1], bbox[2], bbox[3], bbox[0]], fromLonLat);
-            newProj.setExtent(extent);
-          }
-
-          /*
-          if (goog.isArray(e.data.bbox) && e.data.bbox.length == 4) {
-            var extent = ol.proj.transformExtent(
-                [e.data.bbox[1], e.data.bbox[2],
-                 e.data.bbox[3], e.data.bbox[0]],
-                'EPSG:4326', 'EPSG:3857');
-            var center = this.view_.getCenter();
-            // only recenter when outside extent
-            if (extent && center &&
-                !ol.extent.containsCoordinate(extent, center)) {
-              var size = this.map_.getSize();
-              if (size) {
-                this.view_.fit(extent, size);
-              }
-            }
-          }
-          */
-
-          this.reprojectMapElement_.disabled = !newProj;
-          if (this.reprojectMapElement_.disabled) {
-            this.reprojectMapElement_.checked = false;
-          }
-          if (this.reprojectMapElement_.checked) {
-            this.updateMapView_();
-          }
-
-          this.updateHash_();
-        }, false, this);
-  }
-
-  /**
-   * @type {string}
-   * @private
-   */
-  this.srs_ = opt_srs || '4326';
-  var bbox = opt_bbox || [85, -180, -85, 180];
+  this.srsChange_ = goog.dom.getElement('crs-change');
+  goog.events.listen(this.srsChange_, goog.events.EventType.CLICK,
+      function(e) {
+        this.srsPopup_.show();
+        e.preventDefault();
+      }, false, this);
 
   /**
    * @type {number}
    * @private
    */
-  this.lon_ = opt_lon || 0;
+  this.lon_ = 0;
 
   /**
    * @type {number}
    * @private
   */
-  this.lat_ = opt_lat || 0;
+  this.lat_ = 0;
 
   // LOAD ALL THE EXPECTED ELEMENTS ON THE PAGE
   this.mapElement = /** @type {!Element} */(goog.dom.getElement('map'));
@@ -147,8 +85,6 @@ epsg.io.MapPage = function(opt_srs, opt_bbox, opt_lon, opt_lat, opt_proj4) {
   this.geocoderElement = /** @type {!HTMLInputElement} */
       (goog.dom.getElement('geocoder'));
 
-  this.degreeFormatter = new epsg.io.DegreeFormatter();
-
   this.eastingElement = goog.dom.getElement('easting');
   this.northingElement = goog.dom.getElement('northing');
   this.eastNorthFormElement = goog.dom.getElement('eastnorth_form');
@@ -158,7 +94,6 @@ epsg.io.MapPage = function(opt_srs, opt_bbox, opt_lon, opt_lat, opt_proj4) {
 
   // Force preservation of user typed values on recalculation
   this.keepHash = true;
-  this.keepLonLat = false;
   this.keepEastNorth = false;
 
   /**
@@ -173,22 +108,6 @@ epsg.io.MapPage = function(opt_srs, opt_bbox, opt_lon, opt_lat, opt_proj4) {
    */
   this.jsonp_ = new goog.net.Jsonp(epsg.io.TRANS_SERVICE_URL);
 
-  if (opt_proj4) {
-    var newProj;
-    if (goog.isArray(bbox) && bbox.length == 4) {
-      var newProjCode = 'EPSG:' + this.srs_;
-      proj4.defs(newProjCode, opt_proj4);
-      newProj = ol.proj.get(newProjCode);
-      var fromLonLat = ol.proj.getTransform('EPSG:4326', newProj);
-
-      // very approximate calculation of projection extent
-      var extent = ol.extent.applyTransform(
-          [bbox[1], bbox[2], bbox[3], bbox[0]], fromLonLat);
-      newProj.setExtent(extent);
-    }
-    this.reprojectMapElement_.disabled = !newProj;
-  }
-
   this.map_ = new ol.Map({
     target: this.mapElement,
     view: null,
@@ -201,13 +120,6 @@ epsg.io.MapPage = function(opt_srs, opt_bbox, opt_lon, opt_lat, opt_proj4) {
         this.updateHash_();
       }, false, this);
   this.updateMapView_();
-
-  var size = this.map_.getSize();
-  if (size) {
-    this.view_.fit(
-        ol.proj.transformExtent([bbox[1], bbox[2], bbox[3], bbox[0]],
-        'EPSG:4326', this.view_.getProjection()), size);
-  }
 
   this.updateLonLat_([this.lon_, this.lat_]);
 
@@ -224,30 +136,29 @@ epsg.io.MapPage = function(opt_srs, opt_bbox, opt_lon, opt_lat, opt_proj4) {
 
   this.keepHash = false;
 
-  goog.events.listen(this.degreeFormatter,
-      epsg.io.DegreeFormatter.EventType.CHANGE, function(e) {
-        this.keepLonLat = true;
-        this.updateLonLat_(e.lonlat);
-        this.keepLonLat = false;
-      }, false, this);
-
-  goog.events.listen(this.degreeFormatter,
-      epsg.io.DegreeFormatter.EventType.FORMAT_CHANGE, function(e) {
-        this.updateHash_();
+  goog.events.listen(this.map_, ol.MapBrowserEvent.EventType.SINGLECLICK,
+      function(e) {
+        var pan = ol.animation.pan({
+          duration: 150,
+          source: this.view_.getCenter()
+        });
+        this.map_.beforeRender(pan);
+        this.view_.setCenter(e.coordinate);
+        e.preventDefault();
       }, false, this);
 
   // The user can type easting / northing and hit Enter
   goog.events.listen(this.eastNorthFormElement, goog.events.EventType.SUBMIT,
       function(e) {
+        if (!this.srs_) return;
         var easting = goog.string.toNumber(this.eastingElement.value);
         var northing = goog.string.toNumber(this.northingElement.value);
         if (!isNaN(easting) && !isNaN(northing)) {
           // Make the query to epsg.io/trans to get new lat/lon
-          this.degreeFormatter.setLonLat(null, null);
           this.jsonp_.send({
             'x': easting,
             'y': northing,
-            's_srs': this.srs_
+            's_srs': this.srs_['code']
           }, goog.bind(function(result) {
             var latitude = goog.string.toNumber(result['y']);
             var longitude = goog.string.toNumber(result['x']);
@@ -294,6 +205,66 @@ epsg.io.MapPage = function(opt_srs, opt_bbox, opt_lon, opt_lat, opt_proj4) {
 /**
  * @private
  */
+epsg.io.MapPage.prototype.handleSRSChange_ = function() {
+  if (!this.srs_) return;
+
+  this.keepEastNorth = false;
+  this.makeQuery();
+
+  goog.dom.setTextContent(this.srsTitleEl_,
+      'EPSG:' + this.srs_['code'] + ' ' + this.srs_['name']);
+  this.srsDetailLinkEl_.href = '/' + this.srs_['code'];
+  goog.style.setElementShown(this.copyClipboardContainerEl_, true);
+  goog.style.setElementShown(this.srsDetailLinkEl_, true);
+
+  var newProj;
+  var bbox = this.srs_['bbox'];
+  if (this.srs_['proj4'].length > 0 &&
+      goog.isArray(bbox) && bbox.length == 4) {
+    var newProjCode = 'EPSG:' + this.srs_['code'];
+    proj4.defs(newProjCode, this.srs_['proj4']);
+    newProj = ol.proj.get(newProjCode);
+    var fromLonLat = ol.proj.getTransform('EPSG:4326', newProj);
+
+    // very approximate calculation of projection extent
+    var extent = ol.extent.applyTransform(
+        [bbox[1], bbox[2], bbox[3], bbox[0]], fromLonLat);
+    newProj.setExtent(extent);
+  }
+
+  /*
+  if (goog.isArray(bbox) && bbox.length == 4) {
+    var extent = ol.proj.transformExtent(
+        [bbox[1], bbox[2],
+         bbox[3], bbox[0]],
+        'EPSG:4326', this.view_.getProjection());
+    var center = this.view_.getCenter();
+    // only recenter when outside extent
+    if (extent && center &&
+        !ol.extent.containsCoordinate(extent, center)) {
+      var size = this.map_.getSize();
+      if (size) {
+        this.view_.fit(extent, size);
+      }
+    }
+  }
+  */
+
+  this.reprojectMapElement_.disabled = !newProj;
+  if (this.reprojectMapElement_.disabled) {
+    this.reprojectMapElement_.checked = false;
+  }
+  if (this.reprojectMapElement_.checked) {
+    this.updateMapView_();
+  }
+
+  this.updateHash_();
+};
+
+
+/**
+ * @private
+ */
 epsg.io.MapPage.prototype.updateMapType_ = function() {
   var newLayers = [];
   var src;
@@ -326,9 +297,9 @@ epsg.io.MapPage.prototype.updateMapView_ = function() {
     goog.events.unlistenByKey(this.viewListenKey_);
   }
 
-  var reprojectMap = this.reprojectMapElement_.checked;
+  var reprojectMap = this.reprojectMapElement_.checked && this.srs_;
   var projection = ol.proj.get(reprojectMap ?
-      ('EPSG:' + this.srs_) : 'EPSG:3857');
+      ('EPSG:' + this.srs_['code']) : 'EPSG:3857');
   var resolution = !this.view_ ? null : (this.view_.getResolution() *
       this.view_.getProjection().getMetersPerUnit());
   this.view_ = new ol.View({
@@ -341,6 +312,7 @@ epsg.io.MapPage.prototype.updateMapView_ = function() {
     this.view_.setResolution(this.view_.constrainResolution(
         resolution / this.view_.getProjection().getMetersPerUnit()));
   }
+  this.view_.setCenter(this.view_.constrainCenter(this.view_.getCenter()));
 
   this.map_.setView(this.view_);
 
@@ -366,25 +338,39 @@ epsg.io.MapPage.prototype.makeQuery = function() {
     goog.Timer.clear(this.queryTimer_);
     this.queryTimer_ = null;
   }
+  if (!this.srs_) return;
+  var code = this.srs_['code'];
 
-  // Don't proceed with the JSONP query immediatelly,
-  //   but wait for 500 ms if the user doesn't make a new one.
-  this.queryTimer_ = goog.Timer.callOnce(function() {
-    var showResult = goog.bind(function(result) {
-      if (!this.keepEastNorth) {
-        this.eastingElement.value = result.x;
-        this.northingElement.value = result.y;
-      }
-      this.queryTimer_ = null;
-    }, this);
-
-    var data = { 'x': this.lon_, 'y': this.lat_, 't_srs': this.srs_ };
-    if (this.srs_ == '4326') {// no need to transform
-      showResult(data);
-    } else {
-      this.jsonp_.send(data, showResult);
+  var localProj = ol.proj.get('EPSG:' + code);
+  var localTransform = localProj &&
+                       ol.proj.getTransform('EPSG:4326', localProj);
+  if (localTransform) {
+    if (!this.keepEastNorth) {
+      var result = localTransform([this.lon_, this.lat_]);
+      this.eastingElement.value = result[0].toFixed(2);
+      this.northingElement.value = result[1].toFixed(2);
     }
-  }, 500, this);
+  } else {
+    // Don't proceed with the JSONP query immediatelly,
+    //   but wait for 500 ms if the user doesn't make a new one.
+    this.queryTimer_ = goog.Timer.callOnce(function() {
+      if (!this.srs_) return;
+      var showResult = goog.bind(function(result) {
+        if (!this.keepEastNorth) {
+          this.eastingElement.value = result.x;
+          this.northingElement.value = result.y;
+        }
+        this.queryTimer_ = null;
+      }, this);
+
+      var data = { 'x': this.lon_, 'y': this.lat_, 't_srs': code };
+      if (code == '4326') {// no need to transform
+        showResult(data);
+      } else {
+        this.jsonp_.send(data, showResult);
+      }
+    }, 500, this);
+  }
 };
 
 
@@ -397,9 +383,6 @@ epsg.io.MapPage.prototype.updateLonLat_ = function(lonlat) {
   this.lonLatMutex = true;
   this.lat_ = lonlat[1];
   this.lon_ = lonlat[0];
-  if (!this.keepLonLat) {
-    this.degreeFormatter.setLonLat(this.lon_, this.lat_);
-  }
   if (!this.keepEastNorth) {
     this.makeQuery();
   }
@@ -418,8 +401,10 @@ epsg.io.MapPage.prototype.updateHash_ = function() {
   if (this.keepHash) return;
   var qd = new goog.Uri.QueryData();
 
-  if (this.dynamicMode_) {
-    qd.set('srs', this.srs_);
+  if (this.srs_) {
+    qd.set('srs', this.srs_['code']);
+  } else {
+    qd.remove('srs');
   }
 
   qd.set('lon', this.lon_.toFixed(7));
@@ -434,12 +419,6 @@ epsg.io.MapPage.prototype.updateHash_ = function() {
     qd.set('layer', this.mapTypeElement_.value);
   }
 
-  var format = this.degreeFormatter.getFormat();
-  if (format != epsg.io.DegreeFormatter.Format.DECIMAL) {
-    // do not include default value to shorten the url
-    qd.set('format', format);
-  }
-
   window.location.hash = qd.toString();
 };
 
@@ -450,12 +429,13 @@ epsg.io.MapPage.prototype.updateHash_ = function() {
 epsg.io.MapPage.prototype.parseHash_ = function() {
   var qd = new goog.Uri.QueryData(window.location.hash.substr(1));
 
-
-  if (this.dynamicMode_) {
-    var srs = qd.get('srs');
-    if (srs) {
-      this.srsSearch_.select(/** @type {string} */(srs));
-    }
+  var srs = qd.get('srs');
+  if (srs) {
+    this.srsPopup_.getSRS(/** @type {string} */(srs),
+        goog.bind(function(data) {
+          this.srs_ = data;
+          this.handleSRSChange_();
+        }, this));
   }
 
   var lon = parseFloat(qd.get('lon')), lat = parseFloat(qd.get('lat'));
@@ -470,11 +450,6 @@ epsg.io.MapPage.prototype.parseHash_ = function() {
   if (layer) {
     this.mapTypeElement_.value = /** @type {string} */(layer);
     this.updateMapType_();
-  }
-  var format = qd.get('format');
-  if (format) {
-    this.degreeFormatter.setFormat(
-        /** @type {epsg.io.DegreeFormatter.Format} */(format));
   }
 };
 
