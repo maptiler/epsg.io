@@ -51,8 +51,7 @@ epsg.io.MapPage = function() {
   this.srsPopup_.listen(epsg.io.SRSPopup.EventType.SRS_SELECTED,
       function(e) {
         if (e.data) {
-          this.srs_ = e.data;
-          this.handleSRSChange_();
+          this.handleSRSChange_(e.data);
         }
       }, false, this);
 
@@ -203,9 +202,12 @@ epsg.io.MapPage = function() {
 
 
 /**
+ * @param {Object} srsData
  * @private
  */
-epsg.io.MapPage.prototype.handleSRSChange_ = function() {
+epsg.io.MapPage.prototype.handleSRSChange_ = function(srsData) {
+  var firstSRS = !this.srs_ && !!srsData;
+  this.srs_ = srsData;
   if (!this.srs_) return;
 
   this.keepEastNorth = false;
@@ -232,23 +234,18 @@ epsg.io.MapPage.prototype.handleSRSChange_ = function() {
     newProj.setExtent(extent);
   }
 
-  /*
-  if (goog.isArray(bbox) && bbox.length == 4) {
+  if (firstSRS && goog.isArray(bbox) && bbox.length == 4) {
     var extent = ol.proj.transformExtent(
         [bbox[1], bbox[2],
          bbox[3], bbox[0]],
         'EPSG:4326', this.view_.getProjection());
-    var center = this.view_.getCenter();
-    // only recenter when outside extent
-    if (extent && center &&
-        !ol.extent.containsCoordinate(extent, center)) {
+    if (extent) {
       var size = this.map_.getSize();
       if (size) {
         this.view_.fit(extent, size);
       }
     }
   }
-  */
 
   this.reprojectMapElement_.disabled = !newProj;
   if (this.reprojectMapElement_.disabled) {
@@ -306,7 +303,7 @@ epsg.io.MapPage.prototype.updateMapView_ = function() {
     center: ol.proj.transform([this.lon_, this.lat_], 'EPSG:4326', projection),
     projection: projection,
     extent: projection.getExtent(),
-    zoom: reprojectMap ? 0 : 8
+    zoom: reprojectMap ? 0 : 2
   });
   if (resolution) {
     this.view_.setResolution(this.view_.constrainResolution(
@@ -433,8 +430,7 @@ epsg.io.MapPage.prototype.parseHash_ = function() {
   if (srs) {
     this.srsPopup_.getSRS(/** @type {string} */(srs),
         goog.bind(function(data) {
-          this.srs_ = data;
-          this.handleSRSChange_();
+          this.handleSRSChange_(data);
         }, this));
   }
 
