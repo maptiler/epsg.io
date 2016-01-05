@@ -2,7 +2,7 @@
 # encoding: utf-8
 """
 """
-VERSION = "8.7"
+VERSION = "8.8.1"
 INDEX = "./index"
 DATABASE = "./gml/gml.sqlite"
 
