@@ -269,7 +269,7 @@ epsg.io.MapPage.prototype.updateMapType_ = function() {
   var tilejson = this.mapTypeElement_.options[
       this.mapTypeElement_.selectedIndex].getAttribute('data-tilejson');
   if (tilejson) {
-    src = new ol.source.TileJSON({url: tilejson});
+    src = new ol.source.TileJSON({url: tilejson, useXhr: true});
   } else {
     var mapType = this.mapTypeElement_.value;
     if (mapType == 'mqosm') {

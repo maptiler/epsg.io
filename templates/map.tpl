@@ -19,9 +19,8 @@
         <div id="map"></div>
         <select id="mapType">
           <option value="mqosm">OSM MapQuest</option>
-          <option value="osm">OSM</option>
-          <option value="streets" data-tilejson="http://api.tiles.mapbox.com/v3/klokantech.icij6jpi.jsonp">MapBox Streets</option>
-          <option value="satellite" data-tilejson="http://api.tiles.mapbox.com/v3/klokantech.iciigjd2.jsonp">MapBox Satellite</option>
+          <option value="osm" data-tilejson="http://klokantech.tileserver.com/osm-bright/index.json?key=ITnCvdev3U2WlYotXxrX">OSM Bright</option>
+          <option value="satellite" data-tilejson="https://api.tiles.mapbox.com/v4/epsg.og9084kh.json?access_token=pk.eyJ1IjoiZXBzZyIsImEiOiJjaWloNjQybjgwMDA2dm5tMGE3eTk3eXVuIn0.OuKrtb4M8Fca6cO3waqqWg">MapBox Satellite</option>
         </select>
         <div id="mapsight"></div>
         <div id="head">
