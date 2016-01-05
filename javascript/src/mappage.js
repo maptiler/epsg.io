@@ -107,10 +107,27 @@ epsg.io.MapPage = function() {
    */
   this.jsonp_ = new goog.net.Jsonp(epsg.io.TRANS_SERVICE_URL);
 
+  /**
+   * @type {?google.maps.Map}
+   * @private
+   */
+  this.gmapWrap_ = null;
+
+  /**
+   * @type {!Array}
+   * @private
+   */
+  this.viewListenKeysForGmapWrap_ = [];
+
   this.map_ = new ol.Map({
     target: this.mapElement,
     view: null,
-    layers: []
+    layers: [],
+    controls: [
+      new ol.control.Attribution({
+        collapsible: false,
+        tipLabel: ''
+      })]
   });
 
   goog.events.listen(this.reprojectMapElement_, goog.events.EventType.CHANGE,
@@ -247,7 +264,7 @@ epsg.io.MapPage.prototype.handleSRSChange_ = function(srsData) {
     }
   }
 
-  this.reprojectMapElement_.disabled = !newProj;
+  this.reprojectMapElement_.disabled = !!this.gmapWrap_ || !newProj;
   if (this.reprojectMapElement_.disabled) {
     this.reprojectMapElement_.checked = false;
   }
@@ -263,23 +280,74 @@ epsg.io.MapPage.prototype.handleSRSChange_ = function(srsData) {
  * @private
  */
 epsg.io.MapPage.prototype.updateMapType_ = function() {
-  var newLayers = [];
-  var src;
-
-  var tilejson = this.mapTypeElement_.options[
-      this.mapTypeElement_.selectedIndex].getAttribute('data-tilejson');
-  if (tilejson) {
-    src = new ol.source.TileJSON({url: tilejson, useXhr: true});
-  } else {
-    var mapType = this.mapTypeElement_.value;
-    if (mapType == 'mqosm') {
-      src = new ol.source.MapQuest({layer: 'osm'});
-    } else if (mapType == 'osm') {
-      src = new ol.source.OSM();
-    }
+  if (this.gmapWrap_) {
+    google.maps.event.clearInstanceListeners(this.gmapWrap_);
+    goog.dom.removeChildren(this.mapElement);
+    this.map_.setTarget(this.mapElement);
+    delete this.gmapWrap_;
+    goog.array.forEach(this.viewListenKeysForGmapWrap_,
+                       goog.events.unlistenByKey);
+    this.viewListenKeysForGmapWrap_ = [];
   }
-  //src.setRenderReprojectionEdges(true);
-  newLayers = [new ol.layer.Tile({source: src})];
+
+  this.mapElement.style.backgroundColor = '';
+
+  var newLayers = [];
+
+  var mapType = this.mapTypeElement_.value;
+  var useGmaps = mapType.indexOf('gmaps-') === 0;
+  if (useGmaps) {
+    var olTarget = goog.dom.createDom('div',
+                                      {'style': 'width:100%;height:100%'});
+    this.map_.setTarget(olTarget);
+
+    goog.dom.removeChildren(this.mapElement);
+
+    var gmap = new google.maps.Map(this.mapElement, {
+      disableDefaultUI: true,
+      keyboardShortcuts: false,
+      draggable: false,
+      disableDoubleClickZoom: true,
+      scrollwheel: false,
+      streetViewControl: false,
+      mapTypeId: mapType.substr(6) // part after "gmaps-"
+    });
+    this.gmapWrap_ = gmap;
+    gmap.controls[google.maps.ControlPosition.TOP_LEFT].push(olTarget);
+
+    var v = this.view_;
+    this.viewListenKeysForGmapWrap_.push(v.on('change:center', function() {
+      var center = ol.proj.transform(v.getCenter() || null,
+                                     'EPSG:3857', 'EPSG:4326');
+      gmap.setCenter(new google.maps.LatLng(center[1], center[0]));
+    }));
+    this.viewListenKeysForGmapWrap_.push(v.on('change:resolution', function() {
+      gmap.setZoom(v.getZoom() || 0);
+    }));
+
+    var center = ol.proj.transform(v.getCenter() || null,
+                                   'EPSG:3857', 'EPSG:4326');
+    gmap.setCenter(new google.maps.LatLng(center[1], center[0]));
+    gmap.setZoom(v.getZoom() || 0);
+
+    google.maps.event.addListenerOnce(gmap, 'idle', goog.bind(function() {
+      google.maps.event.trigger(gmap, 'resize');
+      this.map_.updateSize();
+    }, this));
+  } else {
+    var src;
+    var tilejson = this.mapTypeElement_.options[
+        this.mapTypeElement_.selectedIndex].getAttribute('data-tilejson');
+    if (tilejson) {
+      src = new ol.source.TileJSON({url: tilejson, useXhr: true});
+    } else {
+      if (mapType == 'mqosm') {
+        src = new ol.source.MapQuest({layer: 'osm'});
+      }
+    }
+    //src.setRenderReprojectionEdges(true);
+    newLayers = [new ol.layer.Tile({source: src})];
+  }
 
   this.map_.getLayerGroup().setLayers(new ol.Collection(newLayers));
   this.map_.updateSize();
@@ -292,9 +360,13 @@ epsg.io.MapPage.prototype.updateMapType_ = function() {
 epsg.io.MapPage.prototype.updateMapView_ = function() {
   if (this.viewListenKey_) {
     goog.events.unlistenByKey(this.viewListenKey_);
+    goog.array.forEach(this.viewListenKeysForGmapWrap_,
+                       goog.events.unlistenByKey);
+    this.viewListenKeysForGmapWrap_ = [];
   }
 
-  var reprojectMap = this.reprojectMapElement_.checked && this.srs_;
+  var reprojectMap =
+      this.reprojectMapElement_.checked && this.srs_ && !this.gmapWrap_;
   var projection = ol.proj.get(reprojectMap ?
       ('EPSG:' + this.srs_['code']) : 'EPSG:3857');
   var resolution = !this.view_ ? null : (this.view_.getResolution() *
@@ -303,6 +375,7 @@ epsg.io.MapPage.prototype.updateMapView_ = function() {
     center: ol.proj.transform([this.lon_, this.lat_], 'EPSG:4326', projection),
     projection: projection,
     extent: projection.getExtent(),
+    maxZoom: 21,
     zoom: reprojectMap ? 0 : 2
   });
   if (resolution) {
@@ -411,7 +484,7 @@ epsg.io.MapPage.prototype.updateHash_ = function() {
   }
 
   var layer = this.mapTypeElement_.value;
-  if (layer != 'mqosm') {
+  if (layer != 'mqosm' && layer.indexOf('gmaps-') === -1) {
     // do not include default value to shorten the url
     qd.set('layer', this.mapTypeElement_.value);
   }
