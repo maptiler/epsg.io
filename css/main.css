@@ -149,6 +149,9 @@ h4, .h4 { margin: 20px 0 13px 0; padding: 0; font-size: 16px; color: #000; }
 #homepage .socialicons {text-align:center; margin-top:55px;}
 #detailpage .socialicons {float:right;}
 
+.home-action{ text-align: center; height: 32px; margin: 0 auto; padding: 0 30px 45px 30px;}
+.home-action a{float: none; margin: 0 20px; padding: 6px 25px;}
+.home-action a:hover{text-decoration: none; color: #fff; background-color: #4295c5;}
 
 #homepage #logo-container { margin: 0 0 55px 36%; padding: 0; height: 77px; width: auto; display: block; }
 #homepage #logo-container a { padding: 62px 0 0 152px; height: 22px; width: auto; display: block; background: url('../img/logo-232x76.png') 0 0 no-repeat; }
