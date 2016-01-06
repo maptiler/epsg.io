@@ -152,6 +152,37 @@ epsg.io.MapPage = function() {
 
   this.keepHash = false;
 
+  var zoomBtn = function(map, delta, e) {
+    if (!map) return;
+    var view = map.getView(), curRes = view.getResolution();
+    map.beforeRender(ol.animation.zoom({
+      resolution: curRes,
+      duration: 250,
+      easing: ol.easing.easeOut
+    }));
+    view.setResolution(view.constrainResolution(curRes, delta));
+    e.preventDefault();
+  };
+  var mapPlus = goog.dom.getElement('map-plus');
+  var mapMinus = goog.dom.getElement('map-minus');
+  if (mapPlus && mapMinus) {
+    goog.events.listen(mapPlus, goog.events.EventType.CLICK,
+        function(e) {zoomBtn(this.map_, 1, e);}, false, this);
+    goog.events.listen(mapMinus, goog.events.EventType.CLICK,
+        function(e) {zoomBtn(this.map_, -1, e);}, false, this);
+  }
+  var mapSearch = goog.dom.getElement('map-search');
+  var searchContainer = goog.dom.getElement('search-container');
+  if (mapSearch && searchContainer) {
+    goog.events.listen(mapSearch, goog.events.EventType.CLICK, function(e) {
+      if (goog.dom.classlist.toggle(searchContainer, 'visible') &&
+          this.geocoderElement) {
+        this.geocoderElement.focus();
+      }
+      e.preventDefault();
+      e.stopPropagation();
+    }, false, this);
+  }
   goog.events.listen(this.map_, ol.MapBrowserEvent.EventType.SINGLECLICK,
       function(e) {
         var pan = ol.animation.pan({

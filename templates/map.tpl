@@ -18,6 +18,12 @@
     </head>
     <body id="mappage" data-role="page">
         <div id="map"></div>
+        <div id="map-plus">+</div>
+        <div id="map-minus">-</div>
+        <div id="map-search">q</div>
+        <div id="search-container">
+            <p><form><input type="search" name="geocoder" id="geocoder" placeholder="Place or address" /></form></p>
+        </div>
         <select id="mapType">
           <option value="mqosm">OSM MapQuest</option>
           <option value="osm" data-tilejson="http://klokantech.tileserver.com/osm-bright/index.json?key=ITnCvdev3U2WlYotXxrX">OSM Bright</option>
@@ -37,9 +43,6 @@
                 </ul>
             </div>
             <div id="search-lat-lg-container">
-                <div id="search-container">
-                    <p><form><input type="search" name="geocoder" id="geocoder" placeholder="Place or address" /> <input type="submit" name="send" value="search" /></form></p>
-                </div>
                 <div id="reproject_map_container">
                   <input type="checkbox" id="reproject_map" /><label for="reproject_map">Reproject Map BETA</label>
                 </div>

@@ -105,6 +105,9 @@ h4, .h4 { margin: 20px 0 13px 0; padding: 0; font-size: 16px; color: #000; }
 
 #mappage {width:100%;height:100%;position:absolute;}
 #map { position: absolute; top:0px; bottom:0px; left:0; right:0; border: 0; margin:0; padding:0;}
+#map-plus, #map-minus, #map-search {position:absolute; top:30%; right:0; width:30px; height:30px; background:#ccc;color:#000;text-align:center;font-size:15px;line-height:30px;cursor:pointer;}
+#map-minus {margin-top:33px;}
+#map-search {margin-top:66px;}
 #mapType {position:absolute;bottom:20px;right:10px;}
 #mapsight {position: absolute; top:50%; left:50%; width:51px; height:51px; margin:-26px; pointer-events:none; background: url('../img/epsg-target-large.png') 0 0 no-repeat; }
 
@@ -181,7 +184,8 @@ h4, .h4 { margin: 20px 0 13px 0; padding: 0; font-size: 16px; color: #000; }
 
 #resultspage #search-container { margin: 0 auto; padding: 0; width: 452px; float:right;}
 
-#mappage #search-container { margin: 0 0 0 20px; float: left; }
+#mappage #search-container { position:absolute;right:30px;top:30%;margin-top:66px;width:auto;display:none;}
+#mappage #search-container.visible {display:block;}
 
 #reproject_map_container {float:right;background:#fff;color:#333;padding:3px 6px;margin:4px;}
 #reproject_map_container input {width:16px !important;}
