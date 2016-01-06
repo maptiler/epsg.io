@@ -130,6 +130,12 @@ epsg.io.MapPage = function() {
       })]
   });
 
+  /**
+   * @type {boolean}
+   * @private
+   */
+  this.reprojectionViewOn_ = false;
+
   goog.events.listen(this.reprojectMapElement_, goog.events.EventType.CHANGE,
       function(e) {
         this.updateMapView_();
@@ -269,9 +275,11 @@ epsg.io.MapPage.prototype.handleSRSChange_ = function(srsData) {
 
   var newProj;
   var bbox = this.srs_['bbox'];
+  var code = this.srs_['code'];
   if (this.srs_['proj4'].length > 0 &&
-      goog.isArray(bbox) && bbox.length == 4) {
-    var newProjCode = 'EPSG:' + this.srs_['code'];
+      goog.isArray(bbox) && bbox.length == 4 &&
+      code != '4326' && code != '3857') {
+    var newProjCode = 'EPSG:' + code;
     proj4.defs(newProjCode, this.srs_['proj4']);
     newProj = ol.proj.get(newProjCode);
     var fromLonLat = ol.proj.getTransform('EPSG:4326', newProj);
@@ -290,18 +298,15 @@ epsg.io.MapPage.prototype.handleSRSChange_ = function(srsData) {
     if (extent) {
       var size = this.map_.getSize();
       if (size) {
-        this.view_.fit(extent, size);
+        this.view_.fit(
+            ol.extent.getIntersection(extent,
+                this.view_.getProjection().getExtent()),
+            size);
       }
     }
   }
 
-  this.reprojectMapElement_.disabled = !!this.gmapWrap_ || !newProj;
-  if (this.reprojectMapElement_.disabled) {
-    this.reprojectMapElement_.checked = false;
-  }
-  if (this.reprojectMapElement_.checked) {
-    this.updateMapView_();
-  }
+  this.handleReprojectionConditionsChange_();
 
   this.updateHash_();
 };
@@ -346,6 +351,8 @@ epsg.io.MapPage.prototype.updateMapType_ = function() {
     this.gmapWrap_ = gmap;
     gmap.controls[google.maps.ControlPosition.TOP_LEFT].push(olTarget);
 
+    this.handleReprojectionConditionsChange_();
+
     var v = this.view_;
     this.viewListenKeysForGmapWrap_.push(v.on('change:center', function() {
       var center = ol.proj.transform(v.getCenter() || null,
@@ -374,14 +381,33 @@ epsg.io.MapPage.prototype.updateMapType_ = function() {
     } else {
       if (mapType == 'mqosm') {
         src = new ol.source.MapQuest({layer: 'osm'});
+        (function() {src.opaque_ = false;})();
       }
     }
     //src.setRenderReprojectionEdges(true);
     newLayers = [new ol.layer.Tile({source: src})];
+    this.handleReprojectionConditionsChange_();
   }
 
   this.map_.getLayerGroup().setLayers(new ol.Collection(newLayers));
   this.map_.updateSize();
+};
+
+
+/**
+ * @private
+ */
+epsg.io.MapPage.prototype.handleReprojectionConditionsChange_ = function() {
+  var possible = !this.gmapWrap_ &&
+                 this.srs_ &&
+                 ol.proj.get('EPSG:' + this.srs_['code']);
+  this.reprojectMapElement_.disabled = !possible;
+  if (this.reprojectMapElement_.disabled) {
+    this.reprojectMapElement_.checked = false;
+  }
+  if (this.reprojectionViewOn_) {
+    this.updateMapView_();
+  }
 };
 
 
@@ -397,7 +423,7 @@ epsg.io.MapPage.prototype.updateMapView_ = function() {
   }
 
   var reprojectMap =
-      this.reprojectMapElement_.checked && this.srs_ && !this.gmapWrap_;
+      this.reprojectMapElement_.checked && !!this.srs_ && !this.gmapWrap_;
   var projection = ol.proj.get(reprojectMap ?
       ('EPSG:' + this.srs_['code']) : 'EPSG:3857');
   var resolution = !this.view_ ? null : (this.view_.getResolution() *
@@ -409,6 +435,13 @@ epsg.io.MapPage.prototype.updateMapView_ = function() {
     maxZoom: 21,
     zoom: reprojectMap ? 0 : 2
   });
+
+  this.viewListenKey_ = this.view_.on('change:center', function(e) {
+    var pos = ol.proj.transform(
+        this.view_.getCenter(), this.view_.getProjection(), 'EPSG:4326');
+    this.updateLonLat_(pos);
+  }, this);
+
   if (resolution) {
     this.view_.setResolution(this.view_.constrainResolution(
         resolution / this.view_.getProjection().getMetersPerUnit()));
@@ -416,12 +449,7 @@ epsg.io.MapPage.prototype.updateMapView_ = function() {
   this.view_.setCenter(this.view_.constrainCenter(this.view_.getCenter()));
 
   this.map_.setView(this.view_);
-
-  this.viewListenKey_ = this.view_.on('change:center', function(e) {
-    var pos = ol.proj.transform(
-        this.view_.getCenter(), this.view_.getProjection(), 'EPSG:4326');
-    this.updateLonLat_(pos);
-  }, this);
+  this.reprojectionViewOn_ = reprojectMap;
 };
 
 
@@ -510,7 +538,7 @@ epsg.io.MapPage.prototype.updateHash_ = function() {
 
   qd.set('lon', this.lon_.toFixed(7));
   qd.set('lat', this.lat_.toFixed(7));
-  if (!this.reprojectMapElement_.checked) {
+  if (!this.reprojectionViewOn_) {
     qd.set('z', this.view_.getZoom());
   }
 
