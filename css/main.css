@@ -471,7 +471,7 @@ pre { background: transparent; border: solid 1px #bdbdbd; font-size: 11px; margi
   #head #logo-container {padding: 17px 0 0 47px;}
   #head #menu-top{padding: 18px 60px 0 0;}
   
-  //map
+  /* map */
   #reproject_map_container {top: 55px;}
   #mapType {top: 60px;}
   #mc-info-container {padding: 10px 15px 10px;}
