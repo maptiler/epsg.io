@@ -445,7 +445,6 @@ pre { background: transparent; border: solid 1px #bdbdbd; font-size: 11px; margi
 }
 
 @media (max-width: 940px) {
-  #mappage #head { height: auto; }
   #mappage #head #search-lat-lg-container { height: auto; overflow: hidden; padding-bottom: 10px; }
   #mappage #search-container { float: none; margin: 0 auto; }
   #resultspage #search-container { float: none; margin-bottom: 10px }
@@ -467,7 +466,7 @@ pre { background: transparent; border: solid 1px #bdbdbd; font-size: 11px; margi
   #eb-menu-container { margin: 0 0 30px; float: none; width: auto; }
   #edit-box-container { padding-top: 20px; }
 
-  #head{height: 50px}
+  #mappage #head, #head{height: 50px}
   #head #logo-container a{background-size: 78px 26px; padding: 0px 0 0 125px;}
   #head #logo-container {padding: 17px 0 0 47px;}
   #head #menu-top{padding: 18px 60px 0 0;}
