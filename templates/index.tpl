@@ -54,8 +54,8 @@
         </div>
       </div>  
       <div class="home-action">
-        <a class="btn-dark" href="/map">Get position on a map</a>
-          <a class="btn-dark" href="/transform">Transform coordinates</a>
+        <a class="btn-dark" href="/map">Get&nbsp;position&nbsp;on&nbsp;a&nbsp;map</a>
+        <a class="btn-dark" href="/transform">Transform&nbsp;coordinates</a>
       </div>
     </div>
 

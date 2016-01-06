@@ -105,10 +105,17 @@ h4, .h4 { margin: 20px 0 13px 0; padding: 0; font-size: 16px; color: #000; }
 
 #mappage {width:100%;height:100%;position:absolute;}
 #map { position: absolute; top:0px; bottom:0px; left:0; right:0; border: 0; margin:0; padding:0;}
-#map-plus, #map-minus, #map-search {position:absolute; top:30%; right:0; width:30px; height:30px; background:#ccc;color:#000;text-align:center;font-size:15px;line-height:30px;cursor:pointer;}
+#map-plus, #map-minus, #map-search {
+  position:absolute; top:30%; right:0; width:30px; height:30px; 
+  background:#9d9d9d;color:#fff;text-align:center;font-size: 20px;line-height:30px;cursor:pointer;
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+  font-weight: bold;
+  font-family:'epsg'
+}
 #map-minus {margin-top:33px;}
-#map-search {margin-top:66px;}
-#mapType {position:absolute;bottom:20px;right:10px;}
+#map-search {margin-top:66px; font-size: 17px}
+#mapType {position:absolute;top:99px;right:10px;}
 #mapsight {position: absolute; top:50%; left:50%; width:51px; height:51px; margin:-26px; pointer-events:none; background: url('../img/epsg-target-large.png') 0 0 no-repeat; }
 
 .ol-attribution{position:absolute;right:0;bottom:0;text-align:right;background:rgba(255,255,255,.8);font-size:10px;line-height:10px;padding:2px;}
@@ -166,8 +173,6 @@ h4, .h4 { margin: 20px 0 13px 0; padding: 0; font-size: 16px; color: #000; }
 #homepage h1 { margin: 0 0 47px; padding: 0; text-align: center; font-size: 25px; color: #4295c5; }
 #detailpage h1 { margin-bottom: 0; }
 
-
-#search-lat-lg-container { margin: 0; padding: 9px 0 0 0; clear: both; background: url('../img/bg-hatch.png') 0 0 repeat; height: 41px; width: 100%; }
 #title-container { min-width: 500px;}
 #search-container { margin: 0 auto 50px; padding: 0; width: 475px; }
 #search-container p { margin: 0; padding: 0; overflow: hidden; }
@@ -187,14 +192,16 @@ h4, .h4 { margin: 20px 0 13px 0; padding: 0; font-size: 16px; color: #000; }
 #mappage #search-container { position:absolute;right:30px;top:30%;margin-top:66px;width:auto;display:none;}
 #mappage #search-container.visible {display:block;}
 
-#reproject_map_container {float:right;background:#fff;color:#333;padding:3px 6px;margin:4px;}
-#reproject_map_container input {width:16px !important;}
+#reproject_map_container {position: absolute; top: 89px; right: 176px; background: #fff; color: #4295c5; padding: 4px 16px; margin: 4px; border-radius: 15px; border: 1px solid #cdcdcd;}
+#reproject_map_container input {width:16px !important; margin: 4px;vertical-align: top; line-height: 21px;}
+#reproject_map_container label{vertical-align: top; line-height: 21px; font-size: 12px;}
+.beta{ vertical-align: top; color: #fff; background-color: #4295c5; border-radius: 4px; font-size: 9px; padding: 0px 3px;}
 #lat-lg-container input { margin: 0; padding: 0; border: 0; font-size: 12px; text-align:right; border-bottom:1px solid #ccc;vertical-align:middle;}
 #eastnorth_submit { position: absolute; left: -9999px; width: 1px; height: 1px; }
 
 #head { margin: 0; padding: 0; width: 100%; height: 79px; background: url('../img/bg-head-wide.png') 0 0 no-repeat; border-bottom: solid 1px #d0e1eb; overflow: hidden; }
 #mappage #head-top { margin: 0; padding: 0; width: 100%; height: 79px; background: #fff url('../img/bg-head-wide.png') 0 0 no-repeat; overflow: hidden; }
-#mappage #head { position:absolute; top:0; left:0; height: 129px; background: transparent; }
+#mappage #head { position:absolute; top:0; left:0; height: 79px; background: transparent; }
 #head #logo-container { margin: 0; padding: 22px 0 0 47px; float: left; height: 39px; }
 #mappage #head #logo-container { margin-bottom: 18px; }
 #head #logo-container a { padding: 16px 0 0 125px; float: left; height: 29px; background: url('../img/logo-118x39.png') 0 0 no-repeat; color: #85969f; font-size: 12px; }
@@ -262,7 +269,7 @@ h3.underline-style { margin: 0 0 20px; padding: 0 0 10px; font-size: 14px; color
 input.btn, input.btn-light, input.btn-dark, input[type=submit].srsdialog-table{
   height: 32px;
 }
-.btn-link-container a:hover, .btn:hover{ text-decoration: none; background: #03639B; }
+.btn-link-container a:hover, .btn:hover{ text-decoration: none; background: #03639B; color: #ffffff;}
 .btn-link-container a:hover i, .btn:hover i{ border-color: rgba(255, 255, 255, 0) rgba(255, 255, 255, 0) rgba(255, 255, 255, 0) #fff; }
 #projected-link-trans a:hover span { color: #4295c5; text-decoration: none; }
 
@@ -299,12 +306,14 @@ input.btn, input.btn-light, input.btn-dark, input[type=submit].srsdialog-table{
 #s_gml_text {display:none;}
 #s_xml_text {display:none;}
 
-#map-clipboard-container { position:absolute; width:510px; bottom:25px; left:50%; margin-left: -255px; padding: 0; border-radius: 15px; -moz-border-radius: 15px; -webkit-border-radius: 15px; overflow: hidden; }
-#mc-info-container { margin: 0; padding: 20px 20px 10px; background: #fff; overflow: hidden; }
+
+
+#map-clipboard-container { position:absolute; width:510px; bottom:25px; left:50%; margin-left: -255px; padding: 0; border-radius: 15px; -moz-border-radius: 15px; -webkit-border-radius: 15px; overflow: hidden;  border: solid 1px #cacaca;}
+#mc-info-container { margin: 0; padding: 20px 20px 10px; background: #fff; overflow: hidden;}
 #mc-info-container h1 { margin: 0 0 10px; font-size: 18px; color: #555; }
 #mc-info-container p { margin: 0; overflow: hidden; }
-#mc-info-container p a { color: #4295c5; float: left; }
-#mc-info-container p a.right { float: right; }
+#mc-info-container p a {float: right; margin-left: 10px;}
+
 #copy-clipboard-container { margin: 0; padding: 12px 34px 16px; background: url('../img/bg-hatch-2.png') 0 0 repeat; overflow: hidden; }
 #copy-clipboard-container p { margin: 0; padding: 0; overflow: hidden; font-size: 11px; }
 #copy-clipboard-container input[type="text"] { margin: 0; padding: 1px 0 0 16px; height: 28px; float: left; width: 138px; background: #fff;
@@ -320,7 +329,7 @@ input.btn, input.btn-light, input.btn-dark, input[type=submit].srsdialog-table{
                               -moz-border-radius-topright: 15px; -moz-border-radius-bottomright: 15px;
                               border-top-right-radius: 15px; border-bottom-right-radius: 15px;
                               background: #4295c5; }
-
+#copy-clipboard-container a span{color: #fff;}
 #copy-clipboard-container a:hover { text-decoration: none; background: #4295c5; }
 
 #side-container { margin: 0; padding: 0; float: right; width: 216px; }
@@ -423,9 +432,6 @@ pre { background: transparent; border: solid 1px #bdbdbd; font-size: 11px; margi
 
 .clnr { margin: 0; padding: 0; clear: both; }
 
-
-
-
 /* lower res */
 /* Smartphones (portrait and landscape) ----------- */
 
@@ -443,8 +449,7 @@ pre { background: transparent; border: solid 1px #bdbdbd; font-size: 11px; margi
   #mappage #head #search-lat-lg-container { height: auto; overflow: hidden; padding-bottom: 10px; }
   #mappage #search-container { float: none; margin: 0 auto; }
   #resultspage #search-container { float: none; margin-bottom: 10px }
-
-
+  #mappage #search-container input[type="search"]{width:200px;margin-top: 66px;z-index: 100;}
 }
 @media (max-width: 740px) {
   .detail-content-inner-wide, .covered-area-container {  width: 100%; float: none; overflow: hidden; }
@@ -461,6 +466,24 @@ pre { background: transparent; border: solid 1px #bdbdbd; font-size: 11px; margi
   #code-definition-container { width: 95%; }
   #eb-menu-container { margin: 0 0 30px; float: none; width: auto; }
   #edit-box-container { padding-top: 20px; }
+
+  #head{height: 50px}
+  #head #logo-container a{background-size: 78px 26px; padding: 0px 0 0 125px;}
+  #head #logo-container {padding: 17px 0 0 47px;}
+  #head #menu-top{padding: 18px 60px 0 0;}
+  
+  //map
+  #reproject_map_container {top: 55px;}
+  #mapType {top: 60px;}
+  #mc-info-container {padding: 10px 15px 10px;}
+  #mc-info-container p a{padding: 0px 10px;font-size: 10px;}
+  #copy-clipboard-container {padding: 5px 50px 5px;}
+  #mc-info-container h1 {margin: 0 0 5px; font-size: 14px;}
+  #copy-clipboard-container input[type="text"] {padding: 1px 0 0 13px; height: 25px;}
+  #map-clipboard-container{position: fixed; left: 0; right: 0; bottom: 0; margin-left: 0; width: 100%; z-index: 90;}
+  #copy-clipboard-container input[type="text"] {width:80px;}
+  #copy-clipboard-container a {padding: 7px 3px 0 0; width: 60px; height: 20px; line-height: 14px;}
+  #eastnorth_copy span{display: none;}
 }
 @media (max-width: 480px) {
   #layout-container { width: 450px; }
@@ -542,6 +565,7 @@ pre { background: transparent; border: solid 1px #bdbdbd; font-size: 11px; margi
 
 .ac-active {
   background-color: #b2b4bf;
+  color: #000;
 }
 
 .ac-type {
