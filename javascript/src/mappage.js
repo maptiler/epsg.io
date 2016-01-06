@@ -118,6 +118,12 @@ epsg.io.MapPage = function() {
    * @type {!Array}
    * @private
    */
+  this.viewListenKeys_ = [];
+
+  /**
+   * @type {!Array}
+   * @private
+   */
   this.viewListenKeysForGmapWrap_ = [];
 
   this.map_ = new ol.Map({
@@ -154,8 +160,6 @@ epsg.io.MapPage = function() {
   this.updateMapView_();
 
   this.updateLonLat_([this.lon_, this.lat_]);
-
-  this.viewListenKey_ = null;
 
   this.parseHash_();
 
@@ -426,8 +430,9 @@ epsg.io.MapPage.prototype.handleReprojectionConditionsChange_ = function() {
  * @private
  */
 epsg.io.MapPage.prototype.updateMapView_ = function() {
-  if (this.viewListenKey_) {
-    goog.events.unlistenByKey(this.viewListenKey_);
+  if (this.viewListenKeys_.length) {
+    goog.array.forEach(this.viewListenKeys_, goog.events.unlistenByKey);
+    this.viewListenKeys_ = [];
     goog.array.forEach(this.viewListenKeysForGmapWrap_,
                        goog.events.unlistenByKey);
     this.viewListenKeysForGmapWrap_ = [];
@@ -447,11 +452,15 @@ epsg.io.MapPage.prototype.updateMapView_ = function() {
     zoom: reprojectMap ? 0 : 2
   });
 
-  this.viewListenKey_ = this.view_.on('change:center', function(e) {
+  this.viewListenKeys_.push(this.view_.on('change:center', function(e) {
     var pos = ol.proj.transform(
         this.view_.getCenter(), this.view_.getProjection(), 'EPSG:4326');
     this.updateLonLat_(pos);
-  }, this);
+  }, this));
+
+  this.viewListenKeys_.push(this.view_.on('change:resolution', function(e) {
+    this.updateHash_();
+  }, this));
 
   if (resolution) {
     this.view_.setResolution(this.view_.constrainResolution(
@@ -549,9 +558,7 @@ epsg.io.MapPage.prototype.updateHash_ = function() {
 
   qd.set('lon', this.lon_.toFixed(7));
   qd.set('lat', this.lat_.toFixed(7));
-  if (!this.reprojectionViewOn_) {
-    qd.set('z', this.view_.getZoom());
-  }
+  qd.set('z', this.view_.getZoom());
 
   if (this.reprojectionViewOn_) {
     qd.set('reproject', '1');
@@ -575,15 +582,20 @@ epsg.io.MapPage.prototype.parseHash_ = function() {
 
   var srs = qd.get('srs');
   var lon = parseFloat(qd.get('lon')), lat = parseFloat(qd.get('lat'));
+  var z = parseInt(qd.get('z'), 10);
+  var reproject = qd.get('reproject') == '1';
+
   var isLonLat = goog.math.isFiniteNumber(lon) && goog.math.isFiniteNumber(lat);
   if (srs) {
     this.srsPopup_.getSRS(/** @type {string} */(srs),
         goog.bind(function(data) {
           this.handleSRSChange_(data, isLonLat);
-          var reproject = qd.get('reproject');
-          if (reproject == '1') {
+          if (reproject) {
             this.reprojectMapElement_.checked = true;
             this.updateMapView_();
+            if (goog.math.isFiniteNumber(z)) {
+              this.view_.setZoom(z);
+            }
             this.updateHash_();
           }
         }, this));
@@ -592,8 +604,7 @@ epsg.io.MapPage.prototype.parseHash_ = function() {
   if (isLonLat) {
     this.updateLonLat_([lon, lat]);
   }
-  var z = parseInt(qd.get('z'), 10);
-  if (goog.math.isFiniteNumber(z)) {
+  if (!reproject && goog.math.isFiniteNumber(z)) {
     this.view_.setZoom(z);
   }
 
