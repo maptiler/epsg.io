@@ -14,6 +14,7 @@ goog.require('goog.Uri.QueryData');
 goog.require('goog.dom');
 goog.require('goog.net.Jsonp');
 goog.require('kt.Nominatim');
+goog.require('kt.alert');
 goog.require('ol.Map');
 goog.require('ol.View');
 goog.require('ol.extent');
@@ -136,6 +137,15 @@ epsg.io.MapPage = function() {
    */
   this.reprojectionViewOn_ = false;
 
+  goog.events.listen(this.reprojectMapElement_, goog.events.EventType.CLICK,
+      function(e) {
+        if (this.reprojectMapElement_.readOnly) {
+          kt.alert('Reprojection is not possible for currently ' +
+                   'selected coordinate system.', 'Reprojection');
+          e.preventDefault();
+        }
+      }, false, this);
+
   goog.events.listen(this.reprojectMapElement_, goog.events.EventType.CHANGE,
       function(e) {
         this.updateMapView_();
@@ -257,9 +267,10 @@ epsg.io.MapPage = function() {
 
 /**
  * @param {Object} srsData
+ * @param {boolean=} opt_dontCenter
  * @private
  */
-epsg.io.MapPage.prototype.handleSRSChange_ = function(srsData) {
+epsg.io.MapPage.prototype.handleSRSChange_ = function(srsData, opt_dontCenter) {
   var firstSRS = !this.srs_ && !!srsData;
   this.srs_ = srsData;
   if (!this.srs_) return;
@@ -290,7 +301,7 @@ epsg.io.MapPage.prototype.handleSRSChange_ = function(srsData) {
     newProj.setExtent(extent);
   }
 
-  if (firstSRS && goog.isArray(bbox) && bbox.length == 4) {
+  if (!opt_dontCenter && firstSRS && goog.isArray(bbox) && bbox.length == 4) {
     var extent = ol.proj.transformExtent(
         [bbox[1], bbox[2],
          bbox[3], bbox[0]],
@@ -401,8 +412,8 @@ epsg.io.MapPage.prototype.handleReprojectionConditionsChange_ = function() {
   var possible = !this.gmapWrap_ &&
                  this.srs_ &&
                  ol.proj.get('EPSG:' + this.srs_['code']);
-  this.reprojectMapElement_.disabled = !possible;
-  if (this.reprojectMapElement_.disabled) {
+  this.reprojectMapElement_.readOnly = !possible;
+  if (!possible) {
     this.reprojectMapElement_.checked = false;
   }
   if (this.reprojectionViewOn_) {
@@ -542,6 +553,10 @@ epsg.io.MapPage.prototype.updateHash_ = function() {
     qd.set('z', this.view_.getZoom());
   }
 
+  if (this.reprojectionViewOn_) {
+    qd.set('reproject', '1');
+  }
+
   var layer = this.mapTypeElement_.value;
   if (layer != 'mqosm' && layer.indexOf('gmaps-') === -1) {
     // do not include default value to shorten the url
@@ -559,21 +574,29 @@ epsg.io.MapPage.prototype.parseHash_ = function() {
   var qd = new goog.Uri.QueryData(window.location.hash.substr(1));
 
   var srs = qd.get('srs');
+  var lon = parseFloat(qd.get('lon')), lat = parseFloat(qd.get('lat'));
+  var isLonLat = goog.math.isFiniteNumber(lon) && goog.math.isFiniteNumber(lat);
   if (srs) {
     this.srsPopup_.getSRS(/** @type {string} */(srs),
         goog.bind(function(data) {
-          this.handleSRSChange_(data);
+          this.handleSRSChange_(data, isLonLat);
+          var reproject = qd.get('reproject');
+          if (reproject == '1') {
+            this.reprojectMapElement_.checked = true;
+            this.updateMapView_();
+            this.updateHash_();
+          }
         }, this));
   }
 
-  var lon = parseFloat(qd.get('lon')), lat = parseFloat(qd.get('lat'));
-  if (goog.math.isFiniteNumber(lon) && goog.math.isFiniteNumber(lat)) {
+  if (isLonLat) {
     this.updateLonLat_([lon, lat]);
   }
   var z = parseInt(qd.get('z'), 10);
   if (goog.math.isFiniteNumber(z)) {
     this.view_.setZoom(z);
   }
+
   var layer = qd.get('layer');
   if (layer) {
     this.mapTypeElement_.value = /** @type {string} */(layer);
