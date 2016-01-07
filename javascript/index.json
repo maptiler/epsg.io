@@ -1,0 +1,7 @@
+{
+  "id": "index",
+  "inherits": "base.json",
+
+  "inputs": "src/main.js",
+  "paths": ["src"]
+}

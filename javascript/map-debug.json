@@ -1,0 +1,10 @@
+{
+  "id": "map-debug",
+  "inherits": "map.json",
+
+  "define": {
+    "goog.DEBUG": true
+  },
+  "pretty-print": true,
+  "debug": true
+}

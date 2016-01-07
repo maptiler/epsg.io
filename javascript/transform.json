@@ -1,0 +1,10 @@
+{
+  "id": "transform",
+  "inherits": "base.json",
+
+  "inputs": "src/transformpage.js",
+  "paths": ["src", "library/src"],
+
+  "externs": [
+  ]
+}

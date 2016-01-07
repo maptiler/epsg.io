@@ -2,7 +2,7 @@
 # encoding: utf-8
 """
 """
-VERSION = "8.7"
+VERSION = "8.8.1"
 INDEX = "./index"
 DATABASE = "./gml/gml.sqlite"
 
@@ -346,14 +346,14 @@ def index():
         if wkt and r['bbox']:
           # a = ref.ImportFromWkt(r['wkt'])
           # if a == 0:
-          url_map = "/" + r['code']+ "/map"
+          url_map = "/map#srs=" + r['code']
 
 
       result.append({'r':r, 'name':name, 'type_epsg':type_epsg, 'link':link, 'area':short_area, 'short_code':short_code, 'url_map':url_map})
       if not expanded_trans and format == "json":
         proj4 = ref.ExportToProj4().strip()
         #proj4js = '%s["%s:%s"] = "%s";' % ("Proj4js.defs", type_epsg, short_code[0], proj4)
-        json_str.append({'code':r['code'], 'name':name, 'wkt':wkt,'proj4':proj4,'default_trans':r['code_trans'],'trans':r['trans'],'area':r['area'],'accuracy':r['accuracy'],'kind':r['kind'], 'bbox':r['bbox']})
+        json_str.append({'code':r['code'], 'name':name, 'wkt':wkt,'proj4':proj4,'default_trans':r['code_trans'],'trans':r['trans'],'area':r['area'],'accuracy':r['accuracy'],'kind':r['kind'], 'bbox':r['bbox'], 'unit':r['uom']})
 
 
       elif expanded_trans and format == "json":
@@ -494,15 +494,14 @@ def index():
           json_bbox = []
           if r['trans']:
             for item in r['trans']:
-              json_bbox.append({'code_trans':item, 'bbox': code_with_bbox[item][0]['bbox'],'name': code_with_bbox[item][0]['name'],'accuracy': code_with_bbox[item][0]['accuracy'],'wkt':code_with_bbox[item][1], 'proj4':code_with_bbox[item][2],'area':code_with_bbox[item][0]['area'] })
-          json_str.append({'code':r['code'], 'name':r['name'], 'wkt':wkt_parent,'proj4':proj4_parent,'default_trans':r['code_trans'],'accuracy':r['accuracy'],'kind':r['kind'], 'trans':json_bbox,'area':r['area']})
+              json_bbox.append({'code_trans':item, 'bbox': code_with_bbox[item][0]['bbox'],'name': code_with_bbox[item][0]['name'],'accuracy': code_with_bbox[item][0]['accuracy'],'wkt':code_with_bbox[item][1], 'proj4':code_with_bbox[item][2],'area':code_with_bbox[item][0]['area'],'unit':r['uom']})
+          json_str.append({'code':r['code'], 'name':r['name'], 'wkt':wkt_parent,'proj4':proj4_parent,'default_trans':r['code_trans'],'accuracy':r['accuracy'],'kind':r['kind'], 'trans':json_bbox,'area':r['area'],'bbox':r['bbox'],'unit':r['uom']})
 
       export['number_result']= num_results
       export['results'] = json_str
       return jsonResponse(export, callback)
 
   return template('./templates/results', selected_kind_index=selected_kind_index, num_deprecated=num_deprecated, show_alt_search=show_alt_search, kind_low=kind_low, num_kind=num_kind, short_code=short_code, title=title, query=query, deprecated=deprecated, num_results=num_results, elapsed=elapsed, facets_list=facets_list, url_facet_statquery=url_facet_statquery, result=result, pagenum=int(pagenum),paging=paging, version=VERSION)
-
 
 
 @route('/<id:re:[\d]+(-[\d]+)?>')
@@ -519,13 +518,13 @@ def index(id):
     query = "code:" + code + " kind:CRS OR kind:COORDOP" #1068-datum, 1068-area,1068 (transformation)
     myquery = parser.parse(query)
     results = searcher.search(myquery, limit=None) #default limit is 10 , reverse = True
-    
+
     # For no result, better error message
     if len(results) == 0:
       error = 404
       try_url= ""
-      return template('./templates/error', error=error, try_url=try_url, version=VERSION)	
-    
+      return template('./templates/error', error=error, try_url=try_url, version=VERSION)
+
     detail = []
     trans_unsorted = []
     trans = []
@@ -1234,14 +1233,7 @@ def index(id, format):
 
     # One of the formats is a map (because /coordinates/ was redirect on /coordinates and then catch by <format>)
     if format == "/map":
-      if bbox:
-        n, w, s, e = bbox
-        center = (n-s)/2.0 + s, (e-w)/2.0 + w
-        if (e < w):
-          center = (n-s)/2.0+s, (w+180 + (360-(w+180)+e+180) / 2.0 ) % 360-180
-      else:
-	    center = 0,0
-      return template ('./templates/map', name=rname, code=rcode, url_coords=url_coords, center=center, bbox=mbbox)
+      return redirect("/map#srs=" + rcode);
 
     ref.ImportFromWkt(wkt)
     ct = "text/plain"
@@ -1341,6 +1333,10 @@ def index(id, format):
 
 @route('/trans')
 def index():
+
+  if (len(request.GET.keys()) == 0):
+    return redirect('/transform')
+
   tcode_trans_values = None
   scode_trans_values = None
   swkt = None
@@ -1694,6 +1690,14 @@ def index(id,format):
 
       else:
         redirect ('/%s' %url)
+
+@route('/map')
+def index():
+  return template('./templates/map', version=VERSION)
+
+@route('/transform')
+def index():
+  return template('./templates/transform', version=VERSION)
 
 @route('/about')
 def index():

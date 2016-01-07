@@ -1,0 +1,6 @@
+[submodule "javascript/ol3"]
+	path = javascript/ol3
+	url = https://github.com/openlayers/ol3.git
+[submodule "javascript/library"]
+	path = javascript/library
+	url = https://github.com/klokantech/javascript.git
