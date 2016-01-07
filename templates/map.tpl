@@ -52,6 +52,7 @@
         <p>
           <a href="#" id="crs-change" class="btn">Change</a>
           <a id="crs-detail-link" class="btn-dark" href="#" title="">Details</a>
+          <a id="crs-transform-link" class="btn-dark" href="/transform" title="">Transform</a>
         </p>
       </div>
       <div id="copy-clipboard-container">

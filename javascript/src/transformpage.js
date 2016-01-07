@@ -11,6 +11,7 @@ goog.require('epsg.io.SRSPopup');
 goog.require('goog.Uri.QueryData');
 goog.require('goog.dom');
 goog.require('goog.net.Jsonp');
+goog.require('goog.net.cookies');
 goog.require('goog.style');
 goog.require('kt.CoordinateInput');
 goog.require('kt.alert');
@@ -113,7 +114,34 @@ epsg.io.TransformPage = function() {
 
   this.parseHash_(goog.bind(function() {
     this.keepHash_ = false;
+    this.updateHash_();
   }, this));
+};
+
+
+/**
+ * @private
+ */
+epsg.io.TransformPage.prototype.updateMapLinks_ = function() {
+  var inLink = goog.dom.getElement('srs-in-map-link');
+  if (this.srsIn_ && this.srsInX_ && this.srsInY_) {
+    inLink.href = '/map#srs=' + this.srsIn_['code'] +
+                  '&x=' + this.srsInX_.getValue() +
+                  '&y=' + this.srsInY_.getValue();
+    inLink.style.display = '';
+  } else {
+    inLink.style.display = 'none';
+  }
+
+  var outLink = goog.dom.getElement('srs-out-map-link');
+  if (this.srsOut_ && this.srsOutX_ && this.srsOutY_) {
+    outLink.href = '/map#srs=' + this.srsOut_['code'] +
+        '&x=' + this.srsOutX_.getValue() +
+        '&y=' + this.srsOutY_.getValue();
+    outLink.style.display = '';
+  } else {
+    outLink.style.display = 'none';
+  }
 };
 
 
@@ -180,6 +208,7 @@ epsg.io.TransformPage.prototype.transform_ = function(opt_manual) {
         if (goog.isDef(data['x']) && goog.isDef(data['x'])) {
           this.srsOutX_.setValue(data['x']);
           this.srsOutY_.setValue(data['y']);
+          this.updateMapLinks_();
         }
       }, this));
     } else if (opt_manual) {
@@ -189,6 +218,7 @@ epsg.io.TransformPage.prototype.transform_ = function(opt_manual) {
     kt.alert('Select coordinate systems before transforming!', 'Error');
   }
   this.updateHash_();
+  this.updateMapLinks_();
 };
 
 
@@ -204,6 +234,7 @@ epsg.io.TransformPage.prototype.updateHash_ = function() {
   }
   if (this.srsOut_) {
     qd.set('t_srs', this.srsOut_['code']);
+    goog.net.cookies.set('t_srs', this.srsOut_['code'], 365 * 24 * 60 * 60);
   }
 
   var x = this.srsInX_.getValue();
@@ -235,7 +266,7 @@ epsg.io.TransformPage.prototype.parseHash_ = function(callback) {
           if (--toBeLoaded <= 0) callback();
         }, this));
   }
-  var t_srs = qd.get('t_srs');
+  var t_srs = qd.get('t_srs') || goog.net.cookies.get('t_srs');
   if (t_srs) {
     toBeLoaded++;
     this.srsPopup_.getSRS(/** @type {string} */(t_srs),

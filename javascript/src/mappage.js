@@ -490,34 +490,40 @@ epsg.io.MapPage.prototype.makeQuery = function() {
   if (!this.srs_) return;
   var code = this.srs_['code'];
 
+  var updateTransformLink = goog.bind(function() {
+    goog.dom.getElement('crs-transform-link').href =
+        '/transform#s_srs=' + code +
+        '&x=' + this.eastingElement.value +
+        '&y=' + this.northingElement.value;
+  }, this);
+
   var localProj = ol.proj.get('EPSG:' + code);
   var localTransform = localProj &&
                        ol.proj.getTransform('EPSG:4326', localProj);
   if (localTransform) {
     if (!this.keepEastNorth) {
       var result = localTransform([this.lon_, this.lat_]);
-      this.eastingElement.value = result[0].toFixed(2);
-      this.northingElement.value = result[1].toFixed(2);
+      this.eastingElement.value = result[0].toFixed(4);
+      this.northingElement.value = result[1].toFixed(4);
+      updateTransformLink();
+      this.updateHash_();
     }
   } else {
     // Don't proceed with the JSONP query immediatelly,
     //   but wait for 500 ms if the user doesn't make a new one.
     this.queryTimer_ = goog.Timer.callOnce(function() {
       if (!this.srs_) return;
-      var showResult = goog.bind(function(result) {
+
+      var data = { 'x': this.lon_, 'y': this.lat_, 't_srs': code };
+      this.jsonp_.send(data, goog.bind(function(result) {
         if (!this.keepEastNorth) {
           this.eastingElement.value = result.x;
           this.northingElement.value = result.y;
+          updateTransformLink();
+          this.updateHash_();
         }
         this.queryTimer_ = null;
-      }, this);
-
-      var data = { 'x': this.lon_, 'y': this.lat_, 't_srs': code };
-      if (code == '4326') {// no need to transform
-        showResult(data);
-      } else {
-        this.jsonp_.send(data, showResult);
-      }
+      }, this));
     }, 500, this);
   }
 };
@@ -552,12 +558,12 @@ epsg.io.MapPage.prototype.updateHash_ = function() {
 
   if (this.srs_) {
     qd.set('srs', this.srs_['code']);
+    qd.set('x', this.eastingElement.value);
+    qd.set('y', this.northingElement.value);
   } else {
     qd.remove('srs');
   }
 
-  qd.set('lon', this.lon_.toFixed(7));
-  qd.set('lat', this.lat_.toFixed(7));
   qd.set('z', this.view_.getZoom());
 
   if (this.reprojectionViewOn_) {
@@ -582,14 +588,16 @@ epsg.io.MapPage.prototype.parseHash_ = function() {
 
   var srs = qd.get('srs') || '4326';
   var lon = parseFloat(qd.get('lon')), lat = parseFloat(qd.get('lat'));
+  var x = parseFloat(qd.get('x')), y = parseFloat(qd.get('y'));
   var z = parseInt(qd.get('z'), 10);
   var reproject = qd.get('reproject') == '1';
 
   var isLonLat = goog.math.isFiniteNumber(lon) && goog.math.isFiniteNumber(lat);
+  var isXY = goog.math.isFiniteNumber(x) && goog.math.isFiniteNumber(y);
 
   this.srsPopup_.getSRS(/** @type {string} */(srs),
       goog.bind(function(data) {
-        this.handleSRSChange_(data, isLonLat);
+        this.handleSRSChange_(data, isLonLat || isXY);
         if (reproject) {
           this.reprojectMapElement_.checked = true;
           this.updateMapView_();
@@ -597,6 +605,17 @@ epsg.io.MapPage.prototype.parseHash_ = function() {
             this.view_.setZoom(z);
           }
           this.updateHash_();
+        }
+        if (isXY) {
+          this.jsonp_.send({
+            'x': x,
+            'y': y,
+            's_srs': srs
+          }, goog.bind(function(result) {
+            var latitude = goog.string.toNumber(result['y']);
+            var longitude = goog.string.toNumber(result['x']);
+            this.updateLonLat_([longitude, latitude]);
+          }, this));
         }
       }, this));
 

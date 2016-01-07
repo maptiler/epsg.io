@@ -51,7 +51,9 @@
         margin-top:-100px;
       }
 
-      #srs-in-change, #srs-out-change, #srs-in-details-link, #srs-out-details-link { color:#4295c5; }
+      #srs-in-change, #srs-out-change,
+      #srs-in-details-link, #srs-out-details-link,
+      #srs-in-map-link, #srs-out-map-link { color:#4295c5; }
 
       @media(max-width: 800px){
         .trans-box, .trans-box.right{
@@ -92,13 +94,13 @@
             <label for="srs-in-x" data-value="X:" data-value-degrees="Longitude:">X:</label>
             <input type="text" id="srs-in-x" data-placeholder="Decimal value of X coordinate"
                    data-placeholder-degrees="e.g. 8°33'10&quot;, 8.55, 8 33 10" />
-            <br>
-
+            <br />
             <label for="srs-in-y" data-value="Y:" data-value-degrees="Latitude:">Y:</label>
             <input type="text" id="srs-in-y" data-placeholder="Decimal value of Y coordinate"
-                   data-placeholder-degrees="e.g. 47°22'00&quot;, 47.36666, 47 22 00" /><br /><br />
-
-
+                   data-placeholder-degrees="e.g. 47°22'00&quot;, 47.36666, 47 22 00" />
+            <br />
+            <a id="srs-in-map-link" href="#" style="display:none;">show position on a map</a>
+            <br /><br />
 
             <h3 class="underline-style">Input coordinate system</h3>
             <span id="srs-in-name">Not selected</span>
@@ -123,9 +125,10 @@
           <label for="srs-out-x" data-value="X:" data-value-degrees="Longitude:">X:</label>
           <input type="text" id="srs-out-x" data-placeholder="" data-placeholder-degrees="" readonly="readonly" />
           <br />
-
           <label for="srs-out-y" data-value="Y:" data-value-degrees="Latitude:">Y:</label>
           <input type="text" id="srs-out-y" data-placeholder="" data-placeholder-degrees="" readonly="readonly" />
+          <br />
+          <a id="srs-out-map-link" href="#" style="display:none;">show position on a map</a>
           <br /><br />
 
           <h3 class="underline-style">Output coordinate system</h3>
