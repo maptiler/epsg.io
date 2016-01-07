@@ -577,3 +577,66 @@ pre { background: transparent; border: solid 1px #bdbdbd; font-size: 11px; margi
   font-style: italic;
   float: right;
 }
+
+/* Transform */
+.trans-box{
+  width: 40%;
+  margin: 0 10% 0 0;
+  display: inline-block;
+  float: left;
+}
+.trans-box.right{
+  margin: 0 0 0 10%;
+}
+input, textarea{
+  margin: 5px 0;
+  display: inline-block;
+  padding: 4px 5px;
+}
+input[type=text] {
+  width:220px;
+}
+h3.underline-style{
+  margin: 15px 0 10px 0;
+}
+
+#srs-in-form input[type=submit] {
+  float:right;
+  margin-top:-100px;
+  margin-right: -150px;
+}
+#srs-swap {
+  float:right;
+  margin-right: -142px;
+  margin-top:-55px;
+}
+
+#srs-in-change, #srs-out-change {
+  border-radius: 15px;
+  color: #fff;
+  background: #4295c5;
+  padding: 2px 10px;
+  font-size: 10px;
+  margin-left: 10px;
+  border: solid 1px #cacaca;
+  line-height: 20px;
+}
+
+#srs-in-details-link, #srs-out-details-link,
+#srs-in-map-link, #srs-out-map-link { color:#4295c5; }
+
+@media(max-width: 800px){
+  .trans-box, .trans-box.right{
+    width: 92%;
+    margin: 0 2% 0 2%;
+    display: inline-block;
+    float: left;
+  }
+  #srs-in-form input[type=submit] {
+    float: none;
+    margin-top: 25px;
+    margin-right: 0;
+    display: block;
+  }
+  #srs-swap { float: none; margin-right: 0; margin-top: 0; display: block; margin: 8px;}
+}

@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="utf-8"/>
-    <title>EPSG.io</title>
+    <meta charset="utf-8" />
+    <title>Transform - epsg.io</title>
     <meta content="width=device-width, initial-scale=1, maximum-scale=1" name="viewport" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="description" content="EPSG.io" />
-    <meta name="keywords" content="EPSG.io" />
+    <meta name="description" content="Transform your coordinates online easily with epsg.io" />
+    <meta name="keywords" content="transform, coordinates, projection, geographic, geodethic, srs, crs, epsg.io" />
     <meta name="robots" content="ALL,FOLLOW" />
     <link rel="stylesheet" href="/css/main.css" type="text/css" />
     <link rel="shortcut icon" href="//epsg.io/favicon.ico" />
@@ -18,61 +18,7 @@
               __gaTracker('create', 'UA-47718358-1', 'epsg.io');
               __gaTracker('send', 'pageview');</script>
     <script src="/js/transform.js"></script>
-    <style>
-      .trans-box{
-        width: 40%;
-        margin: 0 10% 0 0;
-        display: inline-block;
-        float: left;
-      }
-      .trans-box.right{
-        margin: 0 0 0 10%;
-      }
-      input, textarea{
-        margin: 5px 0;
-        display: inline-block;
-        padding: 4px 5px;
-      }
-      input[type=text] {
-        width:220px;
-      }
-      h3.underline-style{
-        margin: 15px 0 10px 0;
-      }
-
-      #srs-in-form input[type=submit] {
-        float:right;
-        margin-top:-145px;
-        margin-right: -150px;
-      }
-      #srs-swap {
-        float:right;
-        margin-right: -142px;
-        margin-top:-100px;
-      }
-
-      #srs-in-change, #srs-out-change,
-      #srs-in-details-link, #srs-out-details-link,
-      #srs-in-map-link, #srs-out-map-link { color:#4295c5; }
-
-      @media(max-width: 800px){
-        .trans-box, .trans-box.right{
-          width: 92%;
-          margin: 0 2% 0 2%;
-          display: inline-block;
-          float: left;
-        }
-        #srs-in-form input[type=submit] {
-          float: none;
-          margin-top: 25px;
-          margin-right: 0;
-          display: block;
-        }
-        #srs-swap { float: none; margin-right: 0; margin-top: 0; display: block; margin: 8px;}
-      }
-    </style>
   </head>
-
   <body id="detailpage" data-role="page">
     <div id="head">
       <p id="logo-container">
@@ -99,12 +45,14 @@
             <input type="text" id="srs-in-y" data-placeholder="Decimal value of Y coordinate"
                    data-placeholder-degrees="e.g. 47°22'00&quot;, 47.36666, 47 22 00" />
             <br />
-            <a id="srs-in-map-link" href="#" style="display:none;">show position on a map</a>
+            <a id="srs-in-map-link" href="#" style="display:none;">Show position on a map</a>
             <br /><br />
+            <input type="submit" value="Transform" class="btn" />
+            <input type="button" id="srs-swap" value="Swap &#x21C4;"  class="btn-dark" />
 
             <h3 class="underline-style">Input coordinate system</h3>
             <span id="srs-in-name">Not selected</span>
-            <a href="#"n id="srs-in-change">Change</a>
+            <a href="#"n id="srs-in-change" class="">Change</a>
 
             <div id="srs-in-details" style="display:none;">
               <h3 class="underline-style">Details</h3>
@@ -113,12 +61,10 @@
               <span class="caption">Area of use: </span><span id="srs-in-area"></span><br />
               <span class="caption">Accuracy: </span><span id="srs-in-accuracy"></span>
             </div>
-            <input type="submit" value="Transform" class="btn" />
-            <input type="button" id="srs-swap" value="Swap &#x21C4;"  class="btn-dark" />
+
           </form>
-
-
         </div>
+        
         <div class="trans-box right">
           <h3 class="underline-style">Output</h3>
 
