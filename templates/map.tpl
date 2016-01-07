@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml"  lang="en" xml:lang="en">
+<html lang="en">
   <head>
-    <meta charset="utf-8"/>
-    <title>Transform coordinates for position on a map - converting latitude / longitude degrees</title>
+    <meta charset="utf-8" />
+    <title>Map - Epsg.io</title>
     <meta content="width=device-width, initial-scale=1, maximum-scale=1" name="viewport" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="description" content="Transform coordinates for position on a map - converting latitude / longitude degrees" />
-    <meta name="keywords" content="EPSG.io" />
+    <meta name="keywords" content="map, epsg, coordinates, latitude, longitude, degrees" />
     <meta name="robots" content="ALL,FOLLOW" />
     <link rel="stylesheet" href="/css/main.css" type="text/css" />
     <link rel="shortcut icon" href="//epsg.io/favicon.ico" />
@@ -17,6 +17,7 @@
     <script type="text/javascript" src="http://maps.google.com/maps/api/js?v=3.3&sensor=false"></script>
   </head>
   <body id="mappage" data-role="page">
+    <h1>Get coordinates from a map - converting latitude / longitude degrees</h1>
     <div id="map"></div>
     <div id="map-plus">+</div>
     <div id="map-minus">-</div>
@@ -36,7 +37,7 @@
     <div id="head">
       <div id="head-top">
         <p id="logo-container">
-          <a href="//epsg.io" title=""><span>Epsg.io</span> Coordinate Systems Worldwide</a>
+          <a href="/" title=""><span>Epsg.io</span> Coordinate Systems Worldwide</a>
         </p>
         <ul id="menu-top">
           <li><a href="/about" title="">About</a></li>
@@ -49,11 +50,9 @@
     <div id="map-clipboard-container">
       <div id="mc-info-container">
         <h1 id="crs-title">Choose coordinate system</h1>
-        <p>
-          <a href="#" id="crs-change" class="btn">Change</a>
-          <a id="crs-detail-link" class="btn-dark" href="#" title="">Details</a>
-          <a id="crs-transform-link" class="btn-dark" href="/transform" title="">Transform</a>
-        </p>
+          <a id="crs-transform-link" href="/transform" title="">Transform</a>
+          <a id="crs-detail-link" href="#" title="">Details</a>
+          <a href="#" id="crs-change" class="btn">Change</a> 
       </div>
       <div id="copy-clipboard-container">
         <p>

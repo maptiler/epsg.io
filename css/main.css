@@ -192,7 +192,7 @@ h4, .h4 { margin: 20px 0 13px 0; padding: 0; font-size: 16px; color: #000; }
 #mappage #search-container { position:absolute;right:30px;top:30%;margin-top:66px;width:auto;display:none;}
 #mappage #search-container.visible {display:block;}
 
-#reproject_map_container {position: absolute; top: 89px; right: 176px; background: #fff; color: #4295c5; padding: 4px 16px; margin: 4px; border-radius: 15px; border: 1px solid #cdcdcd;}
+#reproject_map_container {position: absolute; top: 89px; right: 176px; background: #fff; color: #4295c5; padding: 4px 10px; margin: 4px; border: 1px solid #cdcdcd;}
 #reproject_map_container input {width:16px !important; margin: 4px;vertical-align: top; line-height: 21px;}
 #reproject_map_container label{vertical-align: top; line-height: 21px; font-size: 12px;}
 #reproject_map[readonly] {opacity:0.4;}
@@ -309,11 +309,11 @@ input.btn, input.btn-light, input.btn-dark, input[type=submit].srsdialog-table{
 
 
 
-#map-clipboard-container { position:absolute; width:510px; bottom:25px; left:50%; margin-left: -255px; padding: 0; border-radius: 15px; -moz-border-radius: 15px; -webkit-border-radius: 15px; overflow: hidden;  border: solid 1px #cacaca;}
+#map-clipboard-container { position:absolute; width:510px; bottom:25px; left:50%; margin-left: -255px; padding: 0; overflow: hidden;  border: solid 1px #cacaca;}
 #mc-info-container { margin: 0; padding: 20px 20px 10px; background: #fff; overflow: hidden;}
 #mc-info-container h1 { margin: 0 0 10px; font-size: 18px; color: #555; }
-#mc-info-container p { margin: 0; overflow: hidden; }
-#mc-info-container p a {float: right; margin-left: 10px;}
+#mc-info-container #crs-transform-link, #mc-info-container #crs-detail-link{padding-top: 8px; margin-right: 15px;display: inline-block;}
+#mc-info-container #crs-change{float: right; margin-top: 0; margin-left: 15px; margin-right: 0;}
 
 #copy-clipboard-container { margin: 0; padding: 12px 34px 16px; background: url('../img/bg-hatch-2.png') 0 0 repeat; overflow: hidden; }
 #copy-clipboard-container p { margin: 0; padding: 0; overflow: hidden; font-size: 11px; }
