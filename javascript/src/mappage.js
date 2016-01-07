@@ -580,26 +580,25 @@ epsg.io.MapPage.prototype.updateHash_ = function() {
 epsg.io.MapPage.prototype.parseHash_ = function() {
   var qd = new goog.Uri.QueryData(window.location.hash.substr(1));
 
-  var srs = qd.get('srs');
+  var srs = qd.get('srs') || '4326';
   var lon = parseFloat(qd.get('lon')), lat = parseFloat(qd.get('lat'));
   var z = parseInt(qd.get('z'), 10);
   var reproject = qd.get('reproject') == '1';
 
   var isLonLat = goog.math.isFiniteNumber(lon) && goog.math.isFiniteNumber(lat);
-  if (srs) {
-    this.srsPopup_.getSRS(/** @type {string} */(srs),
-        goog.bind(function(data) {
-          this.handleSRSChange_(data, isLonLat);
-          if (reproject) {
-            this.reprojectMapElement_.checked = true;
-            this.updateMapView_();
-            if (goog.math.isFiniteNumber(z)) {
-              this.view_.setZoom(z);
-            }
-            this.updateHash_();
+
+  this.srsPopup_.getSRS(/** @type {string} */(srs),
+      goog.bind(function(data) {
+        this.handleSRSChange_(data, isLonLat);
+        if (reproject) {
+          this.reprojectMapElement_.checked = true;
+          this.updateMapView_();
+          if (goog.math.isFiniteNumber(z)) {
+            this.view_.setZoom(z);
           }
-        }, this));
-  }
+          this.updateHash_();
+        }
+      }, this));
 
   if (isLonLat) {
     this.updateLonLat_([lon, lat]);
