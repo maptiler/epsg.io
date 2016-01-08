@@ -503,8 +503,8 @@ epsg.io.MapPage.prototype.makeQuery = function() {
   if (localTransform) {
     if (!this.keepEastNorth) {
       var result = localTransform([this.lon_, this.lat_]);
-      this.eastingElement.value = result[0].toFixed(4);
-      this.northingElement.value = result[1].toFixed(4);
+      this.eastingElement.value = result[0].toFixed(6);
+      this.northingElement.value = result[1].toFixed(6);
       updateTransformLink();
       this.updateHash_();
     }
