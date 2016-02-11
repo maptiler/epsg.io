@@ -81,6 +81,8 @@ epsg.io.MapPage = function() {
                          (goog.dom.getElement('mapType'));
   this.reprojectMapElement_ = /** @type {!HTMLInputElement} */
                               (goog.dom.getElement('reproject_map'));
+  this.reprojectMapContainer_ = /** @type {!HTMLInputElement} */
+      (goog.dom.getElement('reproject_map_container'));
 
   this.geocoderElement = /** @type {!HTMLInputElement} */
       (goog.dom.getElement('geocoder'));
@@ -142,15 +144,6 @@ epsg.io.MapPage = function() {
    * @private
    */
   this.reprojectionViewOn_ = false;
-
-  goog.events.listen(this.reprojectMapElement_, goog.events.EventType.CLICK,
-      function(e) {
-        if (this.reprojectMapElement_.readOnly) {
-          kt.alert('Reprojection is not possible for currently ' +
-                   'selected coordinate system.', 'Reprojection');
-          e.preventDefault();
-        }
-      }, false, this);
 
   goog.events.listen(this.reprojectMapElement_, goog.events.EventType.CHANGE,
       function(e) {
@@ -416,7 +409,7 @@ epsg.io.MapPage.prototype.handleReprojectionConditionsChange_ = function() {
   var possible = !this.gmapWrap_ &&
                  this.srs_ &&
                  ol.proj.get('EPSG:' + this.srs_['code']);
-  this.reprojectMapElement_.readOnly = !possible;
+  goog.style.setElementShown(this.reprojectMapContainer_, possible);
   if (!possible) {
     this.reprojectMapElement_.checked = false;
   }
