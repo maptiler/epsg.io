@@ -254,29 +254,31 @@ epsg.io.TransformPage.prototype.updateHash_ = function() {
 epsg.io.TransformPage.prototype.parseHash_ = function(callback) {
   var qd = new goog.Uri.QueryData(window.location.hash.substr(1));
 
-  var toBeLoaded = 0;
-
   var s_srs = qd.get('s_srs');
-  if (s_srs) {
-    toBeLoaded++;
-    this.srsPopup_.getSRS(/** @type {string} */(s_srs),
-        goog.bind(function(data) {
-          this.srsIn_ = data;
-          this.handleSRSChange_();
-          if (--toBeLoaded <= 0) callback();
-        }, this));
-  }
   var t_srs = qd.get('t_srs') || goog.net.cookies.get('t_srs');
-  if (t_srs) {
-    toBeLoaded++;
-    this.srsPopup_.getSRS(/** @type {string} */(t_srs),
-        goog.bind(function(data) {
-          this.srsOut_ = data;
-          this.handleSRSChange_();
-          if (--toBeLoaded <= 0) callback();
-        }, this));
+  if (!t_srs && !s_srs) {
+    s_srs = '4326';
+    t_srs = '3857';
+  } else if (!s_srs) {
+    s_srs = (t_srs == '4326') ? '3857' : '4326';
+  } else if (!t_srs) {
+    t_srs = (s_srs == '4326') ? '3857' : '4326';
   }
-  if (toBeLoaded <= 0) callback();
+
+  var toBeLoaded = 2;
+
+  this.srsPopup_.getSRS(/** @type {string} */(s_srs),
+      goog.bind(function(data) {
+        this.srsIn_ = data;
+        this.handleSRSChange_();
+        if (--toBeLoaded <= 0) callback();
+      }, this));
+  this.srsPopup_.getSRS(/** @type {string} */(t_srs),
+      goog.bind(function(data) {
+        this.srsOut_ = data;
+        this.handleSRSChange_();
+        if (--toBeLoaded <= 0) callback();
+      }, this));
 
   var x = parseFloat(qd.get('x')), y = parseFloat(qd.get('y'));
   if (goog.math.isFiniteNumber(x) && goog.math.isFiniteNumber(y)) {
