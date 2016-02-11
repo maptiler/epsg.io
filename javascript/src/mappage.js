@@ -304,7 +304,8 @@ epsg.io.MapPage.prototype.handleSRSChange_ = function(srsData, opt_dontCenter) {
          bbox[3], bbox[0]],
         'EPSG:4326', this.view_.getProjection());
     if (extent) {
-      var size = this.map_.getSize();
+      var size = goog.style.getContentBoxSize(this.mapElement);
+      size = [size.width, size.height];
       if (size) {
         this.view_.fit(
             ol.extent.getIntersection(extent,
@@ -564,7 +565,7 @@ epsg.io.MapPage.prototype.updateHash_ = function() {
   }
 
   var layer = this.mapTypeElement_.value;
-  if (layer != 'mqosm' && layer.indexOf('gmaps-') === -1) {
+  if (layer != 'gmaps-roadmap') {
     // do not include default value to shorten the url
     qd.set('layer', this.mapTypeElement_.value);
   }
