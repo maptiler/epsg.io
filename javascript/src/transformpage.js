@@ -124,7 +124,7 @@ epsg.io.TransformPage = function() {
  */
 epsg.io.TransformPage.prototype.updateMapLinks_ = function() {
   var inLink = goog.dom.getElement('srs-in-map-link');
-  if (this.srsIn_ && this.srsInX_ && this.srsInY_) {
+  if (this.srsIn_ && this.srsInX_.hasValue() && this.srsInY_.hasValue()) {
     inLink.href = '/map#srs=' + this.srsIn_['code'] +
                   '&x=' + this.srsInX_.getValue() +
                   '&y=' + this.srsInY_.getValue();
@@ -134,7 +134,7 @@ epsg.io.TransformPage.prototype.updateMapLinks_ = function() {
   }
 
   var outLink = goog.dom.getElement('srs-out-map-link');
-  if (this.srsOut_ && this.srsOutX_ && this.srsOutY_) {
+  if (this.srsOut_ && this.srsOutX_.hasValue() && this.srsOutY_.hasValue()) {
     outLink.href = '/map#srs=' + this.srsOut_['code'] +
         '&x=' + this.srsOutX_.getValue() +
         '&y=' + this.srsOutY_.getValue();
