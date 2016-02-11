@@ -298,7 +298,8 @@ input.btn, input.btn-light, input.btn-dark, input[type=submit].srsdialog-table{
 #eb-menu li { margin: 0; padding: 0; display: block; border-bottom: solid 1px #eee; }
 #eb-menu li a { margin: 0; padding: 10px 0 0 0; display: block; height: 29px; overflow: hidden; }
 #eb-menu li a i { margin: 3px 15px 0 0; display: none; border-style: solid; border-width: 5px 0 5px 7px; float: right; height: 1px;
-                  border-color: rgba(255, 255, 255, 0) rgba(255, 255, 255, 0) rgba(255, 255, 255, 0) #4295c5; }
+                  border-color: rgba(255, 255, 255, 0) rgba(255, 255, 255, 0) rgba(255, 255, 255, 0) #4295c5;
+                  pointer-events:none;}
 #eb-menu li a.switcher_selected, #eb-menu li a:hover { color: #4295c5; text-decoration: none;}
 #eb-menu li a.switcher_selected i, #eb-menu li a:hover i { display: block; }
 
