@@ -595,6 +595,8 @@ pre { background: transparent; border: solid 1px #bdbdbd; font-size: 11px; margi
 .trans-box.right{
   margin: 0 0 0 10%;
 }
+.trans-box label {width:20px;display:inline-block;}
+.trans-box label.degrees {width:65px;}
 input, textarea{
   margin: 5px 0;
   display: inline-block;
