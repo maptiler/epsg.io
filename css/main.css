@@ -620,7 +620,7 @@ h3.underline-style{
   margin-top:-55px;
 }
 
-#srs-in-change, #srs-out-change {
+#srs-in-format, #srs-out-format, #srs-in-change, #srs-out-change {
   border-radius: 15px;
   color: #fff;
   background: #4295c5;
@@ -633,6 +633,8 @@ h3.underline-style{
 
 #srs-in-details-link, #srs-out-details-link,
 #srs-in-map-link, #srs-out-map-link { color:#4295c5; }
+#srs-in-format, #srs-out-format {position:absolute;margin:25px 0 0 3px;}
+#srs-in-format:hover, #srs-out-format:hover {background: #03639B;cursor:pointer;}
 
 @media(max-width: 800px){
   .trans-box, .trans-box.right{

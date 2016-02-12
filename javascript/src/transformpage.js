@@ -112,6 +112,33 @@ epsg.io.TransformPage = function() {
         e.preventDefault();
       }, false, this);
 
+  var formatOrder = [
+    kt.CoordinateInput.DegreeFormat.DMS,
+    kt.CoordinateInput.DegreeFormat.DM,
+    kt.CoordinateInput.DegreeFormat.DECIMAL
+  ];
+  var inFormat = 0, outFormat = 0;
+  this.srsInFormat_ = goog.dom.getElement('srs-in-format');
+  this.srsOutFormat_ = goog.dom.getElement('srs-out-format');
+  goog.events.listen(this.srsInFormat_, goog.events.EventType.CLICK,
+      function(e) {
+        inFormat = (inFormat + 1) % 3;
+        var format = formatOrder[inFormat];
+        this.srsInFormat_.value = 'Format: ' + format;
+        this.srsInX_.setDegreeFormat(format);
+        this.srsInY_.setDegreeFormat(format);
+        e.preventDefault();
+      }, false, this);
+  goog.events.listen(this.srsOutFormat_, goog.events.EventType.CLICK,
+      function(e) {
+        outFormat = (outFormat + 1) % 3;
+        var format = formatOrder[outFormat];
+        this.srsOutFormat_.value = 'Format: ' + format;
+        this.srsOutX_.setDegreeFormat(format);
+        this.srsOutY_.setDegreeFormat(format);
+        e.preventDefault();
+      }, false, this);
+
   this.parseHash_(goog.bind(function() {
     this.keepHash_ = false;
     this.updateHash_();
@@ -156,6 +183,8 @@ epsg.io.TransformPage.prototype.handleSRSChange_ = function() {
     this.srsInX_.enableDegrees(isDegrees);
     this.srsInY_.enableDegrees(isDegrees);
 
+    goog.style.setElementShown(this.srsInFormat_, isDegrees);
+
     this.srsInDetailsLink_.href = '/' + this.srsIn_['code'];
     goog.dom.setTextContent(this.srsInUnit_, this.srsIn_['unit']);
     goog.dom.setTextContent(this.srsInArea_, this.srsIn_['area']);
@@ -170,6 +199,8 @@ epsg.io.TransformPage.prototype.handleSRSChange_ = function() {
     var isDegrees = /^degree/.test(this.srsOut_['unit']);
     this.srsOutX_.enableDegrees(isDegrees);
     this.srsOutY_.enableDegrees(isDegrees);
+
+    goog.style.setElementShown(this.srsOutFormat_, isDegrees);
 
     this.srsOutDetailsLink_.href = '/' + this.srsOut_['code'];
     goog.dom.setTextContent(this.srsOutUnit_, this.srsOut_['unit']);
@@ -219,6 +250,9 @@ epsg.io.TransformPage.prototype.transform_ = function(opt_manual) {
   }
   this.updateHash_();
   this.updateMapLinks_();
+
+  this.srsInX_.reformatValue();
+  this.srsInY_.reformatValue();
 };
 
 

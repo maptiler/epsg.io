@@ -40,6 +40,7 @@
             <label for="srs-in-x" data-value="X:" data-value-degrees="Longitude:">X:</label>
             <input type="text" id="srs-in-x" data-placeholder="Decimal value of X coordinate"
                    data-placeholder-degrees="e.g. 8°33'10&quot;, 8.55, 8 33 10" />
+            <input type="button" id="srs-in-format" style="display:none;" value="Format: D°M'S&quot;" />
             <br />
             <label for="srs-in-y" data-value="Y:" data-value-degrees="Latitude:">Y:</label>
             <input type="text" id="srs-in-y" data-placeholder="Decimal value of Y coordinate"
@@ -64,12 +65,13 @@
 
           </form>
         </div>
-        
+
         <div class="trans-box right">
           <h3 class="underline-style">Output</h3>
 
           <label for="srs-out-x" data-value="X:" data-value-degrees="Longitude:">X:</label>
           <input type="text" id="srs-out-x" data-placeholder="" data-placeholder-degrees="" readonly="readonly" />
+          <input type="button" id="srs-out-format" style="display:none;" value="Format: D°M'S&quot;" />
           <br />
           <label for="srs-out-y" data-value="Y:" data-value-degrees="Latitude:">Y:</label>
           <input type="text" id="srs-out-y" data-placeholder="" data-placeholder-degrees="" readonly="readonly" />
