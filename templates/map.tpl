@@ -14,7 +14,7 @@
     <script src="/js/ZeroClipboard.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.3.12/proj4.js"></script>
     <script src="/js/map.js"></script>
-    <script type="text/javascript" src="http://maps.google.com/maps/api/js?v=3.3&sensor=false"></script>
+    <script type="text/javascript" src="https://maps.google.com/maps/api/js?v=3.3&sensor=false"></script>
   </head>
   <body id="mappage" data-role="page">
     <h1>Get coordinates from a map - converting latitude / longitude degrees</h1>
@@ -27,7 +27,7 @@
     </div>
     <select id="mapType">
       <option value="mqosm">OSM MapQuest</option>
-      <option value="osm" data-tilejson="http://klokantech.tileserver.com/osm-bright/index.json?key=ITnCvdev3U2WlYotXxrX">OSM Bright</option>
+      <option value="osm" data-tilejson="https://klokantech.tileserver.com/osm-bright/index.json?key=ITnCvdev3U2WlYotXxrX">OSM Bright</option>
       <option value="satellite" data-tilejson="https://api.tiles.mapbox.com/v4/epsg.og9084kh.json?access_token=pk.eyJ1IjoiZXBzZyIsImEiOiJjaWloNjQybjgwMDA2dm5tMGE3eTk3eXVuIn0.OuKrtb4M8Fca6cO3waqqWg">MapBox Satellite</option>
       <option value="gmaps-roadmap" selected>Google Maps Streets</option>
       <option value="gmaps-satellite">Google Maps Satellite</option>
