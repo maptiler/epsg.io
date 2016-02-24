@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"  lang="en" xml:lang="en">
-  <head>  
+  <head>
     <meta charset="utf-8"/>
-    
+
     %if pagenum == 1:
       <title>{{title}}</title>
     %else:
       <title>{{title}}, page {{pagenum}}</title>
     %end
-    
+
     <meta content="width=device-width, initial-scale=1, maximum-scale=1" name="viewport" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="description" content="EPSG.io" />
@@ -27,18 +27,20 @@
       __gaTracker('send', 'pageview');
     </script>
   </head>
-  
+
   <body id="resultspage" data-role="page">
-    
+
     <div id="head">
       <p id="logo-container">
         <a href="/" title=""><span>Epsg.io</span> Coordinate Systems Worldwide</a>
       </p>
       <ul id="menu-top">
+        <li><a href="/map" title="">Map</a></li>
+        <li><a href="/transform" title="">Transform</a></li>
         <li><a href="/about" title="">About</a></li>
       </ul>
     </div>
-    
+
     <div id="layout-container">
       <div id="search-container">
         <form action="/" method="get">
@@ -51,7 +53,7 @@
         %else:
           <h1>{{title}}, page {{pagenum}}</h1>
         %end
-      
+
         <p>
           %if deprecated == 1:
             Found {{num_results}} deprecated records
@@ -59,16 +61,16 @@
              and {{num_deprecated[0]}} <a href="{{num_deprecated[1]}}">valid</a> records
             %end
               (in {{elapsed}} seconds)
-          %else:  
+          %else:
             Found {{num_results}} valid records
             %if num_deprecated[0]>0:
-              and {{num_deprecated[0]}}  <a href="{{num_deprecated[1]}}">deprecated</a> records 
-            %end  
+              and {{num_deprecated[0]}}  <a href="{{num_deprecated[1]}}">deprecated</a> records
+            %end
               (in {{elapsed}} seconds)
           %end
         </p>
       </div>
-      
+
       <div id="result-content-container">
         <div id="results-container">
           <ul class="results">
@@ -76,7 +78,7 @@
               %for r in result:
                 <li>
                   <h2>
-                    <a href="/{{r['link']}}" title="">{{r['name']}} 
+                    <a href="/{{r['link']}}" title="">{{r['name']}}
                     %if 'alt_title' in r['r']:
                       %if r['r']['alt_title'] and r['r']['name']!= r['r']['alt_title']:
                         - {{r['r']['alt_title']}}
@@ -93,7 +95,7 @@
                     %if r['r']['area_trans']:
                       %if r['r']['accuracy'] == "":
                         Area of use: {{r['area']}} (accuracy: unknown)
-                      %else:  
+                      %else:
                         Area of use: {{r['area']}} (accuracy: {{r['r']['accuracy']}})
                       %end
                     %else:
@@ -123,9 +125,9 @@
               <li><a href="{{num_deprecated[1]}}">Search deprecated ({{num_deprecated[0]}})</a></li>
             %elif deprecated == 1 and num_results>0:
               <li><a href="{{num_deprecated[1]}}">Search valid ({{num_deprecated[0]}})</a></li>
-            %end 
+            %end
           </ul>
-          
+
           <ul class="paginator">
             %if (pagenum-1) > 0:
               <li class="prev"><a href="/?q={{query}}&amp;page={{pagenum-1}}" title="">Prev</a></li>
@@ -144,7 +146,7 @@
             %end
           </ul>
         </div>
-        
+
         <div id="side-container">
           %if show_alt_search:
             <h3>Type of results</h3>
@@ -198,7 +200,7 @@
         <p>Find a coordinate system and get position on a map. Powered by EPSG database {{version}}</p>
         <p id="copyright">Copyright &copy; 2015</p>
       </div>
-      
+
     </div>
   </body>
 </html>

@@ -40,6 +40,8 @@
           <a href="/" title=""><span>Epsg.io</span> Coordinate Systems Worldwide</a>
         </p>
         <ul id="menu-top">
+          <li><a href="/map" title="">Map</a></li>
+          <li><a href="/transform" title="">Transform</a></li>
           <li><a href="/about" title="">About</a></li>
         </ul>
       </div>

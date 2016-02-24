@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"  lang="en" xml:lang="en">
-  <head>  
+  <head>
     <meta charset="utf-8"/>
     <title>EPSG.io: Coordinate Systems Worldwide</title>
     <meta content="width=device-width, initial-scale=1, maximum-scale=1" name="viewport" />
@@ -12,7 +12,7 @@
     <link rel="shortcut icon" href="/favicon.ico" />
 
   <script src="/js/index.js"></script>
-  
+
   <script>
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
     (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -22,20 +22,22 @@
     __gaTracker('create', 'UA-47718358-1', 'epsg.io');
     __gaTracker('send', 'pageview');
   </script>
-  
-  
+
+
  </head>
- 
+
  <body id="errorpage" data-role="page">
    <div id="head">
      <p id="logo-container">
        <a href="//epsg.io" title=""><span>Epsg.io</span> Coordinate Systems Worldwide</a>
      </p>
      <ul id="menu-top">
+       <li><a href="/map" title="">Map</a></li>
+       <li><a href="/transform" title="">Transform</a></li>
        <li><a href="/about" title="">About</a></li>
      </ul>
    </div>
-   
+
    <div id="layout-container">
       %if error == 404:
         <h1>Sorry, that page cannot be found.</h1>
@@ -43,13 +45,13 @@
         <h1>Something went wrong.</h1>
         <p>{{error}}</p>
       %end
-      
+
       %if try_url:
         <h2>Try to searching below or go to <a href="{{try_url}}">GML</a></h2>
       %else:
         <h2>Try to searching below or go to <a href="//epsg.io">epsg.io</a></h2>
       %end
-     
+
      <div id="error-content-container">
        <div id="search-container">
          <form action="/" method="get">
@@ -57,7 +59,7 @@
          </form>
        </div>
      </div>
-     
+
    </div>
    <div id="spacer"><p></p></div>
    <script type="text/javascript">home_init();</script>

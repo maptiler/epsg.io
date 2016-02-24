@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"  lang="en" xml:lang="en">
-  <head>  
+  <head>
     <meta charset="utf-8"/>
     <title>EPSG.io - Google Summer of Code Ideas</title>
     <meta content="width=device-width, initial-scale=1, maximum-scale=1" name="viewport" />
@@ -22,17 +22,19 @@
     a { color: #4295c5 !important; }
     </style>
   </head>
-  
+
   <body id="detailpage" data-role="page">
     <div id="head">
       <p id="logo-container">
         <a href="/" title=""><span>Epsg.io</span> Coordinate Systems Worldwide</a>
       </p>
       <ul id="menu-top">
+        <li><a href="/map" title="">Map</a></li>
+        <li><a href="/transform" title="">Transform</a></li>
         <li><a href="/about" title="">About</a></li>
       </ul>
     </div>
-    
+
     <div id="layout-container">
 		<div id="detail-content-container">
 			<div class="detail-content-inner-wide">
@@ -73,10 +75,10 @@
 					</ul>
 				</p>
 				<p>
-				
+
 				</p>
 				<p>
-				
+
 				</p>
 			</div>
 			<div class="covered-area-container">

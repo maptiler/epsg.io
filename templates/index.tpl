@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
-  <head>  
+  <head>
     <meta charset="utf-8"/>
     <title>EPSG.io: Coordinate Systems Worldwide</title>
     <meta content="width=device-width, initial-scale=1, maximum-scale=1" name="viewport" />
@@ -52,10 +52,10 @@
 
           <a id="share_gplusdark" href="https://plus.google.com/share?url=//epsg.io/"><span class="icon-epsg-googleplus"></span></a>
         </div>
-      </div>  
+      </div>
       <div class="home-action">
-        <a class="btn-dark" href="/map">Get&nbsp;position&nbsp;on&nbsp;a&nbsp;map</a>
-        <a class="btn-dark" href="/transform">Transform&nbsp;coordinates</a>
+        <a class="btn" href="/map">Get&nbsp;position&nbsp;on&nbsp;a&nbsp;map</a>
+        <a class="btn" href="/transform">Transform&nbsp;coordinates</a>
       </div>
     </div>
 
@@ -63,32 +63,32 @@
       <div class="hm-column lft">
         <h2>World coordinate systems</h2>
         <ul>
-          <li><a href="/4326" title="">WGS84 - World Geodetic System 1984, used in GPS </a></li> 
-          <li><a href="/3857" title="">Spherical Mercator, Google Maps Projection, OpenStreetMap, Bing</a></li> 
-          <li><a href="/?q=UTM" title="">UTM - Universal Transverse Mercator</a></li> 
+          <li><a href="/4326" title="">WGS84 - World Geodetic System 1984, used in GPS </a></li>
+          <li><a href="/3857" title="">Spherical Mercator, Google Maps Projection, OpenStreetMap, Bing</a></li>
+          <li><a href="/?q=UTM" title="">UTM - Universal Transverse Mercator</a></li>
 
-          <li><a href="/?q=etrs" title="">ETRS - European Terrestrial Reference System</a></li> 
+          <li><a href="/?q=etrs" title="">ETRS - European Terrestrial Reference System</a></li>
         </ul>
       </div>
       <div class="hm-column lft">
         <h2>Europe coordinate systems</h2>
         <ul>
-          <li><a href="/?q=United%20Kingdom" title="">United Kingdom</a></li> 
-          <li><a href="/?q=France" title="">France</a></li> 
-          <li><a href="/?q=Czech%20Republic" title="">Czech Republic</a></li> 
-          <li><a href="/?q=Germany" title="">Germany</a></li> 
-          <li><a href="/?q=Netherlands" title="">Netherlands</a></li> 
-          <li><a href="/?q=Switzerland" title="">Switzerland</a></li> 
+          <li><a href="/?q=United%20Kingdom" title="">United Kingdom</a></li>
+          <li><a href="/?q=France" title="">France</a></li>
+          <li><a href="/?q=Czech%20Republic" title="">Czech Republic</a></li>
+          <li><a href="/?q=Germany" title="">Germany</a></li>
+          <li><a href="/?q=Netherlands" title="">Netherlands</a></li>
+          <li><a href="/?q=Switzerland" title="">Switzerland</a></li>
         </ul>
       </div>
       <div class="hm-column lft last">
         <h2>Other coordinate systems</h2>
         <ul>
-          <li><a href="/?q=Brazil" title="">Brazil</a></li> 
-          <li><a href="/?q=New%20Zealand" title="">New Zealand</a></li> 
-          <li><a href="/?q=Australia" title="">Australia</a></li> 
+          <li><a href="/?q=Brazil" title="">Brazil</a></li>
+          <li><a href="/?q=New%20Zealand" title="">New Zealand</a></li>
+          <li><a href="/?q=Australia" title="">Australia</a></li>
         </ul>
-      </div>        
+      </div>
     </div>
     </div>
     <div id="spacer"><p></p></div>

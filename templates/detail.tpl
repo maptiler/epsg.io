@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"  lang="en" xml:lang="en">
-  <head>  
+  <head>
     <meta charset="utf-8"/>
 %if alt_title:
   %if not name:
@@ -14,8 +14,8 @@
   %else:
     <title>{{name}} - {{type_epsg}}:{{code_short[0]}}</title>
   %end
-%end    
-    
+%end
+
     <meta content="width=device-width, initial-scale=1, maximum-scale=1" name="viewport" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   %if item['area'] !="" or item['remarks'] !="" or item['scope']!="":
@@ -41,20 +41,22 @@
       __gaTracker('create', 'UA-47718358-1', 'epsg.io');
       __gaTracker('send', 'pageview');
     </script>
-    
+
   </head>
-  
+
   <body id="detailpage" data-role="page">
-    
+
     <div id="head">
       <p id="logo-container">
-        <a href="//epsg.io" title=""><span>Epsg.io</span> Coordinate Systems Worldwide</a>      
+        <a href="//epsg.io" title=""><span>Epsg.io</span> Coordinate Systems Worldwide</a>
       </p>
       <ul id="menu-top">
-        <li><a href="//epsg.io/about" title="">About</a></li>
+        <li><a href="/map" title="">Map</a></li>
+        <li><a href="/transform" title="">Transform</a></li>
+        <li><a href="/about" title="">About</a></li>
       </ul>
     </div>
-    
+
     <div id="layout-container">
       <div id="title_kind">
         <div class="socialicons">
@@ -96,7 +98,7 @@
             %no_map = False
             %if item['bbox']:
             <h3 class="underline-style">Covered area</h3>
-            
+
               %if center:
                 %if trans_lat:
                   <div id="mini-map">
@@ -116,7 +118,7 @@
             %else:
               %no_map = True
             %end
-            
+
             %wgs_found = False
 
             %if trans_lat and trans_lon:
@@ -134,7 +136,7 @@
                 <p>
                   %if default_trans:
                     %wgs_found = True
-                  
+
                     <span class="caption">WGS84 bounds:</span><br />
                     {{default_trans['bbox'][1]}} {{default_trans['bbox'][2]}}<br />
                     {{default_trans['bbox'][3]}} {{default_trans['bbox'][0]}}
@@ -145,7 +147,7 @@
                     {{item['bbox'][3]}} {{item['bbox'][0]}}
                   %end
 
-                </p> 
+                </p>
               </p>
             %end
 
@@ -159,18 +161,18 @@
             <p>
             <span class="caption">WGS84 bounds:</span><br />
             {{item['bbox'][1]}} {{item['bbox'][2]}}<br />
-            {{item['bbox'][3]}} {{item['bbox'][0]}}            
+            {{item['bbox'][3]}} {{item['bbox'][0]}}
             </p>
             %end
           </div>
           <div class="cac-inner">
-            
+
             %if default_trans:
               <a href="{{url_area_trans}}">{{default_trans['area']}}</a>
             %elif item['area'] and (url_area):
               <a href="{{url_area}}">{{item['area']}}</a>
             %end
-          
+
             %found_trans = False
             %if item['kind'].startswith("COORDOP"):
             <p></p>
@@ -183,7 +185,7 @@
 
                   %for r in projcrs_by_gcrs:
                     <a href="/{{r['result']['code']}}/map"><span class="caption">{{r['result']['name']}}</span></a>
-                    
+
                      code <a href="{{r['result']['code']}}">{{r['result']['code']}}</a><br />
                   %end
 
@@ -195,7 +197,7 @@
           </div>
         </div>
         <div class="detail-content-inner-wide">
-          <div class="transformations-container">  
+          <div class="transformations-container">
               %no_trans = False
               %if trans:
                 <h3 class="underline-style">Available transformations:</h3>
@@ -205,15 +207,15 @@
                     %for r in trans:
                       %if r['link'] == "" and r['deprecated'] == 0:
                         <li><i></i>
-                        
+
                          <span class="caption">{{r['area_trans_trans']}}</span>
 
                         %if r['accuracy']:
-                          , accuracy&nbsp;{{r['accuracy']}}&nbsp;m, 
+                          , accuracy&nbsp;{{r['accuracy']}}&nbsp;m,
                         %end
 
                         %if r['code_trans'] != 0:
-                          code&nbsp;{{r['code_trans']}} 
+                          code&nbsp;{{r['code_trans']}}
                         %end
 
                         %if r['default'] == True:
@@ -231,7 +233,7 @@
 
 
                           <a href="/{{r['link']}}" title = "{{r['trans_remarks']}}">
-                            <span class="caption">{{r['area_trans_trans']}}</span>, accuracy&nbsp;{{r['accuracy']}}&nbsp;m, code&nbsp;{{r['code_trans']}} 
+                            <span class="caption">{{r['area_trans_trans']}}</span>, accuracy&nbsp;{{r['accuracy']}}&nbsp;m, code&nbsp;{{r['code_trans']}}
                             %if r['default'] == True:
                               <em>(default)</em>
                             %end
@@ -274,7 +276,7 @@
                             %if r['default'] == True:
                               <span class="caption"><em>(default)</em></span>
                             %end
-                            <a href="/{{r['link']}}" title = "{{r['trans_remarks']}}"><span class="caption">{{r['area_trans_trans']}}</span>, accuracy&nbsp;{{r['accuracy']}}&nbsp;m, code&nbsp;{{r['code_trans']}} <em>(deprecated)</em> 
+                            <a href="/{{r['link']}}" title = "{{r['trans_remarks']}}"><span class="caption">{{r['area_trans_trans']}}</span>, accuracy&nbsp;{{r['accuracy']}}&nbsp;m, code&nbsp;{{r['code_trans']}} <em>(deprecated)</em>
                             %if r['num_param']:
                               [{{r['num_param']}}]
                             %end
@@ -283,7 +285,7 @@
                           </li>
                         %end
                       %end
-                    %end              
+                    %end
                     </div><p></p>
 
                   %end
@@ -320,7 +322,7 @@
                   %end
                 %end
               %end
-              
+
           %if trans:
           <div class="location-data-container">
             %found = False
@@ -351,7 +353,7 @@
                   </p>
                 %end
               %end
-          
+
             %no_default = False
             %if not found:
               %no_default = True
@@ -365,7 +367,7 @@
                 <a href="{{url_format}}/map">Coordinates on a map<i></i></a>
               </p>
             %end
-          
+
             %if trans and default_trans:
               <div class="attributes">
                 %if default_trans['method']:
@@ -374,7 +376,7 @@
                   <p><span class="caption">Remarks: </span>{{default_trans['remarks']}}</p>
                   <p><span class="caption">Information source: </span>{{default_trans['information_source']}}</p>
                   <p><span class="caption">Revision date: </span>{{default_trans['revision_date']}}</p>
-                
+
                 %if url_concatop != []:
                   <p>
                     <span class="caption">Steps of transformation: </span>
@@ -385,33 +387,33 @@
                 %end
               </div>
             %end
-            
-        
+
+
           </div>
-          
+
           %end
           <div class="clnr"></div>
-            
+
           <h3 class="underline-style">Attributes</h3>
-          <div class="attributes-col">            
+          <div class="attributes-col">
             %if 'uom_code' in item:
               %if item['uom_code']:
                 <p><span class="caption">Unit: </span>{{item['uom']}}</p>
               %end
             %end
-            
+
             %if 'geogcrs' in item:
               %if item['geogcrs']:
                 <p><span class="caption">Geodetic CRS: </span><a href="/{{item['geogcrs'][0]}}">{{item['geogcrs'][1]}}</a></p>
               %end
             %end
-            
+
             %if 'datum' in item:
               %if item['datum'] != 0 and item['datum'] :
                 <p><span class="caption">Datum: </span><a href="/{{item['datum'][0]}}-datum/">{{item['datum'][1]}}</a></p>
               %end
             %end
-            
+
             %if 'ellipsoid' in item:
               %if item['ellipsoid']:
                 %if item['ellipsoid'][0] != "None":
@@ -419,7 +421,7 @@
                 %end
               %end
             %end
-            
+
             %gl = False
             %if 'primem' in item:
               %if item['primem']:
@@ -441,13 +443,13 @@
                 %end
               %end
             %end
-            
+
             %if 'data_source' in item:
               %if item['data_source']:
                 <p><span class="caption">Data source: </span>{{item['data_source']}} </p>
               %end
             %end
-            
+
             %if 'information_source' in item:
               %if item['information_source']:
                 <p><span class="caption">Information source: </span>{{item['information_source']}}</p>
@@ -503,9 +505,9 @@
                 %end
               %end
             %end
-            
+
           </div>
-        
+
           %if not trans:
             %if center and trans_lat and trans_lon:
               <div class="location-data-container">
@@ -515,9 +517,9 @@
               </div>
             %end
           %end
-          
+
           <div class="attributes-col2">
-              
+
             %if 'scope' in item:
               %if item['scope']:
               <p>
@@ -533,13 +535,13 @@
               </p>
               %end
             %end
-            
+
             %if "method" in item:
               %if item['method']:
                 <p><span class="caption">Method: </span><a href="/{{item['method'][0]}}-method" title="">{{item['method'][1]}}</a></p>
               %end
             %end
-              
+
              %if detail:
               %if detail[0]['url_area'] != "" and detail[0]['url_area'] != "/?q=" and item['kind'] != "AREA":
                 <p>
@@ -553,7 +555,7 @@
                 </p>
               %end
             %end
-            
+
             %if 'cs' in item:
               %if item['cs']:
                 <p>
@@ -561,18 +563,18 @@
                 </p>
               %end
             %end
-            
+
             %if 'description' in item:
               %if item['description']:
                 <p><span class="caption">Description: </span>{{item['description']}}</p>
               %end
             %end
-            
+
           </div>
-                  
+
         </div>
-        
-        
+
+
 
       </div>
       %else:
@@ -601,7 +603,7 @@
             <li><a class="switcher switcher_selected" id="s_html" href="{{url_format}}.html">Well Known Text as HTML<i></i></a></li>
             <li><a class="switcher" id="s_wkt" href="{{url_format}}.wkt">OGC WKT<i></i></a></li>
             <li><a class="switcher" id="s_esriwkt" href="{{url_format}}.esriwkt">ESRI WKT<i></i></a></li>
-            
+
             <!-- <li><a class="switcher" id="s_prettywkt" href="{{url_format}}.prettywkt">PrettyWKT<i></i></a></li>-->
             %if ogpxml != "":
               <li><a class="switcher" id="s_gml" href="{{url_format}}.gml">OGC GML<i></i></a></li>
@@ -623,7 +625,7 @@
             <!-- <li><a class="switcher" id="s_json" href="{{url_format}}.json">JSON<i></i></a></li> -->
           </ul>
         </div>
-        
+
         <div class="code-definition-container code_visible" id="s_html_code">
           <p>Definition: Well Known Text (WKT)</p>
           <ul>
@@ -631,7 +633,7 @@
             <li><a id="s_html_copyUrl" class="zeroclipboard" data-clipboard-text="//epsg.io{{url_format}}.prettywkt" href="#">Copy URL</a></li>
             <li><a id="s_html_copyText" class="zeroclipboard" data-clipboard-target="s_html_text" href="#">Copy TEXT</a></li>
             <li><a href="{{url_format}}.prettywkt?download">Download</a></li>
-            
+
           </ul>
           <div class="syntax">
             {{!export_html}}
@@ -648,14 +650,14 @@
             <li><a id="s_esriwkt_copyUrl" class="zeroclipboard" data-clipboard-text="//epsg.io{{url_format}}.esriwkt" href="#">Copy URL</a></li>
             <li><a id="s_esriwkt_copyText" class="zeroclipboard" data-clipboard-target="s_esriwkt_text" href="#">Copy TEXT</a></li>
             <li><a href="{{url_format}}.esriwkt?download">Download</a></li>
-          
+
           </ul>
           <div class="syntax">
             <pre id="s_esriwkt_text">{{export['esriwkt']}}</pre>
-            
+
           </div>
         </div>
-        
+
         <div class="code-definition-container" id="s_proj4_code">
           <p>Definition: PROJ.4</p>
           <ul>
@@ -663,13 +665,13 @@
             <li><a id="s_proj4_copyUrl" class="zeroclipboard" data-clipboard-text="//epsg.io{{url_format}}.proj4" href="#">Copy URL</a></li>
             <li><a id="s_proj4_copyText" class="zeroclipboard" data-clipboard-target="s_proj4_text" href="#">Copy TEXT</a></li>
             <li><a href="{{url_format}}.proj4?download">Download</a></li>
-            
+
           </ul>
           <div class="syntax">
             <pre id="s_proj4_text">{{export['proj4']}}</pre>
           </div>
         </div>
-        
+
         <div class="code-definition-container" id="s_proj4js_code">
           <p>Definition: JavaScript (Proj4js) </p>
           <ul>
@@ -677,7 +679,7 @@
             <li><a id="s_proj4js_copyUrl" class="zeroclipboard" data-clipboard-text="//epsg.io{{url_format}}.js" href="#">Copy URL</a></li>
             <li><a id="s_proj4js_copyText" class="zeroclipboard" data-clipboard-target="s_proj4js_text" href="#">Copy TEXT</a></li>
             <li><a href="{{url_format}}.js?download">Download</a></li>
-            
+
           </ul>
           <div class="syntax">
             <pre id="s_proj4js_text">{{export['proj4js']}}</pre>
@@ -710,7 +712,7 @@
               <li><a id="s_xml_copyUrl" class="zeroclipboard" data-clipboard-text="//epsg.io{{url_format}}.xml" href="#">Copy URL</a></li>
               <li><a id="s_xml_copyText" class="zeroclipboard" data-clipboard-target="s_xml_text" href="#">Copy TEXT</a></li>
               <li><a href="{{url_format}}.xml?download">Download</a></li>
-            
+
             </ul>
             <div class="syntax">
               {{!xml_highlight}}
@@ -720,7 +722,7 @@
             </div>
           </div>
         %end
-        
+
         <div class="code-definition-container" id="s_geoserver_code">
           <p>Definition: GeoServer</p>
           <ul>
@@ -728,13 +730,13 @@
             <li><a id="s_geoserver_copyUrl" class="zeroclipboard" data-clipboard-text="//epsg.io{{url_format}}.geoserver" href="#">Copy URL</a></li>
             <li><a id="s_geoserver_copyText" class="zeroclipboard" data-clipboard-target="s_geoserver_text" href="#">Copy TEXT</a></li>
             <li><a href="{{url_format}}.geoserver?download">Download</a></li>
-            
+
           </ul>
           <div class="syntax">
             <pre id="s_geoserver_text">{{export['geoserver']}}</pre>
           </div>
         </div>
-        
+
         <div class="code-definition-container" id="s_mapfile_code">
           <p>Definition: MapServer - MAPfile</p>
           <ul>
@@ -742,7 +744,7 @@
             <li><a id="s_mapfile_copyUrl" class="zeroclipboard" data-clipboard-text="//epsg.io{{url_format}}.mapfile" href="#">Copy URL</a></li>
             <li><a id="s_mapfile_copyText" class="zeroclipboard" data-clipboard-target="s_mapfile_text" href="#">Copy TEXT</a></li>
             <li><a href="{{url_format}}.mapfile?download">Download</a></li>
-            
+
           </ul>
           <div class="syntax">
             <pre id="s_mapfile_text">{{!export['mapfile']}}</pre>
@@ -755,13 +757,13 @@
             <li><a id="s_mapserverpython_copyUrl" class="zeroclipboard" data-clipboard-text="//epsg.io{{url_format}}.mapserverpython" href="#">Copy URL</a></li>
             <li><a id="s_mapserverpython_copyText" class="zeroclipboard" data-clipboard-target="s_mapserverpython_text" href="#">Copy TEXT</a></li>
             <li><a href="{{url_format}}.mapserverpython?download">Download</a></li>
-            
+
           </ul>
           <div class="syntax">
             <pre id="s_mapserverpython_text">{{!export['mapserverpython']}}</pre>
           </div>
         </div>
-        
+
         <div class="code-definition-container" id="s_mapnik_code">
           <p>Definition: Mapnik</p>
           <ul>
@@ -769,7 +771,7 @@
             <li><a id="s_mapnik_copyUrl" class="zeroclipboard" data-clipboard-text="//epsg.io{{url_format}}.mapnik" href="#">Copy URL</a></li>
             <li><a id="s_mapnik_copyText" class="zeroclipboard" data-clipboard-target="s_mapnik_text" href="#">Copy TEXT</a></li>
             <li><a href="{{url_format}}.mapnik?download">Download</a></li>
-            
+
           </ul>
           <div class="syntax">
             <pre id="s_mapnik_text">{{export['mapnik']}}</pre>
@@ -782,13 +784,13 @@
             <li><a id="s_mapnikpython_copyUrl" class="zeroclipboard" data-clipboard-text="//epsg.io{{url_format}}.mapnikpython" href="#">Copy URL</a></li>
             <li><a id="s_mapnikpython_copyText" class="zeroclipboard" data-clipboard-target="s_mapnikpython_text" href="#">Copy TEXT</a></li>
             <li><a href="{{url_format}}.mapnikpython?download">Download</a></li>
-            
+
           </ul>
           <div class="syntax">
             <pre id="s_mapnikpython_text">{{!export['mapnikpython']}}</pre>
           </div>
         </div>
-        
+
         <div class="code-definition-container" id="s_postgis_code">
           <p>Definition: SQL (PostGIS)</p>
           <ul>
@@ -796,7 +798,7 @@
             <li><a id="s_postgis_copyUrl" class="zeroclipboard" data-clipboard-text="//epsg.io{{url_format}}.sql" href="#">Copy URL</a></li>
             <li><a id="s_postgis_copyText" class="zeroclipboard" data-clipboard-target="s_postgis_text" href="#">Copy TEXT</a></li>
             <li><a href="{{url_format}}.sql?download">Download</a></li>
-            
+
           </ul>
           <div class="syntax">
             <pre id="s_postgis_text">{{!export['postgis']}}</pre>
@@ -810,13 +812,13 @@
             <li><a id="s_wkt_copyUrl" class="zeroclipboard" data-clipboard-text="//epsg.io{{url_format}}.wkt" href="#">Copy URL</a></li>
             <li><a id="s_wkt_copyText" class="zeroclipboard" data-clipboard-target="s_wkt_text" href="#">Copy TEXT</a></li>
             <li><a href="{{url_format}}.wkt?download">Download</a></li>
-            
+
           </ul>
           <div class="syntax">
             <pre id="s_wkt_text">{{!export['ogcwkt']}}</pre>
           </div>
         </div>
-        
+
         %if export['usgs'] != "":
           <div class="code-definition-container" id="s_usgs_code">
             <p>Definition: USGS</p>
@@ -825,14 +827,14 @@
               <li><a id="s_usgs_copyUrl" class="zeroclipboard" data-clipboard-text="//epsg.io{{url_format}}.usgs" href="#">Copy URL</a></li>
               <li><a id="s_usgs_copyText" class="zeroclipboard" data-clipboard-target="s_usgs_text" href="#">Copy TEXT</a></li>
               <li><a href="{{url_format}}.usgs?download">Download</a></li>
-            
+
             </ul>
             <div class="syntax">
               <pre id="s_usgs_text">{{!export['usgs']}}</pre>
             </div>
           </div>
         %end
-        
+
         %elif ogpxml:
           <div id="eb-menu-container">
             <h4>Export</h4>
@@ -859,7 +861,7 @@
           </div>
         %end
       </div>
-      %if found_trans == False:      
+      %if found_trans == False:
         <div id="projected-link">
             %if projcrs_by_gcrs:
               %if kind == "Projected coordinate system":
@@ -883,7 +885,7 @@
             %end
           </div>
         %end
-            
+
 <div id="disqus_thread"></div>
 <script type="text/javascript">
 /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
@@ -898,7 +900,7 @@ dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
 </script>
 <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
     </div>
-      
+
        <div id="spacer"><p></p></div>
        <script type="text/javascript">detail_init();</script>
 
