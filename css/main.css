@@ -194,7 +194,7 @@ h4, .h4 { margin: 20px 0 13px 0; padding: 0; font-size: 16px; color: #000; }
 #mappage #search-container { position:absolute;left:30px;top:99px;width:auto;display:none;}
 #mappage #search-container.visible {display:block;}
 
-@media(min-width: 600px){
+@media(min-width: 700px){
   #map-search {display:none;}
   #mappage #search-container {left:19px;display:block !important;}
 }
@@ -209,7 +209,7 @@ h4, .h4 { margin: 20px 0 13px 0; padding: 0; font-size: 16px; color: #000; }
 
 #head { margin: 0; padding: 0; width: 100%; height: 79px; background: url('../img/bg-head-wide.png') 0 0 no-repeat; border-bottom: solid 1px #d0e1eb; overflow: hidden; }
 #mappage #head-top { margin: 0; padding: 0; width: 100%; height: 79px; background: #fff url('../img/bg-head-wide.png') 0 0 no-repeat; overflow: hidden; }
-#mappage #head { position:absolute; top:0; left:0; height: 79px; background: transparent; }
+#mappage #head { position:absolute; top:0; left:0; height: 79px; background: transparent; border-bottom: solid 1px #cacaca;}
 #head #logo-container { margin: 0; padding: 22px 0 0 47px; float: left; height: 39px; }
 #mappage #head #logo-container { margin-bottom: 18px; }
 #head #logo-container a { padding: 16px 0 0 125px; float: left; height: 29px; background: url('../img/logo-118x39.png') 0 0 no-repeat; color: #85969f; font-size: 12px; }
@@ -328,24 +328,21 @@ input.btn, input.btn-light, input.btn-dark, input[type=submit].srsdialog-table{
 #mc-info-container h1 { margin: 0 0 10px; font-size: 18px; color: #555; }
 #mc-info-container #crs-transform-link, #mc-info-container #crs-detail-link{padding-top: 8px; margin-right: 15px;display: inline-block;}
 #mc-info-container #crs-change{float: right; margin-top: 0; margin-left: 15px; margin-right: 0;}
+#crs-title{margin: 0 0 10px 0;}
+#crs-detail-link:hover, #crs-title:hover{text-decoration: none; color: #4295c5;}
 
-#copy-clipboard-container { margin: 0; padding: 12px 34px 16px; background: url('../img/bg-hatch-2.png') 0 0 repeat; overflow: hidden; }
-#copy-clipboard-container p { margin: 0; padding: 0; overflow: hidden; font-size: 11px; }
+#copy-clipboard-container { margin: 0; padding: 0 20px; overflow: hidden; position: absolute; top: 63px; z-index: 1000; left: 50%; width: 500px; margin-left: -250px;}
 #copy-clipboard-container input[type="text"] { margin: 0; padding: 1px 0 0 16px; height: 28px; float: left; width: 138px; background: #fff;
                                                font-size: 11px; border: solid 1px #cacaca; }
-#copy-clipboard-container #easting { -webkit-border-top-left-radius: 15px; -webkit-border-bottom-left-radius: 15px;
-                                     -moz-border-radius-topleft: 15px; -moz-border-radius-bottomleft: 15px;
-                                     border-top-left-radius: 15px; border-bottom-left-radius: 15px; }
+#copy-clipboard-container #easting {border-top-left-radius: 15px; border-bottom-left-radius: 15px; }
+#copy-clipboard-container #northing {border-top-right-radius: 15px; border-bottom-right-radius: 15px; }
 #copy-clipboard-container input[type="text"]:hover { border: solid 1px #9A9A9A; }
 #copy-clipboard-container input[type="text"]:focus { border: solid 1px #4295c5; color: #cc0000; }
 
-#copy-clipboard-container a { padding: 7px 0 0 0; width: 125px; text-align: center; height: 24px; float: left; color: #fff; background: #85969f;
-                              -webkit-border-top-right-radius: 15px; -webkit-border-bottom-right-radius: 15px;
-                              -moz-border-radius-topright: 15px; -moz-border-radius-bottomright: 15px;
-                              border-top-right-radius: 15px; border-bottom-right-radius: 15px;
-                              background: #4295c5; }
+#copy-clipboard-container a { padding: 7px 0 0 0; width: 80px; text-align: center; height: 24px; float: left; color: #fff; background: #4295c5;
+                              border-radius: 15px; margin-left: 10px; }
 #copy-clipboard-container a span{color: #fff;}
-#copy-clipboard-container a:hover { text-decoration: none; background: #4295c5; }
+#copy-clipboard-container a:hover { text-decoration: none; background: #03639B; }
 
 #side-container { margin: 0; padding: 0; float: right; width: 216px; }
 #side-container h3 { margin: 0 0 13px 0; }
@@ -488,15 +485,15 @@ pre { background: transparent; border: solid 1px #bdbdbd; font-size: 11px; margi
 
   /* map */
   #reproject_map_container {top: 55px;}
-  #mapType {top: 60px;}
+  #mapType {top: 100px;}
   #mc-info-container {padding: 10px 15px 10px;}
   #mc-info-container p a{padding: 0px 10px;font-size: 10px;}
-  #copy-clipboard-container {padding: 5px 50px 5px;}
+  #copy-clipboard-container {padding: 5px 50px 5px; top: 57px;}
   #mc-info-container h1 {margin: 0 0 5px; font-size: 14px;}
   #copy-clipboard-container input[type="text"] {padding: 1px 0 0 13px; height: 25px;}
   #map-clipboard-container{position: fixed; left: 0; right: 0; bottom: 0; margin-left: 0; width: 100%; z-index: 90;}
   #copy-clipboard-container input[type="text"] {width:80px;}
-  #copy-clipboard-container a {padding: 7px 3px 0 0; width: 60px; height: 20px; line-height: 14px;}
+  #copy-clipboard-container a {padding: 7px 0 0 0; line-height: 14px; height: 20px;}
   #eastnorth_copy span{display: none;}
 }
 @media (max-width: 480px) {
@@ -608,6 +605,7 @@ input, textarea{
   margin: 5px 0;
   display: inline-block;
   padding: 4px 5px;
+  color: #555;
 }
 input[type=text] {
   width:220px;
