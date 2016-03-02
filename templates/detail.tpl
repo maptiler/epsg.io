@@ -505,16 +505,6 @@
 
           </div>
 
-          %if not trans:
-            %if center and trans_lat and trans_lon:
-              <div class="location-data-container">
-                <p class="btn-link-container">
-                  <a href="{{url_format}}/map">Coordinates on a map<i></i></a>
-                </p>
-              </div>
-            %end
-          %end
-
           <div class="attributes-col2">
 
             %if 'scope' in item:
