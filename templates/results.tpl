@@ -104,7 +104,7 @@
                       %end
                     %end
                   </p>
-                    <a href="/transform#srs={{r['short_code'][0]}}">Transform&nbsp;coordinates</a> | 
+                    <a href="/transform#srs={{r['short_code'][0]}}">Transform&nbsp;coordinates</a> |
                     <a href="/map#s_srs={{r['short_code'][0]}}">Get&nbsp;position&nbsp;on&nbsp;a&nbsp;map</a>
                 </li>
               %end
@@ -118,7 +118,8 @@
               %end
               </li>
             %else:
-              Please change your query.
+            <li id="noresults">Please change your query.</li>
+
             %end
             %if deprecated != 1 and num_deprecated[0]>0:
               <li><a href="{{num_deprecated[1]}}">Search deprecated ({{num_deprecated[0]}})</a></li>
@@ -173,6 +174,14 @@
               </ul>
           %end
         </div>
+
+        %if num_results == 0:
+          %if num_kind == 0:
+            <div id="results-map"></div>
+            <a id="map-link" class="btn" href="/map">Coordinates on map<i></i></a>
+          %end
+        %end
+
       </div>
    </div>
    <div id="spacer"><p></p></div>
@@ -199,7 +208,17 @@
         <p>Find a coordinate system and get position on a map. Powered by EPSG database {{version}}</p>
         <p id="copyright">Copyright &copy; 2015</p>
       </div>
-
     </div>
+
+      %if num_results == 0:
+        %if num_kind == 0:
+          <script src="/js/results.js"></script>
+          <script src="https://maps.googleapis.com/maps/api/js"></script>
+          <script>
+            results("{{kind_low[0]}}");
+          </script>
+        %end
+      %end
+      
   </body>
 </html>
