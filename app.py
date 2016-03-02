@@ -339,17 +339,11 @@ def index():
       if len(short_area) > 100:
         short_area = short_area.split("-", 2)[0]
       wkt = ""
-      url_map = ""
       if r['kind'].startswith("CRS"):
         ref.ImportFromEPSG(int(short_code[0]))
         wkt = ref.ExportToWkt()
-        if wkt and r['bbox']:
-          # a = ref.ImportFromWkt(r['wkt'])
-          # if a == 0:
-          url_map = "/map#srs=" + r['code']
 
-
-      result.append({'r':r, 'name':name, 'type_epsg':type_epsg, 'link':link, 'area':short_area, 'short_code':short_code, 'url_map':url_map})
+      result.append({'r':r, 'name':name, 'type_epsg':type_epsg, 'link':link, 'area':short_area, 'short_code':short_code})
       if not expanded_trans and format == "json":
         proj4 = ref.ExportToProj4().strip()
         #proj4js = '%s["%s:%s"] = "%s";' % ("Proj4js.defs", type_epsg, short_code[0], proj4)

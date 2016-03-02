@@ -37,25 +37,21 @@
           <p><input id="q" name="q" type="search" placeholder="Country, code or name of a coordinate system" /> <input type="submit" name="" value="search" /></p>
         </form>
 
+        <div class="home-action">
+          <a class="btn" href="/transform">Transform&nbsp;coordinates</a>
+          <a class="btn" href="/map">Get&nbsp;position&nbsp;on&nbsp;a&nbsp;map</a>
+        </div>
+
         <div id="countryLinkWrapper">
           <a href="/?q=Czech%20Republic" id="countryLink">Click to see the coordinates systems of <span id="country">Czech Republic</span></a>
         </div>
 
         <div class="socialicons">
-
           <a id="share_facebook" href="https://www.facebook.com/sharer/sharer.php?u=//epsg.io"><span class="icon-epsg-facebook"></span></a>
-
-
           <a id="share_twitterb" href="https://twitter.com/share?original_referer=//epsg.io&amp;text=EPSG.io: Coordinate systems worldwide, view location on a map, get transformation, WKT, Proj.4. made by @klokantech"><span class="icon-epsg-twiter"></span></a>
-
           <a id="share_pinterest" href="https://pinterest.com/pin/create/button/?url=http%3A%2F%2Fepsg.io&amp;media=%2F%2Fdirect.epsg.io%2Fimg%2Fepsg-banner-440x280-2.png&description=EPSG.io:%20Coordinate%20systems%20worldwide%20(EPSG/ESRI),%20preview%20location%20on%20a%20map,%20get%20transformation,%20WKT,%20OGC%20GML,%20Proj.4.%20http://EPSG.io/%20made%20by%20@klokantech"><span class="icon-epsg-pinterest"></span></a>
-
           <a id="share_gplusdark" href="https://plus.google.com/share?url=//epsg.io/"><span class="icon-epsg-googleplus"></span></a>
         </div>
-      </div>
-      <div class="home-action">
-        <a class="btn" href="/map">Get&nbsp;position&nbsp;on&nbsp;a&nbsp;map</a>
-        <a class="btn" href="/transform">Transform&nbsp;coordinates</a>
       </div>
     </div>
 
@@ -66,7 +62,6 @@
           <li><a href="/4326" title="">WGS84 - World Geodetic System 1984, used in GPS </a></li>
           <li><a href="/3857" title="">Spherical Mercator, Google Maps Projection, OpenStreetMap, Bing</a></li>
           <li><a href="/?q=UTM" title="">UTM - Universal Transverse Mercator</a></li>
-
           <li><a href="/?q=etrs" title="">ETRS - European Terrestrial Reference System</a></li>
         </ul>
       </div>

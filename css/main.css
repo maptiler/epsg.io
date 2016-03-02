@@ -157,11 +157,12 @@ h4, .h4 { margin: 20px 0 13px 0; padding: 0; font-size: 16px; color: #000; }
 .socialicons a { font-size: 30px; text-decoration: none; margin: 0 5px 0 0;}
 #detailpage .socialicons a { margin-right: 0px; }
 .socialicons span:hover { color: #4295c5; text-decoration: none; }
-#homepage .socialicons {text-align:center; margin-top:55px;}
-#detailpage .socialicons {float:right;}
+#homepage .socialicons {text-align:center; margin-top:35px;}
+.title-right{float: right; text-align: right;}
+.detail-action-buttons a{ margin-left: 10px;}
 
-.home-action{ text-align: center; height: 32px; margin: 0 auto; padding: 0 30px 45px 30px;}
-.home-action a{float: none; margin: 0 20px; padding: 6px 25px;}
+.home-action{ text-align: center; height: 32px; margin: 0 auto; padding: 45px 0 0 0;}
+.home-action a{float: none; margin: 0 20px; display: inline-block;}
 .home-action a:hover{text-decoration: none; color: #fff; background-color: #4295c5;}
 
 #homepage #logo-container { margin: 0 0 55px 36%; padding: 0; height: 77px; width: auto; display: block; }
@@ -176,7 +177,7 @@ h4, .h4 { margin: 20px 0 13px 0; padding: 0; font-size: 16px; color: #000; }
 
 #title-container { min-width: 500px;}
 #search-container { margin: 0 auto 50px; padding: 0; width: 475px; }
-#search-container p { margin: 0; padding: 0; overflow: hidden; }
+#search-container p { margin: 0; padding: 0; overflow: hidden; padding-left: 10px;}
 #search-container input[type="search"] { margin: 0 10px 0 0; padding: 0 10px; height: 32px; width: 328px; font-size: 11px; color: #989898; }
 #search-container input[type="submit"] { margin: 0; width: 114px; height: 32px; text-align: center; font-size: 14px; text-transform: uppercase;
                                          color: #4295c5; background: #fff; cursor: pointer; }
@@ -188,7 +189,7 @@ h4, .h4 { margin: 20px 0 13px 0; padding: 0; font-size: 16px; color: #000; }
 #homepage #search-container input[type="submit"] { color: #fff; background: #4295c5; }
 
 
-#resultspage #search-container { margin: 0 auto; padding: 0; width: 452px; float:right;}
+#resultspage #search-container { margin: 0 auto; padding: 0; width: 465px; float:right;}
 
 #mappage #search-container { position:absolute;left:30px;top:99px;width:auto;display:none;}
 #mappage #search-container.visible {display:block;}
@@ -254,12 +255,12 @@ h3.underline-style { margin: 0 0 20px; padding: 0 0 10px; font-size: 14px; color
 .location-data-container .btn-link-container, .btn, .btn-light, .btn-dark, input[type=submit].srsdialog-table{
   margin: 0 0 25px; padding: 25px 0 0 0; overflow: hidden;
 }
-.btn-link-container a, .btn, .btn-light, .btn-dark, input[type=submit].srsdialog-table{
+.btn, .btn-light, .btn-dark, input[type=submit].srsdialog-table{
   margin: 0; padding: 7px 13px 0 22px; height: 24px; float: left; border: solid 1px #cacaca;
   border-radius: 15px; -moz-border-radius: 15px; -webkit-border-radius: 15px; color: #fff; background: #4295c5;
 }
-.btn-link-container a i, .btn i{
-  margin: 3px 0 0 15px; border-style: solid; border-width: 5px 0 5px 7px; float: right; height: 1px;
+.btn i{
+  margin: 5px 0 0 15px; border-style: solid; border-width: 5px 0 5px 7px; float: right; height: 1px;
   border-color: rgba(255, 255, 255, 0) rgba(255, 255, 255, 0) rgba(255, 255, 255, 0) #4295c5 ;
 }
 .btn, .btn-light, .btn-dark, input[type=submit].srsdialog-table{
@@ -282,8 +283,8 @@ h3.underline-style { margin: 0 0 20px; padding: 0 0 10px; font-size: 14px; color
 input.btn, input.btn-light, input.btn-dark, input[type=submit].srsdialog-table{
   height: 32px;
 }
-.btn-link-container a:hover, .btn:hover{ text-decoration: none; background: #03639B; color: #ffffff;}
-.btn-link-container a:hover i, .btn:hover i{ border-color: rgba(255, 255, 255, 0) rgba(255, 255, 255, 0) rgba(255, 255, 255, 0) #fff; }
+.btn:hover{ text-decoration: none; background: #03639B; color: #ffffff;}
+.btn:hover i{ border-color: rgba(255, 255, 255, 0) rgba(255, 255, 255, 0) rgba(255, 255, 255, 0) #fff; }
 #projected-link-trans a:hover span { color: #4295c5; text-decoration: none; }
 
 .transformations-container { width: 350px; }
@@ -511,7 +512,7 @@ pre { background: transparent; border: solid 1px #bdbdbd; font-size: 11px; margi
 
   body .map-container { margin: 0 auto; float: none; }
   body .location-data-container { width: 410px; }
-  body .btn-link-container a { margin: 0 auto; float: none; display: block; width: 200px; text-align: center; }
+  /*body .btn-link-container a { margin: 0 auto; float: none; display: block; width: 200px; text-align: center; }*/
 
   body #side-container { padding-top: 20px; float: none; width: 400px; clear: both; }
   .hm-column.lft, .hm-column.lft.last { margin: 0 auto; float: none; }
@@ -617,13 +618,13 @@ h3.underline-style{
 
 #srs-in-form input[type=submit] {
   float:right;
-  margin-top:-100px;
+  margin-top:-90px;
   margin-right: -150px;
 }
 #srs-swap {
   float:right;
   margin-right: -142px;
-  margin-top:-55px;
+  margin-top:-50px;
 }
 
 #srs-in-change, #srs-out-change {

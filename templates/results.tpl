@@ -104,9 +104,8 @@
                       %end
                     %end
                   </p>
-                  %if r['url_map'] != "":
-                    <a href="{{r['url_map']}}">Coordinates on a map</a>
-                  %end
+                    <a href="/transform#srs={{r['short_code'][0]}}">Transform&nbsp;coordinates</a> | 
+                    <a href="/map#s_srs={{r['short_code'][0]}}">Get&nbsp;position&nbsp;on&nbsp;a&nbsp;map</a>
                 </li>
               %end
             %elif num_kind != 0:

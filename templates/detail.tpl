@@ -59,20 +59,23 @@
 
     <div id="layout-container">
       <div id="title_kind">
+        <div class="title-right">
         <div class="socialicons">
-
-            <a id="share_facebook" href="https://www.facebook.com/sharer/sharer.php?u=//epsg.io/{{url_social}}"><span class="icon-epsg-facebook"></span></a>
-
-
-        <a id="share_twitterb" href="https://twitter.com/share?original_referer=//epsg.io/{{url_social}}&amp;text={{name}} - {{type_epsg}}:{{code_short[0]}}&amp;"><span class="icon-epsg-twiter"></span></a>
-
-        %if url_static_map[0]:
-        <a id="share_pinterest" href="https://pinterest.com/pin/create/button/?url=%2F%2Fepsg.io/{{url_social}}&amp;media={{url_static_map[0]}}"><span class="icon-epsg-pinterest"></span></a>
-
-        %else:
-        <a id="share_pinterest" href="https://pinterest.com/pin/create/button/?url=%2F%2Fepsg.io/{{url_social}}&amp;media=http%3A%2F%2Fepsg.io%2Fimg%2Fepsg-banner-440x280-2.png"><span class="icon-epsg-pinterest"></span></a>
-        %end
-        <a id="share_gplusdark" href="https://plus.google.com/share?url=//epsg.io/{{url_social}}"><span class="icon-epsg-googleplus"></span></a>
+          <a id="share_facebook" href="https://www.facebook.com/sharer/sharer.php?u=//epsg.io/{{url_social}}"><span class="icon-epsg-facebook"></span></a>
+          <a id="share_twitterb" href="https://twitter.com/share?original_referer=//epsg.io/{{url_social}}&amp;text={{name}} - {{type_epsg}}:{{code_short[0]}}&amp;"><span class="icon-epsg-twiter"></span></a>
+          %if url_static_map[0]:
+          <a id="share_pinterest" href="https://pinterest.com/pin/create/button/?url=%2F%2Fepsg.io/{{url_social}}&amp;media={{url_static_map[0]}}"><span class="icon-epsg-pinterest"></span></a>
+          %else:
+          <a id="share_pinterest" href="https://pinterest.com/pin/create/button/?url=%2F%2Fepsg.io/{{url_social}}&amp;media=http%3A%2F%2Fepsg.io%2Fimg%2Fepsg-banner-440x280-2.png"><span class="icon-epsg-pinterest"></span></a>
+          %end
+          <a id="share_gplusdark" href="https://plus.google.com/share?url=//epsg.io/{{url_social}}"><span class="icon-epsg-googleplus"></span></a>
+        </div>
+        <div class="detail-action-buttons">
+          <a class="btn" href="/transform#s_srs={{code_short[0]}}" title="Transform {{name}} -- {{alt_title}} coordinates">
+              Transform&nbsp;coordinates</a>
+            <a class="btn" href="/map#srs={{code_short[0]}}"  title="Display {{name}} -- {{alt_title}} on a map">
+              Get&nbsp;position&nbsp;on&nbsp;a&nbsp;map</a>
+        </div>
         </div>
       %if item['deprecated'] == 1 or item['deprecated'] == "true" :
         <h1>{{type_epsg}}:{{code_short[0]}} DEPRECATED</h1>
@@ -360,12 +363,6 @@
               %if not no_trans:
                 <p>NO DEFAULT TRANSFORMATION</p>
               %end
-            %end
-
-            %if center and trans_lat and trans_lon:
-              <p class="btn-link-container">
-                <a href="{{url_format}}/map">Coordinates on a map<i></i></a>
-              </p>
             %end
 
             %if trans and default_trans:

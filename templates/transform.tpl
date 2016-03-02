@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <title>Transform - epsg.io</title>
+    <title>Transform coordinates - GPS online convertor</title>
     <meta content="width=device-width, initial-scale=1, maximum-scale=1" name="viewport" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="description" content="Transform your coordinates online easily with epsg.io" />
@@ -15,8 +15,8 @@
       (i[r].q=i[r].q||[]).push(arguments)}, i[r].l = 1 * new Date(); a = s.createElement(o),
               m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
       })(window, document, 'script', '//www.google-analytics.com/analytics.js', '__gaTracker');
-              __gaTracker('create', 'UA-47718358-1', 'epsg.io');
-              __gaTracker('send', 'pageview');</script>
+      __gaTracker('create', 'UA-47718358-1', 'epsg.io');
+      __gaTracker('send', 'pageview');</script>
     <script src="/js/transform.js"></script>
   </head>
   <body id="detailpage" data-role="page">
@@ -35,8 +35,14 @@
       <div id="detail-content-container">
 
         <h1>Transform coordinates</h1>
+        <h2>Online convertor for lat & long coordinates and projected systems</h2>
         <br /><br />
         <div class="trans-box">
+          <h3 class="underline-style">Input coordinate system</h3>
+          <span id="srs-in-name">Not selected</span>
+          <a href="#"n id="srs-in-change" class="">Change</a>
+          <br><br>
+
           <h3 class="underline-style">Input coordinates</h3>
           <form id="srs-in-form">
             <label for="srs-in-x" data-value="X:" data-value-degrees="Longitude:">X:</label>
@@ -49,27 +55,27 @@
                    data-placeholder-degrees="e.g. 47°22'00&quot;, 47.36666, 47 22 00" />
             <br />
             <a id="srs-in-map-link" href="#" style="display:none;">Show position on a map</a>
-            <br /><br />
+            <br>
             <input type="submit" value="Transform" class="btn" />
             <input type="button" id="srs-swap" value="Swap &#x21C4;"  class="btn-dark" />
 
-            <h3 class="underline-style">Input coordinate system</h3>
-            <span id="srs-in-name">Not selected</span>
-            <a href="#"n id="srs-in-change" class="">Change</a>
-
             <div id="srs-in-details" style="display:none;">
-              <h3 class="underline-style">Details</h3>
-              <a id="srs-in-details-link" href="#" target="_blank">show more details</a><br /><br />
               <span class="caption">Unit: </span><span id="srs-in-unit"></span><br />
               <span class="caption">Area of use: </span><span id="srs-in-area"></span><br />
               <span class="caption">Accuracy: </span><span id="srs-in-accuracy"></span>
             </div>
-
+            <br>
+            <a id="srs-in-details-link" href="#" target="_blank">More details</a><br /><br />
           </form>
         </div>
 
         <div class="trans-box right">
-          <h3 class="underline-style">Output</h3>
+          <h3 class="underline-style">Output coordinate system</h3>
+          <span id="srs-out-name">Not selected</span>
+          <a href="#"n id="srs-out-change">Change</a>
+          <br><br>
+
+          <h3 class="underline-style">Output coordinates</h3>
 
           <label for="srs-out-x" data-value="X:" data-value-degrees="Longitude:">X:</label>
           <input type="text" id="srs-out-x" data-placeholder="" data-placeholder-degrees="" readonly="readonly" />
@@ -79,19 +85,15 @@
           <input type="text" id="srs-out-y" data-placeholder="" data-placeholder-degrees="" readonly="readonly" />
           <br />
           <a id="srs-out-map-link" href="#" style="display:none;">show position on a map</a>
-          <br /><br />
-
-          <h3 class="underline-style">Output coordinate system</h3>
-          <span id="srs-out-name">Not selected</span>
-          <a href="#"n id="srs-out-change">Change</a>
+          <br />
 
           <div id="srs-out-details" style="display:none;">
-            <h3 class="underline-style">Details</h3>
-            <a id="srs-out-details-link" href="#" target="_blank">show more details</a><br /><br />
             <span class="caption">Unit: </span><span id="srs-out-unit"></span><br />
             <span class="caption">Area of use: </span><span id="srs-out-area"></span><br />
             <span class="caption">Accuracy: </span><span id="srs-out-accuracy"></span>
           </div>
+          <br>
+          <a id="srs-out-details-link" href="#" target="_blank">More details</a><br /><br />
         </div>
       </div>
 
@@ -108,7 +110,7 @@
            data-ad-client="ca-pub-0328423815528922"
            data-ad-slot="6564733120"></ins>
       <script>
-              (adsbygoogle = window.adsbygoogle || []).push({});</script>
+      (adsbygoogle = window.adsbygoogle || []).push({});</script>
 
       <div id="foot">
         <p id="klokan-logo">
@@ -122,7 +124,7 @@
       </div>
     </div>
     <script type="text/javascript">
-              new TransformPage;
+      new TransformPage;
     </script>
   </body>
 </html>
