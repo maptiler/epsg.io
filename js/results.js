@@ -11,11 +11,16 @@ function geocodeAddress(geocoder, address) {
         zoom: 8,
         center: {lat: 0, lng: 0}
       });
-      document.getElementById('results-map').className = 'active';
-      document.getElementById('noresults').className = 'hidden';
-      var position = results[0].geometry.location;
-      var hash = '#x=' + position.lng() + '&y=' + position.lat() + '&z=8';
-      document.getElementById('map-link').href += hash;
+      document.getElementById('results-map-container').className = 'active';
+      var geometry = results[0].geometry.location;
+      var position = [
+        Math.round(geometry.lng() * 100000000) / 100000000,
+        Math.round(geometry.lat() * 100000000) / 100000000
+      ];
+      var resPosition = document.getElementById('results-map-position');
+      resPosition.innerHTML = position[0] + ' ' + position[1];
+      var hash = '#x=' + position[0] + '&y=' + position[1] + '&z=8';
+      document.getElementById('results-map-btn').href += hash;
       map.setCenter(results[0].geometry.location);
       var marker = new google.maps.Marker({
         map: map,

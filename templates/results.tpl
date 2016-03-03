@@ -104,8 +104,8 @@
                       %end
                     %end
                   </p>
-                    <a href="/transform#srs={{r['short_code'][0]}}">Transform&nbsp;coordinates</a> |
-                    <a href="/map#s_srs={{r['short_code'][0]}}">Get&nbsp;position&nbsp;on&nbsp;a&nbsp;map</a>
+                    <a href="/transform#s_srs={{r['short_code'][0]}}">Transform&nbsp;coordinates</a> |
+                    <a href="/map#srs={{r['short_code'][0]}}">Get&nbsp;position&nbsp;on&nbsp;a&nbsp;map</a>
                 </li>
               %end
             %elif num_kind != 0:
@@ -177,8 +177,15 @@
 
         %if num_results == 0:
           %if num_kind == 0:
-            <div id="results-map"></div>
-            <a id="map-link" class="btn" href="/map">Coordinates on map<i></i></a>
+            <div id="results-map-container">
+              <div id="results-map"></div>
+              <p id="results-map-link">
+                Location of <b>{{kind_low[0]}}</b><br>
+                is <b id="results-map-position"></b>
+                <br><br>
+              <a id="results-map-btn" class="btn" href="/map">Coordinates on map<i></i></a>
+              </p>
+            </div>
           %end
         %end
 
@@ -219,6 +226,6 @@
           </script>
         %end
       %end
-      
+
   </body>
 </html>
