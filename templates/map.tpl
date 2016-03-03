@@ -19,6 +19,7 @@
   <body id="mappage" data-role="page">
     <h1>Get coordinates from a map - converting latitude / longitude degrees</h1>
     <div id="copy-clipboard-container">
+      <div id="copy-bg"></div>
       <form id="eastnorth_form" method="post" action="#">
         <input id="easting" type="text" name="easting" value="" />
         <input id="northing" type="text" name="northing" value="" />

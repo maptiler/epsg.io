@@ -3,13 +3,17 @@ function results(address) {
   var geocoder = new google.maps.Geocoder();
   geocodeAddress(geocoder, address);
 }
-
 function geocodeAddress(geocoder, address) {
   geocoder.geocode({'address': address}, function (results, status) {
     if (status === google.maps.GeocoderStatus.OK) {
       var map = new google.maps.Map(document.getElementById('results-map'), {
         zoom: 8,
-        center: {lat: 0, lng: 0}
+        center: {lat: 0, lng: 0},
+        draggable: false,
+        zoomControl: false,
+        scrollwheel: false,
+        disableDoubleClickZoom: true,
+        disableDefaultUI: true
       });
       document.getElementById('results-map-container').className = 'active';
       var geometry = results[0].geometry.location;

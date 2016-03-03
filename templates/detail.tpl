@@ -71,9 +71,9 @@
           <a id="share_gplusdark" href="https://plus.google.com/share?url=//epsg.io/{{url_social}}"><span class="icon-epsg-googleplus"></span></a>
         </div>
         <div class="detail-action-buttons">
-          <a class="btn" href="/transform#s_srs={{code_short[0]}}" title="Transform {{name}} -- {{alt_title}} coordinates">
+          <a class="btn" href="/transform#s_srs={{url_social}}" title="Transform {{name}} -- {{alt_title}} coordinates">
               Transform&nbsp;coordinates</a>
-            <a class="btn" href="/map#srs={{code_short[0]}}"  title="Display {{name}} -- {{alt_title}} on a map">
+            <a class="btn" href="/map#srs={{url_social}}"  title="Display {{name}} -- {{alt_title}} on a map">
               Get&nbsp;position&nbsp;on&nbsp;a&nbsp;map</a>
         </div>
         </div>

@@ -118,7 +118,7 @@
               %end
               </li>
             %else:
-            <li id="noresults">Please change your query.</li>
+            <li id="noresults">No records found.</li>
 
             %end
             %if deprecated != 1 and num_deprecated[0]>0:
@@ -178,13 +178,16 @@
         %if num_results == 0:
           %if num_kind == 0:
             <div id="results-map-container">
+              <h3 class="underline-style">Address search results</h3>
               <div id="results-map"></div>
-              <p id="results-map-link">
-                Location of <b>{{kind_low[0]}}</b><br>
-                is <b id="results-map-position"></b>
-                <br><br>
-              <a id="results-map-btn" class="btn" href="/map">Coordinates on map<i></i></a>
-              </p>
+              <ul class="results">
+              <li id="results-map-link">
+                <h2>{{kind_low[0]}}</h2>
+                Location is <b id="results-map-position"></b>
+                <br>
+              <a id="results-map-btn" href="/map">Coordinates on map</a>
+              </li>
+              </ul>
             </div>
           %end
         %end

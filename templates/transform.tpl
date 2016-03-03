@@ -35,7 +35,7 @@
       <div id="detail-content-container">
 
         <h1>Transform coordinates</h1>
-        <h2>Online convertor for lat & long coordinates and projected systems</h2>
+        <h2>Online convertor for lat & long coordinates, geodetic datums and projected systems</h2>
         <br /><br />
         <div class="trans-box">
           <h3 class="underline-style">Input coordinate system</h3>
@@ -43,8 +43,10 @@
           <a href="#"n id="srs-in-change" class="">Change</a>
           <br><br>
 
-          <h3 class="underline-style">Input coordinates</h3>
+          <h3 class="underline-style">Input coordinates <a href="#" style="display: none;">Batch</a></h3>
           <form id="srs-in-form">
+            <input type="submit" value="Transform" class="btn" />
+            <input type="button" id="srs-swap" value="Swap &#x21C4;"  class="btn-dark" />
             <label for="srs-in-x" data-value="X:" data-value-degrees="Longitude:">X:</label>
             <input type="text" id="srs-in-x" data-placeholder="Decimal value of X coordinate"
                    data-placeholder-degrees="e.g. 8°33'10&quot;, 8.55, 8 33 10" />
@@ -53,11 +55,10 @@
             <label for="srs-in-y" data-value="Y:" data-value-degrees="Latitude:">Y:</label>
             <input type="text" id="srs-in-y" data-placeholder="Decimal value of Y coordinate"
                    data-placeholder-degrees="e.g. 47°22'00&quot;, 47.36666, 47 22 00" />
-            <br />
+            <textarea name="batch-in" style="display: none;"></textarea>
+            <br /><br />
             <a id="srs-in-map-link" href="#" style="display:none;">Show position on a map</a>
-            <br>
-            <input type="submit" value="Transform" class="btn" />
-            <input type="button" id="srs-swap" value="Swap &#x21C4;"  class="btn-dark" />
+            <br><br />
 
             <div id="srs-in-details" style="display:none;">
               <span class="caption">Unit: </span><span id="srs-in-unit"></span><br />
@@ -83,9 +84,10 @@
           <br />
           <label for="srs-out-y" data-value="Y:" data-value-degrees="Latitude:">Y:</label>
           <input type="text" id="srs-out-y" data-placeholder="" data-placeholder-degrees="" readonly="readonly" />
-          <br />
-          <a id="srs-out-map-link" href="#" style="display:none;">show position on a map</a>
-          <br />
+          <textarea name="batch-out" style="display: none;"></textarea>
+          <br><br>
+          <a id="srs-out-map-link" href="#" style="display:none;">Show position on a map</a>
+          <br><br>
 
           <div id="srs-out-details" style="display:none;">
             <span class="caption">Unit: </span><span id="srs-out-unit"></span><br />
@@ -96,13 +98,6 @@
           <a id="srs-out-details-link" href="#" target="_blank">More details</a><br /><br />
         </div>
       </div>
-
-      <div id="spacer"><p></p></div>
-
-    </div>
-
-    <div id="footer">
-
       <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
       <!-- EPSG.io -->
       <ins class="adsbygoogle"
@@ -110,7 +105,12 @@
            data-ad-client="ca-pub-0328423815528922"
            data-ad-slot="6564733120"></ins>
       <script>
-      (adsbygoogle = window.adsbygoogle || []).push({});</script>
+      (adsbygoogle = window.adsbygoogle || []).push({});
+       </script>
+
+    </div>
+
+    <div id="footer">
 
       <div id="foot">
         <p id="klokan-logo">
