@@ -275,8 +275,8 @@ epsg.io.MapPage.prototype.handleSRSChange_ = function(srsData, opt_dontCenter) {
   this.keepEastNorth = false;
   this.makeQuery();
 
-  goog.dom.setTextContent(this.srsTitleEl_,
-      this.srs_['name'] + ' <span>' + 'EPSG:' + this.srs_['code'] + '</span>');
+  this.srsTitleEl_.innerHTML =
+      this.srs_['name'] + ' <span>' + 'EPSG:' + this.srs_['code'] + '</span>';
   this.srsDetailLinkEl_.href = '/' + this.srs_['code'];
   goog.style.setElementShown(this.copyClipboardContainerEl_, true);
   goog.style.setElementShown(this.srsDetailLinkEl_, true);
