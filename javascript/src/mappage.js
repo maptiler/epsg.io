@@ -147,6 +147,10 @@ epsg.io.MapPage = function() {
 
   goog.events.listen(this.reprojectMapElement_, goog.events.EventType.CHANGE,
       function(e) {
+        if (this.gmapWrap_) {
+          this.mapTypeElement_.value = 'mqosm';
+          this.updateMapType_();
+        }
         this.updateMapView_();
         this.updateHash_();
       }, false, this);
@@ -407,11 +411,9 @@ epsg.io.MapPage.prototype.updateMapType_ = function() {
  * @private
  */
 epsg.io.MapPage.prototype.handleReprojectionConditionsChange_ = function() {
-  var possible = !this.gmapWrap_ &&
-                 this.srs_ &&
-                 ol.proj.get('EPSG:' + this.srs_['code']);
+  var possible = this.srs_ && ol.proj.get('EPSG:' + this.srs_['code']);
   goog.style.setElementShown(this.reprojectMapContainer_, possible);
-  if (!possible) {
+  if (!possible || this.gmapWrap_) {
     this.reprojectMapElement_.checked = false;
   }
   if (this.reprojectionViewOn_) {
