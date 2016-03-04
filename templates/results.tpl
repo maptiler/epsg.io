@@ -185,9 +185,9 @@
                 <h2>{{kind_low[0]}}</h2>
                 Location is <b id="results-map-position"></b>
                 <br>
-              <a id="results-map-btn" href="/map">Coordinates on map</a>
               </li>
               </ul>
+              <a id="results-map-btn" class="btn"href="/map">Coordinates on map</a>
             </div>
           %end
         %end

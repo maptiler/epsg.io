@@ -334,14 +334,14 @@ input.btn, input.btn-light, input.btn-dark, input[type=submit].srsdialog-table{
 #crs-title span{float: right;}
 #crs-detail-link:hover, #crs-title:hover{text-decoration: none; color: #4295c5;}
 
-#copy-clipboard-container { height: 40px; margin: 0; padding: 0 20px; overflow: hidden; position: absolute; top: 63px; z-index: 1000; left: 50%; width: 500px; margin-left: -265px;}
+#copy-clipboard-container { height: 40px; margin: 0; padding: 0 20px; overflow: hidden; position: absolute; top: 63px; z-index: 100; left: 50%; width: 500px; margin-left: -265px;}
 #copy-clipboard-container input[type="text"] { margin: 0; padding: 1px 0 0 16px; height: 28px; float: left; width: 138px; background: #fff;
                                                font-size: 11px; border: solid 1px #bcbcbc;  border-bottom: solid 1px #4295c5;  border-top: solid 1px #4295c5;}
 #copy-clipboard-container #easting {border-top-left-radius: 15px; border-bottom-left-radius: 15px; border-left: solid 1px #4295c5;  border-right: solid 1px #fff; }
 #copy-clipboard-container #northing {border-top-right-radius: 15px; border-bottom-right-radius: 15px; border-right: solid 1px #4295c5; }
 #copy-clipboard-container input[type="text"]:hover { border: solid 1px #9A9A9A; }
-#copy-clipboard-container #copy-bg{background: #fff; width: 520px; height: 23px;position: absolute;z-index: -1;top: 16px; margin-left: -15px;
-                                   border-left: solid 1px #cacaca;border-bottom: solid 1px #cacaca;border-right: solid 1px #cacaca; background-image: url('/img/bg-coordsinput.png');
+#copy-clipboard-container #copy-bg{width: 520px; height: 23px;position: absolute;z-index: -1;top: 16px; margin-left: -15px;
+                                   border-left: solid 1px #cacaca;border-bottom: solid 1px #cacaca;border-right: solid 1px #cacaca; background: #eef5f9;
 }
 
 #copy-clipboard-container a { padding: 7px 0 0 0; width: 80px; text-align: center; height: 24px; float: left; color: #fff; background: #4295c5;
@@ -483,7 +483,8 @@ pre { background: transparent; border: solid 1px #bdbdbd; font-size: 11px; margi
   #eb-menu-container { margin: 0 0 30px; float: none; width: auto; }
   #edit-box-container { padding-top: 20px; }
 
-  #mappage #head, #head{height: 50px}
+  #mappage #head, #head, #mappage #head-top{height: 85px}
+  #mappage #head-top {background: #fff url('../img/bg-head-long.png') 0 0 repeat;}
   #head #logo-container a{background-size: 78px 26px; padding: 0px 0 0 125px;}
   #head #logo-container {padding: 17px 0 0 47px;}
   #head #menu-top{padding: 18px 60px 0 0;}
@@ -493,7 +494,8 @@ pre { background: transparent; border: solid 1px #bdbdbd; font-size: 11px; margi
   #mapType {top: 100px;}
   #mc-info-container {padding: 10px 15px 10px;}
   #mc-info-container p a{padding: 0px 10px;font-size: 10px;}
-  #copy-clipboard-container {padding: 5px 50px 5px; top: 57px;}
+  #copy-clipboard-container {padding: 5px 45px 5px; top: 45px; left: 0; margin: 0; right: 0; height: 35px;}
+  #copy-clipboard-container #copy-bg{display: none;}
   #mc-info-container h1 {margin: 0 0 5px; font-size: 12px;}
   #copy-clipboard-container input[type="text"] {padding: 1px 0 0 13px; height: 25px;}
   #map-clipboard-container{position: fixed; left: 0; right: 0; bottom: 0; margin-left: 0; width: 100%; z-index: 90;}
@@ -675,7 +677,8 @@ h3.underline-style{
 }
 #results-map-container { width: 100%; display: none; }
 #results-map-link{ margin: 30px 75px 0 0; text-align: left;}
-#results-map{ width: 50%; height: 300px; display: inline-block; float: right;}
+#results-map{ width: 300px; height: 200px; display: inline-block; float: right;}
+#results-map-btn{margin-top: 20px;}
 #results-map-container.active{ display: inline-block; }
 #noresults.hidden{ display: none; }
 #noresults { margin: 0 0 30px 0;}
