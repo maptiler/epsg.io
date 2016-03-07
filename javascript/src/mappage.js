@@ -200,7 +200,7 @@ epsg.io.MapPage = function() {
       e.stopPropagation();
     }, false, this);
   }
-  goog.events.listen(this.map_, ol.MapBrowserEvent.EventType.SINGLECLICK,
+  this.map_.on(ol.MapBrowserEvent.EventType.SINGLECLICK,
       function(e) {
         var pan = ol.animation.pan({
           duration: 150,
@@ -209,7 +209,7 @@ epsg.io.MapPage = function() {
         this.map_.beforeRender(pan);
         this.view_.setCenter(e.coordinate);
         e.preventDefault();
-      }, false, this);
+      }, this);
 
   // The user can type easting / northing and hit Enter
   goog.events.listen(this.eastNorthFormElement, goog.events.EventType.SUBMIT,
