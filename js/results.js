@@ -23,7 +23,7 @@ function geocodeAddress(geocoder, address) {
       ];
       var resPosition = document.getElementById('results-map-position');
       resPosition.innerHTML = position[0] + ' ' + position[1];
-      var hash = '#x=' + position[0] + '&y=' + position[1] + '&z=8';
+      var hash = '#x=' + position[0] + '&y=' + position[1] + '&z=18';
       document.getElementById('results-map-btn').href += hash;
       map.setCenter(results[0].geometry.location);
       var marker = new google.maps.Marker({
