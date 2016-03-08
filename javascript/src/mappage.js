@@ -359,6 +359,7 @@ epsg.io.MapPage.prototype.updateMapType_ = function() {
       disableDoubleClickZoom: true,
       scrollwheel: false,
       streetViewControl: false,
+      tilt: 0,
       mapTypeId: mapType.substr(6) // part after "gmaps-"
     });
     this.gmapWrap_ = gmap;
