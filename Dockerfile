@@ -4,7 +4,7 @@ ENV DEBIAN_FRONTEND noninteractive
 
 RUN apt-get -qq update \
 && apt-get -qq -y --no-install-recommends install curl \
-&& curl https://raw.githubusercontent.com/pypa/pip/master/contrib/get-pip.py | python \
+&& curl https://bootstrap.pypa.io/get-pip.py | python \
 && mkdir -p /var/www
 
 COPY . /var/www/epsg.io
