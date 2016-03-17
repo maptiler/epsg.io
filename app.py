@@ -1689,9 +1689,17 @@ def index(id,format):
 def index():
   return template('./templates/map', version=VERSION)
 
+@route('/map/')
+def index():
+  return redirect("/map");
+
 @route('/transform')
 def index():
   return template('./templates/transform', version=VERSION)
+
+@route('/transform/')
+def index():
+  return redirect("/transform");
 
 @route('/about')
 def index():
