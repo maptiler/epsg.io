@@ -36,8 +36,8 @@
       <p><form><input type="search" name="geocoder" id="geocoder" placeholder="Place or address" /></form></p>
   </div>
   <select id="mapType">
-    <option value="mqosm">OSM MapQuest</option>
-    <option value="osm" data-tilejson="https://klokantech.tileserver.com/osm-bright/index.json?key=ITnCvdev3U2WlYotXxrX">OSM Bright</option>
+    <option value="streets" data-tilejson="https://klokantech.tilehosting.com/styles/streets/rendered.json?key=ZhtX9pgbAUDr2243Y7XY">Streets</option>
+    <option value="osm">OSM</option>
     <option value="satellite" data-tilejson="https://api.tiles.mapbox.com/v4/epsg.og9084kh.json?access_token=pk.eyJ1IjoiZXBzZyIsImEiOiJjaWloNjQybjgwMDA2dm5tMGE3eTk3eXVuIn0.OuKrtb4M8Fca6cO3waqqWg">MapBox Satellite</option>
     <option value="gmaps-roadmap" selected>Google Maps Streets</option>
     <option value="gmaps-satellite">Google Maps Satellite</option>

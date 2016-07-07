@@ -19,7 +19,6 @@ goog.require('ol.Map');
 goog.require('ol.View');
 goog.require('ol.extent');
 goog.require('ol.layer.Tile');
-goog.require('ol.source.MapQuest');
 goog.require('ol.source.OSM');
 goog.require('ol.source.TileJSON');
 
@@ -148,7 +147,7 @@ epsg.io.MapPage = function() {
   goog.events.listen(this.reprojectMapElement_, goog.events.EventType.CHANGE,
       function(e) {
         if (this.gmapWrap_) {
-          this.mapTypeElement_.value = 'mqosm';
+          this.mapTypeElement_.value = 'osm';
           this.updateMapType_();
         }
         this.updateMapView_();
@@ -393,8 +392,8 @@ epsg.io.MapPage.prototype.updateMapType_ = function() {
     if (tilejson) {
       src = new ol.source.TileJSON({url: tilejson, useXhr: true});
     } else {
-      if (mapType == 'mqosm') {
-        src = new ol.source.MapQuest({layer: 'osm'});
+      if (mapType == 'osm') {
+        src = new ol.source.OSM();
         (function() {src.opaque_ = false;})();
       }
     }
