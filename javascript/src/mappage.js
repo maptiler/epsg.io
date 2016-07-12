@@ -147,7 +147,7 @@ epsg.io.MapPage = function() {
   goog.events.listen(this.reprojectMapElement_, goog.events.EventType.CHANGE,
       function(e) {
         if (this.gmapWrap_) {
-          this.mapTypeElement_.value = 'osm';
+          this.mapTypeElement_.value = 'streets';
           this.updateMapType_();
         }
         this.updateMapView_();
@@ -334,7 +334,7 @@ epsg.io.MapPage.prototype.updateMapType_ = function() {
     this.map_.setTarget(this.mapElement);
     delete this.gmapWrap_;
     goog.array.forEach(this.viewListenKeysForGmapWrap_,
-                       goog.events.unlistenByKey);
+                       ol.Observable.unByKey);
     this.viewListenKeysForGmapWrap_ = [];
   }
 
