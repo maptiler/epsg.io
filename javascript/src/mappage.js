@@ -427,7 +427,7 @@ epsg.io.MapPage.prototype.handleReprojectionConditionsChange_ = function() {
  */
 epsg.io.MapPage.prototype.updateMapView_ = function() {
   if (this.viewListenKeys_.length) {
-    goog.array.forEach(this.viewListenKeys_, goog.events.unlistenByKey);
+    goog.array.forEach(this.viewListenKeys_, ol.Observable.unByKey);
     this.viewListenKeys_ = [];
     goog.array.forEach(this.viewListenKeysForGmapWrap_,
                        goog.events.unlistenByKey);
