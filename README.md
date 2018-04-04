@@ -26,7 +26,7 @@ Note: This is not required, as you can easily download the ready-to-use index fr
     * b. file `CRS_exceptions.csv`
     * c. file `CRS_exceptions.py`
     * d. file `gml_parser.py`
-    * e. file `GmlDictionary.xml` (downloaded EPSG database from [http://epsg-registry.org])
+    * e. file `GmlDictionary.xml` (downloaded EPSG database from http://epsg-registry.org)
 3. Start indexing via `python gml_parser.py`
 4. Move created `gml.sqlite` into `gml` folder
 
