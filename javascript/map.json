@@ -6,7 +6,6 @@
   "paths": ["src", "library/src", "ol3/src", "ol3/build/ol.ext"],
 
   "externs": [
-    "//externs/maps/google_maps_api_v3.js",
     "ol3/externs/bingmaps.js",
     "ol3/externs/geojson.js",
     "ol3/externs/oli.js",

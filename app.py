@@ -240,6 +240,15 @@ def area_to_url(area):
 
   return url
 
+def get_static_map_url(center, g_coords):
+  if center != "" and g_coords != "":
+    url_static = "https://maps.tilehosting.com/styles/streets/static/auto/265x215@2x.png?key=qrAJy6x3Ck8n4XFFH4PS&latlng=1&fill=rgba(255,0,0,0.15)&stroke=red&width=2&path=" + g_coords
+    # + "&markers=" +str(center[0])+","+str(center[1])
+
+    return urllib2.quote(url_static), url_static
+  else:
+    return ("","")
+
 @route('/',method="GET")
 def index():
 
@@ -748,10 +757,7 @@ def index(id):
         else:
           g_coords = str(s) + "," + str(w) + "|" + str(n) + "," + str(w) + "|" + str(n) + "," + str(e) + "|" + str(s) + "," + str(e) + "|" + str(s) + "," + str(w)
 
-    url_static_map = ("","")
-    if center != "" and g_coords != "":
-      url_static = "https://maps.googleapis.com/maps/api/staticmap?size=265x215&scale=2&sensor=false&visual_refresh=true&center="+str(center[0])+","+str(center[1])+"&path=color:0xff0000ff|fillcolor:0xff000022|weight:2|"+g_coords
-      url_static_map = urllib2.quote(url_static), url_static
+    url_static_map = get_static_map_url(center, g_coords)
     ogpxml = ""
     if item['kind'].startswith("CRS"):
       urn = "urn:ogc:def:crs:EPSG::"+code
@@ -1027,9 +1033,8 @@ def index(id):
             g_coords = str(s) + "," + str(w) + "|" + str(n) + "," + str(w) + "|" + str(n) + "," + str(e) + "|" + str(s) + "," + str(e) + "|" + str(s) + "," + str(w)
 
           bbox_coords = (n,e,s,w)
-          if center != "" and g_coords != "":
-            url_static = "https://maps.googleapis.com/maps/api/staticmap?size=265x215&scale=2&sensor=false&visual_refresh=true&center="+str(center[0])+","+str(center[1])+"&path=color:0xff0000ff|fillcolor:0xff000022|weight:2|"+g_coords
-            url_static_map = urllib2.quote(url_static), url_static
+
+          url_static_map = get_static_map_url(center, g_coords)
 
         if 'primem' in r:
           if r['primem']:

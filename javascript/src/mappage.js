@@ -110,22 +110,10 @@ epsg.io.MapPage = function() {
   this.jsonp_ = new goog.net.Jsonp(epsg.io.TRANS_SERVICE_URL);
 
   /**
-   * @type {?google.maps.Map}
-   * @private
-   */
-  this.gmapWrap_ = null;
-
-  /**
    * @type {!Array}
    * @private
    */
   this.viewListenKeys_ = [];
-
-  /**
-   * @type {!Array}
-   * @private
-   */
-  this.viewListenKeysForGmapWrap_ = [];
 
   this.map_ = new ol.Map({
     target: this.mapElement,
@@ -146,10 +134,6 @@ epsg.io.MapPage = function() {
 
   goog.events.listen(this.reprojectMapElement_, goog.events.EventType.CHANGE,
       function(e) {
-        if (this.gmapWrap_) {
-          this.mapTypeElement_.value = 'streets';
-          this.updateMapType_();
-        }
         this.updateMapView_();
         this.updateHash_();
       }, false, this);
@@ -328,79 +312,25 @@ epsg.io.MapPage.prototype.handleSRSChange_ = function(srsData, opt_dontCenter) {
  * @private
  */
 epsg.io.MapPage.prototype.updateMapType_ = function() {
-  if (this.gmapWrap_) {
-    google.maps.event.clearInstanceListeners(this.gmapWrap_);
-    goog.dom.removeChildren(this.mapElement);
-    this.map_.setTarget(this.mapElement);
-    delete this.gmapWrap_;
-    goog.array.forEach(this.viewListenKeysForGmapWrap_,
-                       ol.Observable.unByKey);
-    this.viewListenKeysForGmapWrap_ = [];
-  }
-
   this.mapElement.style.backgroundColor = '';
 
   var newLayers = [];
 
   var mapType = this.mapTypeElement_.value;
-  var useGmaps = mapType.indexOf('gmaps-') === 0;
-  if (useGmaps) {
-    var olTarget = goog.dom.createDom('div',
-                                      {'style': 'width:100%;height:100%'});
-    this.map_.setTarget(olTarget);
-
-    goog.dom.removeChildren(this.mapElement);
-
-    var gmap = new google.maps.Map(this.mapElement, {
-      disableDefaultUI: true,
-      keyboardShortcuts: false,
-      draggable: false,
-      disableDoubleClickZoom: true,
-      scrollwheel: false,
-      streetViewControl: false,
-      tilt: 0,
-      mapTypeId: mapType.substr(6) // part after "gmaps-"
-    });
-    this.gmapWrap_ = gmap;
-    gmap.controls[google.maps.ControlPosition.TOP_LEFT].push(olTarget);
-
-    this.handleReprojectionConditionsChange_();
-
-    var v = this.view_;
-    this.viewListenKeysForGmapWrap_.push(v.on('change:center', function() {
-      var center = ol.proj.transform(v.getCenter() || null,
-                                     'EPSG:3857', 'EPSG:4326');
-      gmap.setCenter(new google.maps.LatLng(center[1], center[0]));
-    }));
-    this.viewListenKeysForGmapWrap_.push(v.on('change:resolution', function() {
-      gmap.setZoom(v.getZoom() || 0);
-    }));
-
-    var center = ol.proj.transform(v.getCenter() || null,
-                                   'EPSG:3857', 'EPSG:4326');
-    gmap.setCenter(new google.maps.LatLng(center[1], center[0]));
-    gmap.setZoom(v.getZoom() || 0);
-
-    google.maps.event.addListenerOnce(gmap, 'idle', goog.bind(function() {
-      google.maps.event.trigger(gmap, 'resize');
-      this.map_.updateSize();
-    }, this));
+  var src;
+  var tilejson = this.mapTypeElement_.options[
+      this.mapTypeElement_.selectedIndex].getAttribute('data-tilejson');
+  if (tilejson) {
+    src = new ol.source.TileJSON({url: tilejson, useXhr: true});
   } else {
-    var src;
-    var tilejson = this.mapTypeElement_.options[
-        this.mapTypeElement_.selectedIndex].getAttribute('data-tilejson');
-    if (tilejson) {
-      src = new ol.source.TileJSON({url: tilejson, useXhr: true});
-    } else {
-      if (mapType == 'osm') {
-        src = new ol.source.OSM();
-        (function() {src.opaque_ = false;})();
-      }
+    if (mapType == 'osm') {
+      src = new ol.source.OSM();
+      (function() {src.opaque_ = false;})();
     }
-    //src.setRenderReprojectionEdges(true);
-    newLayers = [new ol.layer.Tile({source: src})];
-    this.handleReprojectionConditionsChange_();
   }
+  //src.setRenderReprojectionEdges(true);
+  newLayers = [new ol.layer.Tile({source: src})];
+  this.handleReprojectionConditionsChange_();
 
   this.map_.getLayerGroup().setLayers(new ol.Collection(newLayers));
   this.map_.updateSize();
@@ -413,7 +343,7 @@ epsg.io.MapPage.prototype.updateMapType_ = function() {
 epsg.io.MapPage.prototype.handleReprojectionConditionsChange_ = function() {
   var possible = this.srs_ && ol.proj.get('EPSG:' + this.srs_['code']);
   goog.style.setElementShown(this.reprojectMapContainer_, possible);
-  if (!possible || this.gmapWrap_) {
+  if (!possible) {
     this.reprojectMapElement_.checked = false;
   }
   if (this.reprojectionViewOn_) {
@@ -429,13 +359,10 @@ epsg.io.MapPage.prototype.updateMapView_ = function() {
   if (this.viewListenKeys_.length) {
     goog.array.forEach(this.viewListenKeys_, ol.Observable.unByKey);
     this.viewListenKeys_ = [];
-    goog.array.forEach(this.viewListenKeysForGmapWrap_,
-                       goog.events.unlistenByKey);
-    this.viewListenKeysForGmapWrap_ = [];
   }
 
   var reprojectMap =
-      this.reprojectMapElement_.checked && !!this.srs_ && !this.gmapWrap_;
+      this.reprojectMapElement_.checked && !!this.srs_;
   var projection = ol.proj.get(reprojectMap ?
       ('EPSG:' + this.srs_['code']) : 'EPSG:3857');
   var resolution = !this.view_ ? null : (this.view_.getResolution() *

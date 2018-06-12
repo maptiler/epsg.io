@@ -14,7 +14,6 @@
     <script src="/js/ZeroClipboard.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.3.12/proj4.js"></script>
     <script src="/js/map.js"></script>
-    <script type="text/javascript" src="https://maps.google.com/maps/api/js?v=3.3&sensor=false"></script>
   </head>
   <body id="mappage" data-role="page">
     <h1>Get coordinates from a map - converting latitude / longitude degrees</h1>
@@ -39,9 +38,6 @@
     <option value="streets" data-tilejson="https://maps.tilehosting.com/styles/streets.json?key=qrAJy6x3Ck8n4XFFH4PS">Streets</option>
     <option value="satellite" data-tilejson="https://maps.tilehosting.com/styles/hybrid.json?key=qrAJy6x3Ck8n4XFFH4PS">Satellite</option>
     <option value="osm">OSM</option>
-    <option value="gmaps-roadmap" selected>Google Maps Streets</option>
-    <option value="gmaps-satellite">Google Maps Satellite</option>
-    <option value="gmaps-hybrid">Google Maps Hybrid</option>
   </select>
   <div id="mapsight"></div>
   <div id="head">
