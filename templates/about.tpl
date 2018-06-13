@@ -163,7 +163,7 @@
            <a href="//www.mzk.cz/" title=""><img src="./img/hzk-logo.png" alt="" /></a>
          </p>
          <p>Find a coordinate system and get position on a map. Powered by EPSG database {{version}}</p>
-         <p id="copyright">Copyright &copy; 2016</p>
+         <p id="copyright">Copyright &copy; 2018</p>
        </div>
      </div>
 
