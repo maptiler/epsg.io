@@ -572,29 +572,27 @@ pre { background: transparent; border: solid 1px #bdbdbd; font-size: 11px; margi
 }
 
 .ac-row {
+  white-space: nowrap;
   position: relative;
-  padding: .4em;
   cursor: pointer;
+  padding: 5px;
+  background-color: #fff;
+  overflow: hidden !important;
+  text-overflow: ellipsis;
 }
-
-.ac-highlighted {
-  font-weight: bold;
+.ac-row .suffix {
+  font-size:.8em;
+  color:#ccc;
+  padding:.1em 0 .1em 5px;
 }
-
-.ac-active {
-  background-color: #b2b4bf;
-  color: #000;
+.ac-row .type {
+  font-size:.7em;
+  color:#aaa;
+  display:block;
+  width:100%;
 }
-
-.ac-type {
-  background-color: #990033;
-  color: #FFFFFF;
-  display: block;
-  margin: 2px;
-  padding: 2px;
-  font-style: italic;
-  float: right;
-}
+.ac-highlighted {font-weight: bold;}
+.ac-active {background-color: #eee;}
 
 /* Transform */
 .trans-box{

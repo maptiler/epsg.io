@@ -13,7 +13,7 @@ goog.require('goog.Timer');
 goog.require('goog.Uri.QueryData');
 goog.require('goog.dom');
 goog.require('goog.net.Jsonp');
-goog.require('kt.Nominatim');
+goog.require('kt.OsmNamesAutocomplete');
 goog.require('kt.alert');
 goog.require('ol.Map');
 goog.require('ol.View');
@@ -218,16 +218,21 @@ epsg.io.MapPage = function() {
       }, false, this);
 
   if (this.geocoderElement) {
-    var nominatim = new kt.Nominatim(this.geocoderElement,
-        'http://nominatim.klokantech.com/');
-    nominatim.registerCallback(goog.bind(function(bnds) {
-      this.geocoderElement.value = '';
+    var geocoder = new kt.OsmNamesAutocomplete(this.geocoderElement,
+        'https://geocoder.tilehosting.com/', '7xPOpTaJNg9f5zW7LlED');
+    geocoder.registerCallback(goog.bind(function(item) {
+      var bbox = item['boundingbox'];
+      if (bbox[0] > bbox[2]) {
+        bbox[0] -= 360;
+      }
+      var isDegenerate = (bbox[2] - bbox[0]) * (bbox[3] - bbox[1]) <= 0;
+
       var size = this.map_.getSize();
-      if (size && ol.extent.getArea(bnds) > 1e-5) {
-        this.view_.fit(ol.proj.transformExtent(bnds,
+      if (size && !isDegenerate) {
+        this.view_.fit(ol.proj.transformExtent(bbox,
             'EPSG:4326', this.view_.getProjection()), size);
       } else {
-        this.view_.setCenter(ol.proj.transform(ol.extent.getCenter(bnds),
+        this.view_.setCenter(ol.proj.transform(ol.extent.getCenter(bbox),
             'EPSG:4326', this.view_.getProjection()));
         this.view_.setZoom(15);
       }
