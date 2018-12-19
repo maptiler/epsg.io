@@ -48,9 +48,10 @@
 
     <div id="head">
       <p id="logo-container">
-        <a href="//epsg.io" title=""><span>Epsg.io</span> Coordinate Systems Worldwide</a>
+        <a href="//epsg.io" title=""><span>Epsg.io</span>From MapTiler team</a>
       </p>
       <ul id="menu-top">
+        <li> <a href="/?q=">Search</a></li>
         <li><a href="/map" title="">Map</a></li>
         <li><a href="/transform" title="">Transform</a></li>
         <li><a href="/about" title="">About</a></li>
@@ -61,14 +62,10 @@
       <div id="title_kind">
         <div class="title-right">
         <div class="socialicons">
-          <a id="share_facebook" href="https://www.facebook.com/sharer/sharer.php?u=//epsg.io/{{url_social}}"><span class="icon-epsg-facebook"></span></a>
-          <a id="share_twitterb" href="https://twitter.com/share?original_referer=//epsg.io/{{url_social}}&amp;text={{name}} - {{type_epsg}}:{{code_short[0]}}&amp;"><span class="icon-epsg-twiter"></span></a>
-          %if url_static_map[0]:
-          <a id="share_pinterest" href="https://pinterest.com/pin/create/button/?url=%2F%2Fepsg.io/{{url_social}}&amp;media={{url_static_map[0]}}"><span class="icon-epsg-pinterest"></span></a>
-          %else:
-          <a id="share_pinterest" href="https://pinterest.com/pin/create/button/?url=%2F%2Fepsg.io/{{url_social}}&amp;media=http%3A%2F%2Fepsg.io%2Fimg%2Fepsg-banner-440x280-2.png"><span class="icon-epsg-pinterest"></span></a>
-          %end
-          <a id="share_gplusdark" href="https://plus.google.com/share?url=//epsg.io/{{url_social}}"><span class="icon-epsg-googleplus"></span></a>
+          <p>Share on:</p>
+          <a id="share_twitterb" href="https://twitter.com/share?original_referer=//epsg.io&amp;text=EPSG.io: Coordinate systems worldwide, view location on a map, get transformation, WKT, Proj.4. made by @klokantech"><span class="icon-epsg-twiter"></span></a>
+          <a id="share_pinterest" href="https://pinterest.com/pin/create/button/?url=http%3A%2F%2Fepsg.io&amp;media=%2F%2Fdirect.epsg.io%2Fimg%2Fepsg-banner-440x280-2.png&description=EPSG.io:%20Coordinate%20systems%20worldwide%20(EPSG/ESRI),%20preview%20location%20on%20a%20map,%20get%20transformation,%20WKT,%20OGC%20GML,%20Proj.4.%20http://EPSG.io/%20made%20by%20@klokantech"><span class="icon-epsg-pinterest"></span></a>
+          <a id="share_gplusdark" href="https://plus.google.com/share?url=//epsg.io/"><span class="icon-epsg-googleplus"></span></a>
         </div>
         <div class="detail-action-buttons">
           <a class="btn" href="/transform#s_srs={{url_social}}" title="Transform {{name}} -- {{alt_title}} coordinates">
@@ -83,9 +80,6 @@
         <h1>{{type_epsg}}:{{code_short[0]}}</h1>
       %end
 
-      <p>
-        {{kind}}
-      </p>
 
       %if alt_title:
       <h2>{{name}} -- {{alt_title}}</h2>
@@ -100,7 +94,7 @@
           <div class="cac-inner">
             %no_map = False
             %if item['bbox']:
-            <h3 class="underline-style">Covered area</h3>
+            <h3 class="underline-style"><b>Covered area powered by MapTiler</b><img style="width: 20px; margin: 0 0 -5px 10px;" src="/img/maptiler-logo-icon.png" alt="MapTiler logo"></h3>
 
               %if center:
                 %if trans_lat:
@@ -582,6 +576,10 @@
         %end
       %end
 
+      <div id="maptiler-banner">
+        <a href="https://www.maptiler.com/cloud/"><img src="/img/maptiler-gmaps-banner.png" alt="MapTiler banner"></a>
+      </div>
+
       <div id="edit-box-container">
         %if url_format and error_code == 0:
         <div id="eb-menu-container">
@@ -904,14 +902,10 @@ dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
           </script>
 
           <div id="foot">
-			<p id="klokan-logo">
-			  <a href="//www.klokantech.com/" title=""><img src="./img/klokan-logo-grey.png" alt="" /></a>
-			</p>
-            <p id="mzk-logo">
-              <a href="//www.mzk.cz/" title=""><img src="./img/hzk-logo.png" alt="" /></a>
-            </p>
-            <p>Find a coordinate system and get position on a map. Powered by EPSG database {{version}}</p>
+            <div id="maptiler-logo">
+              <a href="https://www.maptiler.com/" title=""><img src="/img/maptiler-logo.png" alt="" /></a>
             <p id="copyright">Copyright &copy; 2018</p>
+          </div>
           </div>
         </div>
 

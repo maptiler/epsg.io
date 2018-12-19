@@ -24,9 +24,10 @@
   <body id="detailpage" data-role="page">
     <div id="head">
       <p id="logo-container">
-        <a href="/" title=""><span>Epsg.io</span> Coordinate Systems Worldwide</a>
+        <a href="/" title=""><span>Epsg.io</span>From MapTiler team</a>
       </p>
       <ul id="menu-top">
+        <li> <a href="/?q=">Search</a></li>
         <li><a href="/map" title="">Map</a></li>
         <li><a href="/transform" title="">Transform</a></li>
         <li><a href="/about" title="">About</a></li>
@@ -156,14 +157,10 @@
        </script>
 
        <div id="foot">
-         <p id="klokan-logo">
-           <a href="//www.klokantech.com/" title=""><img src="./img/klokan-logo-grey.png" alt="" /></a>
-		 </p>
-         <p id="mzk-logo">
-           <a href="//www.mzk.cz/" title=""><img src="./img/hzk-logo.png" alt="" /></a>
-         </p>
-         <p>Find a coordinate system and get position on a map. Powered by EPSG database {{version}}</p>
+         <div id="maptiler-logo">
+           <a href="https://www.maptiler.com/" title=""><img src="/img/maptiler-logo.png" alt="" /></a>
          <p id="copyright">Copyright &copy; 2018</p>
+       </div>
        </div>
      </div>
 
