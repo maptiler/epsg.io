@@ -24,9 +24,10 @@
   <body id="detailpage" data-role="page">
     <div id="head">
       <p id="logo-container">
-        <a href="/" title=""><span>Epsg.io</span> Coordinate Systems Worldwide</a>
+        <a href="/" title=""><span>Epsg.io</span>From MapTiler team</a>
       </p>
       <ul id="menu-top">
+        <li> <a href="/?q=">Search</a></li>
         <li><a href="/map" title="">Map</a></li>
         <li><a href="/transform" title="">Transform</a></li>
         <li><a href="/about" title="">About</a></li>
@@ -39,7 +40,7 @@
 				<h1>EPSG.io: Find Coordinate Systems Worldwide</h1>
 				<p></p>
 				<p>
-					Klokan Technologies GmbH, Switzerland (<a href="//www.klokantech.com/">www.klokantech.com/</a>) is pleased to announce a new open-source web service with a database of coordinates systems used in maps worldwide.
+					<a href="//www.klokantech.com/">Klokan Technologies GmbH, Switzerland (www.klokantech.com/)</a> is pleased to announce a new open-source web service with a database of coordinates systems used in maps worldwide.
 				</p>
 				<p>
 					EPSG.io (<a href="//epsg.io/">http://epsg.io/</a>) simplifies discovery of coordinate reference systems utilized all over the world for creating maps and geodata and for identifying geo-position. It is a practical tool for anybody interested in cartography and digital map making, who needs to know exact latitude and longitude values for numerical coordinates in different spatial reference systems. Included map application allows to show the precise location anywhere on the planet also visually.
@@ -96,8 +97,9 @@
 					</p>
 				</p>
 				<p>
-					<h4>Main contributors for Klokan Technologies GmbH</h4>
+					<h4>Main contributors</h4>
 				    <ul>
+            <li><a href="https://www.maptiler.com">MapTiler Team</a></li>
 						<li>Petr Pridal (managing director KlokanTech.com, work done as part of PhD thesis at Czech Technical University of Technology - Geodesy and Cartography)</li>
 						<li>Tomas Pohanka (internship at KlokanTech.com, Masters degree candidate at Palacky University Olomouc - Geoinformatics)</li>
 						<li>Radim Kacer (designer at KlokanTech.com)</li>
@@ -156,14 +158,10 @@
        </script>
 
        <div id="foot">
-         <p id="klokan-logo">
-           <a href="//www.klokantech.com/" title=""><img src="./img/klokan-logo-grey.png" alt="" /></a>
-		 </p>
-         <p id="mzk-logo">
-           <a href="//www.mzk.cz/" title=""><img src="./img/hzk-logo.png" alt="" /></a>
-         </p>
-         <p>Find a coordinate system and get position on a map. Powered by EPSG database {{version}}</p>
+         <div id="maptiler-logo">
+           <a href="https://www.maptiler.com/" title=""><img src="/img/maptiler-logo.png" alt="" /></a>
          <p id="copyright">Copyright &copy; 2018</p>
+       </div>
        </div>
      </div>
 

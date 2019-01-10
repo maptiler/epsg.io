@@ -23,21 +23,28 @@
       __gaTracker('send', 'pageview');
     </script>
   </head>
+  <div id="topbar">
+      <a href="/about">About</a>
+      <a href="/transform">Transform</a>
+      <a href="/map">Map</a>
+
+  </div>
   <body id="homepage" data-role="page">
-    <a href="https://github.com/klokantech/epsg.io"><img style="position: absolute; top: 0; right: 0; border: 0; width: 149px; height: 149px;" src="/img/github-ribbon.png" alt="Fork me on GitHub"></a>
     <div id="layout-container">
       <p id="logo-container">
-        <a href="//epsg.io" title=""><span>Epsg.io</span> Coordinate Systems Worldwide</a>
+        <a href="//epsg.io"><span>Epsg.io</span>From MapTiler Team</a>
       </p>
-      <h1>Find a coordinate system and get position on a map.</h1>
+      <h1>Coordinate Systems Worldwide</h1>
 
       <div id="search-container">
 
         <form action="/" method="get">
-          <p><input id="q" name="q" type="search" placeholder="Country, code or name of a coordinate system" /> <input type="submit" name="" value="search" /></p>
+          <p><input id="q" name="q" type="search" placeholder="Country, code or name of a coordinate system ..." /> <input type="submit" name="" value="search" /></p>
         </form>
 
         <div class="home-action">
+        <a class="home-search-img" href="/transform"><img src="/img/coordinates.png" alt="Coordinates"></a>
+          <a class="home-search-img" href="/map"><img src="/img/position.png" alt="Position"></a>
           <a class="btn" href="/transform">Transform&nbsp;coordinates</a>
           <a class="btn" href="/map">Get&nbsp;position&nbsp;on&nbsp;a&nbsp;map</a>
         </div>
@@ -47,13 +54,30 @@
         </div>
 
         <div class="socialicons">
-          <a id="share_facebook" href="https://www.facebook.com/sharer/sharer.php?u=//epsg.io"><span class="icon-epsg-facebook"></span></a>
+          <p>Share on:</p>
           <a id="share_twitterb" href="https://twitter.com/share?original_referer=//epsg.io&amp;text=EPSG.io: Coordinate systems worldwide, view location on a map, get transformation, WKT, Proj.4. made by @klokantech"><span class="icon-epsg-twiter"></span></a>
           <a id="share_pinterest" href="https://pinterest.com/pin/create/button/?url=http%3A%2F%2Fepsg.io&amp;media=%2F%2Fdirect.epsg.io%2Fimg%2Fepsg-banner-440x280-2.png&description=EPSG.io:%20Coordinate%20systems%20worldwide%20(EPSG/ESRI),%20preview%20location%20on%20a%20map,%20get%20transformation,%20WKT,%20OGC%20GML,%20Proj.4.%20http://EPSG.io/%20made%20by%20@klokantech"><span class="icon-epsg-pinterest"></span></a>
           <a id="share_gplusdark" href="https://plus.google.com/share?url=//epsg.io/"><span class="icon-epsg-googleplus"></span></a>
         </div>
       </div>
-    </div>
+
+
+    <div id="home-maptiler">
+      <div class="maptiler-col-r">
+        <img src="/img/maptiler-logo-icon.png" alt="MapTiler logo">
+      </div>
+
+      <div class="maptiler-col-l">
+   <h3>Transform raster data with MapTiler</h3>
+   <div >
+   <p>MapTiler is Desktop app designed to turn large raster datasets into zoomable maps for your website. MapTiler use EPSG.IO database and has support for any coordinate system.</p>
+ </div>
+   <a href="https://www.maptiler.com/desktop/" class="btn">More information</a>
+  </div>
+</div>
+
+
+      <h3 class="coordinate-systems">Picked coordinate systems</h3>
 
     <div id="home-menu-container">
       <div class="hm-column lft">
@@ -86,6 +110,7 @@
       </div>
     </div>
     </div>
+  </div>
     <div id="spacer"><p></p></div>
     <script type="text/javascript">home_init();</script>
 
@@ -103,14 +128,10 @@
       </script>
 
       <div id="foot">
-        <p id="klokan-logo">
-          <a href="//www.klokantech.com/" title=""><img src="./img/klokan-logo-grey.png" alt="" /></a>
-        </p>
-        <p id="mzk-logo">
-          <a href="//www.mzk.cz/" title=""><img src="./img/hzk-logo.png" alt="" /></a>
-        </p>
-        <p>Find a coordinate system and get position on a map. Powered by EPSG database {{version}}</p>
-        <p id="copyright">Copyright &copy; 2018</p>
+        <div id="maptiler-logo">
+          <a href="https://www.maptiler.com/" title=""><img src="/img/maptiler-logo.png" alt="" /></a>
+        <p id="copyright">Copyright &copy; 2019</p>
+      </div>
       </div>
     </div>
   </body>
