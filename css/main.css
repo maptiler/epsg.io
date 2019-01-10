@@ -57,19 +57,19 @@
   font-style: normal;
 }
 
+body, p, em, h2, h3, h4, h5, h6, div, span, li, a, textarea, input, abbr, #homepage h1, #resultspage h1, #errorpage h1, #mc-info-container h1 {
+  font-family: OpenSansRegular, Arial, "Geneva CE", lucida, sans-serif; color: #9da4b4; font-weight: normal;
+}
+
 html { margin: 0; padding: 0; height:100%}
 body { margin: 0; padding: 0; background: #fff; position:relative; min-height:100%;}
 form { margin: 0; padding: 0; }
 a img { border: 0; }
-a { text-decoration: none; }
+a { color: #576484; text-decoration: none; }
 a:hover { text-decoration: underline; color: #2c7ac2;  }
 input[type="submit"], input[type="image"], label { cursor: pointer; }
 input:focus { outline: none; }
 abbr { cursor: help; }
-
-body, p, em, h2, h3, h4, h5, h6, div, span, li, a, textarea, input, abbr, #homepage h1, #resultspage h1, #errorpage h1, #mc-info-container h1 {
-  font-family: OpenSansRegular, Arial, "Geneva CE", lucida, sans-serif; color: #9da4b4; font-weight: normal;
-}
 
 strong, dt,  h1, .wys table td strong { font-family: OpenSansBold, Arial, "Geneva CE", lucida, sans-serif; font-weight: normal; }
 
@@ -317,6 +317,7 @@ input.btn, input.btn-light, input.btn-dark, input[type=submit].srsdialog-table{
                                      border-color: rgba(255, 255, 255, 0) rgba(255, 255, 255, 0) rgba(255, 255, 255, 0) #585858 ; }
 #trans_deprecated { display:none; }
 #maptiler-banner {padding: 25px 0; border-top: solid 1px #eee;}
+#maptiler-banner img:hover { opacity: 0.85; }
 
 #edit-box-container { margin: 0 0 50px; padding: 40px 0 0 0; border-top: solid 1px #eee; overflow: hidden; }
 #eb-menu-container { margin: 0; padding: 0; float: left; width: 270px; }

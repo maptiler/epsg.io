@@ -40,7 +40,7 @@
 				<h1>EPSG.io: Find Coordinate Systems Worldwide</h1>
 				<p></p>
 				<p>
-					Klokan Technologies GmbH, Switzerland (<a href="//www.klokantech.com/">www.klokantech.com/</a>) is pleased to announce a new open-source web service with a database of coordinates systems used in maps worldwide.
+					<a href="//www.klokantech.com/">Klokan Technologies GmbH, Switzerland (www.klokantech.com/)</a> is pleased to announce a new open-source web service with a database of coordinates systems used in maps worldwide.
 				</p>
 				<p>
 					EPSG.io (<a href="//epsg.io/">http://epsg.io/</a>) simplifies discovery of coordinate reference systems utilized all over the world for creating maps and geodata and for identifying geo-position. It is a practical tool for anybody interested in cartography and digital map making, who needs to know exact latitude and longitude values for numerical coordinates in different spatial reference systems. Included map application allows to show the precise location anywhere on the planet also visually.
@@ -97,8 +97,9 @@
 					</p>
 				</p>
 				<p>
-					<h4>Main contributors for Klokan Technologies GmbH</h4>
+					<h4>Main contributors</h4>
 				    <ul>
+            <li><a href="https://www.maptiler.com">MapTiler Team</a></li>
 						<li>Petr Pridal (managing director KlokanTech.com, work done as part of PhD thesis at Czech Technical University of Technology - Geodesy and Cartography)</li>
 						<li>Tomas Pohanka (internship at KlokanTech.com, Masters degree candidate at Palacky University Olomouc - Geoinformatics)</li>
 						<li>Radim Kacer (designer at KlokanTech.com)</li>

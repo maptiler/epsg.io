@@ -94,7 +94,11 @@
           <div class="cac-inner">
             %no_map = False
             %if item['bbox']:
-            <h3 class="underline-style"><b>Covered area powered by MapTiler</b><img style="width: 20px; margin: 0 0 -5px 10px;" src="/img/maptiler-logo-icon.png" alt="MapTiler logo"></h3>
+            <h3 class="underline-style"><b>Covered area powered by MapTiler</b>
+              <a href="https://www.maptiler.com" target="_blank">
+                <img style="width: 20px; margin: 0 0 -5px 10px;" src="/img/maptiler-logo-icon.png" alt="MapTiler logo">
+              </a>
+            </h3>
 
               %if center:
                 %if trans_lat:
