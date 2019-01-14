@@ -129,8 +129,9 @@ h4, .h4 { margin: 20px 0 13px 0; padding: 0; font-size: 16px; color: #555; }
 .ol-attribution.ol-logo-only {display:none;}
 
 #layout-container { margin: 0 auto; padding: 0 5px; width: 990px; }
-#logo-container a { margin: 0; color: #989898; font-size: 12px; }
-#description-message { padding:20px; background-color:#eee; border: 1px solid #ccc; margin-bottom:10px; font-size: 14px; }
+#logo-container a { margin: 0; font-size: 12px;text-decoration: none; }
+#logo-container a:hover {color: #576484;}
+#description-message { padding:20px; background-color:#eee; border: 1px solid #ccc; margin-bottom:10px; font-size: 14px;}
 #spacer {width:100%;height:100px}
 
 #homepage #layout-container { padding-top: 94px; }
@@ -183,11 +184,11 @@ h4, .h4 { margin: 20px 0 13px 0; padding: 0; font-size: 16px; color: #555; }
 #title-container { min-width: 500px;}
 #search-container { margin: 0 auto 50px; padding: 0; width: 510px; }
 #search-container p { margin: 0; padding: 0; overflow: hidden; padding-left: 20px;}
-#search-container input[type="search"] { margin: 0 10px 0 0; padding: 0 10px; height: 32px; width: 340px; font-size: 11px; color: #f3f4f7;border: solid 1px #2c7ac2; }
+#search-container input[type="search"] { margin: 0 10px 0 0; padding: 0 10px; height: 32px; width: 340px; font-size: 11px; color: #555f;border: solid 1px #2c7ac2; -webkit-appearance: none;}
 #search-container input[type="submit"] { margin: 0; width: 114px; height: 32px; text-align: center; font-size: 14px; text-transform: uppercase;
-                                         color: #2c7ac2; background: #fff; cursor: pointer; border: none;}
+                                        color: #fff; background: #2c7ac2; cursor: pointer; border: none;}
 #search-container input { float: left; border-radius: 15px; -moz-border-radius: 15px; -webkit-border-radius: 15px; }
-
+#search-container .result {width:305px!important;}
 
 #search-container input[type="submit"]:hover { color: #fff; background: #2c7ac2; }
 #homepage #search-container input[type="submit"] { color: #fff; background: #2c7ac2; }
@@ -230,11 +231,11 @@ h4, .h4 { margin: 20px 0 13px 0; padding: 0; font-size: 16px; color: #555; }
 #mappage #head { position:absolute; top:0; left:0; height: 79px; background: transparent; border-bottom: solid 1px #cacaca;}
 #head #logo-container { margin: 0; padding: 22px 0 0 47px; float: left; height: 39px; }
 #mappage #head #logo-container { margin-bottom: 18px; }
-#head #logo-container a { padding: 16px 0 0 125px; float: left; height: 29px; background: url('../img/logo-118x39.png') 0 0 no-repeat; color: #85969f; font-size: 12px; }
+#head #logo-container a { padding: 16px 0 0 125px; float: left; height: 29px; background: url('../img/logo-118x39.png') 0 0 no-repeat; font-size: 12px; }
 
 #head #menu-top { margin: 0; padding: 36px 60px 0 0; list-style-type: none; float: right; }
 #head #menu-top li { margin: 0 20px 0 20px; padding: 0; display: inline; }
-#head #menu-top li a { margin: 0; padding: 0; color: #85969f; font-size: 14px;text-decoration: none;}
+#head #menu-top li a { margin: 0; padding: 0; font-size: 14px;text-decoration: none;}
 
 #home-menu-container { margin: 130px auto 48px; padding: 0; width: 720px; overflow: hidden; }
 .hm-column { margin: 0; padding: 0; width: 200px; }
@@ -286,7 +287,7 @@ h3.underline-style { margin: 0 0 20px; padding: 0 0 10px; font-size: 14px; color
   height: 22px;
   vertical-align: middle;
   line-height: 22px;
-  padding: 4px 25px;
+  padding: 4px 24px;
   cursor: pointer;
 }
 .btn-dark{
@@ -394,7 +395,7 @@ ul.paginator li span { margin: 0; padding: 2px 5px 2px; background: #2c7ac2; col
 #footer { position:absolute; width: 100%;bottom: 0;text-align:center;}
 #foot { margin: 0 auto; margin-top: 40px; padding: 16px 0; overflow: hidden; border-top: solid 1px #e7e7e7;max-width:990px; }
 #mappage #foot { width: 100%; background: #fff; position: fixed; bottom: 0; left: 0; }
-#foot p { margin: 0 20px 0 0; padding: 0; float: left; font-size: 12px;}
+#foot p { margin: 3px 20px 0 35px; padding: 0; float: left; font-size: 12px;}
 #foot p#mzk-logo { padding: 0; float: left; }
 #foot p#copyright { margin-right: 0; float: right; }
 #mappage #foot p#mzk-logo { margin-left: 20px; }
@@ -702,3 +703,4 @@ h3.underline-style{
 #results-map-container.active{ display: inline-block; }
 #noresults.hidden{ display: none; }
 #noresults { margin: 0 0 30px 0;}
+CSS

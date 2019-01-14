@@ -32,7 +32,7 @@
   <body id="homepage" data-role="page">
     <div id="layout-container">
       <p id="logo-container">
-        <a href="//epsg.io"><span>Epsg.io</span>From MapTiler Team</a>
+        <a href="/"><span>Epsg.io</span>From MapTiler Team</a>
       </p>
       <h1>Coordinate Systems Worldwide</h1>
 
@@ -130,6 +130,7 @@
       <div id="foot">
         <div id="maptiler-logo">
           <a href="https://www.maptiler.com/" title=""><img src="/img/maptiler-logo.png" alt="" /></a>
+          <p>Find a coordinate system and get position on a map. Powered by EPSG database {{version}}</p>
         <p id="copyright">Copyright &copy; 2019</p>
       </div>
       </div>

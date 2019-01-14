@@ -29,7 +29,7 @@
  <body id="errorpage" data-role="page">
    <div id="head">
      <p id="logo-container">
-       <a href="//epsg.io" title=""><span>Epsg.io</span>From MapTiler team</a>
+       <a href="/" title=""><span>Epsg.io</span>From MapTiler team</a>
      </p>
      <ul id="menu-top">
        <li> <a href="/?q=">Search</a></li>

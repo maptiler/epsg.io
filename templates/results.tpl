@@ -45,7 +45,7 @@
     <div id="layout-container">
       <div id="search-container">
         <form action="/" method="get">
-          <p><input type="search" name="q" value="{{query}}" /> <input type="submit" name="" value="search" /></p>
+          <p><input type="search" name="q" value="{{query}}" class="result"> <input type="submit" name="" value="search" /></p>
         </form>
       </div>
       <div id="title-container">
