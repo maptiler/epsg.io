@@ -233,9 +233,9 @@ h4, .h4 { margin: 20px 0 13px 0; padding: 0; font-size: 16px; color: #555; }
 #mappage #head #logo-container { margin-bottom: 18px; }
 #head #logo-container a { padding: 16px 0 0 125px; float: left; height: 29px; background: url('../img/logo-118x39.png') 0 0 no-repeat; font-size: 12px; }
 
-#head #menu-top { margin: 0; padding: 36px 60px 0 0; list-style-type: none; float: right; }
-#head #menu-top li { margin: 0 20px 0 20px; padding: 0; display: inline; }
-#head #menu-top li a { margin: 0; padding: 0; font-size: 14px;text-decoration: none;}
+#menu-top { margin: 0; padding: 36px 60px 0 0; list-style-type: none; float: right; }
+#menu-top li { margin: 0 20px 0 20px; padding: 0; display: inline; }
+#menu-top li a { margin: 0; padding: 0; font-size: 14px;text-decoration: none;}
 
 #home-menu-container { margin: 130px auto 48px; padding: 0; width: 720px; overflow: hidden; }
 .hm-column { margin: 0; padding: 0; width: 200px; }
@@ -510,7 +510,7 @@ pre { background: #f3f4f7; font-size: 11px; margin-bottom: 10px; margin-top: 10p
   #mappage #head-top {background: #fff url('../img/bg-head-long.png') 0 0 repeat;}
   #head #logo-container a{background-size: 78px 26px; padding: 0px 0 0 125px;}
   #head #logo-container {padding: 17px 0 0 47px;}
-  #head #menu-top{padding: 18px 60px 0 0;}
+  #menu-top{padding: 18px 60px 0 0;}
 
   /* map */
   #reproject_map_container {top: 55px;}

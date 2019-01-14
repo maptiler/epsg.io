@@ -23,12 +23,12 @@
       __gaTracker('send', 'pageview');
     </script>
   </head>
-  <div id="topbar">
-      <a href="/about">About</a>
-      <a href="/transform">Transform</a>
-      <a href="/map">Map</a>
-
-  </div>
+  <ul id="menu-top">
+    <li> <a href="/">Search</a></li>
+    <li><a href="/map" title="">Map</a></li>
+    <li><a href="/transform" title="">Transform</a></li>
+    <li><a href="/about" title="">About</a></li>
+  </ul>
   <body id="homepage" data-role="page">
     <div id="layout-container">
       <p id="logo-container">
