@@ -49,9 +49,9 @@
           <a class="btn" href="/map">Get&nbsp;position&nbsp;on&nbsp;a&nbsp;map</a>
         </div>
 
-        <div id="countryLinkWrapper">
+        <!--div id="countryLinkWrapper">
           <a href="/?q=Czech%20Republic" id="countryLink">Click to see the coordinates systems of <span id="country">Czech Republic</span></a>
-        </div>
+        </div-->
 
         <div class="socialicons">
           <p>Share on:</p>
