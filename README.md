@@ -1,6 +1,6 @@
-#EPSG.io
+# EPSG.io
 
-##Installation
+## Installation
 
 ```
 $ virtualenv venv
@@ -15,7 +15,7 @@ Start the server via:
 or use the gunicorn startup scripts (`./epsgio start`)
 
 
-##Create your own index from EPSG export
+## Create your own index from EPSG export
 
 Note: This is not required, as you can easily download the ready-to-use index from releases.
 
@@ -65,7 +65,7 @@ where:
   
 ## API for /trans
 
-###For one point
+### For one point
 [http://epsg.io/trans?x=50&y=17&z=0&s_srs=4326&t_srs=5514&callback=jsonpFunction]
 
 where everything is optional:
@@ -76,7 +76,7 @@ where everything is optional:
 
 e.g. [http://epsg.io/trans] will transform point on coordinates 0,0,0 from EPSG:4326 to EPSG:4326
 
-###For many points
+### For many points
 [http://epsg.io/trans?data=17,50;17,50,300;17.132,50.456&s_srs=4326&&t_srs=5514]
 
 Where
