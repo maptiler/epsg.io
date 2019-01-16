@@ -5,7 +5,6 @@
 VERSION = "9.4"
 INDEX = "./index"
 DATABASE = "./gml/gml.sqlite"
-DEBUG = False
 
 CRS_EXCEPTIONS = 'CRS_exceptions.csv'
 # ['kind'(in whoosh), 'short kind', 'space for formating', 'explenation of abbr', count', 'link to new query', 'long kind']
@@ -252,11 +251,6 @@ def get_static_map_url(center, g_coords):
 
 @route('/',method="GET")
 def index():
-  # Redirect to https
-  if not DEBUG and request.url.startswith('http://'):
-    url = request.url.replace('http://', 'https://', 1)
-    code = 301
-    return redirect(url, code=code)
 
   # Front page without parameters
   if (len(request.GET.keys()) == 0):
@@ -1749,5 +1743,5 @@ def static():
     return static_file('favicon.ico', root='./img/')
 
 if __name__ == "__main__":
-  #run(host='0.0.0.0', port=8080)
+  #run(host='0.0.0.0', port=82)
   run(host='0.0.0.0', port=8080, server='gunicorn', workers=4)
