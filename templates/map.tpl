@@ -35,8 +35,8 @@
       <p><form><input type="search" name="geocoder" id="geocoder" placeholder="Place or address" /></form></p>
   </div>
   <select id="mapType">
-    <option value="streets" data-tilejson="https://maps.tilehosting.com/styles/streets.json?key=qrAJy6x3Ck8n4XFFH4PS">Streets</option>
-    <option value="satellite" data-tilejson="https://maps.tilehosting.com/styles/hybrid.json?key=qrAJy6x3Ck8n4XFFH4PS">Satellite</option>
+    <option value="streets" data-tilejson="https://api.maptiler.com/maps/streets/256/tiles.json?key=qrAJy6x3Ck8n4XFFH4PS">Streets</option>
+    <option value="satellite" data-tilejson="https://api.maptiler.com/maps/hybrid/256/tiles.json?key=qrAJy6x3Ck8n4XFFH4PS">Satellite</option>
     <option value="osm">OSM</option>
   </select>
   <div id="mapsight"></div>
