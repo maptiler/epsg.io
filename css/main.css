@@ -392,7 +392,7 @@ ul.paginator li.next a { margin-left: 10px; }
 ul.paginator li span { margin: 0; padding: 2px 5px 2px; background: #2c7ac2; color: #fff; }
 
 #disqus_thread { margin-top: 30px; }
-#footer { position:absolute; width: 100%;bottom: 0;text-align:center;}
+#footer { width: 100%;bottom: 0;text-align:center;}
 #foot { margin: 0 auto; margin-top: 40px; padding: 16px 0; overflow: hidden; border-top: solid 1px #e7e7e7;max-width:990px; }
 #mappage #foot { width: 100%; background: #fff; position: fixed; bottom: 0; left: 0; }
 #foot p { margin: 3px 20px 0 35px; padding: 0; float: left; font-size: 12px;}

@@ -195,7 +195,6 @@
 
       </div>
    </div>
-   <div id="spacer"><p></p></div>
 
     <div id="footer">
 

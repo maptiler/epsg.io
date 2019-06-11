@@ -62,7 +62,6 @@
      </div>
 
    </div>
-   <div id="spacer"><p></p></div>
    <script type="text/javascript">home_init();</script>
 
     <div id="footer">

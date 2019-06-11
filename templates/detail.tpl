@@ -890,7 +890,6 @@ dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
 <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
     </div>
 
-       <div id="spacer"><p></p></div>
        <script type="text/javascript">detail_init();</script>
 
         <div id="footer">
