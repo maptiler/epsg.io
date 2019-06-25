@@ -49,8 +49,10 @@ f_datum_index = 12
 f_cs_index = 19
 f_unit_index = 26
 
+from flask import Flask
+
 import bottle
-from bottle import route, run, template, request, response, static_file, redirect, error
+from bottle import template, request, response, static_file, redirect, error
 import urllib2
 import urllib
 import urlparse
@@ -74,7 +76,7 @@ import json
 import csv
 import sqlite3 as sqlite
 
-app = bottle.default_app()
+app = Flask(__name__)
 
 re_kind = re.compile(r'kind:([\*\w-]+)')
 re_deprecated = re.compile(r'deprecated:\d')
@@ -249,7 +251,7 @@ def get_static_map_url(center, g_coords):
   else:
     return ("","")
 
-@route('/',method="GET")
+@app.route('/',methods=['GET'])
 def index():
 
   # Front page without parameters
@@ -507,8 +509,8 @@ def index():
   return template('./templates/results', selected_kind_index=selected_kind_index, num_deprecated=num_deprecated, show_alt_search=show_alt_search, kind_low=kind_low, num_kind=num_kind, short_code=short_code, title=title, query=query, deprecated=deprecated, num_results=num_results, elapsed=elapsed, facets_list=facets_list, url_facet_statquery=url_facet_statquery, result=result, pagenum=int(pagenum),paging=paging, version=VERSION)
 
 
-@route('/<id:re:[\d]+(-[\d]+)?>')
-def index(id):
+@app.route('/<id>') # :re:[\d]+(-[\d]+)?
+def index2(id):
   ref = osr.SpatialReference()
   ix = open_dir(INDEX, readonly=True)
   url_social = id
@@ -959,8 +961,8 @@ def index(id):
 
   return template('./templates/detail',greenwich_longitude=greenwich_longitude, url_social=url_social, url_static_map=url_static_map, ogpxml_highlight=ogpxml_highlight, xml_highlight=xml_highlight, area_trans_item=area_trans_item, ogpxml=ogpxml, bbox_coords=bbox_coords, more_gcrs_result=more_gcrs_result, deprecated_available=deprecated_available, url_kind=url_kind, type_epsg=type_epsg, name=name, projcrs_by_gcrs=projcrs_by_gcrs, kind=kind, alt_title=alt_title, area_item=area_item, code_short=code_short, item=item, trans=trans, default_trans=default_trans, num_results=num_results, url_method=url_method, title=title, url_format=url_format, export_html=export_html, url_area_trans=url_area_trans, url_area=url_area, center=center, g_coords=g_coords, trans_lat=trans_lat, trans_lon=trans_lon, wkt=wkt, facets_list=facets_list,url_concatop=url_concatop, nadgrid=nadgrid, detail=detail,export=export, error_code=error_code, version=VERSION)
 
-@route('/<id:re:[\d]+(-[a-zA-Z]+)>')
-def index(id):
+@app.route('/<id>') # :re:[\d]+(-[a-zA-Z]+)
+def index3(id):
   url_social = id
   ix = open_dir(INDEX, readonly=True)
   with ix.searcher(closereader=False) as searcher:
@@ -1118,8 +1120,8 @@ def index(id):
 
   return template('./templates/detail', url_area=url_area, greenwich_longitude=greenwich_longitude, url_social=url_social, url_static_map=url_static_map, url_concatop=url_concatop, ogpxml_highlight=ogpxml_highlight, area_trans_item=area_trans_item, error_code=error_code, ogpxml=ogpxml, bbox_coords=bbox_coords,more_gcrs_result=more_gcrs_result, deprecated_available=deprecated_available, url_kind=url_kind, type_epsg=type_epsg, name=name, projcrs_by_gcrs=projcrs_by_gcrs, alt_title=alt_title, kind=kind, code_short=code_short,item=item, detail=detail, facets_list=facets_list, nadgrid=nadgrid, trans_lat=trans_lat, trans_lon=trans_lon, trans=trans, url_format=url_format, default_trans=default_trans, center=center,g_coords=g_coords,version=VERSION)
 
-@route('/<id:re:[\d]+(-[a-zA-Z]+)><format:re:[\.]+[gml]+>')
-def index(id, format):
+@app.route('/<id>') # :re:[\d]+(-[a-zA-Z]+)><format:re:[\.]+[gml]+
+def index4(id, format):
   code, text = (id+'-0').split('-')[:2]
   text = text.replace("/","").replace(".","")
   code = code.replace(".","")
@@ -1146,8 +1148,8 @@ def index(id, format):
         response['Content-disposition'] = "attachment; filename=%s.gml" % id
   return xml
 
-@route('/<id:re:[\d]+(-[\d]+)?><format:re:[\/\.]+[\w]+>')
-def index(id, format):
+@app.route('/<id>') # :re:[\d]+(-[\d]+)?><format:re:[\/\.]+[\w]+
+def index5(id, format):
   ix = open_dir(INDEX, readonly=True)
   result = []
   export = ""
@@ -1330,8 +1332,8 @@ def index(id, format):
   response['Content-Type'] = ct
   return export
 
-@route('/trans')
-def index():
+@app.route('/trans')
+def trans():
 
   if (len(request.GET.keys()) == 0):
     return redirect('/transform')
@@ -1505,13 +1507,9 @@ def error500(error):
   try_url = ""
   return template('./templates/error', error=error, try_url=try_url, version=VERSION)
 
-@route('/<id:re:.+[\d]+.+?>/')
-def index(id):
-  redirect('/%s' % id)
-
 #handling for urn from sqlite
-@route('/<id:re:(urn:?_?ogc:?_?def:?_?([\w]+-?[\w]+):?_?[EPSG]+:?:?_?_?(\d+\.?\d+(\.\d)?))><format:re:(\.gml)?>')
-def index(id,format):
+@app.route('/<id><format>') # /<id:re:(urn:?_?ogc:?_?def:?_?([\w]+-?[\w]+):?_?[EPSG]+:?:?_?_?(\d+\.?\d+(\.\d)?))><format:re:(\.gml)?>
+def index6(id,format):
   # if i want gml
   if format == ".gml":
     cur.execute('SELECT id,xml FROM gml where urn = ?', (id,))
@@ -1599,8 +1597,8 @@ def index(id,format):
       redirect('/%s' % url)
 
 # the same logic as for sqlite urn's
-@route('/<id:re:(\w+-\w+-\d+((\.\d+)?(\.?\d+)?)?)><format:re:((\.)?gml)?>')
-def index(id,format):
+@app.route('/<id><format>') # /<id:re:(\w+-\w+-\d+((\.\d+)?(\.?\d+)?)?)><format:re:((\.)?gml)?>
+def index7(id,format):
   #name_map={}
   name_map={
   'cr':"Change request",
@@ -1690,58 +1688,50 @@ def index(id,format):
       else:
         redirect ('/%s' %url)
 
-@route('/map')
-def index():
+@app.route('/map')
+def map():
   return template('./templates/map', version=VERSION)
 
-@route('/map/')
-def index():
-  return redirect("/map");
-
-@route('/transform')
-def index():
+@app.route('/transform')
+def transform():
   return template('./templates/transform', version=VERSION)
 
-@route('/transform/')
-def index():
-  return redirect("/transform");
-
-@route('/about')
-def index():
+@app.route('/about')
+def about():
   return template('./templates/about', version=VERSION)
 
-@route('/gsoc')
-def index():
+@app.route('/gsoc')
+def gsoc():
   return template('./templates/gsoc', version=VERSION)
 
-@route('/press/<filename>')
-def static(filename):
+@app.route('/press/<filename>')
+def static1(filename):
     return static_file(filename, root='./press/')
 
-@route('/css/main.css')
-def static():
+@app.route('/css/main.css')
+def static2():
     return static_file("main.css", root='./css/')
 
-@route('/opensearch.xml')
-def static():
+@app.route('/opensearch.xml')
+def static3():
     return static_file('opensearch.xml', root='./')
 
-@route('/fonts/<filename>')
-def static(filename):
+@app.route('/fonts/<filename>')
+def static4(filename):
     return static_file(filename, root='./fonts/')
 
-@route('/img/<filename>')
-def static(filename):
+@app.route('/img/<filename>')
+def static5(filename):
     return static_file(filename, root='./img/')
 
-@route('/js/<filename>')
-def static(filename):
+@app.route('/js/<filename>')
+def static6(filename):
     return static_file(filename, root='./js/')
 
-@route('/favicon.ico')
-def static():
+@app.route('/favicon.ico')
+def static7():
     return static_file('favicon.ico', root='./img/')
 
 if __name__ == "__main__":
   #run(host='0.0.0.0', port=82)
-  run(host='0.0.0.0', port=8080, server='gunicorn', workers=4)
+  app.run(host='0.0.0.0', port=8080)
