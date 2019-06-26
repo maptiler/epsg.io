@@ -242,7 +242,7 @@ def area_to_url(area):
 
 def get_static_map_url(center, g_coords):
   if center != "" and g_coords != "":
-    url_static = "https://maps.tilehosting.com/styles/streets/static/auto/265x215@2x.png?key=qrAJy6x3Ck8n4XFFH4PS&latlng=1&fill=rgba(255,0,0,0.15)&stroke=red&width=2&path=" + g_coords
+    url_static = "https://api.maptiler.com/maps/streets/static/auto/265x215@2x.png?key=qrAJy6x3Ck8n4XFFH4PS&latlng=1&fill=rgba(255,0,0,0.15)&stroke=red&width=2&path=" + g_coords
     # + "&markers=" +str(center[0])+","+str(center[1])
 
     return urllib2.quote(url_static), url_static
