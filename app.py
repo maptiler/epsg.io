@@ -49,10 +49,10 @@ f_datum_index = 12
 f_cs_index = 19
 f_unit_index = 26
 
-from flask import Flask
+from flask import Flask, redirect, render_template, url_for
 
 import bottle
-from bottle import template, request, response, static_file, redirect, error
+from bottle import response, static_file, error, request
 import urllib2
 import urllib
 import urlparse
@@ -69,7 +69,7 @@ from pygments.lexer import RegexLexer
 from pygments.token import *
 from pygments import highlight
 from pygments.formatters import HtmlFormatter
-from osgeo import gdal, osr, ogr
+# from osgeo import gdal, osr, ogr
 import time
 import math
 import json
@@ -257,7 +257,7 @@ def index():
   # Front page without parameters
   if (len(request.GET.keys()) == 0):
     #print len(request.GET.keys())
-    return template('./templates/index', version=VERSION)
+    return render_template('index.html', version=VERSION)
 
 
   ix = open_dir(INDEX, readonly=True)

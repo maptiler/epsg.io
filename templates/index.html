@@ -1,35 +1,9 @@
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
-  <head>
-    <meta charset="utf-8"/>
-    <title>EPSG.io: Coordinate Systems Worldwide</title>
-    <meta content="width=device-width, initial-scale=1, maximum-scale=1" name="viewport" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="description" content="EPSG.io: Coordinate systems worldwide (EPSG/ESRI), preview location on a map, get transformation, WKT, OGC GML, Proj.4. http://EPSG.io/ made by @klokantech" />
-    <meta name="keywords" content="EPSG.io" />
-    <meta name="robots" content="ALL,FOLLOW" />
-    <meta property="og:image" content="//epsg.io/img/epsg-banner-440x280-2.png"/>
-    <link rel="stylesheet" href="/css/main.css" type="text/css" />
-    <link rel="shortcut icon" href="//epsg.io/favicon.ico" />
-    <link rel="search" href="/opensearch.xml" title="EPSG.io" type="application/opensearchdescription+xml"/>
-    <script src="/js/index.js"></script>
-    <script>
-      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-      })(window,document,'script','//www.google-analytics.com/analytics.js','__gaTracker');
+{% extends 'base.html' %}
 
-              __gaTracker('create', 'UA-47718358-1', 'epsg.io');
-      __gaTracker('send', 'pageview');
-    </script>
-  </head>
-  <ul id="menu-top">
-    <li> <a href="/">Search</a></li>
-    <li><a href="/map" title="">Map</a></li>
-    <li><a href="/transform" title="">Transform</a></li>
-    <li><a href="/about" title="">About</a></li>
-  </ul>
-  <body id="homepage" data-role="page">
+{% block title %}EPSG.io: Coordinate Systems Worldwide{% endblock %}
+
+{% block content %}
+
     <div id="layout-container">
       <p id="logo-container">
         <a href="/"><span>Epsg.io</span>From MapTiler Team</a>
@@ -68,13 +42,13 @@
       </div>
 
       <div class="maptiler-col-l">
-   <h3>Transform raster data with MapTiler</h3>
-   <div>
-   <p>MapTiler is Desktop app designed to turn large raster datasets into zoomable maps for your website. MapTiler use EPSG.IO database and has support for any coordinate system.</p>
- </div>
-   <a href="https://www.maptiler.com/desktop/" class="btn">More information</a>
-  </div>
-</div>
+         <h3>Transform raster data with MapTiler</h3>
+         <div>
+         <p>MapTiler is Desktop app designed to turn large raster datasets into zoomable maps for your website. MapTiler use EPSG.IO database and has support for any coordinate system.</p>
+       </div>
+         <a href="https://www.maptiler.com/desktop/" class="btn">More information</a>
+        </div>
+      </div>
 
 
       <h3 class="coordinate-systems">Picked coordinate systems</h3>
@@ -113,26 +87,4 @@
   </div>
     <script type="text/javascript">home_init();</script>
 
-
-    <div id="footer">
-
-      <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-      <!-- EPSG.io -->
-      <ins class="adsbygoogle"
-           style="display:inline-block;width:728px;height:90px"
-           data-ad-client="ca-pub-0328423815528922"
-           data-ad-slot="6564733120"></ins>
-      <script>
-      (adsbygoogle = window.adsbygoogle || []).push({});
-      </script>
-
-      <div id="foot">
-        <div id="maptiler-logo">
-          <a href="https://www.maptiler.com/" title=""><img src="/img/maptiler-logo.png" alt="" /></a>
-          <p>Find a coordinate system and get position on a map. Powered by EPSG database {{version}}</p>
-        <p id="copyright">Copyright &copy; 2019</p>
-      </div>
-      </div>
-    </div>
-  </body>
-</html>
+{% endblock %}

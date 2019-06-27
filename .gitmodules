@@ -4,3 +4,6 @@
 [submodule "javascript/library"]
 	path = javascript/library
 	url = https://github.com/klokantech/javascript.git
+[submodule "styles/lib"]
+	path = styles/lib
+	url = https://github.com/klokantech/styles.git
