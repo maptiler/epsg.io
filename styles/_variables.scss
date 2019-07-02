@@ -1,10 +1,10 @@
 /* Colors */
-$color-primary: #448aff;
-$color-secondary: #333359;
+$color-primary: #2c7ac2;
+$color-secondary: #576484;
 
 $color-gray-dark: #363636;
 $color-gray: #d6d6de;
-$color-gray-light: #f7f7f7;
+$color-gray-light: #e7e7e7;
 
 $color-info: #a1acb7;
 $color-success: #90cb90;
@@ -105,7 +105,7 @@ $btn-color-bg: $color-primary;
 $btn-color: #fff;
 $btn-padding-x: 8px;
 $btn-padding-y: 16px;
-$btn-radius: $radius-all;
+$btn-radius: 25px;
 $btn-font-size: 14px;
 $btn-letterspacing: initial;
 $btn-lineheight: $line-height;
@@ -243,28 +243,28 @@ $box-shadow: 0px 6px 35px 0px rgba(0,0,0,0.1);
 $box-radius: 6px;
 
 /* Top navbar */
-$navbar-top-height: 130px;
+$navbar-top-height: 80px;
 $navbar-top-small-height: 65px;
-$navbar-top-border-bottom: 0;
-$navbar-top-border-container: 1px solid rgba(200, 200, 200, 0.3);
+$navbar-top-border-bottom: 1px solid $color-gray;
+$navbar-top-border-container: 0;
 $navbar-top-margin-bottom: 20px;
 
 $navbar-top-zindex: 90;
-$navbar-top-bg: transparent;
+$navbar-top-bg: url(/static/img/bg-homepage.png);
 $navbar-top-menu-padding-bottom: 28px;
 
-$navbar-top-title-size: 38px;
+$navbar-top-title-size: 40px;
 $navbar-top-title-color: $color-gray-dark;
 $navbar-top-title-fontweight: 400;
 $navbar-top-title-bg: transparent;
-$navbar-top-title-padding-bottom: 40px;
+$navbar-top-title-padding-bottom: 10px;
 $navbar-top-title-width: auto;
 
-$navbar-top-link-color: #333359;
-$navbar-top-link-size: 15px;
+$navbar-top-link-color: $color-secondary;
+$navbar-top-link-size: 14px;
 $navbar-top-link-font: $font-primary;
-$navbar-top-link-fontweight: 600;
-$navbar-top-link-padding: 70px 0 10px 0;
+$navbar-top-link-fontweight: 400;
+$navbar-top-link-padding: 35px 0 10px 0;
 $navbar-top-link-margin: 0 20px;
 $navbar-top-link-hover-color: $color-gray-dark;
 $navbar-top-link-hover-bgcolor: transparent;
@@ -290,7 +290,7 @@ $navside: false;
 $navside-width: 280px;
 $navside-top: 0;
 $navside-padding: 0 0 20px 0;
-$navside-color: $color-gray-dark;
+$navside-color: $color-secondary;
 $navside-bgcolor: #fff;
 $navside-open-color: $color-primary;
 $navside-open-bgcolor: $color-gray;

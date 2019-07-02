@@ -1,0 +1,141 @@
+#navbar-top {
+  background-position: top center ;
+  background-repeat: no-repeat;
+}
+.logo {
+  margin-top: -20px;
+  color: $text-color;
+  pointer-events: none;
+  text-decoration: none;
+  a:visited {
+    color: $text-color;
+  }
+}
+body#home{
+  background-image: url(/static/img/bg-homepage.png);
+  background-position: top center;
+  background-repeat: no-repeat;
+  height: 1000px;
+}
+body#map-template {
+  height: 0px;
+  background: transparent;
+  #footer {
+    display: none;
+  }
+  #search-container {
+    position: absolute;
+    top: 90px;
+    left: 15px;
+  }
+}
+.padt-1 {
+  padding-top: 10px !important;
+}
+
+.navbar-home {
+  background: none !important;
+  border: none !important;
+}
+.btn.home {
+  margin-top: -40px;
+}
+
+
+
+#copy-clipboard-container {
+  display: inline-block !important;
+  position: absolute;
+  top: 60px;
+  left: 450px;
+  input{
+    min-width:200px;
+  }
+  @media(max-width: $sc-medium) {
+    top: 85px;
+    left: 220px;
+    width: 205px;
+    text-align: center;
+    }
+}
+#reproject_map_container{
+    display: inline-block !important;
+    padding: 0px 10px 5px 10px;
+    position: absolute;
+    top: 100px;
+    right: 140px;
+
+
+}
+#mapsight {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 51px;
+  height: 51px;
+  margin: -26px;
+  pointer-events: none;
+  z-index: 100;
+  background: url("../img/epsg-target-large.png") 0 0 no-repeat;
+}
+#map {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  border: 0;
+  margin: 0;
+  padding: 0;
+  z-index: -1;
+}
+
+#map-minus,
+#map-plus,
+#map-search {
+  position: absolute;
+  top: 99px;
+  left: 0;
+  width: 30px;
+  height: 30px;
+  background: #9da4b4;
+  color: #fff;
+  text-align: center;
+  font-size: 20px;
+  line-height: 30px;
+  cursor: pointer;
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+  font-weight: bold;
+  font-family: 'epsg';
+}
+
+#map-search {
+  font-size: 17px;
+}
+
+#map-plus {
+  margin-top: 83px;
+}
+
+#map-minus {
+  margin-top: 116px;
+}
+
+#mapType {
+  position: absolute;
+  top: 105px;
+  right: 15px;
+}
+#map-clipboard-container {
+ position: absolute;
+ bottom: 0px;
+ width: 100%;
+ left: 38%;
+ @media(max-width: $sc-medium) {
+   left: 28%;
+ }
+ @media(max-width: $sc-small) {
+   left: 10%;
+ }
+}

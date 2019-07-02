@@ -1,0 +1,83 @@
+
+{% extends 'base.html' %}
+{% block head %}
+<script src="{{ url_for('static', filename='js/map.js') }}"></script>
+{% endblock %}
+{% block title %}EPSG.io: Coordinate Systems Worldwide{% endblock %}
+{% block body %}<body id="map-template">{% endblock %}
+  {% block navbar %}
+
+     <div id="navbar-top" class="nav-background">
+       <div class="container">
+           <a href="/"><img class="title padt-1 padr-0" src="/static/img/espg-logo.png" alt="EPSG logo"> </a>
+           <div id="copy-clipboard-container">
+             <div id="copy-bg"></div>
+             <form id="eastnorth_form" method="post" action="#">
+               <input id="easting" type="text" name="easting" value="" />
+               <input id="northing" type="text" name="northing" value="" />
+               <a id="eastnorth_copy" href="#" title="" class="btn-small">Copy</a>
+               <a id="crs-transform-link" href="/transform" title="" class="btn-small">Transform</a>
+               <input class="hidden" type="submit" id="eastnorth_submit" value="">
+             </form>
+           </div>
+         <div class="nav">
+           <a href="/">Search</a>
+           <a href="/map" title="">Map</a>
+           <a href="/transform" title="">Transform</a>
+           <a href="/about" title="">About</a>
+         </div>
+         <div class="nav-mobile">
+           <div id="nav-mobile-btn">L</div>
+           <div id="nav-mobile-nav">
+             <a href="/">Search</a>
+             <a href="/map" title="">Map</a>
+             <a href="/transform" title="">Transform</a>
+             <a href="/about" title="">About</a>
+           </div>
+         </div>
+       </div>
+     </div>
+     <div class="row padb-10"></div>
+     {% endblock %}
+
+{% block content %}
+
+
+<div class="row">
+  <div class="container">
+    <div id="map-plus">+</div>
+    <div id="map-minus">-</div>
+    <div id="map-search" class="hidden">q</div>
+    <div id="reproject_map_container" class="inline box">
+      <input type="checkbox" id="reproject_map" class="marx-1 marl-0"><label for="reproject_map">Reproject Map <span class="beta">beta</span></label>
+    </div>
+    <select id="mapType">
+      <option value="streets" data-tilejson="https://api.maptiler.com/maps/streets/256/tiles.json?key=qrAJy6x3Ck8n4XFFH4PS">Streets</option>
+      <option value="satellite" data-tilejson="https://api.maptiler.com/maps/hybrid/256/tiles.json?key=qrAJy6x3Ck8n4XFFH4PS">Satellite</option>
+      <option value="osm">OSM</option>
+    </select>
+    <div id="mapsight"></div>
+    <div id="map"></div>
+
+
+    <div id="search-container">
+      <p>
+        <form><input type="search" name="geocoder" id="geocoder" placeholder="Place or address" /></form>
+      </p>
+    </div>
+    <div id="map-clipboard-container">
+      <div id="mc-info-container " class="box padt-1 padb-4">
+        <h5 class="inline">Coordinate system</h5>
+        <a href="#" id="crs-change" class="btn-small marx-10 marr-0">Change</a>
+        <a id="crs-detail-link" href="#" title="">
+          <h2 id="crs-title"></h2>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript">
+  new MapPage;
+</script>.
+{% endblock %}

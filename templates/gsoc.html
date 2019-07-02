@@ -1,0 +1,88 @@
+
+{% extends 'base.html' %}
+
+{% block title %}EPSG.io: Coordinate Systems Worldwide{% endblock %}
+
+{% block content %}
+<div class="row">
+  <div class="container">
+    <div class="col10 offset1">
+      <h1>Google Summer of Code 2015 - Ideas</h1>
+      <p></p>
+      <p>
+        Klokan Technologies GmbH, Switzerland (<a href="//www.klokantech.com/">http://www.klokantech.com/</a>) propose improvement of the open-source EPSG.io project (<a href="//epsg.io/">http://epsg.io/</a>) - the web service with a database of
+        coordinates systems used in maps worldwide.
+      </p>
+      <p>
+        EPSG.io (<a href="//epsg.io/">http://epsg.io/</a>) simplifies discovery of coordinate reference systems utilized all over the world for creating maps and geodata and for identifying geo-position. It is a practical tool for anybody interested
+        in cartography and digital map making, who needs to know exact latitude and longitude values for numerical coordinates in different spatial reference systems. Included map application powered by Google Maps API allows to show the precise
+        location anywhere on the planet also visually. The functionality of the portal is exposed via an API. Read more <a href="//epsg.io/about">about the service</a> and explore the source code on <a href="//www.github.com/klokantech/epsg.io/">GitHub</a>.
+      </p>
+      <p>
+        EPSG.io is available under Simplified BSD License.</br>
+      </p>
+      <p>
+      </p>
+      <p>
+        <h4>Idea #1: EPSG.io improvements</h4>
+        <p>Requirements: practical knowledge of programming in Python and JavaScript (experience with Closure Tools, Google OpenLayers V3 and Google Maps API is welcome).</p>
+        <p>The student will work on a set of tasks improving the open-source EPSG.io project and adding new exciting functionality to the online service.</p>
+        <p></p>
+        <ul>
+          <li><img src="https://cloud.githubusercontent.com/assets/59284/6268870/09afd3b6-b850-11e4-92e2-f4ece69197fe.png" border="0" width="250"><br />Overview map for each coordinate system - with visual representation of map projection, meridian,
+            etc. Details in: <a href="https://github.com/klokantech/epsg.io/issues/62">#62</a></li>
+          <li>Automate the update of the EPSG database to ensure the latest version is always indexed <a href="https://github.com/klokantech/epsg.io/issues/77">#77</a></li>
+          <li>Deploy via Docker - allowing an easy one-command start by anybody, even offline <a href="https://github.com/klokantech/epsg.io/issues/75">#75</a></li>
+          <li>Grid transformation and related Proj4js improment <a href="https://github.com/klokantech/epsg.io/issues/6">#6</a></li>
+          <li>Import ESRI specific codes <a href="https://github.com/klokantech/epsg.io/issues/24">#24</a></li>
+          <li>User-defined SRS indexing <a href="https://github.com/klokantech/epsg.io/issues/78">#78</a></li>
+        </ul>
+        New ideas and inputs from the student are very welcome. See and use <a href="https://github.com/klokantech/epsg.io/milestones/gsoc">GitHub Issues</a>.
+      </p>
+      <p>
+        <a href="https://www.google-melange.com/gsoc/homepage/google/gsoc2015"><img src="/static/press/gsoc2015-300x270.jpg" width="260" border="0"></a>
+      </p>
+      <p><a href="https://www.google-melange.com/gsoc/homepage/google/gsoc2015">Google Summer of Code 2015</a></p>
+    </div>
+        <div class="row">
+          <div class="container">
+            <div class="col6">
+            <p>
+              <h4>The mentorship provided by Klokan Technologies GmbH</h4>
+              <ul>
+                <li>Petr Pridal, Ph.D. (<a href="//linkedin.com/in/klokan">CV</a>)</li>
+                <li>Vaclav Klusak</li>
+                <li>Petr Sloup</li>
+              </ul>
+            </p>
+          </div>
+            <div class="col6">
+              <a href="//www.klokantech.com/"><img src="//www.klokantech.com/img/klokantech.png" width="260" border="0"></a>
+            </p>
+            <p><a href="//www.klokantech.com/">www.klokantech.com</a></p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="row">
+        <div class="container">
+          <div class="col8 offset2">
+            <p>
+              <span class="caption">EPSG.io identity</span>
+            </p>
+            <a href="/static/press/epsg-banner-1400-560-2.png"><img src="/static/press/epsg-banner-1400-560-2.png" height="90" width="205"></a>
+
+            <a href="/static/press/main-page-pr.png"><img src="/static/press/main-page-pr.png" height="115" width="205"></a>
+
+            <a href="/static/press/results-pr.png"><img src="/static/press/results-pr.png" height="115" width="205"></a>
+
+            <a href="/static/press/detail-pr.png"><img src="/static/press/detail-pr.png" height="115" width="205"></a>
+
+            <a href="/static/press/map-pr.png"><img src="/static/press/map-pr.png" height="115" width="205"></a>
+        </div>
+      </div>
+    </div>
+
+ {% endblock %}

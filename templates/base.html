@@ -7,7 +7,7 @@
     <meta name="keywords" content="{% block keywords %}epsg, coordinate system, srs, crs, projection{% endblock %}">
     <meta name="description" content="{% block description %}EPSG.io: Coordinate systems worldwide (EPSG/ESRI), preview location on a map, get transformation, WKT, OGC GML, Proj.4. http://EPSG.io/ made by @klokantech{% endblock %}" />
 
-    <meta property="og:image" content="{% block image %}{{ url_for('static', filename='img/logo.png') }}{% endblock %}">
+    <meta property="og:image" content="{% block image %}{{ url_for('static', filename='/static/img/logo.png') }}{% endblock %}">
     <meta property="og:title" content="{% if self.htmltitle() %}{{ self.htmltitle() }}{% else %}{{ self.title() }}{% endif %}">
     <meta property="og:description" content="{{ self.description() }}">
     <meta property="og:url" content="http://epsg.io">
@@ -32,7 +32,7 @@
     <title>{% if self.htmltitle() %}{% block htmltitle %}{% endblock %}{% else %}{% block title %}{% endblock %}{% endif %}</title>
     {% block head %}{% endblock %}
   </head>
-  <body>
+  {% block body %}<body>{% endblock %}
     {% set messages = get_flashed_messages(with_categories=true) %}
     {% if messages %}
     <ul class="flashes">
@@ -42,18 +42,20 @@
     </ul>
     {% endif %}
 
-    <div id="navbar-top">
+ {% block navbar %}
+
+    <div id="navbar-top" class="nav-background">
       <div class="container">
-        <a class="title" href="/">OpenMapTiles.com</a>
+          <a href="/"><img class="title padt-1 padr-0" src="/static/img/espg-logo.png" alt="EPSG logo"> </a>
+          <p class="marb-0 logo padt-7 inline"><a class="" href="/">From MapTiler Team</a></p>
         <div class="nav">
           <a href="/">Search</a>
           <a href="/map" title="">Map</a>
           <a href="/transform" title="">Transform</a>
           <a href="/about" title="">About</a>
         </div>
-
         <div class="nav-mobile">
-          <div id="nav-mobile-btn">H</div>
+          <div id="nav-mobile-btn">L</div>
           <div id="nav-mobile-nav">
             <a href="/">Search</a>
             <a href="/map" title="">Map</a>
@@ -63,6 +65,8 @@
         </div>
       </div>
     </div>
+    <div class="row padb-10"></div>
+    {% endblock %}
 
     {% block content %}
     {% endblock %}
@@ -79,14 +83,21 @@
       (adsbygoogle = window.adsbygoogle || []).push({});
       </script>
 
-      <div id="foot">
-        <div id="maptiler-logo">
-          <a href="https://www.maptiler.com/" title=""><img src="/img/maptiler-logo.png" alt="" /></a>
-          <p>Find a coordinate system and get position on a map. Powered by EPSG database {#{ version }#}</p>
-        <p id="copyright">Copyright &copy; 2019</p>
-      </div>
-      </div>
-    </div>
+          <div class="row">
+            <div class="container bordertop-gray-light">
+              <div class="col2 padt-2">
+                <a href="https://www.maptiler.com/" title=""><img class="width-100" src="/static/img/maptiler-logo.png" alt="" /></a>
+              </div>
+                <div class="col8">
+                <p>Find a coordinate system and get position on a map. Powered by EPSG database {#{ version }#}</p>
+
+              </div>
+              <div class="col2">
+                <p id="copyright">Copyright &copy; 2019</p>
+              </div>
+            </div>
+          </div>
+        </div>
 
     <script>
       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){

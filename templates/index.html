@@ -1,70 +1,124 @@
 {% extends 'base.html' %}
+{% block head %}
+<script src="{{ url_for('static', filename='js/index.js') }}"></script>
+{% endblock %}
+{% block body %}<body id="home">{% endblock %}
+{% block navbar %}
+<div id="navbar-top" class="navbar-home">
+  <div class="container">
+    <div class="nav">
+      <a href="/">Search</a>
+      <a href="/map" title="">Map</a>
+      <a href="/transform" title="">Transform</a>
+      <a href="/about" title="">About</a>
+    </div>
 
+    <div class="nav-mobile">
+      <div id="nav-mobile-btn">L</div>
+      <div id="nav-mobile-nav">
+        <a href="/">Search</a>
+        <a href="/map" title="">Map</a>
+        <a href="/transform" title="">Transform</a>
+        <a href="/about" title="">About</a>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row padb-10"></div>
+ {% endblock %}
 {% block title %}EPSG.io: Coordinate Systems Worldwide{% endblock %}
-
 {% block content %}
 
-    <div id="layout-container">
-      <p id="logo-container">
-        <a href="/"><span>Epsg.io</span>From MapTiler Team</a>
-      </p>
-      <h1>Coordinate Systems Worldwide</h1>
+<div class="row">
+  <div class="container">
+    <div class="col4 offset4">
+      <a class="allign-left" href="/"><img class="width-100" src="/static/img/espg-logo.png" alt="EPSG logo"></a>
+      <div class="offset8 width-50">
+        <p class="marb-0 logo tablet-no"><a class="" href="/">From MapTiler Team</a></p>
 
-      <div id="search-container">
+      </div>
 
-        <form action="/" method="get">
-          <p><input id="q" name="q" type="search" placeholder="Country, code or name of a coordinate system ..." /> <input type="submit" name="" value="search" /></p>
-        </form>
+    </div>
+  </div>
+</div>
+<p>
+</p>
+    <div class="row ">
+      <div class="container">
 
-        <div class="home-action">
-        <a class="home-search-img" href="/transform"><img src="/img/coordinates.png" alt="Coordinates"></a>
-          <a class="home-search-img" href="/map"><img src="/img/position.png" alt="Position"></a>
-          <a class="btn" href="/transform">Transform&nbsp;coordinates</a>
-          <a class="btn" href="/map">Get&nbsp;position&nbsp;on&nbsp;a&nbsp;map</a>
+        <div class="col10 center offset1">
+          <h1>Coordinate Systems Worldwide</h1>
+
+          <div id="search-container">
+            <form action="/" method="get">
+              <p><input class="width-50" id="q" name="q" type="search" placeholder="Country, code or name of a coordinate system ..." /> <input class="btn marx-2" type="submit" name="" value="search" /></p>
+            </form>
+        </div>
+
+      </div>
+    </div>
+        <div class="row">
+          <div class="container">
+            <div class="col4 offset2 center">
+              <a  href="/transform"><img class="width-100 round shadow  border-gray" src="/static/img/coordinates.png" alt="Coordinates"></a>
+              <a class="btn home" href="/transform">Transform&nbsp;coordinates</a>
+
+            </div>
+            <div class="col4 center">
+              <a href="/map"><img class="width-100 round shadow border-gray" src="/static/img/position.png" alt="Position"></a>
+              <a class="btn home" href="/map">Get&nbsp;position&nbsp;on&nbsp;a&nbsp;map</a>
+            </div>
+            <div class="col8 offset2 center pady-6">
+              <div class="social circles">
+                <p>Share on:
+                  <a class="T" target="_blank" href="https://twitter.com/share?original_referer=//epsg.io&amp;text=EPSG.io: Coordinate systems worldwide, view location on a map, get transformation, WKT, Proj.4. made by @klokantech">T</a>
+                  <a class="G" target="_blank" href="https://pinterest.com/pin/create/button/?url=http%3A%2F%2Fepsg.io&amp;media=%2F%2Fdirect.epsg.io%2Fimg%2Fepsg-banner-440x280-2.png&description=EPSG.io:%20Coordinate%20systems%20worldwide%20(EPSG/ESRI),%20preview%20location%20on%20a%20map,%20get%20transformation,%20WKT,%20OGC%20GML,%20Proj.4.%20http://EPSG.io/%20made%20by%20@klokantech">Q</a>
+                  <a class="G" target="_blank" href="https://plus.google.com/share?url=//epsg.io/">J</a>
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
 
         <!--div id="countryLinkWrapper">
           <a href="/?q=Czech%20Republic" id="countryLink">Click to see the coordinates systems of <span id="country">Czech Republic</span></a>
         </div-->
 
-        <div class="socialicons">
-          <p>Share on</p>
-          <a id="share_twitterb" href="https://twitter.com/share?original_referer=//epsg.io&amp;text=EPSG.io: Coordinate systems worldwide, view location on a map, get transformation, WKT, Proj.4. made by @klokantech"><span class="icon-epsg-twiter"></span></a>
-          <a id="share_pinterest" href="https://pinterest.com/pin/create/button/?url=http%3A%2F%2Fepsg.io&amp;media=%2F%2Fdirect.epsg.io%2Fimg%2Fepsg-banner-440x280-2.png&description=EPSG.io:%20Coordinate%20systems%20worldwide%20(EPSG/ESRI),%20preview%20location%20on%20a%20map,%20get%20transformation,%20WKT,%20OGC%20GML,%20Proj.4.%20http://EPSG.io/%20made%20by%20@klokantech"><span class="icon-epsg-pinterest"></span></a>
-          <a id="share_gplusdark" href="https://plus.google.com/share?url=//epsg.io/"><span class="icon-epsg-googleplus"></span></a>
-        </div>
+
+
+    <div class="row mary-4">
+      <div class="container">
+
+      <div class="col2 offset1 tablet-no">
+        <img class="width-100" src="/static/img/maptiler-logo-icon.png" alt="MapTiler logo">
       </div>
 
-
-    <div id="home-maptiler">
-      <div class="maptiler-col-r">
-        <img src="/img/maptiler-logo-icon.png" alt="MapTiler logo">
-      </div>
-
-      <div class="maptiler-col-l">
+      <div class="col6">
          <h3>Transform raster data with MapTiler</h3>
          <div>
          <p>MapTiler is Desktop app designed to turn large raster datasets into zoomable maps for your website. MapTiler use EPSG.IO database and has support for any coordinate system.</p>
        </div>
          <a href="https://www.maptiler.com/desktop/" class="btn">More information</a>
-        </div>
+       </div>
+     </div>
       </div>
-
-
-      <h3 class="coordinate-systems">Picked coordinate systems</h3>
-
-    <div id="home-menu-container">
+<div class="row">
+  <div class="container">
+    <div class="col12 center">
+      <h2>Picked coordinate systems</h2>
+    </div>
+    <div class="col4">
+      <h3>World coordinate systems</h3>
+      <ul>
+        <li><a href="/4326" title="">WGS84 - World Geodetic System 1984, used in GPS </a></li>
+        <li><a href="/3857" title="">Spherical Mercator, Google Maps Projection, OpenStreetMap, Bing</a></li>
+        <li><a href="/?q=UTM" title="">UTM - Universal Transverse Mercator</a></li>
+        <li><a href="/?q=etrs" title="">ETRS - European Terrestrial Reference System</a></li>
+      </ul>
+    </div>
+    <div class="col4">
       <div class="hm-column lft">
-        <h2>World coordinate systems</h2>
-        <ul>
-          <li><a href="/4326" title="">WGS84 - World Geodetic System 1984, used in GPS </a></li>
-          <li><a href="/3857" title="">Spherical Mercator, Google Maps Projection, OpenStreetMap, Bing</a></li>
-          <li><a href="/?q=UTM" title="">UTM - Universal Transverse Mercator</a></li>
-          <li><a href="/?q=etrs" title="">ETRS - European Terrestrial Reference System</a></li>
-        </ul>
-      </div>
-      <div class="hm-column lft">
-        <h2>Europe coordinate systems</h2>
+        <h3>Europe coordinate systems</h3>
         <ul>
           <li><a href="/?q=United%20Kingdom" title="">United Kingdom</a></li>
           <li><a href="/?q=France" title="">France</a></li>
@@ -74,17 +128,18 @@
           <li><a href="/?q=Switzerland" title="">Switzerland</a></li>
         </ul>
       </div>
-      <div class="hm-column lft last">
-        <h2>Other coordinate systems</h2>
-        <ul>
-          <li><a href="/?q=Brazil" title="">Brazil</a></li>
-          <li><a href="/?q=New%20Zealand" title="">New Zealand</a></li>
-          <li><a href="/?q=Australia" title="">Australia</a></li>
-        </ul>
-      </div>
     </div>
+    <div class="col4">
+      <h3>Other coordinate systems</h3>
+      <ul>
+        <li><a href="/?q=Brazil" title="">Brazil</a></li>
+        <li><a href="/?q=New%20Zealand" title="">New Zealand</a></li>
+        <li><a href="/?q=Australia" title="">Australia</a></li>
+      </ul>
     </div>
   </div>
+</div>
+
     <script type="text/javascript">home_init();</script>
 
 {% endblock %}

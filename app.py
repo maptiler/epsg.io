@@ -1690,19 +1690,19 @@ def index7(id,format):
 
 @app.route('/map')
 def map():
-  return template('./templates/map', version=VERSION)
+  return render_template('map.html', version=VERSION)
 
 @app.route('/transform')
 def transform():
-  return template('./templates/transform', version=VERSION)
+  return render_template('transform.html', version=VERSION)
 
 @app.route('/about')
 def about():
-  return template('./templates/about', version=VERSION)
+  return render_template('about.html', version=VERSION)
 
 @app.route('/gsoc')
 def gsoc():
-  return template('./templates/gsoc', version=VERSION)
+  return render_template('gsoc.html', version=VERSION)
 
 @app.route('/press/<filename>')
 def static1(filename):
