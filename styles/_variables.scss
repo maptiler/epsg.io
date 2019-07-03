@@ -2,7 +2,7 @@
 $color-primary: #2c7ac2;
 $color-secondary: #576484;
 
-$color-gray-dark: #363636;
+$color-gray-dark: #3c4a69;
 $color-gray: #d6d6de;
 $color-gray-light: #e7e7e7;
 
@@ -16,21 +16,21 @@ $color-code: #dd1144;
 $body-bg:  #fff !default;
 
 /* Global text color */
-$text-color: #6b7c93 !default;
+$text-color: #9da4b4 !default;
 
 /* Links color */
-$link-color: $color-primary;
+$link-color: $color-secondary;
 $link-hover-color: lighten($color-primary, 8%);
 
 /* Fonts */
-$font-primary: 'Open Sans', sans-serif;
-$font-secondary: 'Ubuntu', 'Open Sans', sans-serif;
-$font-monospace: Menlo, Monaco, 'Courier New', monospace;
+$font-primary: OpenSansRegular, Arial, "Geneva CE", lucida, sans-serif;
+$font-secondary: OpenSansRegular, Arial, "Geneva CE", lucida, sans-serif;
+$font-monospace: OpenSansRegular, Arial, "Geneva CE", lucida, sans-serif;
 $font-icon: 'icons';
-$font-size: 16px !default;
+$font-size: 14px !default;
 
 /* Line height*/
-$line-height: 1.5 !default;
+$line-height: 1.8 !default;
 $line-height-computed: floor(($font-size * $line-height)) !default;
 
 /* Headings */
@@ -40,12 +40,12 @@ $headings-font-weight: 400;
 $headings-line-height: 1.1;
 $headings-color: #333359;
 
-$font-size-h1: 40px !default;
-$font-size-h2: 34px !default;
-$font-size-h3: 24px !default;
-$font-size-h4: 18px !default;
-$font-size-h5: $font-size !default;
-$font-size-h6: 12px !default;
+$font-size-h1: 30px !default;
+$font-size-h2: 23px !default;
+$font-size-h3: 18px !default;
+$font-size-h4: 16px !default;
+$font-size-h5: 14px !default;
+$font-size-h6: 13px !default;
 
 $code-color-bg: $color-gray-light;
 $code-color: $color-gray-dark;
@@ -59,7 +59,7 @@ $padding-y: 15px;
 $padding-x: 15px;
 
 /* Container */
-$container-max: 1200px;
+$container-max: 1024px;
 $container-width: 95%;
 $container-padding-x: 0;
 $container-padding-y: 0;
@@ -94,7 +94,7 @@ $grid-margin-y: 0;
 /* Helpers */
 $list-style: disc;
 /* Corners for rounding */
-$radius-all: 4px;
+$radius-all: 8px;
 $radius-top-left: $radius-all;
 $radius-top-right: $radius-all;
 $radius-bottom-right: $radius-all;
@@ -103,17 +103,17 @@ $radius-bottom-left: $radius-all;
 /* Buttons */
 $btn-color-bg: $color-primary;
 $btn-color: #fff;
-$btn-padding-x: 8px;
-$btn-padding-y: 16px;
+$btn-padding-x: 4px;
+$btn-padding-y: 30px;
 $btn-radius: 25px;
 $btn-font-size: 14px;
 $btn-letterspacing: initial;
 $btn-lineheight: $line-height;
-$btn-fontweight: 600;
-$btn-shadow: 0 10px 30px 0 rgba(0,0,0,0.25);
-$btn-texttransform: uppercase;
+$btn-fontweight: normal;
+$btn-shadow: none;
+$btn-texttransform: none;
 $btn-border: 2px;
-$btn-small-scale: 0.5;
+$btn-small-scale: 0.75;
 
 $btn-icon-font-size: 14px;
 $btn-icon-padding: 0 10px 5px 0;
@@ -125,6 +125,7 @@ $btns: (
 ("-secondary", #ffffff, $color-secondary, #ffffff, darken($color-secondary, 7%)),
 ("-gray", #fff, $color-gray, #fff, darken($color-gray, 5%)),
 ("-gray-dark", $color-gray-light, #333, $color-gray-light, lighten(#333, 5%)),
+("-swap", $color-primary, transparent, $color-gray-light, lighten(#333, 5%)),
 ("-gray-light", $color-gray-dark, $color-gray-light, $color-gray-dark, darken($color-gray-light, 1%))
 );
 
@@ -176,10 +177,10 @@ $input-line-height: 20px;
 $input-font-size: 14px;
 $input-bg: #ffffff;
 $input-bg-disabled: $color-gray-light;
-$input-border-color: #dfdfdf;
+$input-border-color: $color-primary;
 $input-border-color-active: $color-primary;
 $input-box-shadow-active: none;
-$input-border-radius: 2px;
+$input-border-radius: 25px;
 $input-padding: 8px;
 $input-margin: 0;
 $checkbox-color: $input-border-color;
@@ -257,7 +258,7 @@ $navbar-top-title-size: 40px;
 $navbar-top-title-color: $color-gray-dark;
 $navbar-top-title-fontweight: 400;
 $navbar-top-title-bg: transparent;
-$navbar-top-title-padding-bottom: 10px;
+$navbar-top-title-padding-bottom: 15px;
 $navbar-top-title-width: auto;
 
 $navbar-top-link-color: $color-secondary;
