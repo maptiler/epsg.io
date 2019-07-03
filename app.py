@@ -94,7 +94,7 @@ except:
   print "!!! FAILED: NO CRS_EXCEPTIONS !!!"
   #sys.exit(1)
 
-con = sqlite.connect(DATABASE)
+con = sqlite.connect(DATABASE, check_same_thread=False)
 if not con:
   print "Connection to gml.sqlite FAILED"
   #sys.exit(1)
@@ -277,7 +277,7 @@ def index():
     expanded_trans = request.GET.get('trans',False)
 
     if query == None:
-      return template('./templates/index',version=VERSION)
+      return render_template('./templates/index',version=VERSION)
 
     kind = getQueryParam(query, 'kind')
     deprecated = getQueryParam(query, 'deprecated')
@@ -506,7 +506,7 @@ def index():
       export['results'] = json_str
       return jsonResponse(export, callback)
 
-  return template('./templates/results', selected_kind_index=selected_kind_index, num_deprecated=num_deprecated, show_alt_search=show_alt_search, kind_low=kind_low, num_kind=num_kind, short_code=short_code, title=title, query=query, deprecated=deprecated, num_results=num_results, elapsed=elapsed, facets_list=facets_list, url_facet_statquery=url_facet_statquery, result=result, pagenum=int(pagenum),paging=paging, version=VERSION)
+  return render_template('./templates/results', selected_kind_index=selected_kind_index, num_deprecated=num_deprecated, show_alt_search=show_alt_search, kind_low=kind_low, num_kind=num_kind, short_code=short_code, title=title, query=query, deprecated=deprecated, num_results=num_results, elapsed=elapsed, facets_list=facets_list, url_facet_statquery=url_facet_statquery, result=result, pagenum=int(pagenum),paging=paging, version=VERSION)
 
 
 @app.route('/<id>') # :re:[\d]+(-[\d]+)?
@@ -528,7 +528,7 @@ def index2(id):
     if len(results) == 0:
       error = 404
       try_url= ""
-      return template('./templates/error', error=error, try_url=try_url, version=VERSION)
+      return render_template('error.html', error=error, try_url=try_url, version=VERSION)
 
     detail = []
     trans_unsorted = []
@@ -959,7 +959,7 @@ def index2(id):
     greenwich_longitude = item['greenwich_longitude']
 
 
-  return template('./templates/detail',greenwich_longitude=greenwich_longitude, url_social=url_social, url_static_map=url_static_map, ogpxml_highlight=ogpxml_highlight, xml_highlight=xml_highlight, area_trans_item=area_trans_item, ogpxml=ogpxml, bbox_coords=bbox_coords, more_gcrs_result=more_gcrs_result, deprecated_available=deprecated_available, url_kind=url_kind, type_epsg=type_epsg, name=name, projcrs_by_gcrs=projcrs_by_gcrs, kind=kind, alt_title=alt_title, area_item=area_item, code_short=code_short, item=item, trans=trans, default_trans=default_trans, num_results=num_results, url_method=url_method, title=title, url_format=url_format, export_html=export_html, url_area_trans=url_area_trans, url_area=url_area, center=center, g_coords=g_coords, trans_lat=trans_lat, trans_lon=trans_lon, wkt=wkt, facets_list=facets_list,url_concatop=url_concatop, nadgrid=nadgrid, detail=detail,export=export, error_code=error_code, version=VERSION)
+  return render_template('./templates/detail',greenwich_longitude=greenwich_longitude, url_social=url_social, url_static_map=url_static_map, ogpxml_highlight=ogpxml_highlight, xml_highlight=xml_highlight, area_trans_item=area_trans_item, ogpxml=ogpxml, bbox_coords=bbox_coords, more_gcrs_result=more_gcrs_result, deprecated_available=deprecated_available, url_kind=url_kind, type_epsg=type_epsg, name=name, projcrs_by_gcrs=projcrs_by_gcrs, kind=kind, alt_title=alt_title, area_item=area_item, code_short=code_short, item=item, trans=trans, default_trans=default_trans, num_results=num_results, url_method=url_method, title=title, url_format=url_format, export_html=export_html, url_area_trans=url_area_trans, url_area=url_area, center=center, g_coords=g_coords, trans_lat=trans_lat, trans_lon=trans_lon, wkt=wkt, facets_list=facets_list,url_concatop=url_concatop, nadgrid=nadgrid, detail=detail,export=export, error_code=error_code, version=VERSION)
 
 @app.route('/<id>') # :re:[\d]+(-[a-zA-Z]+)
 def index3(id):
@@ -995,7 +995,7 @@ def index3(id):
     if len(results) == 0:
       error = 404
       try_url= ""
-      return template('./templates/error', error=error, try_url=try_url, version=VERSION)
+      return render_template('error.html', error=error, try_url=try_url, version=VERSION)
 
     for r in results:
       if str(id) in str(r):
@@ -1118,7 +1118,7 @@ def index3(id):
         for gcrs_item in gcrs_result[:5]:
           projcrs_by_gcrs.append({'result': gcrs_item})
 
-  return template('./templates/detail', url_area=url_area, greenwich_longitude=greenwich_longitude, url_social=url_social, url_static_map=url_static_map, url_concatop=url_concatop, ogpxml_highlight=ogpxml_highlight, area_trans_item=area_trans_item, error_code=error_code, ogpxml=ogpxml, bbox_coords=bbox_coords,more_gcrs_result=more_gcrs_result, deprecated_available=deprecated_available, url_kind=url_kind, type_epsg=type_epsg, name=name, projcrs_by_gcrs=projcrs_by_gcrs, alt_title=alt_title, kind=kind, code_short=code_short,item=item, detail=detail, facets_list=facets_list, nadgrid=nadgrid, trans_lat=trans_lat, trans_lon=trans_lon, trans=trans, url_format=url_format, default_trans=default_trans, center=center,g_coords=g_coords,version=VERSION)
+  return render_template('./templates/detail', url_area=url_area, greenwich_longitude=greenwich_longitude, url_social=url_social, url_static_map=url_static_map, url_concatop=url_concatop, ogpxml_highlight=ogpxml_highlight, area_trans_item=area_trans_item, error_code=error_code, ogpxml=ogpxml, bbox_coords=bbox_coords,more_gcrs_result=more_gcrs_result, deprecated_available=deprecated_available, url_kind=url_kind, type_epsg=type_epsg, name=name, projcrs_by_gcrs=projcrs_by_gcrs, alt_title=alt_title, kind=kind, code_short=code_short,item=item, detail=detail, facets_list=facets_list, nadgrid=nadgrid, trans_lat=trans_lat, trans_lon=trans_lon, trans=trans, url_format=url_format, default_trans=default_trans, center=center,g_coords=g_coords,version=VERSION)
 
 @app.route('/<id>') # :re:[\d]+(-[a-zA-Z]+)><format:re:[\.]+[gml]+
 def index4(id, format):
@@ -1275,7 +1275,7 @@ def index5(id, format):
       out = ref.ExportToPrettyWkt()
       export = highlight(out, WKTLexer(), HtmlFormatter(cssclass='syntax',nobackground=True))
       response.content_type = 'text/html; charset=UTF-8'
-      #return template('./templates/export', export = export, code=rcode)
+      #return render_template('./templates/export', export = export, code=rcode)
 
     elif format == '.xml':
       if ref.ExportToXML() != 7 :
@@ -1499,13 +1499,13 @@ def trans():
 def error404(error):
   error = 404
   try_url = ""
-  return template('./templates/error', error=error, try_url=try_url, version=VERSION)
+  return render_template('error.html', error=error, try_url=try_url, version=VERSION)
 
 @error(code=500)
 def error500(error):
   error = "500: Internal Server Error"
   try_url = ""
-  return template('./templates/error', error=error, try_url=try_url, version=VERSION)
+  return render_template('error.html', error=error, try_url=try_url, version=VERSION)
 
 #handling for urn from sqlite
 @app.route('/<id><format>') # /<id:re:(urn:?_?ogc:?_?def:?_?([\w]+-?[\w]+):?_?[EPSG]+:?:?_?_?(\d+\.?\d+(\.\d)?))><format:re:(\.gml)?>
@@ -1522,7 +1522,7 @@ def index6(id,format):
     else:
       error = 404
       try_url = ""
-      return template('./templates/error',error=error, try_url=try_url, version=VERSION)
+      return render_template('error.html',error=error, try_url=try_url, version=VERSION)
   # exist this urn?
   cur.execute('SELECT id,urn,xml,deprecated,name FROM gml where urn = ? or id = ?', (id,id,))
   gml = cur.fetchall()
@@ -1530,7 +1530,7 @@ def index6(id,format):
     error = 404
     try_url = ""
 
-    return template('./templates/error',error=error, try_url=try_url, version=VERSION)
+    return render_template('error.html',error=error, try_url=try_url, version=VERSION)
 
   # if exist than change to our url
   if "_" in id:
@@ -1590,9 +1590,9 @@ def index6(id,format):
         ogpxml = '<?xml version="1.0" encoding="UTF-8"?> %s' % (xml,)
         ogpxml = ogpxml.strip()
         ogpxml_highlight = highlight(ogpxml, XmlLexer(), HtmlFormatter(cssclass='syntax',nobackground=True))
-      return template('./templates/detail',url_static_map=url_static_map, url_social=url_social, url_concatop=url_concatop, ogpxml_highlight=ogpxml_highlight, area_trans_item=area_trans_item, error_code=error_code, ogpxml=ogpxml, bbox_coords=bbox_coords, more_gcrs_result=more_gcrs_result, deprecated_available=deprecated_available, url_kind=url_kind, type_epsg=type_epsg, name=name, projcrs_by_gcrs=projcrs_by_gcrs, alt_title=alt_title, kind=kind, code_short=code_short, item=item, detail=detail, nadgrid=nadgrid, trans_lat=trans_lat, trans_lon=trans_lon, trans=trans, url_format=url_format, default_trans=default_trans, center=center,g_coords=g_coords, version=VERSION)
+      return render_template('./templates/detail',url_static_map=url_static_map, url_social=url_social, url_concatop=url_concatop, ogpxml_highlight=ogpxml_highlight, area_trans_item=area_trans_item, error_code=error_code, ogpxml=ogpxml, bbox_coords=bbox_coords, more_gcrs_result=more_gcrs_result, deprecated_available=deprecated_available, url_kind=url_kind, type_epsg=type_epsg, name=name, projcrs_by_gcrs=projcrs_by_gcrs, alt_title=alt_title, kind=kind, code_short=code_short, item=item, detail=detail, nadgrid=nadgrid, trans_lat=trans_lat, trans_lon=trans_lon, trans=trans, url_format=url_format, default_trans=default_trans, center=center,g_coords=g_coords, version=VERSION)
 
-      #return template('./templates/error',error=error, try_url=try_url)
+      #return render_template('error.html',error=error, try_url=try_url)
     else:
       redirect('/%s' % url)
 
@@ -1626,13 +1626,12 @@ def index7(id,format):
       export = '<?xml version="1.0" encoding="UTF-8"?>\n %s' % (xml)
       response['Content-Type'] = "text/xml"
       return export
-
   cur.execute('SELECT id,urn,xml,deprecated,name FROM gml where id = ?', (id,))
   gml = cur.fetchall()
   if len(gml) == 0:
     error = 404
     try_url= ""
-    return template('./templates/error',error=error, try_url=try_url, version=VERSION)
+    return render_template('error.html',error=error, try_url=try_url, version=VERSION)
   else:
     id_reformated = id.replace("ogp-","").replace("epsg-","")
     subject,code = id_reformated.split("-")
@@ -1650,7 +1649,7 @@ def index7(id,format):
       if len(results) == 0:
         # error = 404
         # try_url = "/"+id+".gml"
-        # return template('./templates/error',error=error, try_url=try_url)
+        # return render_template('error.html',error=error, try_url=try_url)
         url_social = id
         urn = ""
         ogpxml = ""
@@ -1683,7 +1682,7 @@ def index7(id,format):
           item = {'code':code,'area':"", 'remarks':"",'scope':"",'deprecated':deprecated,'target_uom':"",'files':"",'orientation':"",'abbreviation':"",'order':"",'bbox':"",'kind':subject}
           ogpxml = '<?xml version="1.0" encoding="UTF-8"?>\n %s' % (xml,)
           ogpxml_highlight = highlight(ogpxml, XmlLexer(), HtmlFormatter(cssclass='syntax',nobackground=True))
-        return template('./templates/detail',url_static_map=url_static_map, url_social=url_social, url_concatop=url_concatop, ogpxml_highlight=ogpxml_highlight, area_trans_item=area_trans_item, error_code=error_code, ogpxml=ogpxml, bbox_coords=bbox_coords, more_gcrs_result=more_gcrs_result, deprecated_available=deprecated_available, url_kind=url_kind, type_epsg=type_epsg, name=name, projcrs_by_gcrs=projcrs_by_gcrs, alt_title=alt_title, kind=kind, code_short=code_short, item=item, detail=detail, nadgrid=nadgrid, trans_lat=trans_lat, trans_lon=trans_lon, trans=trans, url_format=url_format, default_trans=default_trans, center=center,g_coords=g_coords, version=VERSION)
+        return render_template('./templates/detail',url_static_map=url_static_map, url_social=url_social, url_concatop=url_concatop, ogpxml_highlight=ogpxml_highlight, area_trans_item=area_trans_item, error_code=error_code, ogpxml=ogpxml, bbox_coords=bbox_coords, more_gcrs_result=more_gcrs_result, deprecated_available=deprecated_available, url_kind=url_kind, type_epsg=type_epsg, name=name, projcrs_by_gcrs=projcrs_by_gcrs, alt_title=alt_title, kind=kind, code_short=code_short, item=item, detail=detail, nadgrid=nadgrid, trans_lat=trans_lat, trans_lon=trans_lon, trans=trans, url_format=url_format, default_trans=default_trans, center=center,g_coords=g_coords, version=VERSION)
 
       else:
         redirect ('/%s' %url)
@@ -1734,4 +1733,4 @@ def static7():
 
 if __name__ == "__main__":
   #run(host='0.0.0.0', port=82)
-  app.run(host='0.0.0.0', port=8080)
+  app.run(host='0.0.0.0', port=8080, threaded=False, processes=1, debug=True)
