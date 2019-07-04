@@ -56,17 +56,21 @@
 #navbar-top {
   background-position: top center ;
   background-repeat: no-repeat;
-
 }
+
+.fixed-footer {
+  position: fixed !important;
+  bottom: 0 !important;
+  right: 0;
+    left: 0;
+}
+
 .logo {
-  margin-top: -20px;
-  color: $text-color;
-  pointer-events: none;
-  text-decoration: none;
-  margin-left: 66.6666%;
-  width: 60%;
-  a:visited {
-    color: $text-color;
+    img{
+      width: 125px;
+    }
+    a:visited {
+      color: $text-color;
   }
   @media(max-width: $sc-medium) {
     width: 50%;
@@ -115,7 +119,7 @@ body#map-template {
   }
   #search-container {
     position: absolute;
-    top: 90px;
+    top: 94px;
     left: 15px;
 
     @media(max-width: $sc-small) {
@@ -144,11 +148,14 @@ margin-left: -35px !important;
   display: inline-block !important;
   position: absolute;
   top: 60px;
-  left: 30%;
+  left: 0;
+  width: 555px;
+  right: 0;
+  margin: auto;
 
   #copy-bg {
       width: 100%;
-      height: 28px;
+      height: 24px;
       position: absolute;
       z-index: -1;
       top: 19px;
@@ -176,7 +183,7 @@ margin-left: -35px !important;
     display: inline-block !important;
     padding: 5px 10px 5px 10px;
     position: absolute;
-    top: 105px;
+    top: 108px;
     right: 140px;
     @media(max-width: $sc-small) {
       top: 135px;
@@ -242,7 +249,7 @@ margin-left: -35px !important;
 
 #mapType {
   position: absolute;
-  top: 105px;
+  top: 108px;
   right: 15px;
   @media(max-width: $sc-small) {
     top: 95px;
@@ -255,11 +262,12 @@ margin-left: -35px !important;
  left: 33%;
    width: 520px;
  @media(max-width: $sc-medium) {
-   left: 15%;
-   width: 70%;
+   left: 0;
+   right: 0;
+   margin: auto;
+    width: 70%;
  }
  @media(max-width: $sc-small) {
-left: 0;
 width: 100%;
 }
 }
