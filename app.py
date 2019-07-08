@@ -49,10 +49,10 @@ f_datum_index = 12
 f_cs_index = 19
 f_unit_index = 26
 
-from flask import Flask, redirect, render_template, url_for
+from flask import Flask, redirect, render_template, url_for, request
 
 import bottle
-from bottle import response, static_file, error, request
+from bottle import response, static_file, error
 import urllib2
 import urllib
 import urlparse
@@ -254,27 +254,25 @@ def get_static_map_url(center, g_coords):
 @app.route('/',methods=['GET'])
 def index():
 
-  # Front page without parameters
-  if (len(request.GET.keys()) == 0):
+  ## Front page without parameters
+  if 'q' not in request.args:
     #print len(request.GET.keys())
     return render_template('index.html', version=VERSION)
 
+  ## Search API
 
   ix = open_dir(INDEX, readonly=True)
   result = []
 
   ref = osr.SpatialReference()
-  # with ix.reader() as reader:
-  #   print reader.most_frequent_terms("kind",50)
-
   with ix.searcher(closereader=False) as searcher:
 
     parser = MultifieldParser(["code","name","kind","area","area_trans","alt_title"], ix.schema)
-    query = request.GET.get('q')  # p43 - 1.9 The default query language
-    pagenum = int(request.GET.get("page",1))
-    format = request.GET.get('format',0)
-    callback = request.GET.get('callback',False)
-    expanded_trans = request.GET.get('trans',False)
+    query = request.args.get('q')  # p43 - 1.9 The default query language
+    pagenum = int(request.args.get("page",1))
+    format = request.args.get('format',0)
+    callback = request.args.get('callback',False)
+    expanded_trans = request.args.get('trans',False)
 
     if query == None:
       return render_template('./templates/index',version=VERSION)
@@ -1144,7 +1142,7 @@ def index4(id, format):
       xml = '<?xml version="1.0" encoding="UTF-8"?>\n %s' % xml
       response['Content-Type'] = "text/xml"
 
-      if request.GET.get('download',1) == "":
+      if request.args.get('download',1) == "":
         response['Content-disposition'] = "attachment; filename=%s.gml" % id
   return xml
 
@@ -1238,7 +1236,7 @@ def index5(id, format):
 
     ref.ImportFromWkt(wkt)
     ct = "text/plain"
-    if request.GET.get('download',1) == "":
+    if request.args.get('download',1) == "":
       response['Content-disposition'] = "attachment; filename=%s.prj" % rcode
 
     if format == ".esriwkt":
@@ -1260,7 +1258,7 @@ def index5(id, format):
 
     elif format == ".proj4":
       export = ref.ExportToProj4()
-      if request.GET.get('download',1) == "":
+      if request.args.get('download',1) == "":
         response['Content-disposition'] = "attachment; filename=%s.proj4" % rcode
 
     elif format == '.js':
@@ -1268,7 +1266,7 @@ def index5(id, format):
         if code:
             export = '%s("%s:%s","%s");' % ("proj4.defs", type_epsg, code, proj4)
             ct = "application/javascript"
-            if request.GET.get('download',1) == "":
+            if request.args.get('download',1) == "":
               response['Content-disposition'] = "attachment; filename=%s.js" % rcode
 
     elif format == '.html':
@@ -1281,7 +1279,7 @@ def index5(id, format):
       if ref.ExportToXML() != 7 :
         export = '<?xml version="1.0" encoding="UTF-8"?>\n %s' % (ref.ExportToXML().replace(">",' xmlns:gml="http://www.opengis.net/gml/3.2" xmlns:xlink="http://www.w3.org/1999/xlink">',1))
         ct = "text/xml"
-        if request.GET.get('download',1) == "":
+        if request.args.get('download',1) == "":
           response['Content-disposition'] = "attachment; filename=%s.xml" % rcode
       else:
         export = "NOT AVAILABLE,PLEASE SELECT OTHER FORMAT"
@@ -1290,31 +1288,31 @@ def index5(id, format):
     elif format == '.gml':
       export = '<?xml version="1.0" encoding="UTF-8"?>\n %s' % (xml)
       ct = "text/xml"
-      if request.GET.get('download',1) == "":
+      if request.args.get('download',1) == "":
         response['Content-disposition'] = "attachment; filename=%s.gml" % rcode
 
     elif format == '.map':
       export = 'PROJECTION\n\t'+'\n\t'.join(['"'+l.lstrip('+')+'"' for l in ref.ExportToProj4().split()])+'\nEND' ### CSS: white-space: pre-wrap
-      if request.GET.get('download',1) == "":
+      if request.args.get('download',1) == "":
         response['Content-disposition'] = "attachment; filename=%s.map" % rcode
 
     elif format == '.mapnik':
       proj4 = ref.ExportToProj4().strip()
       export = '<?xml version="1.0" encoding="utf-8"?>\n<Map srs="%s">\n\t<Layer srs="%s">\n\t</Layer>\n</Map>' % (proj4,proj4)
       ct = "application/xml"
-      if request.GET.get('download',1) == "":
+      if request.args.get('download',1) == "":
         response['Content-disposition'] = "attachment; filename=%s.xml" % rcode
 
     elif format == '.mapserverpython':
       mswkt = ref.ExportToWkt()
       export = "wkt = '''%s'''\nm = mapObj('')\nm.setWKTProjection(mswkt)\nlyr = layerObj(m)\nlyr.setWKTProjection(mswkt)" % (mswkt) #from mapscript import mapObj,layerObj\n
-      if request.GET.get('download',1) == "":
+      if request.args.get('download',1) == "":
         response['Content-disposition'] = "attachment; filename=%s.py" % rcode
 
     elif format == '.mapnikpython':
       proj4 = ref.ExportToProj4().strip()
       export = "proj4 = '%s'\nm = Map(256,256,proj4)\nlyr = Layer('Name',proj4)" % (proj4) #from mapnik import Map, Layer\n
-      if request.GET.get('download',1) == "":
+      if request.args.get('download',1) == "":
         response['Content-disposition'] = "attachment; filename=%s.py" % rcode
 
     elif format == '.geoserver':
@@ -1323,7 +1321,7 @@ def index5(id, format):
 
     elif format == '.sql':
       export = 'INSERT into spatial_ref_sys (srid, auth_name, auth_srid, proj4text, srtext) values ( %s, \'%s\', %s, \'%s\', \'%s\');' % (rcode, type_epsg, rcode, ref.ExportToProj4(), ref.ExportToWkt())
-      if request.GET.get('download',1) == "":
+      if request.args.get('download',1) == "":
         response['Content-disposition'] = "attachment; filename=%s.sql" % rcode
 
     elif format == '.ogcwkt':
