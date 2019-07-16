@@ -16,5 +16,5 @@ RUN pip install -q -r requirements.txt
 
 EXPOSE 8080
 
-CMD gunicorn --workers 4 --bind 0.0.0.0:8080 --log-level info --reload app:app
-# CMD ['python', 'app.py'] # dev
+# CMD gunicorn --workers 4 --bind 0.0.0.0:8080 --log-level info --reload app:app
+CMD python app.py # dev

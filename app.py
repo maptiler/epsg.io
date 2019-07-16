@@ -49,7 +49,7 @@ f_datum_index = 12
 f_cs_index = 19
 f_unit_index = 26
 
-from flask import Flask, redirect, render_template, url_for, request
+from flask import Flask, redirect, render_template, url_for, request, Response
 from flask_debugtoolbar import DebugToolbarExtension
 
 import bottle
@@ -78,7 +78,7 @@ import csv
 import sqlite3 as sqlite
 
 app = Flask(__name__)
-app.debug = False
+app.debug = True
 app.config['SECRET_KEY'] = '<replace with a secret key>'
 toolbar = DebugToolbarExtension(app)
 
@@ -164,11 +164,10 @@ def jsonResponse(json_str, callback, status = 'ok', error_type = ''):
 
     json_str['status'] = status
     if callback:
-      response['Content-Type']  = "application/javascript"
-      return '{}({})'.format(callback, json.dumps(json_str))
+      resp = '{}({})'.format(callback, json.dumps(json_str))
+      return Response(resp, mimetype='application/javascript')
     else:
-      response['Content-Type'] = "application/json"
-      return json.dumps(json_str)
+      return Response(json.dumps(json_str), mimetype='application/json')
 
 class WKTLexer(RegexLexer):
     name = 'wkt'
@@ -486,7 +485,11 @@ def index():
             values = hit['description']
             if not re.findall(r'([a-df-zA-Z_])',values):
               if str(values) != str('(0,)'):
-                values = tuple(map(float, values[1:-1].split(',')))
+                num = []
+                w = re.findall(r'(-?\d*\.\d*[e]?-?\d*)',values)
+                for n in w:
+                  num.append(float(n))
+                values = tuple(num)
                 # do not change default TOWGS84
                 if int(hit['code_trans']) != int(hit['code']) :
                   if (values != (0.0,0.0,0.0,0.0,0.0,0.0,0.0) and type(values) == tuple and values != (0,) and values != ()):
