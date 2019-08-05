@@ -125,7 +125,7 @@ $btns: (
 ("-secondary", #ffffff, $color-secondary, #ffffff, darken($color-secondary, 7%)),
 ("-gray", #fff, $color-gray, #fff, darken($color-gray, 5%)),
 ("-gray-dark", $color-gray-light, #333, $color-gray-light, lighten(#333, 5%)),
-("-swap", $color-primary, transparent, $color-gray-light, lighten(#333, 5%)),
+("-swap", $color-primary, transparent, lighten($color-primary, 5%),transparent),
 ("-gray-light", $color-gray-dark, $color-gray-light, $color-gray-dark, darken($color-gray-light, 1%))
 );
 
