@@ -68,13 +68,12 @@
   <div class="row">
     <div class="container">
       <div class="col9">
-        <div class="transformations-container">
+        <div class="row  padb-6">
           {% set no_trans = 'False' %}
           {% if trans %}
+          <div class="col6">
           <h3 >Available transformations:</h3>
-          <div class="transformations-container-inner">
-            <ul>
-              % i = 0
+            <ul class="bordertop-gray-light alt-search">
               {% for r in trans %}
               {% if r['link'] == "" and r['deprecated'] == 0 %}
               <li><i></i>
@@ -96,7 +95,6 @@
                 [{{r['num_param']}}]
                 {% endif %}
 
-                % i +=1
               </li>
 
               {% elif r['deprecated'] == 0 %}
@@ -112,23 +110,16 @@
                   [{{r['num_param']}}]
                   {% endif %}
                 </a>
-                %i+=1
 
               </li>
               {% endif %}
               {% endfor %}
 
               {% if deprecated_available == 1 %}
-              {% if i == 0: %}
-              <p></p>
 
-              <div id="trans_deprecated">
-                {% else %}
-                <p></p>
 
                 <a href="#" id="trans_deprecated_link">Show deprecated transformations</a>
                 <div id="trans_deprecated">
-                  {% endif %}
 
                   {% for r in trans %}
                   {% if r['deprecated'] == 1 %}
@@ -164,7 +155,6 @@
             </ul>
 
           </div>
-        </div>
         {% else %}
       </div>
       {% set no_trans = 'True' %}
@@ -197,20 +187,19 @@
       {% endif %}
 
       {% if trans %}
-      <div class="location-data-container">
+      <div class="col6">
         {% set found = 'False' %}
         <h3 >Selected transformation</h3>
         {% for r in trans %}
         {% if r['link'] == "" and not found %}
-        {% set found = 'True' %}
+        {% set found = 'True' %} <p class="bordertop-gray-light">
         <h2>
           {{r['area_trans_trans']}}
         </h2>
         {% if r['code_trans'] != 0 %}
         code <a href="/{{r['code_trans']}}">{{r['code_trans']}}</a>
         {% endif %}
-        <p>
-          <p></p>
+          <br>
           {% if r['accuracy'] %}
           Accuracy&nbsp;{{r['accuracy']}}&nbsp;m
           {% endif %}
@@ -237,7 +226,7 @@
         {% endif %}
 
         {% if trans and default_trans %}
-        <div class="attributes">
+        <div class="attributes bordertop-gray-light">
           {% if default_trans['method'] %}
           <p><span class="caption">Method: </span><a href="/{{default_trans['method'][0]}}-method">{{default_trans['method'][1]}}</a></p>
           {% endif %}
@@ -258,13 +247,15 @@
 
 
       </div>
+    </div>
 
       {% endif %}
 
       <div class="clnr"></div>
 
-      <h3 >Attributes</h3>
-      <div class="row bordertop-gray-light">
+      <div class="row">
+        <h3 >Attributes</h3>
+      <div class="bordertop-gray-light">
       <div class="col6">
         {% if 'uom_code' in item %}
         {% if item['uom_code'] %}
@@ -434,16 +425,18 @@
       </div>
     </div>
   </div>
+</div>
 
+  <div class="col3 padx-0  borderbottom-gray-light">
+  <a href="https://www.maptiler.com" target="_blank">
+    <h6 class="center maptiler-power" >Covered area powered by MapTiler
+      <img class="width-10" src="/static/img/maptiler-logo-icon.png" alt="MapTiler logo">
+    </h6>
+  </a>
+  </div>
     <div class="col3 padx-0">
-      <div class="cac-inner">
         {% set no_map = 'False' %}
         {% if item['bbox'] %}
-        <a href="https://www.maptiler.com" target="_blank">
-          <h6 class="center pady-1 borderbottom-gray-light" >Covered area powered by MapTiler
-            <img class="width-10" src="/static/img/maptiler-logo-icon.png" alt="MapTiler logo">
-          </h6>
-        </a>
 
         {% if center %}
         {% if trans_lat: %}
@@ -472,7 +465,7 @@
           <span class="caption">Center coordinates</span><br />
           <span>{{trans_lat}}</span> <span>{{trans_lon}}</span> <br />
           {% if item['kind'] != "CRS-GEOGCRS" %}
-          %wgs_found = True
+          {% set wgs_found = 'True' %}
           <p>
             <span class="caption">Projected bounds:</span><br />
             {{bbox_coords[3]}} {{bbox_coords[2]}}<br />
@@ -510,8 +503,6 @@
           {{item['bbox'][3]}} {{item['bbox'][0]}}
         </p>
         {% endif %}
-      </div>
-      <div class="cac-inner">
 
         {% if default_trans %}
         <a href="{{url_area_trans}}">{{default_trans['area']}}</a>
@@ -542,7 +533,6 @@
         {% endif %}
       </div>
     </div>
-  </div>
   </div>
   {% else %}
   {% if 'alt_description' in item %}

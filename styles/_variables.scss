@@ -3,7 +3,7 @@ $color-primary: #2c7ac2;
 $color-secondary: #576484;
 
 $color-gray-dark: #3c4a69;
-$color-gray: #d6d6de;
+$color-gray: #aaa;
 $color-gray-light: #e7e7e7;
 
 $color-info: #a1acb7;
@@ -30,7 +30,7 @@ $font-icon: 'icons';
 $font-size: 14px !default;
 
 /* Line height*/
-$line-height: 1.8 !default;
+$line-height: 1.6 !default;
 $line-height-computed: floor(($font-size * $line-height)) !default;
 
 /* Headings */
@@ -171,7 +171,7 @@ $even-bg-color: #eee5de;
 $odd-bg-color: #f6f2ef;
 
 /* Forms */
-$input-color: $text-color;
+$input-color: $color-gray-dark;
 $input-color-active: $headings-color;
 $input-line-height: 20px;
 $input-font-size: 14px;
