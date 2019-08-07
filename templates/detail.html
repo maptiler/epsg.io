@@ -1,29 +1,36 @@
 {% extends 'base.html' %}
 
-{% block title %}EPSG.io: Coordinate Systems Worldwide{% endblock %}
+{% block title %}
+    {% if alt_title %}
+      {% if not name %}
+      {{alt_title}} - {{type_epsg}}:{{code_short[0]}}
+      {% else %}
+        {{name}} - {{alt_title}} - {{type_epsg}}:{{code_short[0]}}
+      {% endif %}
+    {% else %}
+      {% if not name %}
+      {{type_epsg}}:{{code_short[0]}}
+      {% else %}
+        {{name}} - {{type_epsg}}:{{code_short[0]}}
+      {% endif %}
+    {% endif %}
+{% endblock %}
+
+{% block description %}
+    {% if item['area'] !="" or item['remarks'] !="" or item['scope']!="" %}
+    EPSG:{{code_short[0]}} {{kind}} for {{item['area']}} {{item['remarks']}} {{item['scope']}}
+    {% else %}
+    EPSG:{{code_short[0]}} {{kind}}
+    {% endif %}
+{% endblock %}
+
+{% block image %}
+    {% if not url_static_map[1] %}
+        {{ url_for('static', filename='/static/img/logo.png') }}
+    {% endif %}
+{% endblock %}
 
 {% block head %}
-{% if alt_title %}
-{% if not name %}
-<title>{{alt_title}} - {{type_epsg}}:{{code_short[0]}}</title>
-{% else %}
-<title>{{name}} - {{alt_title}} - {{type_epsg}}:{{code_short[0]}}</title>
-{% endif %}
-{% else %}
-{% if not name %}
-<title>{{type_epsg}}:{{code_short[0]}}</title>
-{% else %}
-<title>{{name}} - {{type_epsg}}:{{code_short[0]}}</title>
-{% endif %}
-{% endif %}
-{% if item['area'] !="" or item['remarks'] !="" or item['scope']!="" %}
-<meta name="description" content="EPSG:{{code_short[0]}} {{kind}} for {{item['area']}} {{item['remarks']}} {{item['scope']}}" />
-{% else %}
-<meta name="description" content="EPSG:{{code_short[0]}} {{kind}}" />
-{% endif %}
-{% if not url_static_map[1] %}
-<meta property="og:image" content="//epsg.io/img/epsg-banner-440x280-2.png" />
-{% endif %}
 <script src="{{ url_for('static', filename='js/ZeroClipboard.min.js') }}"></script>
 {% endblock %}
 
@@ -34,29 +41,31 @@
 
   <div class="row mary-4 mart-0">
     <div class="container">
-      <div class="col8 padx-0 padt-2">
+      <div class="col7 padt-4">
         {% if item['deprecated'] == 1 or item['deprecated'] == "true" %}
-        <h1>{{type_epsg}}:{{code_short[0]}} DEPRECATED</h1>
+        <h1><b>{{type_epsg}}:{{code_short[0]}} DEPRECATED</b> </h1>
         {% else %}
-        <h1>{{type_epsg}}:{{code_short[0]}}</h1>
+        <h1><b>{{type_epsg}}:{{code_short[0]}}</b> </h1>
         {% endif %}
         {% if alt_title %}
-        <h2>{{name}} -- {{alt_title}}</h2>
+        <h2 class="padt-2">{{name}} -- {{alt_title}}</h2>
         {% else %}
-        <h2>{{name}}</h2>
+        <h2 class="padt-2">{{name}}</h2>
         {% endif %}
       </div>
-      <div class="col4 padx-0">
+      <div class="col5 padx-0 padt-4">
         <div class="social circles block right">
           <p>Share on:
             <a class="T" target="_blank" href="https://twitter.com/share?original_referer=//epsg.io&amp;text=EPSG.io: Coordinate systems worldwide, view location on a map, get transformation, WKT, Proj.4. made by @klokantech">T</a>
             <a class="G" target="_blank" href="https://pinterest.com/pin/create/button/?url=http%3A%2F%2Fepsg.io&amp;media=%2F%2Fdirect.epsg.io%2Fimg%2Fepsg-banner-440x280-2.png&description=EPSG.io:%20Coordinate%20systems%20worldwide%20(EPSG/ESRI),%20preview%20location%20on%20a%20map,%20get%20transformation,%20WKT,%20OGC%20GML,%20Proj.4.%20http://EPSG.io/%20made%20by%20@klokantech">Q</a>
           </p>
         </div>
-        <a class="btn" href="/transform#s_srs={{url_social}}" title="Transform {{name}} -- {{alt_title}} coordinates">
-          Transform</a>
-        <a class="btn" href="/map#srs={{url_social}}" title="Display {{name}} -- {{alt_title}} on a map">
-          Get&nbsp;position&nbsp;on&nbsp;a&nbsp;map</a>
+        <div class="float-right mary-2">
+          <a class="btn marx-1" href="/transform#s_srs={{url_social}}" title="Transform {{name}} -- {{alt_title}} coordinates">
+            Transform</a>
+          <a class="btn" href="/map#srs={{url_social}}" title="Display {{name}} -- {{alt_title}} on a map">
+            Get&nbsp;position&nbsp;on&nbsp;a&nbsp;map</a>
+        </div>
       </div>
     </div>
   </div>
@@ -68,10 +77,10 @@
   <div class="row">
     <div class="container">
       <div class="col9">
-        <div class="row  padb-6">
+        <div class="row">
           {% set no_trans = 'False' %}
           {% if trans %}
-          <div class="col6">
+          <div class="col6 padx-0">
           <h3 >Available transformations:</h3>
             <ul class="bordertop-gray-light alt-search">
               {% for r in trans %}
@@ -187,7 +196,7 @@
       {% endif %}
 
       {% if trans %}
-      <div class="col6">
+      <div class="col6 padx-2">
         {% set found = 'False' %}
         <h3 >Selected transformation</h3>
         {% for r in trans %}
@@ -253,10 +262,10 @@
 
       <div class="clnr"></div>
 
-      <div class="row">
+      <div class="row pad-col">
         <h3 >Attributes</h3>
       <div class="bordertop-gray-light">
-      <div class="col6">
+      <div class="col6 padx-0">
         {% if 'uom_code' in item %}
         {% if item['uom_code'] %}
         <p><span class="caption">Unit: </span>{{item['uom']}}</p>
@@ -370,7 +379,7 @@
           {% endif %}
           {% endif %}
       </div>
-      <div class="col6">
+      <div class="col6 padx-2">
 
         {% if 'scope' in item %}
         {% if item['scope'] %}
@@ -554,7 +563,7 @@
   {% endif %}
 
   <div class="row">
-    <div class="container center">
+    <div class="container center bordertop-gray-light pady-4">
       <a href="https://www.maptiler.com/cloud/"><img class="width-100" src="/static/img/maptiler-gmaps-banner.png" alt="MapTiler banner"></a>
     </div>
   </div>

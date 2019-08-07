@@ -1,11 +1,24 @@
 {% extends 'base.html' %}
 
-{% block head %}
-<script src="{{ url_for('static', filename='js/transform.js') }}"></script>
-{% endblock %}
+  {% block title %}
+    Transform coordinates - GPS online convertor
+  {% endblock %}
 
-{% block title %}EPSG.io: Coordinate Systems Worldwide{% endblock %}
-{% block body %}<body id="transform">{% endblock %}
+  {% block description %}
+    Transform your coordinates online easily with epsg.io
+  {% endblock %}
+
+  {% block keywords %}
+    transform, coordinates, projection, geographic, geodethic, srs, crs, epsg.io
+  {% endblock %}
+
+  {% block head %}
+    <script src="{{ url_for('static', filename='js/transform.js') }}"></script>
+  {% endblock %}
+
+  {% block body %}
+    <body id="transform">
+  {% endblock %}
 
 {% block content %}
     <div class="row center-mobile">

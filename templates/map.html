@@ -1,12 +1,26 @@
-
 {% extends 'base.html' %}
-{% block head %}
-<script src="{{ url_for('static', filename='js/map.js') }}"></script>
-{% endblock %}
-{% block title %}EPSG.io: Coordinate Systems Worldwide{% endblock %}
-{% block body %}<body id="map-template">{% endblock %}
-  {% block navbar %}
 
+  {% block title %}
+    Coordinates on a map - pick GPS lat & long or coordinates in a projection system
+  {% endblock %}
+
+  {% block description %}
+    Transform coordinates for position on a map - converting latitude / longitude degrees
+  {% endblock %}
+
+  {% block keywords %}
+    map, epsg, coordinates, latitude, longitude, degrees
+  {% endblock %}
+
+  {% block head %}
+    <script src="{{ url_for('static', filename='js/map.js') }}"></script>
+  {% endblock %}
+
+  {% block body %}
+    <body id="map-template">
+  {% endblock %}
+
+  {% block navbar %}
      <div id="navbar-top" class="nav-background">
 <a class="logo" href="/"><img class="padt-2 marx-4 marr-0" src="/static/img/espg-logo.png" alt="EPSG logo"><p class="inline">From MapTiler Team</p></a>           <div id="copy-clipboard-container">
              <div id="copy-bg"></div>
@@ -17,7 +31,7 @@
                <input class="hidden" type="submit" id="eastnorth_submit" value="">
              </form>
            </div>
-         <div class="nav">
+         <div class="nav marx-4">
            <a href="/?q=">Search</a>
            <a href="/map" title="">Map</a>
            <a href="/transform" title="">Transform</a>
@@ -34,7 +48,7 @@
        </div>
      </div>
      <div class="row padb-10"></div>
-     {% endblock %}
+  {% endblock %}
 
 {% block content %}
 
@@ -61,7 +75,7 @@
         <form><input class="" type="search" name="geocoder" id="geocoder" placeholder="Place or address" /></form>
       </p>
     </div>
-    <div id="map-clipboard-container" class="bg-white border-gray-light inline padt-1 padb-3 padx-1">
+    <div id="map-clipboard-container" class="bg-white border-gray-light inline pady-1 padx-1">
       <div id="mc-info-container">
         <h5 class="inline mart-0">Coordinate system</h5>
         <a href="#" id="crs-change" class="btn-small padx-1 marr-0 float-right">Change</a>

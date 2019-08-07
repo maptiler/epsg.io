@@ -1,19 +1,17 @@
 {% extends 'base.html' %}
 
-
-{% block title %}EPSG.io: Coordinate Systems Worldwide{% endblock %}
+  {% block title %}
+    {% if pagenum == 1 %}
+      {{title}}
+    {% else %}
+      {{title}}, page {{pagenum}}
+    {% endif %}
+  {% endblock %}
 
 {% block content %}
-
     <div class="row">
-      <div class="container borderbottom-gray-light">
+      <div class="container borderbottom-gray-light padt-4 padb-2">
       <div class="col6">
-        {% if pagenum == 1 %}
-          <h3>{{title}}</h3>
-        {% else %}
-          <h3>{{title}}, page {{pagenum}}</h3>
-        {% endif %}
-
         <p class="small mart-0">
           {% if deprecated == 1 %}
             Found {{num_results}} deprecated records
