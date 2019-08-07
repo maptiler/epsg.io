@@ -13,7 +13,7 @@ styles-build:
 	sass styles/base.scss static/css/base.min.css --style compressed
 
 run:
-	docker run -v $(pwd):/var/www/epsg.io -p 8080:8080 epsg.io
+	docker run -v $(pwd):/var/www/epsg.io -p 8000:8080 epsg.io
 
 build:
 	docker build . --tag=epsg.io
