@@ -39,7 +39,7 @@
 {% endblock %}
   {% block content %}
 
-  <div class="row mary-4 mart-0 mar-mobile">
+  <div class="row mar-mobile">
     <div class="container">
       <div class="col7 padt-4 pad-mobile center-mobile">
         {% if item['deprecated'] == 1 or item['deprecated'] == "true" %}
@@ -61,9 +61,9 @@
           </p>
         </div>
         <div class="right mary-2 mar-mobile center-mobile">
-          <a class="btn marx-1 mar-mobile" href="/transform#s_srs={{url_social}}" title="Transform {{name}} -- {{alt_title}} coordinates">
+          <a class="btn mar-1 mart-0" href="/transform#s_srs={{url_social}}" title="Transform {{name}} -- {{alt_title}} coordinates">
             Transform</a>
-          <a class="btn" href="/map#srs={{url_social}}" title="Display {{name}} -- {{alt_title}} on a map">
+          <a class="btn mar-1 mart-0" href="/map#srs={{url_social}}" title="Display {{name}} -- {{alt_title}} on a map">
             Get&nbsp;position&nbsp;on&nbsp;a&nbsp;map</a>
         </div>
         <div class="social circles detail-sc-small">
@@ -443,28 +443,28 @@
 </div>
 
   <div class="col3 padx-0  borderbottom-gray-light">
-  <a href="https://www.maptiler.com" target="_blank">
-    <h6 class="center maptiler-power" >Covered area powered by MapTiler
+  <a href="https://www.maptiler.com" class=" maptiler-power" target="_blank">
+    <h6 class="center" >Covered area powered by MapTiler
       <img class="width-10" src="/static/img/maptiler-logo-icon.png" alt="MapTiler logo">
     </h6>
   </a>
   </div>
-    <div class="col3 padx-0 center-mobile">
+    <div class="col3 minimap-pad">
         {% set no_map = 'False' %}
         {% if item['bbox'] %}
 
         {% if center %}
         {% if trans_lat: %}
-        <div id="mini-map">
+        <div id="mini-map" class=" center-mobile">
           <a href="{{url_format}}/map">
-            <img src="/img/epsg-target-small.png" id="crosshair" alt="" />
+            <img src="/static/img/epsg-target-small.png" id="crosshair" alt="" />
             <img src="{{url_static_map[1]}}" alt="SimpleMap" width="265" height="215">
 
           </a>
         </div>
         {% else %}
-        <div id="mini-map">
-          <img src="/img/epsg-target-small.png" id="crosshair" alt="" />
+        <div id="mini-map" class=" center-mobile">
+          <img src="/static/img/epsg-target-small.png" id="crosshair" alt="" />
           <img src="{{url_static_map[1]}}" alt="SimpleMap" width="265" height="215">
         </div>
         {% endif %}
@@ -569,8 +569,10 @@
   {% endif %}
 
   <div class="row">
-    <div class="container center bordertop-gray-light pady-4">
-      <a href="https://www.maptiler.com/cloud/"><img class="width-100" src="/static/img/maptiler-gmaps-banner.png" alt="MapTiler banner"></a>
+    <div class="container center bordertop-gray-light pady-2">
+      <div class="col12">
+        <a href="https://www.maptiler.com/cloud/"><img class="width-100" src="/static/img/maptiler-gmaps-banner.png" alt="MapTiler banner"></a>
+      </div>
     </div>
   </div>
   <div class="row">
