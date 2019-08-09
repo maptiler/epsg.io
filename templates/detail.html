@@ -35,13 +35,13 @@
 {% endblock %}
 
 {% block body %}
-
-<body id="detailpage" data-role="page">{% endblock %}
+<body id="detailpage" data-role="page">
+{% endblock %}
   {% block content %}
 
-  <div class="row mary-4 mart-0">
+  <div class="row mary-4 mart-0 mar-mobile">
     <div class="container">
-      <div class="col7 padt-4">
+      <div class="col7 padt-4 pad-mobile center-mobile">
         {% if item['deprecated'] == 1 or item['deprecated'] == "true" %}
         <h1><b>{{type_epsg}}:{{code_short[0]}} DEPRECATED</b> </h1>
         {% else %}
@@ -53,18 +53,24 @@
         <h2 class="padt-2">{{name}}</h2>
         {% endif %}
       </div>
-      <div class="col5 padx-0 padt-4">
-        <div class="social circles block right">
+      <div class="col5 padx-0 padt-4 pad-mobile center-mobile">
+        <div class="social circles detail-sc-big block right">
           <p>Share on:
             <a class="T" target="_blank" href="https://twitter.com/share?original_referer=//epsg.io&amp;text=EPSG.io: Coordinate systems worldwide, view location on a map, get transformation, WKT, Proj.4. made by @klokantech">T</a>
             <a class="G" target="_blank" href="https://pinterest.com/pin/create/button/?url=http%3A%2F%2Fepsg.io&amp;media=%2F%2Fdirect.epsg.io%2Fimg%2Fepsg-banner-440x280-2.png&description=EPSG.io:%20Coordinate%20systems%20worldwide%20(EPSG/ESRI),%20preview%20location%20on%20a%20map,%20get%20transformation,%20WKT,%20OGC%20GML,%20Proj.4.%20http://EPSG.io/%20made%20by%20@klokantech">Q</a>
           </p>
         </div>
-        <div class="float-right mary-2">
-          <a class="btn marx-1" href="/transform#s_srs={{url_social}}" title="Transform {{name}} -- {{alt_title}} coordinates">
+        <div class="right mary-2 mar-mobile center-mobile">
+          <a class="btn marx-1 mar-mobile" href="/transform#s_srs={{url_social}}" title="Transform {{name}} -- {{alt_title}} coordinates">
             Transform</a>
           <a class="btn" href="/map#srs={{url_social}}" title="Display {{name}} -- {{alt_title}} on a map">
             Get&nbsp;position&nbsp;on&nbsp;a&nbsp;map</a>
+        </div>
+        <div class="social circles detail-sc-small">
+          <p>Share on:
+            <a class="T" target="_blank" href="https://twitter.com/share?original_referer=//epsg.io&amp;text=EPSG.io: Coordinate systems worldwide, view location on a map, get transformation, WKT, Proj.4. made by @klokantech">T</a>
+            <a class="G" target="_blank" href="https://pinterest.com/pin/create/button/?url=http%3A%2F%2Fepsg.io&amp;media=%2F%2Fdirect.epsg.io%2Fimg%2Fepsg-banner-440x280-2.png&description=EPSG.io:%20Coordinate%20systems%20worldwide%20(EPSG/ESRI),%20preview%20location%20on%20a%20map,%20get%20transformation,%20WKT,%20OGC%20GML,%20Proj.4.%20http://EPSG.io/%20made%20by%20@klokantech">Q</a>
+          </p>
         </div>
       </div>
     </div>
@@ -196,7 +202,7 @@
       {% endif %}
 
       {% if trans %}
-      <div class="col6 padx-2">
+      <div class="col5 offset1 padx-0">
         {% set found = 'False' %}
         <h3 >Selected transformation</h3>
         {% for r in trans %}
@@ -379,7 +385,7 @@
           {% endif %}
           {% endif %}
       </div>
-      <div class="col6 padx-2">
+      <div class="col6 padx-0">
 
         {% if 'scope' in item %}
         {% if item['scope'] %}
@@ -443,7 +449,7 @@
     </h6>
   </a>
   </div>
-    <div class="col3 padx-0">
+    <div class="col3 padx-0 center-mobile">
         {% set no_map = 'False' %}
         {% if item['bbox'] %}
 
