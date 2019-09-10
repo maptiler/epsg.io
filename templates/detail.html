@@ -67,7 +67,7 @@
             Get&nbsp;position&nbsp;on&nbsp;a&nbsp;map</a>
         </div>
         <div class="social circles detail-sc-small">
-          <p>Share on:
+          <p>Share on
             <a class="T" target="_blank" href="https://twitter.com/share?original_referer=//epsg.io&amp;text=EPSG.io: Coordinate systems worldwide, view location on a map, get transformation, WKT, Proj.4. made by @klokantech">T</a>
             <a class="G" target="_blank" href="https://pinterest.com/pin/create/button/?url=http%3A%2F%2Fepsg.io&amp;media=%2F%2Fdirect.epsg.io%2Fimg%2Fepsg-banner-440x280-2.png&description=EPSG.io:%20Coordinate%20systems%20worldwide%20(EPSG/ESRI),%20preview%20location%20on%20a%20map,%20get%20transformation,%20WKT,%20OGC%20GML,%20Proj.4.%20http://EPSG.io/%20made%20by%20@klokantech">Q</a>
           </p>
@@ -177,7 +177,7 @@
       {% if item['alt_description'] %}
       {% if wkt %}
       <p>
-        <div id="description-message">{{item['alt_description']}}</div>
+        <div id="description-message">{{item['alt_description']|safe}}</div>
       </p>
       {% else %}
       {% if export_html %}

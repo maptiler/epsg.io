@@ -67,6 +67,7 @@ a:hover{
     }
   }
 }
+
 .minimap-pad{
   padding: 15px 0;
   @media (max-width: $sc-small) {
@@ -107,6 +108,16 @@ body#home {
 
   .nav {
     padding-right: 60px;
+  }
+
+  @media(max-width: 768px) {
+    .mainlogo-container {
+      width: 100%;
+      text-align: center;
+      img {
+        max-width: 400px;
+      }
+    }
   }
 }
 
