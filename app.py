@@ -1124,8 +1124,9 @@ def index3(id):
 
   return render_template('detail.html', url_area=url_area, greenwich_longitude=greenwich_longitude, url_social=url_social, url_static_map=url_static_map, url_concatop=url_concatop, ogpxml_highlight=ogpxml_highlight, area_trans_item=area_trans_item, error_code=error_code, ogpxml=ogpxml, bbox_coords=bbox_coords,more_gcrs_result=more_gcrs_result, deprecated_available=deprecated_available, url_kind=url_kind, type_epsg=type_epsg, name=name, projcrs_by_gcrs=projcrs_by_gcrs, alt_title=alt_title, kind=kind, code_short=code_short,item=item, detail=detail, facets_list=facets_list, nadgrid=nadgrid, trans_lat=trans_lat, trans_lon=trans_lon, trans=trans, url_format=url_format, default_trans=default_trans, center=center,g_coords=g_coords,version=VERSION)
 
-@app.route('/<id>') # :re:[\d]+(-[a-zA-Z]+)><format:re:[\.]+[gml]+
-def index4(id, format):
+# XXX this doesn't match - delete? - handled in crs_text
+@app.route('/<id>.?gml') # :re:[\d]+(-[a-zA-Z]+)><format:re:[\.]+[gml]+
+def index4(id, format='gml'):
   code, text = (id+'-0').split('-')[:2]
   text = text.replace("/","").replace(".","")
   code = code.replace(".","")
@@ -1152,8 +1153,9 @@ def index4(id, format):
         response['Content-disposition'] = "attachment; filename=%s.gml" % id
   return xml
 
-@app.route('/<id>') # :re:[\d]+(-[\d]+)?><format:re:[\/\.]+[\w]+
-def index5(id, format):
+# Returns definition of projection as text or xml file
+@app.route('/<id>.<format>') # :re:[\d]+(-[\d]+)?><format:re:[\/\.]+[\w]+
+def crs_text(id, format):
   ix = open_dir(INDEX, readonly=True)
   result = []
   export = ""
@@ -1224,117 +1226,118 @@ def index5(id, format):
       url_coords = rcode
     if not re.findall(r'([a-df-zA-Z_])',values):
       if str(values) != "(0,)" and str(values) != "":
-        values = tuple(map(float, values[1:-1].split(',')))
-        # w = re.findall(r'(-?\d*\.\d*[e]?-?\d*)',values)
-        #       num =[]
-        #       for n in w:
-        #         num.append(float(n))
-        #       values = tuple(num)
+        values = str(values[1:-1]).split(', ')
+        num =[]
+        for n in values:
+          num.append(float(n))
+        values = tuple(num)
         if int(def_trans) != int(tcode):
           if (values != (0,0,0,0,0,0,0) and type(values) == tuple and values != (0,) and values != ()):
             ref.ImportFromEPSG(int(rcode))
             ref.SetTOWGS84(*values)
             wkt = ref.ExportToWkt().decode('utf-8')
 
-    # One of the formats is a map (because /coordinates/ was redirect on /coordinates and then catch by <format>)
+    # XXX One of the formats is a map (because /coordinates/ was redirect on /coordinates and then catch by <format>)
     if format == "/map":
       return redirect("/map#srs=" + rcode);
 
     ref.ImportFromWkt(wkt)
-    ct = "text/plain"
+    response = {
+      'Content-disposition': '',
+      'Content-Type': 'text/plain'
+    }
     if request.args.get('download',1) == "":
       response['Content-disposition'] = "attachment; filename=%s.prj" % rcode
 
-    if format == ".esriwkt":
+    if format == "esriwkt":
       if rcode == "3857":
         wkt_3857 = 'PROJCS["WGS_1984_Web_Mercator_Auxiliary_Sphere",GEOGCS["GCS_WGS_1984",DATUM["D_WGS_1984",SPHEROID["WGS_1984",6378137.0,298.257223563]],PRIMEM["Greenwich",0.0],UNIT["Degree",0.0174532925199433]],PROJECTION["Mercator_Auxiliary_Sphere"],PARAMETER["False_Easting",0.0],PARAMETER["False_Northing",0.0],PARAMETER["Central_Meridian",0.0],PARAMETER["Standard_Parallel_1",0.0],PARAMETER["Auxiliary_Sphere_Type",0.0],UNIT["Meter",1.0],AUTHORITY["EPSG",3857]]'
         ref.SetFromUserInput(wkt_3857)
       ref.MorphToESRI()
       export = ref.ExportToWkt()
-      ct = "text/x-esriwkt"
+      response['Content-Type'] = "text/x-esriwkt"
 
-    elif format == ".prettywkt":
+    elif format == "prettywkt":
       export = ref.ExportToPrettyWkt()
 
-    elif format == ".usgs":
+    elif format == "usgs":
       export = str(ref.ExportToUSGS())
 
-    elif format == ".wkt":
+    elif format == "wkt":
       export = ref.ExportToWkt()
 
-    elif format == ".proj4":
+    elif format == "proj4":
       export = ref.ExportToProj4()
-      if request.args.get('download',1) == "":
+      if request.args.get('download', 1) == "":
         response['Content-disposition'] = "attachment; filename=%s.proj4" % rcode
 
-    elif format == '.js':
+    elif format == 'js':
         proj4 = ref.ExportToProj4().strip()
         if code:
             export = '%s("%s:%s","%s");' % ("proj4.defs", type_epsg, code, proj4)
-            ct = "application/javascript"
-            if request.args.get('download',1) == "":
+            response['Content-Type'] = "application/javascript"
+            if request.args.get('download', 1) == "":
               response['Content-disposition'] = "attachment; filename=%s.js" % rcode
 
-    elif format == '.html':
+    elif format == 'html':
       out = ref.ExportToPrettyWkt()
       export = highlight(out, WKTLexer(), HtmlFormatter(cssclass='syntax',nobackground=True))
-      response.content_type = 'text/html; charset=UTF-8'
+      response['Content-Type'] = 'text/html; charset=UTF-8'
       #return render_template('./templates/export', export = export, code=rcode)
 
-    elif format == '.xml':
+    elif format == 'xml':
       if ref.ExportToXML() != 7 :
         export = '<?xml version="1.0" encoding="UTF-8"?>\n %s' % (ref.ExportToXML().replace(">",' xmlns:gml="http://www.opengis.net/gml/3.2" xmlns:xlink="http://www.w3.org/1999/xlink">',1))
-        ct = "text/xml"
+        response['Content-Type'] = "text/xml"
         if request.args.get('download',1) == "":
           response['Content-disposition'] = "attachment; filename=%s.xml" % rcode
       else:
         export = "NOT AVAILABLE,PLEASE SELECT OTHER FORMAT"
-        ct = "text/plain"
+        response['Content-Type'] = "text/plain"
 
-    elif format == '.gml':
+    elif format == 'gml':
       export = '<?xml version="1.0" encoding="UTF-8"?>\n %s' % (xml)
-      ct = "text/xml"
+      response['Content-Type'] = "text/xml"
       if request.args.get('download',1) == "":
         response['Content-disposition'] = "attachment; filename=%s.gml" % rcode
 
-    elif format == '.map':
+    elif format == 'map':
       export = 'PROJECTION\n\t'+'\n\t'.join(['"'+l.lstrip('+')+'"' for l in ref.ExportToProj4().split()])+'\nEND' ### CSS: white-space: pre-wrap
       if request.args.get('download',1) == "":
         response['Content-disposition'] = "attachment; filename=%s.map" % rcode
 
-    elif format == '.mapnik':
+    elif format == 'mapnik':
       proj4 = ref.ExportToProj4().strip()
       export = '<?xml version="1.0" encoding="utf-8"?>\n<Map srs="%s">\n\t<Layer srs="%s">\n\t</Layer>\n</Map>' % (proj4,proj4)
-      ct = "application/xml"
+      response['Content-Type'] = "application/xml"
       if request.args.get('download',1) == "":
         response['Content-disposition'] = "attachment; filename=%s.xml" % rcode
 
-    elif format == '.mapserverpython':
+    elif format == 'mapserverpython':
       mswkt = ref.ExportToWkt()
       export = "wkt = '''%s'''\nm = mapObj('')\nm.setWKTProjection(mswkt)\nlyr = layerObj(m)\nlyr.setWKTProjection(mswkt)" % (mswkt) #from mapscript import mapObj,layerObj\n
       if request.args.get('download',1) == "":
         response['Content-disposition'] = "attachment; filename=%s.py" % rcode
 
-    elif format == '.mapnikpython':
+    elif format == 'mapnikpython':
       proj4 = ref.ExportToProj4().strip()
       export = "proj4 = '%s'\nm = Map(256,256,proj4)\nlyr = Layer('Name',proj4)" % (proj4) #from mapnik import Map, Layer\n
       if request.args.get('download',1) == "":
         response['Content-disposition'] = "attachment; filename=%s.py" % rcode
 
-    elif format == '.geoserver':
+    elif format == 'geoserver':
       export = "%s=%s" % (rcode,ref.ExportToWkt()) # put this custom projection in the 'user_projections' file inside the GEOSERVER_DATA_DIR '\n' # You can further work with your projections via the web admin tool.\n
       # we'll assume Geotools has this SRS...
 
-    elif format == '.sql':
+    elif format == 'sql':
       export = 'INSERT into spatial_ref_sys (srid, auth_name, auth_srid, proj4text, srtext) values ( %s, \'%s\', %s, \'%s\', \'%s\');' % (rcode, type_epsg, rcode, ref.ExportToProj4(), ref.ExportToWkt())
       if request.args.get('download',1) == "":
         response['Content-disposition'] = "attachment; filename=%s.sql" % rcode
 
-    elif format == '.ogcwkt':
+    elif format == 'ogcwkt':
       export = ref.ExportToWkt()
 
-  response['Content-Type'] = ct
-  return export
+  return export, 200, response
 
 @app.route('/trans')
 def trans():
