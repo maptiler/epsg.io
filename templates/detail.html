@@ -621,7 +621,7 @@
 
             </ul>
             <div class="syntax">
-              {{export_html}}
+              {{export_html|safe}}
             </div>
             <div class="syntax">
               <pre id="s_html_text">{{export['prettywkt']}}</pre>
@@ -640,7 +640,7 @@
 
             </ul>
             <div class="syntax">
-              <pre id="s_esriwkt_text">{{export['esriwkt']}}</pre>
+              <pre id="s_esriwkt_text">{{export['esriwkt']|safe}}</pre>
 
             </div>
           </div>
@@ -690,7 +690,7 @@
 
             </ul>
             <div class="syntax">
-              {{ogpxml_highlight}}
+              {{ogpxml_highlight|safe}}
             </div>
             <div class="syntax">
               <pre id="s_gml_text">{{ogpxml}}</pre>
@@ -712,7 +712,7 @@
 
             </ul>
             <div class="syntax">
-              {{xml_highlight}}
+              {{xml_highlight|safe}}
             </div>
             <div class="syntax">
               <pre id="s_xml_text">{{export['xml']}}</pre>
