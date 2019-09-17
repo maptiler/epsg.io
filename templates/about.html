@@ -1,44 +1,14 @@
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml"  lang="en" xml:lang="en">
-  <head>
-    <meta charset="utf-8"/>
-    <title>EPSG.io</title>
-    <meta content="width=device-width, initial-scale=1, maximum-scale=1" name="viewport" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="description" content="EPSG.io" />
-    <meta name="keywords" content="EPSG.io" />
-    <meta name="robots" content="ALL,FOLLOW" />
-    <link rel="stylesheet" href="/css/main.css" type="text/css" />
-    <link rel="shortcut icon" href="//epsg.io/favicon.ico" />
-    <script src="/js/index.js"></script>    
-    <script>
-      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-      })(window,document,'script','//www.google-analytics.com/analytics.js','__gaTracker');
+{% extends 'base.html' %}
 
-      __gaTracker('create', 'UA-47718358-1', 'epsg.io');
-      __gaTracker('send', 'pageview');
-    </script>
-  </head>
-
-  <body id="detailpage" data-role="page">
-    <div id="head">
-      <p id="logo-container">
-        <a href="/" title=""><span>Epsg.io</span>From MapTiler team</a>
-      </p>
-      <ul id="menu-top">
-        <li> <a href="/">Search</a></li>
-        <li><a href="/map" title="">Map</a></li>
-        <li><a href="/transform" title="">Transform</a></li>
-        <li><a href="/about" title="">About</a></li>
-      </ul>
-    </div>
-
-    <div id="layout-container">
-		<div id="detail-content-container">
-			<div class="detail-content-inner-wide">
-				<h1>EPSG.io: Find Coordinate Systems Worldwide</h1>
+{% block title %}EPSG.io: Coordinate Systems Worldwide{% endblock %}
+{% block body %}
+<body id="about" data-role="page">
+{% endblock %}
+{% block content %}
+    <div class="row">
+		<div class="container">
+			<div class="col9">
+				<h1> <b>EPSG.io: Find Coordinate Systems Worldwide</b> </h1>
 				<p></p>
 				<p>
 					<a href="//www.klokantech.com/">Klokan Technologies GmbH, Switzerland (www.klokantech.com/)</a> is pleased to announce a new open-source web service with a database of coordinates systems used in maps worldwide.
@@ -113,31 +83,31 @@
 
 				</p>
 			</div>
-			<div class="covered-area-container">
+			<div class="col3 center-mobile">
 				<p>
-					<span class="caption">Downloadable content</span>
+					<span class="gray-dark">Downloadable content</span>
 				</p>
 				<ul>
-				<a href="./press/announcement-epsg_io.zip">Download all content in a one .zip archive</a>
+				<a href="/static/press/announcement-epsg_io.zip">Download all content in a one .zip archive</a>
 				</ul>
 				<p></p>
 				<p>
-					<span class="caption">Pictures</span>
+					<span class="gray-dark">Pictures</span>
 				</p>
-				<ul>Logo
-				<a href="./press/epsg-banner-1400-560-2.png"><img src="./press/epsg-banner-1400-560-2.png" height="90" width="205"></a>
+				<ul><p>Logo</p>
+				<a href="/static/press/epsg-banner-1400-560-2.png"><img src="/static/press/epsg-banner-1400-560-2.png" height="90" width="205"></a>
 				</ul>
-				<ul>Main page
-				<a href="./press/main-page-pr.png"><img src="./press/main-page-pr.png" height="115" width="205"></a>
+				<ul><p>Main page</p>
+				<a href="/static/press/main-page-pr.png"><img src="/static/press/main-page-pr.png" height="115" width="205"></a>
 				</ul>
-				<ul>Result page
-				<a href="./press/results-pr.png"><img src="./press/results-pr.png" height="115" width="205"></a>
+				<ul><p>Result page</p>
+				<a href="/static/press/results-pr.png"><img src="/static/press/results-pr.png" height="115" width="205"></a>
 				</ul>
-				<ul>Detail page
-				<a href="./press/detail-pr.png"><img src="./press/detail-pr.png" height="115" width="205"></a>
+				<ul><p>Detail page</p>
+				<a href="/static/press/detail-pr.png"><img src="/static/press/detail-pr.png" height="115" width="205"></a>
 				</ul>
-				<ul>Map page
-				<a href="./press/map-pr.png"><img src="./press/map-pr.png" height="115" width="205"></a>
+				<ul><p>Map page</p>
+				<a href="/static/press/map-pr.png"><img src="/static/press/map-pr.png" height="115" width="205"></a>
 				</ul>
 			</div>
 		</div>
@@ -157,14 +127,7 @@
        (adsbygoogle = window.adsbygoogle || []).push({});
        </script>
 
-       <div id="foot">
-         <div id="maptiler-logo">
-           <a href="https://www.maptiler.com/" title=""><img src="/img/maptiler-logo.png" alt="" /></a>
-         <p id="copyright">Copyright &copy; 2018</p>
-       </div>
-       </div>
-     </div>
-
    </body>
 
  </html>
+ {% endblock %}

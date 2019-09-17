@@ -1,0 +1,182 @@
+{% extends 'base.html' %}
+
+  {% block title %}
+    {% if pagenum == 1 %}
+      {{title}}
+    {% else %}
+      {{title}}, page {{pagenum}}
+    {% endif %}
+  {% endblock %}
+
+{% block content %}
+    <div class="row">
+      <div class="container borderbottom-gray-light padt-4 padb-2">
+      <div class="col6">
+        <p class="small mart-0">
+          {% if deprecated == 1 %}
+            Found {{num_results}} deprecated records
+            {% if num_results>0 %}
+             and {{num_deprecated[0]}} <a href="{{num_deprecated[1]}}">valid</a> records
+             {% endif %}
+              (in {{elapsed}} seconds)
+          {% else %}
+            Found {{num_results}} valid records
+            {% if num_deprecated[0]>0 %}
+              and {{num_deprecated[0]}}  <a href="{{num_deprecated[1]}}">deprecated</a> records
+              {% endif %}
+              (in {{elapsed}} seconds)
+              {% endif %}
+        </p>
+      </div>
+      <div class="col6 center-mobile">
+        <form action="/" method="get">
+            <input class="width-75 width-mobile mar-mobile" type="search" name="q" value="{{query}}" class="result">
+            <input class="btn uppercase" type="submit" name="" value="search" />
+        </form>
+      </div>
+    </div>
+  </div>
+
+      <div class="row">
+        <div class="container">
+      <div class="col9">
+        <div id="results-container">
+          <ul class="results">
+            {% if num_results != 0 %}
+              {% for r in result %}
+                <li>
+                  <h4>
+                    <a href="/{{r['link']}}" title="">{{r['name']}}
+                    {% if 'alt_title' in r['r'] %}
+                      {% if r['r']['alt_title'] and r['r']['name']!= r['r']['alt_title'] %}
+                        - {{r['r']['alt_title']}}
+                        {% endif %}
+                        {% endif %}
+                    </a></h4>
+                  <p class="mart-0">
+                    <span class="gray">
+                    {{r['type_epsg']}}:{{r['short_code'][0]}}
+                    {% if r['r']['code_trans'] != 0 %}
+                      with transformation: {{r['r']['code_trans']}}
+                      {% endif %} </span>
+                      <br>
+                    {% if r['r']['area_trans'] %}
+                      {% if r['r']['accuracy'] == "" %}
+                        Area of use: {{r['area']}} (accuracy: unknown)
+                      {% else %}
+                        Area of use: {{r['area']}} (accuracy: {{r['r']['accuracy']}})
+                      {% endif %}
+                    {% else %}
+                      {% if r['area'] %}
+                        Area of use: {{r['area']}}
+                        {% endif %}
+                        {% endif %}
+                        <br>
+                    <a href="/transform#s_srs={{r['short_code'][0]}}">Transform&nbsp;coordinates</a> |
+                    <a href="/map#srs={{r['short_code'][0]}}">Get&nbsp;position&nbsp;on&nbsp;a&nbsp;map</a>
+                  </p>
+
+                </li>
+              {% endfor %}
+            {% elif num_kind != 0 %}
+              "{{kind_low[0]}}" is not in {{kind_low[1]}}, please select other kind
+              <li>
+              {% for i in [0,8,12,16,17,18,19,24,25,26] %}
+                {% if facets_list[i][4] != 0 %}
+                  <h4><a href="{{facets_list[i][5]}}" title="">{{facets_list[i][6]}}s ({{facets_list[i][4]}}) </a></h4>
+                  {% endif %}
+              {% endfor %}
+              </li>
+            {% else %}
+            <li id="noresults">No records found.</li>
+
+            {% endif %}
+            {% if deprecated != 1 and num_deprecated[0]>0 %}
+              <li><a href="{{num_deprecated[1]}}">Search deprecated ({{num_deprecated[0]}})</a></li>
+            {% elif deprecated == 1 and num_results>0 %}
+              <li><a href="{{num_deprecated[1]}}">Search valid ({{num_deprecated[0]}})</a></li>
+              {% endif %}
+          </ul>
+
+          <ul class="paginator">
+            {% if (pagenum-1) > 0 %}
+              <li class="prev"><a href="/?q={{query}}&amp;page={{pagenum-1}}" title="">Prev</a></li>
+              {% endif %}
+
+            {% for i in paging %}
+              {% if i == pagenum %}
+                <li><span>{{ i }}</span></li>
+              {% else %}
+                <li><a href="/?q={{query}}&amp;page={{i}}" title="">{{i}}</a></li>
+                {% endif %}
+            {% endfor %}
+
+            {% if (pagenum+1) in paging %}
+              <li class="next"><a href="/?q={{query}}&amp;page={{pagenum+1}}" title="">Next</a></li>
+            {% endif %}
+          </ul>
+        </div>
+
+        {% if num_results == 0 %}
+          {% if num_kind == 0 %}
+            <div id="results-map-container">
+              <h3 class="underline-style">Address search results</h3>
+              <div id="results-map"></div>
+              <ul class="results">
+              <li id="results-map-link">
+                <h4>{{kind_low[0]}}</h4>
+                Location is <b id="results-map-position"></b>
+                <br>
+              </li>
+              </ul>
+              <a id="results-map-btn" class="btn"href="/map">Coordinates on map</a>
+            </div>
+            {% endif %}
+            {% endif %}
+
+      </div>
+              <div class="col3">
+
+
+              <div id="side-container">
+                {% if show_alt_search %}
+                  <h3>Type of results</h3>
+                    <ul class="alt-search">
+                      {% set colored_head = 'False' %}
+                      {% for facets in facets_list %}
+                        {% if facets[4] != 0 %}
+                          {% if facets[2] == "" %}
+                            {% if selected_kind_index == i %}
+                              <li><h5><a class="colored" href="{{facets[5]}}">{{facets[3]}} ({{facets[4]}})</a></h4> </li>
+                              {% set colored_head = 'True' %}
+                            {% else %}
+                              <li><h5><a class="colored" href="{{facets[5]}}">{{facets[3]}} ({{facets[4]}})</a></h4> </li>
+                              {% set colored_head = 'False' %}
+                              {% endif %}
+                          {% else %}
+                            {% if selected_kind_index == i or colored_head == True %}
+                              <li>{{facets[2]}}<a class="colored" href="{{facets[5]}}">{{facets[3]}} ({{facets[4]}})</a></li>
+                            {% else %}
+                              <li>{{facets[2]}}<a href="{{facets[5]}}">{{facets[3]}} ({{facets[4]}})</a></li>
+                              {% endif %}
+                              {% endif %}
+                              {% endif %}
+                      {% endfor %}
+                    </ul>
+                    {% endif %}
+              </div>
+</div>
+   </div>
+ </div>
+
+      {% if num_results == 0 %}
+        {% if num_kind == 0 %}
+          <script src="/js/results.js"></script>
+          <script src="https://maps.googleapis.com/maps/api/js"></script>
+          <script>
+            results("{{kind_low[0]}}");
+          </script>
+          {% endif %}
+          {% endif %}
+
+      {% endblock %}

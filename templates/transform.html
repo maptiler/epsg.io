@@ -1,0 +1,103 @@
+{% extends 'base.html' %}
+
+  {% block title %}
+    Transform coordinates - GPS online convertor
+  {% endblock %}
+
+  {% block description %}
+    Transform your coordinates online easily with epsg.io
+  {% endblock %}
+
+  {% block keywords %}
+    transform, coordinates, projection, geographic, geodethic, srs, crs, epsg.io
+  {% endblock %}
+
+  {% block head %}
+    <script src="{{ url_for('static', filename='js/transform.js') }}"></script>
+  {% endblock %}
+
+  {% block body %}
+    <body id="transform">
+  {% endblock %}
+
+{% block content %}
+    <div class="row center-mobile">
+      <div class="container">
+        <div class="col10">
+          <h1> <b>Transform coordinates</b> </h1>
+          <h3>Online convertor for lat & long coordinates, geodetic datums and projected systems</h3>
+        </div>
+
+        <div class="col5">
+          <h4 class="borderbottom-gray-light padb-1">Input coordinate system</h4>
+          <span id="srs-in-name">Not selected</span>
+          <a href="#"n id="srs-in-change" class="btn-small  pad-1 pady-0">Change</a>
+          <br><br>
+
+          <h4 class="borderbottom-gray-light padb-1">Input coordinates <a href="#" style="display: none;">Batch</a></h4>
+          <form id="srs-in-form">
+
+            <label for="srs-in-x" data-value="X:" data-value-degrees="Longitude:">X:</label>
+            <input class="transform" type="text" id="srs-in-x" data-placeholder="Decimal value of X coordinate"
+                   data-placeholder-degrees="e.g. 8°33'10&quot;, 8.55, 8 33 10" />
+            <br>
+            <label for="srs-in-y" data-value="Y:" data-value-degrees="Latitude:">Y:</label>
+            <input  class="transform" type="text" id="srs-in-y" data-placeholder="Decimal value of Y coordinate"
+                   data-placeholder-degrees="e.g. 47°22'00&quot;, 47.36666, 47 22 00" />
+                   <input type="button" id="srs-in-format" class="btn-swap pad-0 small" style="display:none;" value="Format: D°M'S&quot;" />
+
+            <textarea name="batch-in" style="display: none;"></textarea>
+            <a id="srs-in-map-link" href="#" style="display:none;">Show position on a map</a>
+            <br>
+            <br>
+            <div id="srs-in-details" style="display:none;">
+              <span class="caption">Unit: </span><span id="srs-in-unit"></span><br />
+              <span class="caption">Area of use: </span><span id="srs-in-area"></span><br />
+              <span class="caption">Accuracy: </span><span id="srs-in-accuracy"></span>
+            </div>
+
+            <a id="srs-in-details-link" href="#" target="_blank">More details</a><br /><br />
+        </div>
+        <div class="col1 center pady-10 pad-mobile">
+          <input type="submit" value="Transform" class="btn mary-6 padx-2 marb-0 mar-mobile" /><br>
+          <input type="button" id="srs-swap" value="Swap &#x21C4;" class="btn-swap"/>
+
+        </div>
+        <div class="col5 offset1">
+          <h4 class="borderbottom-gray-light padb-1">Output coordinate system</h4>
+          <span id="srs-out-name">Not selected</span>
+          <a href="#"n id="srs-out-change" class="btn-small pad-1 pady-0">Change</a>
+          <br><br>
+
+          <h4 class="borderbottom-gray-light padb-1">Output coordinates</h4>
+
+          <label for="srs-out-x" data-value="X:" data-value-degrees="Longitude:">X:</label>
+          <input class="transform" type="text" id="srs-out-x" data-placeholder="" data-placeholder-degrees="" readonly="readonly" />
+          <br />
+          <label for="srs-out-y" data-value="Y:" data-value-degrees="Latitude:">Y:</label>
+          <input class="transform" type="text" id="srs-out-y" data-placeholder="" data-placeholder-degrees="" readonly="readonly" />
+          <input type="button" id="srs-out-format" class="btn-swap pad-0 small" style="display:none;" value="Format: D°M'S&quot;" />
+
+          <textarea name="batch-out" style="display: none;"></textarea>
+          <br>
+          <a id="srs-out-map-link" href="#" style="display:none;">Show position on a map</a>
+
+        </form>
+
+          <div id="srs-out-details" style="display:none;">
+            <span class="caption">Unit: </span><span id="srs-out-unit"></span><br />
+            <span class="caption">Area of use: </span><span id="srs-out-area"></span><br />
+            <span class="caption">Accuracy: </span><span id="srs-out-accuracy"></span>
+          </div>
+          <br>
+          <a id="srs-out-details-link" href="#" target="_blank">More details</a> <br>
+
+        </div>
+      </div>
+    </div>
+    </div>
+
+    <script type="text/javascript">
+      new TransformPage;
+    </script>
+    {% endblock %}

@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block title %}EPSG.io: Coordinate Systems Worldwide{% endblock %}
+
+{% block content %}
+
+   <div class="row">
+     <div class="container pady-10">
+       <div class="col10 offset1">
+      {% if error == 404 %}
+        <h1>Sorry, that page cannot be found.</h1>
+      {% else %}
+        <h1>Something went wrong.</h1>
+        <p>{{error}}</p>
+      {% endif %}
+        <p>Try to searching below or go to <a href="//epsg.io">epsg.io</a></p>
+         <form action="/" method="get">
+           <p><input class="width-50" id="q" name="q" type="search" placeholder="Country, code or name of a coordinate system" /> <input class="btn" type="submit" name="" value="search" /></p>
+         </form>
+     </div>
+   </div>
+ </div>
+
+    {% endblock %}
+
+    {% block footer_type %}
+    <div id="footer" class="fixed-footer">
+    {% endblock %}
