@@ -50,7 +50,7 @@ f_cs_index = 19
 f_unit_index = 26
 
 from flask import Flask, redirect, render_template, url_for, request, Response, send_from_directory
-from flask_debugtoolbar import DebugToolbarExtension
+# from flask_debugtoolbar import DebugToolbarExtension
 
 import bottle
 from bottle import response, error
@@ -78,9 +78,9 @@ import csv
 import sqlite3 as sqlite
 
 app = Flask(__name__)
-app.debug = True
-app.config['SECRET_KEY'] = '<replace with a secret key>'
-toolbar = DebugToolbarExtension(app)
+# app.debug = True
+# app.config['SECRET_KEY'] = '<replace with a secret key>'
+# toolbar = DebugToolbarExtension(app)
 
 re_kind = re.compile(r'kind:([\*\w-]+)')
 re_deprecated = re.compile(r'deprecated:\d')
@@ -1717,4 +1717,4 @@ def opensearch():
 
 if __name__ == "__main__":
   #run(host='0.0.0.0', port=82)
-  app.run(host='0.0.0.0', port=8080, threaded=False, processes=1, debug=app.debug)
+  app.run(host='0.0.0.0', port=8080, threaded=False, processes=4)
