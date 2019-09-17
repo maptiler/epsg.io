@@ -49,11 +49,11 @@ f_datum_index = 12
 f_cs_index = 19
 f_unit_index = 26
 
-from flask import Flask, redirect, render_template, url_for, request, Response
+from flask import Flask, redirect, render_template, url_for, request, Response, send_from_directory
 from flask_debugtoolbar import DebugToolbarExtension
 
 import bottle
-from bottle import response, static_file, error
+from bottle import response, error
 import urllib2
 import urllib
 import urlparse
@@ -1710,33 +1710,10 @@ def about():
 def gsoc():
   return render_template('gsoc.html', version=VERSION)
 
-@app.route('/press/<filename>')
-def static1(filename):
-    return static_file(filename, root='./press/')
-
-@app.route('/css/main.css')
-def static2():
-    return static_file("main.css", root='./css/')
-
 @app.route('/opensearch.xml')
-def static3():
-    return static_file('opensearch.xml', root='./')
+def opensearch():
+    return send_from_directory('.', 'opensearch.xml')
 
-@app.route('/fonts/<filename>')
-def static4(filename):
-    return static_file(filename, root='./fonts/')
-
-@app.route('/img/<filename>')
-def static5(filename):
-    return static_file(filename, root='./img/')
-
-@app.route('/js/<filename>')
-def static6(filename):
-    return static_file(filename, root='./js/')
-
-@app.route('/favicon.ico')
-def static7():
-    return static_file('favicon.ico', root='./img/')
 
 if __name__ == "__main__":
   #run(host='0.0.0.0', port=82)
