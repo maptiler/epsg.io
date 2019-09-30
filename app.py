@@ -1705,6 +1705,10 @@ def about():
 def gsoc():
   return render_template('gsoc.html', version=VERSION)
 
+@app.route('/favicon.ico')
+def favicon():
+    return send_from_directory('static', 'favicon.ico')
+
 @app.route('/opensearch.xml')
 def opensearch():
     return send_from_directory('.', 'opensearch.xml')
