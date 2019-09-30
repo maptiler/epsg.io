@@ -1337,9 +1337,8 @@ def crs_text(id, format):
 
 @app.route('/trans')
 def trans():
-
-  if (len(request.GET.keys()) == 0):
-    return redirect('/transform')
+  if (len(request.args) == 0):
+    return redirect(url_for('transform'))
 
   tcode_trans_values = None
   scode_trans_values = None
@@ -1490,10 +1489,10 @@ def trans():
 			export["y"] = trans_lon
 			export["z"] = trans_h
     json_str = export
-    response['Content-Type'] = "text/json"
+    response = {'Content-Type': 'text/plain'}
     if callback != str(0):
-        json_str = str(callback) + "(" + json.dumps(json_str) + ")"
-        response['Content-Type'] = "application/javascript"
+        json_str = str(callback) + '(' + json.dumps(json_str) + ')'
+        response['Content-Type'] = 'application/javascript'
         return json_str
 
     return json.dumps(json_str)
