@@ -18,6 +18,7 @@
 
 NAME="epsgio"
 PROJECT=/var/www/epsg.io
+FLASK_APP=$PROJECT/app.py
 VIRTUALENV=$PROJECT/venv
 APP=app:app
 PORT=8000

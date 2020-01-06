@@ -7,14 +7,12 @@ RUN apt-get -qq update \
 && curl https://bootstrap.pypa.io/get-pip.py | python \
 && mkdir -p /var/www
 
+COPY requirements.txt /tmp/requirements.txt
+RUN pip install -q -r /tmp/requirements.txt
+
 COPY . /var/www/epsg.io
+VOLUME /var/www/epsg.io
 WORKDIR /var/www/epsg.io
 
-VOLUME /var/www/epsg.io
-
-RUN pip install -q -r requirements.txt
-
-EXPOSE 8080
-
-CMD gunicorn --workers 4 --bind 0.0.0.0:8080 --log-level info --reload app:app
-# CMD python app.py # dev
+EXPOSE 8000
+ENV FLASK_APP=/var/www/epsg.io/app.py

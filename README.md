@@ -9,8 +9,13 @@ $ pip install -r requirements.txt
 ```
 Copy the content of "index" directory from the .zip from the latest project release.
 
-Start the server via:
-`python app.py`
+Start the server with:
+
+```
+$ export FLASK_APP=app.py
+$ export FLASK_ENV=development
+$ flask run
+```
 
 or use the gunicorn startup scripts (`./epsgio start`)
 
@@ -54,7 +59,7 @@ Other are codes with suffix like:
 ## API for results
 
 For result page exist a export in JSON and JSONP
-for example 
+for example
 
 [http://epsg.io/?q=czech&format=json&trans=1&callback=jsonpFunction]
 
@@ -62,7 +67,7 @@ where:
   * `format=json` for export in json **(obligatory)**
   * `trans=1` for more detailed transformation in each coordinate reference system (optional)
   * `callback=jsonpFunction` for jsonp where "jsonpFunction" is name of Javascript function (optional)
-  
+
 ## API for /trans
 
 ### For one point
@@ -107,7 +112,7 @@ Where
  VERTDAT|Vertical datums|LENUNIT|Length unit
  ENGDAT|Engineering datums|TIMEUNIT|Time unit
  GEODDAT|Geodetic datums||
- 
+
 
  * `deprecated:` 0(default), 1
  * `code:` number of EPSG (5514, 4326,...)

@@ -49,11 +49,9 @@ f_datum_index = 12
 f_cs_index = 19
 f_unit_index = 26
 
-from flask import Flask, redirect, render_template, url_for, request, Response, send_from_directory
+from flask import Flask, jsonify, redirect, render_template, url_for, request, Response, send_from_directory, make_response
 # from flask_debugtoolbar import DebugToolbarExtension
 
-import bottle
-from bottle import response, error
 import urllib2
 import urllib
 import urlparse
@@ -1142,12 +1140,13 @@ def index4(id, format='gml'):
     cur.execute('SELECT id,xml FROM gml where urn = ?', (urn,))
     gml = cur.fetchall()
     for id,xml in gml:
-      xml = '<?xml version="1.0" encoding="UTF-8"?>\n %s' % xml
-      response['Content-Type'] = "text/xml"
-
+      response = make_response('<?xml version="1.0" encoding="UTF-8"?>\n %s' % xml)
+      response.headers['Content-Type'] = "text/xml"
       if request.args.get('download',1) == "":
-        response['Content-disposition'] = "attachment; filename=%s.gml" % id
-  return xml
+        response.headers['Content-Disposition'] = "attachment; filename=%s.gml" % id
+      return response
+  else:
+    return make_response(xml)
 
 # Returns definition of projection as text or xml file
 @app.route('/<id>.<format>') # :re:[\d]+(-[\d]+)?><format:re:[\/\.]+[\w]+
@@ -1238,12 +1237,12 @@ def crs_text(id, format):
       return redirect("/map#srs=" + rcode);
 
     ref.ImportFromWkt(wkt)
-    response = {
+    headers = {
       'Content-disposition': '',
       'Content-Type': 'text/plain'
     }
     if request.args.get('download',1) == "":
-      response['Content-disposition'] = "attachment; filename=%s.prj" % rcode
+      headers['Content-disposition'] = "attachment; filename=%s.prj" % rcode
 
     if format == "esriwkt":
       if rcode == "3857":
@@ -1251,7 +1250,7 @@ def crs_text(id, format):
         ref.SetFromUserInput(wkt_3857)
       ref.MorphToESRI()
       export = ref.ExportToWkt()
-      response['Content-Type'] = "text/x-esriwkt"
+      headers['Content-Type'] = "text/x-esriwkt"
 
     elif format == "prettywkt":
       export = ref.ExportToPrettyWkt()
@@ -1265,61 +1264,61 @@ def crs_text(id, format):
     elif format == "proj4":
       export = ref.ExportToProj4()
       if request.args.get('download', 1) == "":
-        response['Content-disposition'] = "attachment; filename=%s.proj4" % rcode
+        headers['Content-disposition'] = "attachment; filename=%s.proj4" % rcode
 
     elif format == 'js':
         proj4 = ref.ExportToProj4().strip()
         if code:
             export = '%s("%s:%s","%s");' % ("proj4.defs", type_epsg, code, proj4)
-            response['Content-Type'] = "application/javascript"
+            headers['Content-Type'] = "application/javascript"
             if request.args.get('download', 1) == "":
-              response['Content-disposition'] = "attachment; filename=%s.js" % rcode
+              headers['Content-disposition'] = "attachment; filename=%s.js" % rcode
 
     elif format == 'html':
       out = ref.ExportToPrettyWkt()
       export = highlight(out, WKTLexer(), HtmlFormatter(cssclass='syntax',nobackground=True))
-      response['Content-Type'] = 'text/html; charset=UTF-8'
+      headers['Content-Type'] = 'text/html; charset=UTF-8'
       #return render_template('./templates/export', export = export, code=rcode)
 
     elif format == 'xml':
       if ref.ExportToXML() != 7 :
         export = '<?xml version="1.0" encoding="UTF-8"?>\n %s' % (ref.ExportToXML().replace(">",' xmlns:gml="http://www.opengis.net/gml/3.2" xmlns:xlink="http://www.w3.org/1999/xlink">',1))
-        response['Content-Type'] = "text/xml"
+        headers['Content-Type'] = "text/xml"
         if request.args.get('download',1) == "":
-          response['Content-disposition'] = "attachment; filename=%s.xml" % rcode
+          headers['Content-disposition'] = "attachment; filename=%s.xml" % rcode
       else:
         export = "NOT AVAILABLE,PLEASE SELECT OTHER FORMAT"
-        response['Content-Type'] = "text/plain"
+        headers['Content-Type'] = "text/plain"
 
     elif format == 'gml':
       export = '<?xml version="1.0" encoding="UTF-8"?>\n %s' % (xml)
-      response['Content-Type'] = "text/xml"
+      headers['Content-Type'] = "text/xml"
       if request.args.get('download',1) == "":
-        response['Content-disposition'] = "attachment; filename=%s.gml" % rcode
+        headers['Content-disposition'] = "attachment; filename=%s.gml" % rcode
 
     elif format == 'map':
       export = 'PROJECTION\n\t'+'\n\t'.join(['"'+l.lstrip('+')+'"' for l in ref.ExportToProj4().split()])+'\nEND' ### CSS: white-space: pre-wrap
       if request.args.get('download',1) == "":
-        response['Content-disposition'] = "attachment; filename=%s.map" % rcode
+        headers['Content-disposition'] = "attachment; filename=%s.map" % rcode
 
     elif format == 'mapnik':
       proj4 = ref.ExportToProj4().strip()
       export = '<?xml version="1.0" encoding="utf-8"?>\n<Map srs="%s">\n\t<Layer srs="%s">\n\t</Layer>\n</Map>' % (proj4,proj4)
-      response['Content-Type'] = "application/xml"
+      headers['Content-Type'] = "application/xml"
       if request.args.get('download',1) == "":
-        response['Content-disposition'] = "attachment; filename=%s.xml" % rcode
+        headers['Content-disposition'] = "attachment; filename=%s.xml" % rcode
 
     elif format == 'mapserverpython':
       mswkt = ref.ExportToWkt()
       export = "wkt = '''%s'''\nm = mapObj('')\nm.setWKTProjection(mswkt)\nlyr = layerObj(m)\nlyr.setWKTProjection(mswkt)" % (mswkt) #from mapscript import mapObj,layerObj\n
       if request.args.get('download',1) == "":
-        response['Content-disposition'] = "attachment; filename=%s.py" % rcode
+        headers['Content-disposition'] = "attachment; filename=%s.py" % rcode
 
     elif format == 'mapnikpython':
       proj4 = ref.ExportToProj4().strip()
       export = "proj4 = '%s'\nm = Map(256,256,proj4)\nlyr = Layer('Name',proj4)" % (proj4) #from mapnik import Map, Layer\n
       if request.args.get('download',1) == "":
-        response['Content-disposition'] = "attachment; filename=%s.py" % rcode
+        headers['Content-disposition'] = "attachment; filename=%s.py" % rcode
 
     elif format == 'geoserver':
       export = "%s=%s" % (rcode,ref.ExportToWkt()) # put this custom projection in the 'user_projections' file inside the GEOSERVER_DATA_DIR '\n' # You can further work with your projections via the web admin tool.\n
@@ -1328,12 +1327,14 @@ def crs_text(id, format):
     elif format == 'sql':
       export = 'INSERT into spatial_ref_sys (srid, auth_name, auth_srid, proj4text, srtext) values ( %s, \'%s\', %s, \'%s\', \'%s\');' % (rcode, type_epsg, rcode, ref.ExportToProj4(), ref.ExportToWkt())
       if request.args.get('download',1) == "":
-        response['Content-disposition'] = "attachment; filename=%s.sql" % rcode
+        headers['Content-disposition'] = "attachment; filename=%s.sql" % rcode
 
     elif format == 'ogcwkt':
       export = ref.ExportToWkt()
 
-  return export, 200, response
+  response = make_response(export)
+  response.headers.extend(headers)
+  return response
 
 @app.route('/trans')
 def trans():
@@ -1488,22 +1489,21 @@ def trans():
 			export["x"] = trans_lat
 			export["y"] = trans_lon
 			export["z"] = trans_h
-    json_str = export
-    response = {'Content-Type': 'text/plain'}
+
     if callback != str(0):
-        json_str = str(callback) + '(' + json.dumps(json_str) + ')'
-        response['Content-Type'] = 'application/javascript'
-        return json_str
+      response = make_response(str(callback) + '(' + json.dumps(export) + ')')
+      response.headers['Content-Type'] = 'application/javascript'
+      return response
+    else:
+      return jsonify(export)
 
-    return json.dumps(json_str)
-
-@error(code=404)
+@app.errorhandler(404)
 def error404(error):
   error = 404
   try_url = ""
   return render_template('error.html', error=error, try_url=try_url, version=VERSION)
 
-@error(code=500)
+@app.errorhandler(500)
 def error500(error):
   error = "500: Internal Server Error"
   try_url = ""
@@ -1518,9 +1518,9 @@ def index6(id,format):
     gml = cur.fetchall()
     if len(gml)!=0:
       for id,xml in gml:
-        export = '<?xml version="1.0" encoding="UTF-8"?>\n %s' % (xml)
-        response['Content-Type'] = "text/xml"
-        return export
+        response = make_response('<?xml version="1.0" encoding="UTF-8"?>\n %s' % xml)
+        response.headers['Content-Type'] = "text/xml"
+        return response
     else:
       error = 404
       try_url = ""
@@ -1625,9 +1625,9 @@ def index7(id,format):
     cur.execute('SELECT id,xml FROM gml where id = ?', (id,))
     gml = cur.fetchall()
     for id,xml in gml:
-      export = '<?xml version="1.0" encoding="UTF-8"?>\n %s' % (xml)
-      response['Content-Type'] = "text/xml"
-      return export
+      response = make_response('<?xml version="1.0" encoding="UTF-8"?>\n %s' % xml)
+      response.headers['Content-Type'] = "text/xml"
+      return response
   cur.execute('SELECT id,urn,xml,deprecated,name FROM gml where id = ?', (id,))
   gml = cur.fetchall()
   if len(gml) == 0:
@@ -1712,8 +1712,3 @@ def favicon():
 @app.route('/opensearch.xml')
 def opensearch():
     return send_from_directory('.', 'opensearch.xml')
-
-
-if __name__ == "__main__":
-  #run(host='0.0.0.0', port=82)
-  app.run(host='0.0.0.0', port=8080, threaded=False, processes=4)
