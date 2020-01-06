@@ -52,8 +52,6 @@ f_unit_index = 26
 from flask import Flask, redirect, render_template, url_for, request, Response, send_from_directory
 # from flask_debugtoolbar import DebugToolbarExtension
 
-import bottle
-from bottle import response, error
 import urllib2
 import urllib
 import urlparse
@@ -1497,13 +1495,13 @@ def trans():
 
     return json.dumps(json_str)
 
-@error(code=404)
+@app.errorhandler(404)
 def error404(error):
   error = 404
   try_url = ""
   return render_template('error.html', error=error, try_url=try_url, version=VERSION)
 
-@error(code=500)
+@app.errorhandler(500)
 def error500(error):
   error = "500: Internal Server Error"
   try_url = ""
