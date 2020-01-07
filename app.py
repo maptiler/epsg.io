@@ -629,16 +629,20 @@ def index2(id):
             default = False
             if int(r['code_trans'])== int(hit['code']):
               default = True
+            try:
+              values = tuple(map(float, hit['description'][1:-1].split(',')))
+            except:
+              values = hit['description']
 
-            # Count parameters of transformation
-            values = hit['description'][1:-1].split(',')
-            num_param = 0
-            for val in values:
-              if float(val.strip()) > 0:
-                num_param = num_param + 1
-            if num_param > 3:
-                num_param = 7
-
+            num_param = ""
+            if values[3:7] == (0,0,0,0) or values == (0,0,0,0,0,0,0):
+              num_param = 3
+            elif type(values) != tuple and str(values) != "0":
+              num_param = 'grid'
+            elif str(values) == '0':
+              num_param = ""
+            else:
+              num_param = 7
             area_trans_trans = hit['area']
             if item['area'].startswith("World:"):
               area_trans_trans = "World"
