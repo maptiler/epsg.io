@@ -76,9 +76,18 @@ import csv
 import sqlite3 as sqlite
 
 app = Flask(__name__)
-# app.debug = True
 # app.config['SECRET_KEY'] = '<replace with a secret key>'
 # toolbar = DebugToolbarExtension(app)
+
+if os.environ.get('SENTRY_DSN'):
+  import sentry_sdk
+  sentry_sdk.init(
+    dsn=os.environ['SENTRY_DSN'],
+    release=os.environ.get('SENTRY_RELEASE'),
+    environment=os.environ.get('SENTRY_ENVIRONMENT'),
+    server_name=os.environ.get('SENTRY_SERVER_NAME'),
+    send_default_pii=True,
+  )
 
 re_kind = re.compile(r'kind:([\*\w-]+)')
 re_deprecated = re.compile(r'deprecated:\d')

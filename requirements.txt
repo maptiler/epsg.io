@@ -8,3 +8,4 @@ wsgiref==0.1.2
 Flask==1.1.1
 Flask-DebugToolbar==0.10.1
 Jinja2==2.10.1
+sentry-sdk==0.13.5
