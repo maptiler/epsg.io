@@ -1,0 +1,13 @@
+version: "2"
+
+services:
+  app:
+    build: .
+    command: flask run --host 0.0.0.0 --port 8000
+    ports:
+    - "8000:8000"
+    volumes:
+    - ./:/var/www/epsg.io
+    environment:
+      FLASK_DEBUG: "1"
+      FLASK_ENV: "development"
