@@ -2,3 +2,4 @@
 venv
 epsgio.log
 epsgio.pid
+/static/css/base.min.css.map
