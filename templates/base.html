@@ -26,8 +26,8 @@
     <link rel="search" href="{{ url_for('static', filename='opensearch.xml') }}" title="EPSG.io" type="application/opensearchdescription+xml"/>
 
     <link href="{{ url_for('static', filename='css/base.min.css') }}" rel="stylesheet" />
+    <script src="{{ url_for('static', filename='js/clipboard.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/index.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/ZeroClipboard.min.js') }}"></script>
 
     <title>{% if self.htmltitle() %}{% block htmltitle %}{% endblock %}{% else %}{% block title %}{% endblock %}{% endif %}</title>
     {% block head %}{% endblock %}

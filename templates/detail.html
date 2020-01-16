@@ -30,10 +30,6 @@
     {% endif %}
 {% endblock %}
 
-{% block head %}
-<script src="{{ url_for('static', filename='js/ZeroClipboard.min.js') }}"></script>
-{% endblock %}
-
 {% block body %}
 <body id="detailpage" data-role="page">
 {% endblock %}
@@ -114,8 +110,6 @@
 
               {% elif r['deprecated'] == 0 %}
               <li>
-
-
                 <a href="/{{r['link']}}" title="{{r['trans_remarks']}}">
                   <span class="caption">{{r['area_trans_trans']}}</span>, accuracy&nbsp;{{r['accuracy']}}&nbsp;m, code&nbsp;{{r['code_trans']}}
                   {% if r['default'] == True %}
@@ -125,13 +119,11 @@
                   [{{r['num_param']}}]
                   {% endif %}
                 </a>
-
               </li>
               {% endif %}
               {% endfor %}
 
               {% if deprecated_available == 1 %}
-
 
                 <a href="#" id="trans_deprecated_link">Show deprecated transformations</a>
                 <div id="trans_deprecated">
@@ -157,7 +149,6 @@
                       {% if r['num_param'] %}
                       [{{r['num_param']}}]
                       {% endif %}
-
                     </a>
                   </li>
                   {% endif %}
@@ -176,9 +167,7 @@
       {% if 'alt_description' in item %}
       {% if item['alt_description'] %}
       {% if wkt %}
-      <p>
-        <div id="description-message">{{item['alt_description']|safe}}</div>
-      </p>
+        <div id="description-message"><p>{{item['alt_description']|safe}}</p></div>
       {% else %}
       {% if export_html %}
       <div id="description-message">{{export_html}} </div>
@@ -211,6 +200,7 @@
         <h2>
           {{r['area_trans_trans']}}
         </h2>
+        <p>
         {% if r['code_trans'] != 0 %}
         code <a href="/{{r['code_trans']}}">{{r['code_trans']}}</a>
         {% endif %}
@@ -615,10 +605,9 @@
             <p>Definition: Well Known Text (WKT)</p>
             <ul>
               <li><a href="{{url_format}}.prettywkt">Open</a></li>
-              <li><a id="s_html_copyUrl" class="zeroclipboard" data-clipboard-text="//epsg.io{{url_format}}.prettywkt" href="#">Copy URL</a></li>
-              <li><a id="s_html_copyText" class="zeroclipboard" data-clipboard-target="s_html_text" href="#">Copy TEXT</a></li>
+              <li><a id="s_html_copyUrl" class="clipboard" data-clipboard-text="//epsg.io{{url_format}}.prettywkt">Copy URL</a></li>
+              <li><a id="s_html_copyText" class="clipboard" data-clipboard-target="#s_html_text">Copy TEXT</a></li>
               <li><a href="{{url_format}}.prettywkt?download">Download</a></li>
-
             </ul>
             <div class="syntax">
               {{export_html|safe}}
@@ -634,10 +623,9 @@
             <p>Definition: ESRI WKT</p>
             <ul>
               <li><a href="{{url_format}}.esriwkt">Open</a></li>
-              <li><a id="s_esriwkt_copyUrl" class="zeroclipboard" data-clipboard-text="//epsg.io{{url_format}}.esriwkt" href="#">Copy URL</a></li>
-              <li><a id="s_esriwkt_copyText" class="zeroclipboard" data-clipboard-target="s_esriwkt_text" href="#">Copy TEXT</a></li>
+              <li><a id="s_esriwkt_copyUrl" class="clipboard" data-clipboard-text="//epsg.io{{url_format}}.esriwkt">Copy URL</a></li>
+              <li><a id="s_esriwkt_copyText" class="clipboard" data-clipboard-target="#s_esriwkt_text">Copy TEXT</a></li>
               <li><a href="{{url_format}}.esriwkt?download">Download</a></li>
-
             </ul>
             <div class="syntax">
               <pre id="s_esriwkt_text">{{export['esriwkt']|safe}}</pre>
@@ -651,8 +639,8 @@
             <p>Definition: PROJ.4</p>
             <ul>
               <li><a href="{{url_format}}.proj4">Open</a></li>
-              <li><a id="s_proj4_copyUrl" class="zeroclipboard" data-clipboard-text="//epsg.io{{url_format}}.proj4" href="#">Copy URL</a></li>
-              <li><a id="s_proj4_copyText" class="zeroclipboard" data-clipboard-target="s_proj4_text" href="#">Copy TEXT</a></li>
+              <li><a id="s_proj4_copyUrl" class="clipboard" data-clipboard-text="//epsg.io{{url_format}}.proj4">Copy URL</a></li>
+              <li><a id="s_proj4_copyText" class="clipboard" data-clipboard-target="#s_proj4_text">Copy TEXT</a></li>
               <li><a href="{{url_format}}.proj4?download">Download</a></li>
 
             </ul>
@@ -667,8 +655,8 @@
             <p>Definition: JavaScript (Proj4js) </p>
             <ul>
               <li><a href="{{url_format}}.js">Open</a></li>
-              <li><a id="s_proj4js_copyUrl" class="zeroclipboard" data-clipboard-text="//epsg.io{{url_format}}.js" href="#">Copy URL</a></li>
-              <li><a id="s_proj4js_copyText" class="zeroclipboard" data-clipboard-target="s_proj4js_text" href="#">Copy TEXT</a></li>
+              <li><a id="s_proj4js_copyUrl" class="clipboard" data-clipboard-text="//epsg.io{{url_format}}.js">Copy URL</a></li>
+              <li><a id="s_proj4js_copyText" class="clipboard" data-clipboard-target="#s_proj4js_text">Copy TEXT</a></li>
               <li><a href="{{url_format}}.js?download">Download</a></li>
 
             </ul>
@@ -684,8 +672,8 @@
             <p>Definition: OGC GML</p>
             <ul>
               <li><a href="{{url_format}}.gml">Open</a></li>
-              <li><a id="s_gml_copyUrl" class="zeroclipboard" data-clipboard-text="//epsg.io{{url_format}}.gml" href="#">Copy URL</a></li>
-              <li><a id="s_gml_copyText" class="zeroclipboard" data-clipboard-target="s_gml_text" href="#">Copy TEXT</a></li>
+              <li><a id="s_gml_copyUrl" class="clipboard" data-clipboard-text="//epsg.io{{url_format}}.gml">Copy URL</a></li>
+              <li><a id="s_gml_copyText" class="clipboard" data-clipboard-target="#s_gml_text">Copy TEXT</a></li>
               <li><a href="{{url_format}}.gml?download">Download</a></li>
 
             </ul>
@@ -706,8 +694,8 @@
             <p>Definition: XML</p>
             <ul>
               <li><a href="{{url_format}}.xml">Open</a></li>
-              <li><a id="s_xml_copyUrl" class="zeroclipboard" data-clipboard-text="//epsg.io{{url_format}}.xml" href="#">Copy URL</a></li>
-              <li><a id="s_xml_copyText" class="zeroclipboard" data-clipboard-target="s_xml_text" href="#">Copy TEXT</a></li>
+              <li><a id="s_xml_copyUrl" class="clipboard" data-clipboard-text="//epsg.io{{url_format}}.xml">Copy URL</a></li>
+              <li><a id="s_xml_copyText" class="clipboard" data-clipboard-target="#s_xml_text">Copy TEXT</a></li>
               <li><a href="{{url_format}}.xml?download">Download</a></li>
 
             </ul>
@@ -727,8 +715,8 @@
             <p>Definition: GeoServer</p>
             <ul>
               <li><a href="{{url_format}}.geoserver">Open</a></li>
-              <li><a id="s_geoserver_copyUrl" class="zeroclipboard" data-clipboard-text="//epsg.io{{url_format}}.geoserver" href="#">Copy URL</a></li>
-              <li><a id="s_geoserver_copyText" class="zeroclipboard" data-clipboard-target="s_geoserver_text" href="#">Copy TEXT</a></li>
+              <li><a id="s_geoserver_copyUrl" class="clipboard" data-clipboard-text="//epsg.io{{url_format}}.geoserver">Copy URL</a></li>
+              <li><a id="s_geoserver_copyText" class="clipboard" data-clipboard-target="#s_geoserver_text">Copy TEXT</a></li>
               <li><a href="{{url_format}}.geoserver?download">Download</a></li>
 
             </ul>
@@ -744,8 +732,8 @@
             <p>Definition: MapServer - MAPfile</p>
             <ul>
               <li><a href="{{url_format}}.mapfile">Open</a></li>
-              <li><a id="s_mapfile_copyUrl" class="zeroclipboard" data-clipboard-text="//epsg.io{{url_format}}.mapfile" href="#">Copy URL</a></li>
-              <li><a id="s_mapfile_copyText" class="zeroclipboard" data-clipboard-target="s_mapfile_text" href="#">Copy TEXT</a></li>
+              <li><a id="s_mapfile_copyUrl" class="clipboard" data-clipboard-text="//epsg.io{{url_format}}.mapfile">Copy URL</a></li>
+              <li><a id="s_mapfile_copyText" class="clipboard" data-clipboard-target="#s_mapfile_text">Copy TEXT</a></li>
               <li><a href="{{url_format}}.mapfile?download">Download</a></li>
 
             </ul>
@@ -761,8 +749,8 @@
           <p>Definition: MapServer - Python</p>
           <ul>
             <li><a href="{{url_format}}.mapserverpython">Open</a></li>
-            <li><a id="s_mapserverpython_copyUrl" class="zeroclipboard" data-clipboard-text="//epsg.io{{url_format}}.mapserverpython" href="#">Copy URL</a></li>
-            <li><a id="s_mapserverpython_copyText" class="zeroclipboard" data-clipboard-target="s_mapserverpython_text" href="#">Copy TEXT</a></li>
+            <li><a id="s_mapserverpython_copyUrl" class="clipboard" data-clipboard-text="//epsg.io{{url_format}}.mapserverpython">Copy URL</a></li>
+            <li><a id="s_mapserverpython_copyText" class="clipboard" data-clipboard-target="#s_mapserverpython_text">Copy TEXT</a></li>
             <li><a href="{{url_format}}.mapserverpython?download">Download</a></li>
 
           </ul>
@@ -778,8 +766,8 @@
             <p>Definition: Mapnik</p>
             <ul>
               <li><a href="{{url_format}}.mapnik">Open in new page</a></li>
-              <li><a id="s_mapnik_copyUrl" class="zeroclipboard" data-clipboard-text="//epsg.io{{url_format}}.mapnik" href="#">Copy URL</a></li>
-              <li><a id="s_mapnik_copyText" class="zeroclipboard" data-clipboard-target="s_mapnik_text" href="#">Copy TEXT</a></li>
+              <li><a id="s_mapnik_copyUrl" class="clipboard" data-clipboard-text="//epsg.io{{url_format}}.mapnik">Copy URL</a></li>
+              <li><a id="s_mapnik_copyText" class="clipboard" data-clipboard-target="#s_mapnik_text">Copy TEXT</a></li>
               <li><a href="{{url_format}}.mapnik?download">Download</a></li>
 
             </ul>
@@ -793,8 +781,8 @@
           <p>Definition: Mapnik - Python</p>
           <ul>
             <li><a href="{{url_format}}.mapnikpython">Open</a></li>
-            <li><a id="s_mapnikpython_copyUrl" class="zeroclipboard" data-clipboard-text="//epsg.io{{url_format}}.mapnikpython" href="#">Copy URL</a></li>
-            <li><a id="s_mapnikpython_copyText" class="zeroclipboard" data-clipboard-target="s_mapnikpython_text" href="#">Copy TEXT</a></li>
+            <li><a id="s_mapnikpython_copyUrl" class="clipboard" data-clipboard-text="//epsg.io{{url_format}}.mapnikpython">Copy URL</a></li>
+            <li><a id="s_mapnikpython_copyText" class="clipboard" data-clipboard-target="#s_mapnikpython_text">Copy TEXT</a></li>
             <li><a href="{{url_format}}.mapnikpython?download">Download</a></li>
 
           </ul>
@@ -809,8 +797,8 @@
             <p>Definition: SQL (PostGIS)</p>
             <ul>
               <li><a href="{{url_format}}.sql">Open</a></li>
-              <li><a id="s_postgis_copyUrl" class="zeroclipboard" data-clipboard-text="//epsg.io{{url_format}}.sql" href="#">Copy URL</a></li>
-              <li><a id="s_postgis_copyText" class="zeroclipboard" data-clipboard-target="s_postgis_text" href="#">Copy TEXT</a></li>
+              <li><a id="s_postgis_copyUrl" class="clipboard" data-clipboard-text="//epsg.io{{url_format}}.sql">Copy URL</a></li>
+              <li><a id="s_postgis_copyText" class="clipboard" data-clipboard-target="#s_postgis_text">Copy TEXT</a></li>
               <li><a href="{{url_format}}.sql?download">Download</a></li>
 
             </ul>
@@ -825,8 +813,8 @@
             <p>Definition: OGC WKT</p>
             <ul>
               <li><a href="{{url_format}}.wkt">Open</a></li>
-              <li><a id="s_wkt_copyUrl" class="zeroclipboard" data-clipboard-text="//epsg.io{{url_format}}.wkt" href="#">Copy URL</a></li>
-              <li><a id="s_wkt_copyText" class="zeroclipboard" data-clipboard-target="s_wkt_text" href="#">Copy TEXT</a></li>
+              <li><a id="s_wkt_copyUrl" class="clipboard" data-clipboard-text="//epsg.io{{url_format}}.wkt">Copy URL</a></li>
+              <li><a id="s_wkt_copyText" class="clipboard" data-clipboard-target="#s_wkt_text">Copy TEXT</a></li>
               <li><a href="{{url_format}}.wkt?download">Download</a></li>
 
             </ul>
@@ -842,8 +830,8 @@
             <p>Definition: USGS</p>
             <ul>
               <li><a href="{{url_format}}.usgs">Open</a></li>
-              <li><a id="s_usgs_copyUrl" class="zeroclipboard" data-clipboard-text="//epsg.io{{url_format}}.usgs" href="#">Copy URL</a></li>
-              <li><a id="s_usgs_copyText" class="zeroclipboard" data-clipboard-target="s_usgs_text" href="#">Copy TEXT</a></li>
+              <li><a id="s_usgs_copyUrl" class="clipboard" data-clipboard-text="//epsg.io{{url_format}}.usgs">Copy URL</a></li>
+              <li><a id="s_usgs_copyText" class="clipboard" data-clipboard-target="#s_usgs_text">Copy TEXT</a></li>
               <li><a href="{{url_format}}.usgs?download">Download</a></li>
 
             </ul>
@@ -868,8 +856,8 @@
             <p>Definition: OGP XML</p>
             <ul>
               <li><a href="{{url_format}}.gml">Open</a></li>
-              <li><a id="s_gml_copyUrl" class="zeroclipboard" data-clipboard-text="//epsg.io{{url_format}}.gml" href="#">Copy URL</a></li>
-              <li><a id="s_gml_copyText" class="zeroclipboard" data-clipboard-target="s_gml_text" href="#">Copy TEXT</a></li>
+              <li><a id="s_gml_copyUrl" class="clipboard" data-clipboard-text="//epsg.io{{url_format}}.gml">Copy URL</a></li>
+              <li><a id="s_gml_copyText" class="clipboard" data-clipboard-target="#s_gml_text">Copy TEXT</a></li>
               <li><a href="{{url_format}}.gml?download">Download</a></li>
 
             </ul>

@@ -27,7 +27,8 @@
              <form id="eastnorth_form" method="post" action="#">
                <input id="easting" type="text" name="easting" value="" />
                <input id="northing" type="text" name="northing" value="" />
-               <a id="eastnorth_copy" href="#" title="" class="btn padx-2">Copy</a><a id="crs-transform-link" href="/transform" title="" class="btn padx-1 marx-1">Transform</a>
+               <a id="eastnorth_copy" title="" class="btn padx-2">Copy</a><!--
+            --><a id="crs-transform-link" href="/transform" title="" class="btn padx-1 marx-1">Transform</a>
                <input class="hidden" type="submit" id="eastnorth_submit" value="">
              </form>
            </div>
@@ -89,5 +90,12 @@
 
 <script type="text/javascript">
   new MapPage;
-</script>.
+
+  // XXX
+  new ClipboardJS('#eastnorth_copy', {
+    text: function(trigger) {
+        return document.getElementById('easting').value + ' ' + document.getElementById('northing').value;
+    }
+  });
+</script>
 {% endblock %}

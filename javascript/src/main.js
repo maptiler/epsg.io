@@ -127,12 +127,18 @@ epsg.io.detail_init = function() {
     goog.events.listen(e, goog.events.EventType.CLICK, switcherClicked);
   });
 
-  var ZeroClipboard = window['ZeroClipboard'];
-  ZeroClipboard['config']({ 'moviePath': '/js/ZeroClipboard.swf' });
-
-  // Put zeroclipboard on all elements with "zeroclipboard" class
-  goog.array.forEach(goog.dom.getElementsByClass('zeroclipboard'),
-      function(element) { new ZeroClipboard(element); });
+  // Put copyclipboard on all elements with "clipboard" class
+  var ClipboardJS = window['ClipboardJS'];
+  goog.array.forEach(goog.dom.getElementsByClass('clipboard'),
+    function(element) {
+      new ClipboardJS(element);
+      goog.events.listen(element, goog.events.EventType.CLICK, function(e) {
+        goog.dom.classlist.add(element, 'success');
+        setTimeout(function(){
+          goog.dom.classlist.remove(element, 'success');
+        }.bind(element), 300);
+      });
+  });
 
   var soc = goog.dom.getElementByClass('socialicons');
   if (soc) {

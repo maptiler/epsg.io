@@ -238,19 +238,6 @@ epsg.io.MapPage = function() {
       }
     }, this));
   }
-
-
-  // ZeroClipboard initialization
-  var ZeroClipboard = window['ZeroClipboard'];
-  ZeroClipboard['config']({ 'moviePath': '/js/ZeroClipboard.swf' });
-  this.eastNorthZeroClipboard = new ZeroClipboard(this.eastNorthCopyElement);
-
-  this.eastNorthZeroClipboard['on']('dataRequested',
-      goog.bind(function(client, args) {
-        var eastNorthText = this.eastingElement.value + '\t' +
-            this.northingElement.value;
-        client['setText'](eastNorthText);
-      }, this));
 };
 
 

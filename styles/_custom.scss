@@ -802,6 +802,11 @@ pre {
 
   a {
     color: #2c7ac2;
+    transition: all ease 0.1s;
+
+    &.success {
+      color: $color-success;
+    }
   }
 }
 
