@@ -68,10 +68,7 @@
 
     {% block content %}
     {% endblock %}
-{% block footer_type %}
-    <div id="footer">
-      {% endblock %}
-
+    <div class="container center">
       <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
       <!-- EPSG.io -->
       <ins class="adsbygoogle"
@@ -81,7 +78,10 @@
       <script>
       (adsbygoogle = window.adsbygoogle || []).push({});
       </script>
-
+    </div>
+    {% block footer_type %}
+    <div id="footer">
+      {% endblock %}
           <div class="row center-mobile">
             <div class="container bordertop-gray-light">
               <div class="col2 padt-2">
