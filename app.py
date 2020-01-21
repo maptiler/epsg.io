@@ -1187,6 +1187,10 @@ def crs_text(id, format):
 
     for r in code_result:
       rcode = r['code']
+      # XXX One of the formats is a map (because /coordinates/ was redirect on /coordinates and then catch by <format>)
+      # make it sooner for quicker answer
+      if format == "map":
+        return redirect("/map#srs=" + rcode)
       rcode = r['code']
       rname = r['name'].replace("ESRI: ","").strip()
       def_trans = r['code_trans']
@@ -1248,9 +1252,6 @@ def crs_text(id, format):
             ref.SetTOWGS84(*values)
             wkt = ref.ExportToWkt().decode('utf-8')
 
-    # XXX One of the formats is a map (because /coordinates/ was redirect on /coordinates and then catch by <format>)
-    if format == "/map":
-      return redirect("/map#srs=" + rcode);
 
     ref.ImportFromWkt(wkt)
     headers = {
@@ -1312,7 +1313,8 @@ def crs_text(id, format):
       if request.args.get('download',1) == "":
         headers['Content-disposition'] = "attachment; filename=%s.gml" % rcode
 
-    elif format == 'map':
+    #mapfile in detail.html
+    elif format == 'mapfile':
       export = 'PROJECTION\n\t'+'\n\t'.join(['"'+l.lstrip('+')+'"' for l in ref.ExportToProj4().split()])+'\nEND' ### CSS: white-space: pre-wrap
       if request.args.get('download',1) == "":
         headers['Content-disposition'] = "attachment; filename=%s.map" % rcode
