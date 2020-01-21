@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# encoding: utf-8
+# -*- coding: utf-8 -*-
 """
 """
 VERSION = "9.8"
@@ -520,9 +520,16 @@ def index():
 
   return render_template('results.html', selected_kind_index=selected_kind_index, num_deprecated=num_deprecated, show_alt_search=show_alt_search, kind_low=kind_low, num_kind=num_kind, short_code=short_code, title=title, query=query, deprecated=deprecated, num_results=num_results, elapsed=elapsed, facets_list=facets_list, url_facet_statquery=url_facet_statquery, result=result, pagenum=int(pagenum),paging=paging, version=VERSION)
 
+# links for coordinate system and for transformations, e.g. https://epsg.io/5514 and https://epsg.io/5514-1623 
+@app.route('/<int:id>')
+@app.route('/<int:id>-<int:code>') # :re:[\d]+(-[\d]+)?
+def index2(id,code=''):
+  # reconstruct full id with or without "code"
+  if code != '':
+    id = str(id) + '-' + str(code)
+  else:
+    id = str(id)
 
-@app.route('/<id>') # :re:[\d]+(-[\d]+)?
-def index2(id):
   ref = osr.SpatialReference()
   ix = open_dir(INDEX, readonly=True)
   url_social = id
@@ -785,7 +792,8 @@ def index2(id):
       for id,xml in gml:
         ogpxml = '<?xml version="1.0" encoding="UTF-8"?>\n %s' % (xml)
     ogpxml_highlight = highlight(ogpxml, XmlLexer(), HtmlFormatter(cssclass='syntax',nobackground=True))
-
+    # explicit coding of xml(gml) - https://epsg.io/2056
+    ogpxml = ogpxml.decode('utf-8')
     # if available wkt, default_trans and wkt has length minimum 100 characters (transformation has length maximum 100 (just a TOWGS84))
     error_code = 9
     xml_highlight = ""
@@ -972,8 +980,12 @@ def index2(id):
 
   return render_template('detail.html',greenwich_longitude=greenwich_longitude, url_social=url_social, url_static_map=url_static_map, ogpxml_highlight=ogpxml_highlight, xml_highlight=xml_highlight, area_trans_item=area_trans_item, ogpxml=ogpxml, bbox_coords=bbox_coords, more_gcrs_result=more_gcrs_result, deprecated_available=deprecated_available, url_kind=url_kind, type_epsg=type_epsg, name=name, projcrs_by_gcrs=projcrs_by_gcrs, kind=kind, alt_title=alt_title, area_item=area_item, code_short=code_short, item=item, trans=trans, default_trans=default_trans, num_results=num_results, url_method=url_method, title=title, url_format=url_format, export_html=export_html, url_area_trans=url_area_trans, url_area=url_area, center=center, g_coords=g_coords, trans_lat=trans_lat, trans_lon=trans_lon, wkt=wkt, facets_list=facets_list,url_concatop=url_concatop, nadgrid=nadgrid, detail=detail,export=export, error_code=error_code, version=VERSION)
 
-@app.route('/<id>') # :re:[\d]+(-[a-zA-Z]+)
-def index3(id):
+# links for NOT crs or trans. e.g. https://epsg.io/9315-datum; https://epsg.io/8901-primem
+# https://github.com/maptiler/epsg.io#types-of-urls - other codes with suffix
+@app.route('/<int:id>-<string:code>') # :re:[\d]+(-[a-zA-Z]+)
+def index3(id, code):
+  # reconstruct full id
+  id = str(id) + '-' + code
   url_social = id
   ix = open_dir(INDEX, readonly=True)
   with ix.searcher(closereader=False) as searcher:
@@ -1114,6 +1126,8 @@ def index3(id):
       gml = cur.fetchall()
       for id,xml in gml:
         ogpxml = '<?xml version="1.0" encoding="UTF-8"?>\n %s' % xml
+        # explicit coding of xml (gml) - https://epsg.io/2056
+        ogpxml = ogpxml.decode('utf-8')
         ogpxml_highlight = highlight(ogpxml, XmlLexer(), HtmlFormatter(cssclass='syntax',nobackground=True))
 
     if id and code_short[1] != "units":
@@ -1132,8 +1146,11 @@ def index3(id):
   return render_template('detail.html', url_area=url_area, greenwich_longitude=greenwich_longitude, url_social=url_social, url_static_map=url_static_map, url_concatop=url_concatop, ogpxml_highlight=ogpxml_highlight, area_trans_item=area_trans_item, error_code=error_code, ogpxml=ogpxml, bbox_coords=bbox_coords,more_gcrs_result=more_gcrs_result, deprecated_available=deprecated_available, url_kind=url_kind, type_epsg=type_epsg, name=name, projcrs_by_gcrs=projcrs_by_gcrs, alt_title=alt_title, kind=kind, code_short=code_short,item=item, detail=detail, facets_list=facets_list, nadgrid=nadgrid, trans_lat=trans_lat, trans_lon=trans_lon, trans=trans, url_format=url_format, default_trans=default_trans, center=center,g_coords=g_coords,version=VERSION)
 
 # XXX this doesn't match - delete? - handled in crs_text
-@app.route('/<id>.?gml') # :re:[\d]+(-[a-zA-Z]+)><format:re:[\.]+[gml]+
-def index4(id, format='gml'):
+# Handler for other codes (not crs and trans) for return qml from sqlite
+@app.route('/<int:id>-<string:code>.<string:format>') # :re:[\d]+(-[a-zA-Z]+)><format:re:[\.]+[gml]+
+def index4(id, code, format):
+  id = str(id) + '-' + code
+
   code, text = (id+'-0').split('-')[:2]
   text = text.replace("/","").replace(".","")
   code = code.replace(".","")
@@ -1149,7 +1166,7 @@ def index4(id, format='gml'):
   elif text.startswith("cs"):urn = "urn:ogc:def:cs:EPSG::"+str(code)
   elif text.startswith("primem"):urn = "urn:ogc:def:meridian:EPSG::"+str(code)
 
-  if urn != "" and format == ".gml":
+  if urn != "" and format == "gml":
     cur.execute('SELECT id,xml FROM gml where urn = ?', (urn,))
     gml = cur.fetchall()
     for id,xml in gml:
@@ -1162,8 +1179,17 @@ def index4(id, format='gml'):
     return make_response(xml)
 
 # Returns definition of projection as text or xml file
-@app.route('/<id>.<format>') # :re:[\d]+(-[\d]+)?><format:re:[\/\.]+[\w]+
-def crs_text(id, format):
+# Returns variable formats for crs with or without transformations
+@app.route('/<int:id>.<string:format>')
+@app.route('/<int:id>/<string:format>')
+@app.route('/<int:id>-<int:code>.<string:format>') # :re:[\d]+(-[\d]+)?><format:re:[\/\.]+[\w]+
+@app.route('/<int:id>-<int:code>/<string:format>')
+def crs_text(id, format='', code=''):
+  if code != '':
+    id = str(id) + '-' + str(code)
+  else:
+    id = str(id)
+
   ix = open_dir(INDEX, readonly=True)
   result = []
   export = ""
@@ -1184,6 +1210,10 @@ def crs_text(id, format):
 
     for r in code_result:
       rcode = r['code']
+      # XXX One of the formats is a map (because /coordinates/ was redirect on /coordinates and then catch by <format>)
+      # make it sooner for quicker answer
+      if format == "map":
+        return redirect("/map#srs=" + rcode)
       rcode = r['code']
       rname = r['name'].replace("ESRI: ","").strip()
       def_trans = r['code_trans']
@@ -1245,9 +1275,6 @@ def crs_text(id, format):
             ref.SetTOWGS84(*values)
             wkt = ref.ExportToWkt().decode('utf-8')
 
-    # XXX One of the formats is a map (because /coordinates/ was redirect on /coordinates and then catch by <format>)
-    if format == "/map":
-      return redirect("/map#srs=" + rcode);
 
     ref.ImportFromWkt(wkt)
     headers = {
@@ -1309,7 +1336,8 @@ def crs_text(id, format):
       if request.args.get('download',1) == "":
         headers['Content-disposition'] = "attachment; filename=%s.gml" % rcode
 
-    elif format == 'map':
+    #mapfile in detail.html
+    elif format == 'mapfile':
       export = 'PROJECTION\n\t'+'\n\t'.join(['"'+l.lstrip('+')+'"' for l in ref.ExportToProj4().split()])+'\nEND' ### CSS: white-space: pre-wrap
       if request.args.get('download',1) == "":
         headers['Content-disposition'] = "attachment; filename=%s.map" % rcode
@@ -1522,9 +1550,14 @@ def error500(error):
   try_url = ""
   return render_template('error.html', error=error, try_url=try_url, version=VERSION)
 
-#handling for urn from sqlite
-@app.route('/<id>.<format>') # /<id:re:(urn:?_?ogc:?_?def:?_?([\w]+-?[\w]+):?_?[EPSG]+:?:?_?_?(\d+\.?\d+(\.\d)?))><format:re:(\.gml)?>
-def index6(id,format):
+#handling for urn from sqlite, with or without format (only gml)
+# https://epsg.io/urn:ogc:def:crs:EPSG::5514
+# all in sqlite "urn"
+@app.route('/urn<string:id>')
+@app.route('/urn<string:id>.<string:format>') # /<id:re:(urn:?_?ogc:?_?def:?_?([\w]+-?[\w]+):?_?[EPSG]+:?:?_?_?(\d+\.?\d+(\.\d)?))><format:re:(\.gml)?>
+def index6(id,format=''):
+  id = "urn"+id
+
   # if i want gml
   if format == "gml":
     cur.execute('SELECT id,xml FROM gml where urn = ?', (id,))
@@ -1604,16 +1637,24 @@ def index6(id,format):
         item = {'code':code,'area':"", 'remarks':"",'scope':"",'deprecated':deprecated,'target_uom':"",'files':"",'orientation':"",'abbreviation':"",'order':"",'bbox':"",'kind':subject}
         ogpxml = '<?xml version="1.0" encoding="UTF-8"?> %s' % (xml,)
         ogpxml = ogpxml.strip()
+        # explicit coding of xml(gml) - https://epsg.io/2056
+        ogpxml = ogpxml.decode('utf-8')
         ogpxml_highlight = highlight(ogpxml, XmlLexer(), HtmlFormatter(cssclass='syntax',nobackground=True))
       return render_template('detail.html',url_static_map=url_static_map, url_social=url_social, url_concatop=url_concatop, ogpxml_highlight=ogpxml_highlight, area_trans_item=area_trans_item, error_code=error_code, ogpxml=ogpxml, bbox_coords=bbox_coords, more_gcrs_result=more_gcrs_result, deprecated_available=deprecated_available, url_kind=url_kind, type_epsg=type_epsg, name=name, projcrs_by_gcrs=projcrs_by_gcrs, alt_title=alt_title, kind=kind, code_short=code_short, item=item, detail=detail, nadgrid=nadgrid, trans_lat=trans_lat, trans_lon=trans_lon, trans=trans, url_format=url_format, default_trans=default_trans, center=center,g_coords=g_coords, version=VERSION)
 
       #return render_template('error.html',error=error, try_url=try_url)
     else:
-      redirect('/%s' % url)
+      return redirect('/%s' % url)
 
-# the same logic as for sqlite urn's
-@app.route('/<id>.<format>') # /<id:re:(\w+-\w+-\d+((\.\d+)?(\.?\d+)?)?)><format:re:((\.)?gml)?>
-def index7(id,format):
+# the same logic as for sqlite urn's(all in sqlite "id")
+# https://epsg.io/ogp-crs-7414
+# https://epsg.io/epsg-crs-7411
+# https://epsg.io/iogp-crs-5514
+@app.route('/ogp<id>') # /<id:re:(\w+-\w+-\d+((\.\d+)?(\.?\d+)?)?)><format:re:((\.)?gml)?>
+@app.route('/epsg<id>')
+@app.route('/iogp<id>')
+def index7(id):
+
   #name_map={}
   name_map={
   'cr':"Change request",
@@ -1634,6 +1675,22 @@ def index7(id,format):
   'deprecation':"Deprecation",
   'area':"Area"
   }
+  #if in the link is format (only gml), is after dot
+  try:
+    id, format = id.split('.')
+  except:
+    format = ''
+
+  # find which prefix was catch by handler. If ogp or epsg or iogp (id field in sqlite). 
+  for prefix in ['ogp', 'epsg', 'iogp']:
+    cur.execute('SELECT count(id) FROM gml where id = ?', (prefix + id,))
+    #(1,)
+    count = cur.fetchone()[0]
+    #after find match with id and database record, create id and continue (not big number of iogp)
+    if count:
+      id = prefix + id
+      continue
+  
   if format =="gml":
     cur.execute('SELECT id,xml FROM gml where id = ?', (id,))
     gml = cur.fetchall()
@@ -1648,7 +1705,8 @@ def index7(id,format):
     try_url= ""
     return render_template('error.html',error=error, try_url=try_url, version=VERSION)
   else:
-    id_reformated = id.replace("ogp-","").replace("epsg-","")
+    # iogp must be replace before ogp
+    id_reformated = id.replace("iogp-","").replace("ogp-","").replace("epsg-","")
     subject,code = id_reformated.split("-")
 
     url = code+"-"+subject
@@ -1696,11 +1754,13 @@ def index7(id,format):
           if name == None: name = ""
           item = {'code':code,'area':"", 'remarks':"",'scope':"",'deprecated':deprecated,'target_uom':"",'files':"",'orientation':"",'abbreviation':"",'order':"",'bbox':"",'kind':subject}
           ogpxml = '<?xml version="1.0" encoding="UTF-8"?>\n %s' % (xml,)
+          # explicit coding of xml(gml) - https://epsg.io/2056
+          ogpxml = ogpxml.decode('utf-8')
           ogpxml_highlight = highlight(ogpxml, XmlLexer(), HtmlFormatter(cssclass='syntax',nobackground=True))
         return render_template('detail.html',url_static_map=url_static_map, url_social=url_social, url_concatop=url_concatop, ogpxml_highlight=ogpxml_highlight, area_trans_item=area_trans_item, error_code=error_code, ogpxml=ogpxml, bbox_coords=bbox_coords, more_gcrs_result=more_gcrs_result, deprecated_available=deprecated_available, url_kind=url_kind, type_epsg=type_epsg, name=name, projcrs_by_gcrs=projcrs_by_gcrs, alt_title=alt_title, kind=kind, code_short=code_short, item=item, detail=detail, nadgrid=nadgrid, trans_lat=trans_lat, trans_lon=trans_lon, trans=trans, url_format=url_format, default_trans=default_trans, center=center,g_coords=g_coords, version=VERSION)
 
       else:
-        redirect ('/%s' %url)
+        return redirect ('/%s' %url)
 
 @app.route('/map')
 def map():
