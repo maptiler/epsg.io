@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# encoding: utf-8
+# -*- coding: utf-8 -*-
 """
 """
 VERSION = "9.8"
@@ -785,7 +785,8 @@ def index2(id):
       for id,xml in gml:
         ogpxml = '<?xml version="1.0" encoding="UTF-8"?>\n %s' % (xml)
     ogpxml_highlight = highlight(ogpxml, XmlLexer(), HtmlFormatter(cssclass='syntax',nobackground=True))
-
+    # explicit coding of xml(gml) - https://epsg.io/2056
+    ogpxml = ogpxml.decode('utf-8')
     # if available wkt, default_trans and wkt has length minimum 100 characters (transformation has length maximum 100 (just a TOWGS84))
     error_code = 9
     xml_highlight = ""
@@ -1114,6 +1115,8 @@ def index3(id):
       gml = cur.fetchall()
       for id,xml in gml:
         ogpxml = '<?xml version="1.0" encoding="UTF-8"?>\n %s' % xml
+        # explicit coding of xml (gml) - https://epsg.io/2056
+        ogpxml = ogpxml.decode('utf-8')
         ogpxml_highlight = highlight(ogpxml, XmlLexer(), HtmlFormatter(cssclass='syntax',nobackground=True))
 
     if id and code_short[1] != "units":
@@ -1604,6 +1607,8 @@ def index6(id,format):
         item = {'code':code,'area':"", 'remarks':"",'scope':"",'deprecated':deprecated,'target_uom':"",'files':"",'orientation':"",'abbreviation':"",'order':"",'bbox':"",'kind':subject}
         ogpxml = '<?xml version="1.0" encoding="UTF-8"?> %s' % (xml,)
         ogpxml = ogpxml.strip()
+        # explicit coding of xml(gml) - https://epsg.io/2056
+        ogpxml = ogpxml.decode('utf-8')
         ogpxml_highlight = highlight(ogpxml, XmlLexer(), HtmlFormatter(cssclass='syntax',nobackground=True))
       return render_template('detail.html',url_static_map=url_static_map, url_social=url_social, url_concatop=url_concatop, ogpxml_highlight=ogpxml_highlight, area_trans_item=area_trans_item, error_code=error_code, ogpxml=ogpxml, bbox_coords=bbox_coords, more_gcrs_result=more_gcrs_result, deprecated_available=deprecated_available, url_kind=url_kind, type_epsg=type_epsg, name=name, projcrs_by_gcrs=projcrs_by_gcrs, alt_title=alt_title, kind=kind, code_short=code_short, item=item, detail=detail, nadgrid=nadgrid, trans_lat=trans_lat, trans_lon=trans_lon, trans=trans, url_format=url_format, default_trans=default_trans, center=center,g_coords=g_coords, version=VERSION)
 
@@ -1696,6 +1701,8 @@ def index7(id,format):
           if name == None: name = ""
           item = {'code':code,'area':"", 'remarks':"",'scope':"",'deprecated':deprecated,'target_uom':"",'files':"",'orientation':"",'abbreviation':"",'order':"",'bbox':"",'kind':subject}
           ogpxml = '<?xml version="1.0" encoding="UTF-8"?>\n %s' % (xml,)
+          # explicit coding of xml(gml) - https://epsg.io/2056
+          ogpxml = ogpxml.decode('utf-8')
           ogpxml_highlight = highlight(ogpxml, XmlLexer(), HtmlFormatter(cssclass='syntax',nobackground=True))
         return render_template('detail.html',url_static_map=url_static_map, url_social=url_social, url_concatop=url_concatop, ogpxml_highlight=ogpxml_highlight, area_trans_item=area_trans_item, error_code=error_code, ogpxml=ogpxml, bbox_coords=bbox_coords, more_gcrs_result=more_gcrs_result, deprecated_available=deprecated_available, url_kind=url_kind, type_epsg=type_epsg, name=name, projcrs_by_gcrs=projcrs_by_gcrs, alt_title=alt_title, kind=kind, code_short=code_short, item=item, detail=detail, nadgrid=nadgrid, trans_lat=trans_lat, trans_lon=trans_lon, trans=trans, url_format=url_format, default_trans=default_trans, center=center,g_coords=g_coords, version=VERSION)
 
