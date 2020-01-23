@@ -345,7 +345,7 @@
           {% endif %}
 
           {% if item['target_uom'] %}
-          {% if int(code_short[0]) != int(item['target_uom'][0]) %}
+          {% if code_short[0] | int != item['target_uom'][0] | int %}
           <p><span class="caption">Target unit: </span><a href="/{{item['target_uom'][0]}}-units">{{item['target_uom'][1]}}</a></p>
           {% endif %}
           {% endif %}
