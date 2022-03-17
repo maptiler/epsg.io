@@ -254,7 +254,7 @@ def area_to_url(area):
 
 def get_static_map_url(center, g_coords):
   if center != "" and g_coords != "":
-    url_static = "https://api.maptiler.com/maps/streets/static/auto/265x215@2x.png?key=qrAJy6x3Ck8n4XFFH4PS&latlng=1&fill=rgba(255,0,0,0.15)&stroke=red&width=2&path=" + g_coords
+    url_static = "https://api.maptiler.com/maps/streets/static/auto/265x215@2x.png?key=Pv8X48h6LIafuFmSomha&latlng=1&fill=rgba(255,0,0,0.15)&stroke=red&width=2&path=" + g_coords
     # + "&markers=" +str(center[0])+","+str(center[1])
 
     return urllib2.quote(url_static), url_static
@@ -520,7 +520,7 @@ def index():
 
   return render_template('results.html', selected_kind_index=selected_kind_index, num_deprecated=num_deprecated, show_alt_search=show_alt_search, kind_low=kind_low, num_kind=num_kind, short_code=short_code, title=title, query=query, deprecated=deprecated, num_results=num_results, elapsed=elapsed, facets_list=facets_list, url_facet_statquery=url_facet_statquery, result=result, pagenum=int(pagenum),paging=paging, version=VERSION)
 
-# links for coordinate system and for transformations, e.g. https://epsg.io/5514 and https://epsg.io/5514-1623 
+# links for coordinate system and for transformations, e.g. https://epsg.io/5514 and https://epsg.io/5514-1623
 @app.route('/<int:id>')
 @app.route('/<int:id>-<int:code>') # :re:[\d]+(-[\d]+)?
 def index2(id,code=''):
@@ -1681,7 +1681,7 @@ def index7(id):
   except:
     format = ''
 
-  # find which prefix was catch by handler. If ogp or epsg or iogp (id field in sqlite). 
+  # find which prefix was catch by handler. If ogp or epsg or iogp (id field in sqlite).
   for prefix in ['ogp', 'epsg', 'iogp']:
     cur.execute('SELECT count(id) FROM gml where id = ?', (prefix + id,))
     #(1,)
@@ -1690,7 +1690,7 @@ def index7(id):
     if count:
       id = prefix + id
       continue
-  
+
   if format =="gml":
     cur.execute('SELECT id,xml FROM gml where id = ?', (id,))
     gml = cur.fetchall()
