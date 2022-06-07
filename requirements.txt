@@ -1,4 +1,5 @@
 # GDAL==1.10.0
+pytest==4.6.11
 Pygments==1.6
 Whoosh==2.5.5
 argparse==1.2.1
@@ -9,3 +10,6 @@ Flask==1.1.1
 Flask-DebugToolbar==0.10.1
 Jinja2==2.10.1
 sentry-sdk==0.13.5
+
+
+
