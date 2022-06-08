@@ -172,7 +172,7 @@
       {% if export_html %}
       <div id="description-message">{{export_html}} </div>
       {% else %}
-      <div id="description-message">{{item['alt_description']}} </div>
+      <div id="description-message">{{item['alt_description']|safe}} </div>
       {% endif %}
       {% endif %}
       {% endif %}
@@ -862,7 +862,7 @@
 
             </ul>
             <div class="syntax">
-              {{ogpxml_highlight}}
+              {{ogpxml_highlight|safe}}
             </div>
             <div class="syntax">
               <pre id="s_gml_text">{{ogpxml}}</pre>

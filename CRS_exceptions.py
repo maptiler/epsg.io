@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/python3 
 # -*- coding: utf-8 -*-
 CRS_EXCEPTATIONS = 'CRS_exceptions.csv'
 INDEX = 'index'
@@ -10,6 +10,7 @@ import whoosh.fields
 import csv
 import os.path
 import time
+import json
 
 exceptations_mod_time=time.gmtime(os.path.getmtime(CRS_EXCEPTATIONS))
 # exceptations_create_time=time.gmtime(os.path.getctime(CRS_EXCEPTATIONS))
@@ -29,7 +30,7 @@ if exceptations_mod_time>=index_mod_time or index_mod_time!=index_create_time: #
 if do_it == True:
   
   ###############################################################################
-  print "INICIALIZING"
+  print("INITIALIZING")
   ###############################################################################
   crs_ex_line = {}
   try:
@@ -42,19 +43,21 @@ if do_it == True:
       #print crs_ex_line['4326'][2]
       #print crs_ex_line
   except:
-    print "!!! FAILED: NO CRS_EXCEPTATIONS !!!"
+    print("!!! FAILED: NO CRS_EXCEPTATIONS !!!")
     sys.exit(1)
 
   try:
     ix = whoosh.index.open_dir(INDEX)
-  except:
-    print "!!! FAILED: Connection to Index !!!"
+  except Exception as e:
+    print("!!! FAILED: Connection to Index !!!")
+    print(e)
     sys.exit(1)    
 
   ###############################################################################
-  print "UPDATING INDEX"
+  print("UPDATING INDEX")
   ###############################################################################
   for item in crs_ex_line:
+
     alt_code = crs_ex_line[item][3].split(",")
     doc = {}
     # alt_code = []
@@ -65,6 +68,11 @@ if do_it == True:
     #     alt_code = [str(x) for x in crs_ex_line[item][3].split(",")]
     # #if alt_code == []:
     # #  alt_code = None
+
+
+    if(alt_code == ['']):
+        alt_code = None
+
     with ix.searcher() as searcher:
       parser = whoosh.qparser.QueryParser("code", ix.schema)
 
@@ -76,66 +84,66 @@ if do_it == True:
           deprecated = 1
       
         doc = {
-        'code':item.decode('utf-8'),
-        'code_id':item.decode('utf-8'),
-        'name': crs_ex_line[item][2].decode('utf-8'),
-        'alt_title': u"",
-        'alt_description' : crs_ex_line[item][4].decode('utf-8'),
+        'code':item,
+        'code_id':item,
+        'name': crs_ex_line[item][2],
+        'alt_title': "",
+        'alt_description' : crs_ex_line[item][4],
         'alt_code' : alt_code,
         'code_trans' : 0,
-        'area_trans' : u"",
-        'accuracy' : u"",
-        'kind': u"CRS",
-        'area': u"",
+        'area_trans' : "",
+        'accuracy' : "",
+        'kind': "CRS",
+        'area': "",
         'deprecated': deprecated,
         'trans' : [],
         'primary' : 0,
-        'description': u"",
+        'description': "",
       
-        'alt_name' : u"",
-        'trans_alt_name' : u"",
-        'trans_remarks': u"",
-        'bbox': u"",
-        'scope': u"",
-        'remarks': u"",
-        'information_source': u"",
-        'revision_date': u"",
-        'datum' : u"",
-        'geogcrs': u"",
+        'alt_name' : "",
+        'trans_alt_name' : "",
+        'trans_remarks': "",
+        'bbox': "",
+        'scope': "",
+        'remarks': "",
+        'information_source': "",
+        'revision_date': "",
+        'datum' : "",
+        'geogcrs': "",
         #'children_code' : u"",
-        'data_source' : u"",
-        'uom_code' : u"",
-        'uom' : u"",
-        'target_uom': u"",
-        'primem' : u"",
-        'greenwich_longitude' : u"",
-        'concatop' : u"",
-        'method' : u"",
-        'files' : u"",
-        'reverse' : u"",
-        'orientation' : u"",
-        'abbreviation' : u"",
-        'order' : u"",
-        'area_code' : u"",
-        'area_trans_code': u"",
-        'ellipsoid' : u"",
+        'data_source' : "",
+        'uom_code' : "",
+        'uom' : "",
+        'target_uom': "",
+        'primem' : "",
+        'greenwich_longitude' : "",
+        'concatop' : "",
+        'method' : "",
+        'files' : "",
+        'reverse' : "",
+        'orientation' : "",
+        'abbreviation' : "",
+        'order' : "",
+        'area_code' : None,
+        'area_trans_code': None,
+        'ellipsoid' : "",
 
-        'cs': u"",
+        'cs': "",
         }
         with ix.writer() as writer:
           writer.add_document(**doc)
       
       elif code_result:  
-        alt_title = u""
+        alt_title = ""
         for result in code_result:
           if 'alt_title' in result:
-            if str(result['name']) != str(result['alt_title']) and str(result['name']) != str(crs_ex_line[item][2].decode('utf-8')):
-              alt_title = crs_ex_line[item][2].decode('utf-8')
+            if str(result['name']) != str(result['alt_title']) and str(result['name']) != str(crs_ex_line[item][2]):
+              alt_title = crs_ex_line[item][2]
             
             else:
-              alt_title = u""
+              alt_title = ""
           
-          area_trans_code = u""    
+          area_trans_code = None  
           if 'area_trans_code' in result:
             area_trans_code = result['area_trans_code']
         
@@ -148,7 +156,7 @@ if do_it == True:
           importance = 0
           try:
             importance = crs_ex_line[item][1]
-            if importance == u"":
+            if importance == "":
               importance = 0
           except:
             pass
@@ -192,26 +200,32 @@ if do_it == True:
             'order' : result['order'],
             'description':result['description'],
             'primary' : result['primary'],
-            'code_id':item.decode('utf-8'),
-            'alt_description' : crs_ex_line[item][4].decode('utf-8'),
+            'code_id':item,
+            'alt_description' : crs_ex_line[item][4],
             'alt_code' : alt_code,
-            'area_code' : result['area_code'],
+            'area_code' : result['area_code'] if 'area_code' in result else None,
             'area_trans_code' : area_trans_code,
             'ellipsoid' : result['ellipsoid'],
             'cs': result['cs'],
             '_boost': score
           }  
           with ix.writer() as writer:
-            writer.update_document(**doc)
+
+            try:
+              writer.update_document(**doc)
+            except Exception as e:
+              print(e)
+              print(json.dumps(doc))
+              exit()
 
 
 
 
 ###############################################################################
-  print "FINISH"
+  print("FINISH")
 ###############################################################################
 
 else:
 ###############################################################################
-  print "NOT NECESSARY TO UPDATE DATABASE!"
+  print("NOT NECESSARY TO UPDATE DATABASE!")
 ###############################################################################

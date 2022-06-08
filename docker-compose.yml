@@ -3,7 +3,11 @@ version: "2"
 services:
   app:
     build: .
+    # command: pytest -x
     command: flask run --host 0.0.0.0 --port 8000
+    # command: bash
+    # stdin_open: true # docker run -i
+    # tty: true        # docker run -t
     ports:
     - "8000:8000"
     volumes:

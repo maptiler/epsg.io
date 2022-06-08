@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/python3 
 # -*- coding: utf-8 -*-
 """
 """
@@ -52,9 +52,9 @@ f_unit_index = 26
 from flask import Flask, jsonify, redirect, render_template, url_for, request, Response, send_from_directory, make_response
 # from flask_debugtoolbar import DebugToolbarExtension
 
-import urllib2
-import urllib
-import urlparse
+import urllib.request, urllib.error, urllib.parse
+import urllib.request, urllib.parse, urllib.error
+import urllib.parse
 import sys
 import os
 from whoosh.index import open_dir
@@ -102,14 +102,13 @@ try:
       crs_ex_line[row[0]] = row
     #print crs_ex_line['4326'][2]
 except:
-  print "!!! FAILED: NO CRS_EXCEPTIONS !!!"
+  print("!!! FAILED: NO CRS_EXCEPTIONS !!!")
   #sys.exit(1)
 
 con = sqlite.connect(DATABASE, check_same_thread=False)
 if not con:
-  print "Connection to gml.sqlite FAILED"
+  print("Connection to gml.sqlite FAILED")
   #sys.exit(1)
-cur = con.cursor()
 
 def getQueryParam(q, param):
   """Return value of a param in query"""
@@ -171,10 +170,10 @@ def jsonResponse(json_str, callback, status = 'ok', error_type = ''):
 
     json_str['status'] = status
     if callback:
-      resp = '{}({})'.format(callback, json.dumps(json_str))
+      resp = '{}({})'.format(callback, json.dumps(json_str, sort_keys=True))
       return Response(resp, mimetype='application/javascript')
     else:
-      return Response(json.dumps(json_str), mimetype='application/json')
+      return Response(json.dumps(json_str, sort_keys=True), mimetype='application/json')
 
 class WKTLexer(RegexLexer):
     name = 'wkt'
@@ -248,7 +247,7 @@ def area_to_url(area):
     qarea = area
   if area.startswith("World"):
     qarea = ["World",]
-  url = "/?q=" + urllib.quote_plus(qarea[0].encode('utf-8'))
+  url = "/?q=" + urllib.parse.quote_plus(qarea[0])
 
   return url
 
@@ -257,7 +256,7 @@ def get_static_map_url(center, g_coords):
     url_static = "https://api.maptiler.com/maps/streets/static/auto/265x215@2x.png?key=Pv8X48h6LIafuFmSomha&latlng=1&fill=rgba(255,0,0,0.15)&stroke=red&width=2&path=" + g_coords
     # + "&markers=" +str(center[0])+","+str(center[1])
 
-    return urllib2.quote(url_static), url_static
+    return urllib.parse.quote(url_static), url_static
   else:
     return ("","")
 
@@ -282,7 +281,7 @@ def index():
     pagenum = int(request.args.get("page",1))
     format = request.args.get('format',0)
     callback = request.args.get('callback',False)
-    expanded_trans = request.args.get('trans',False)
+    expanded_trans = bool(request.args.get('trans',False))
 
     if query == None:
       return render_template('./templates/index',version=VERSION)
@@ -292,7 +291,7 @@ def index():
 
     # for count inverse deprecated (if it display valid, show me a number of deprecated records)
     statquery = setQueryParam(query, 'deprecated', not deprecated,True)
-    url_facet_statquery ="/?q=" + urllib2.quote(statquery)
+    url_facet_statquery ="/?q=" + urllib.parse.quote(statquery)
     # and through all kinds
     #statquery = setQueryParam(statquery,'kind','*')
     # show query in all kinds
@@ -314,13 +313,13 @@ def index():
     # parse and prepare for search
     myquery = parser.parse(getVerboseQuery(query))
 
-    start = time.clock()
+    start = time.process_time()
     # result of query
     results = searcher.search(myquery, limit = None) #(pagenum*pagelen)
     # how many document include query in each kind
     res_facets = searcher.search(facet_query, groupedby="kind", scored=False, sortedby=None, maptype=sorting.Count)
     # "search in" number
-    elapsed = (time.clock() - start)
+    elapsed = round(time.process_time() - start, 2)
 
     # kind and count of result from catquery
     groups = res_facets.groups("kind")
@@ -358,7 +357,7 @@ def index():
       if len(short_area) > 100:
         short_area = short_area.split("-", 2)[0]
       wkt = ""
-      if r['kind'].startswith("CRS"):
+      if r['kind'].startswith("CRS") and expanded_trans: # Fixes the trans bug
         ref.ImportFromEPSG(int(short_code[0]))
         wkt = ref.ExportToWkt()
 
@@ -379,7 +378,7 @@ def index():
 
     # paging ala google
     pagemax = int(math.ceil(num_results / float(pagelen) ))
-    paging = range(1, pagemax+1)[ max(0, pagenum-6) : (pagenum+4 if pagenum >= 10 else min(10,pagemax))]
+    paging = list(range(1, pagemax+1))[ max(0, pagenum-6) : (pagenum+4 if pagenum >= 10 else min(10,pagemax))]
 
     # set all facets_list counts to zero
     for i in range(0,len(facets_list)):
@@ -417,7 +416,7 @@ def index():
     kind_low = q,kind_low
     # update facets counters
     show_alt_search = False
-    for key,value in groups.iteritems():
+    for key,value in groups.items():
 
       if value>0:
         show_alt_search = True
@@ -426,7 +425,7 @@ def index():
         if facets_list[i][0] == key:
           facets_list[i][4] = int(value)
           catquery = setQueryParam(base_query_kind, 'kind', facets_list[i][1])
-          facets_list[i][5] = "/?q=" + urllib2.quote(catquery)
+          facets_list[i][5] = "/?q=" + urllib.parse.quote(catquery)
 
           # index of chose kind
           if kind == facets_list[i][1]:
@@ -436,27 +435,27 @@ def index():
       if key.startswith('CRS-'):
         facets_list[f_crs_index][4] += int(value)
         catquery = setQueryParam(base_query_kind, 'kind', facets_list[f_crs_index][1])
-        facets_list[f_crs_index][5] = "/?q=" + urllib2.quote(catquery)
+        facets_list[f_crs_index][5] = "/?q=" + urllib.parse.quote(catquery)
 
       if key.startswith('DATUM-'):
         facets_list[f_datum_index][4] += int(value)
         catquery = setQueryParam(base_query_kind, 'kind', facets_list[f_datum_index][1])
-        facets_list[f_datum_index][5] = "/?q=" + urllib2.quote(catquery)
+        facets_list[f_datum_index][5] = "/?q=" + urllib.parse.quote(catquery)
 
       if key.startswith('CS-'):
         facets_list[f_cs_index][4] += int(value)
         catquery = setQueryParam(base_query_kind, 'kind', facets_list[f_cs_index][1])
-        facets_list[f_cs_index][5] = "/?q=" + urllib2.quote(catquery)
+        facets_list[f_cs_index][5] = "/?q=" + urllib.parse.quote(catquery)
 
       if key.startswith('UNIT-'):
         facets_list[f_unit_index][4] += int(value)
         catquery = setQueryParam(base_query_kind, 'kind', facets_list[f_unit_index][1])
-        facets_list[f_unit_index][5] = "/?q=" + urllib2.quote(catquery)
+        facets_list[f_unit_index][5] = "/?q=" + urllib.parse.quote(catquery)
 
       if key.startswith('COORDOP-'):
         facets_list[f_op_index][4] += int(value)
         catquery = setQueryParam(base_query_kind, 'kind', facets_list[f_op_index][1])
-        facets_list[f_op_index][5] = "/?q=" + urllib2.quote(catquery)
+        facets_list[f_op_index][5] = "/?q=" + urllib.parse.quote(catquery)
 
     # show a clear query (e.g. without kind:CRS, deprecated:0)
     query = setQueryParam(query,'kind',kind)
@@ -502,7 +501,7 @@ def index():
                   if (values != (0.0,0.0,0.0,0.0,0.0,0.0,0.0) and type(values) == tuple and values != (0,) and values != ()):
                     ref.ImportFromEPSG(int(short_code[0]))
                     ref.SetTOWGS84(*values)
-                    wkt = ref.ExportToWkt().decode('utf-8')
+                    wkt = ref.ExportToWkt()
                     proj4 = ref.ExportToProj4().strip()
             code_with_bbox[int(hit['code'])] = hit,wkt,proj4
 
@@ -597,9 +596,9 @@ def index2(id,code=''):
             ref.SetProjCS(name.replace(" ", "_"))
             ref.SetAuthority("PROJCS","EPSG",int(code))
             ref.ExportToPrettyWkt()
-            alt_description = str(ref).decode('utf-8')
+            alt_description = str(ref)
         elif a == 0:
-          wkt = ref.ExportToWkt().decode('utf-8')
+          wkt = ref.ExportToWkt()
 
       title = item['kind'] + ":" + item['code']
       url_area = area_to_url(item['area'])
@@ -639,7 +638,7 @@ def index2(id,code=''):
             if int(hit['code']) == int(code_trans):
               link = ""
             else:
-              link = str(r['code']) + u"-" + str(hit['code'])
+              link = str(r['code']) + "-" + str(hit['code'])
 
             # if exist default trans code
             default = False
@@ -723,7 +722,7 @@ def index2(id,code=''):
               if (values != (0.0,0.0,0.0,0.0,0.0,0.0,0.0) and type(values) == tuple and values != (0,) and values != ()):
                 ref.ImportFromEPSG(int(r['code']))
                 ref.SetTOWGS84(*values)
-                wkt = ref.ExportToWkt().decode('utf-8')
+                wkt = ref.ExportToWkt()
         # if do not have trans_item or default_trans
         else:
           n, w, s, e = item['bbox']
@@ -757,7 +756,7 @@ def index2(id,code=''):
     # for activated transformation
     if default_trans:
       #if default_trans['method']:
-      #  url_method ="/?q=" + urllib.quote_plus((default_trans['method'][0]+ ' kind:METHOD').encode('utf-8'))
+      #  url_method ="/?q=" + urllib.quote_plus((default_trans['method'][0]+ ' kind:METHOD'))
       url_area_trans = area_to_url(default_trans['area'])
       center = ""
       g_coords = ""
@@ -781,19 +780,21 @@ def index2(id,code=''):
     ogpxml = ""
     if item['kind'].startswith("CRS"):
       urn = "urn:ogc:def:crs:EPSG::"+code
+      cur = con.cursor()
       cur.execute('SELECT id,xml FROM gml where urn = ?', (urn,))
       gml = cur.fetchall()
       for id,xml in gml:
-        ogpxml = '<?xml version="1.0" encoding="UTF-8"?>\n %s' % (xml)
+        ogpxml = '<?xml version="1.0" encoding="UTF-8"?>\n %s' % (xml.decode("utf-8"))
     elif item['kind'].startswith("COORDOP"):
       urn = "urn:ogc:def:coordinateOperation:EPSG::" + code
+      cur = con.cursor()
       cur.execute('SELECT id,xml FROM gml where urn = ?', (urn,))
       gml = cur.fetchall()
       for id,xml in gml:
-        ogpxml = '<?xml version="1.0" encoding="UTF-8"?>\n %s' % (xml)
+        ogpxml = '<?xml version="1.0" encoding="UTF-8"?>\n %s' % (xml.decode("utf-8"))
     ogpxml_highlight = highlight(ogpxml, XmlLexer(), HtmlFormatter(cssclass='syntax',nobackground=True))
     # explicit coding of xml(gml) - https://epsg.io/2056
-    ogpxml = ogpxml.decode('utf-8')
+    ogpxml = ogpxml
     # if available wkt, default_trans and wkt has length minimum 100 characters (transformation has length maximum 100 (just a TOWGS84))
     error_code = 9
     xml_highlight = ""
@@ -843,7 +844,7 @@ def index2(id,code=''):
         export['esriwkt'] = ref.ExportToWkt()
 
         if item['bbox']:
-          ref.ImportFromWkt(wkt.encode('utf-8'))
+          ref.ImportFromWkt(wkt)
           wgs = osr.SpatialReference()
           wgs.ImportFromEPSG(4326)
           xform = osr.CoordinateTransformation(wgs,ref)
@@ -852,8 +853,8 @@ def index2(id,code=''):
           try:
             trans_coords_orig = xform.TransformPoint(center[1],center[0]) #5514 - 49.3949, 17.325
             #transform the bouding box coords (if have default trans, this will be a default tran else from crs)
-            bbox_coords_orig1 = xform.TransformPoint(e,n)
-            bbox_coords_orig2 = xform.TransformPoint(w,s)
+            bbox_coords_orig1 = xform.TransformPoint(e, n)
+            bbox_coords_orig2 = xform.TransformPoint(w, s)
 
             if type(trans_coords_orig[0]) != float:
               trans_lat = "%s" % trans_coords_orig[0]
@@ -891,8 +892,11 @@ def index2(id,code=''):
         ref.ImportFromWkt(wkt)
         export_html = highlight(ref.ExportToPrettyWkt(), WKTLexer(), HtmlFormatter(cssclass='syntax',nobackground=True))
 
-    if 'alt_description' in item and (item['information_source'] == "ESRI" or item['information_source'] == "other") and export_html == "" and error_code != 0:
-      export_html = highlight(item['alt_description'], WKTLexer(), HtmlFormatter(cssclass='syntax',nobackground=True))
+
+    # TODO figure out why description is being highlighted
+
+    # if 'alt_description' in item and (item['information_source'] == "ESRI" or item['information_source'] == "other") and export_html == "" and error_code != 0:
+    #   # export_html = highlight(item['alt_description'], WKTLexer(), HtmlFormatter(cssclass='syntax',nobackground=True))
 
     # if the CRS its concatenated
     url_concatop=[]
@@ -1122,12 +1126,13 @@ def index3(id, code):
       #  greenwich_longitude = item['greenwich_longitude']
 
     if urn != "":
+      cur = con.cursor()
       cur.execute('SELECT id,xml FROM gml where urn = ?', (urn,))
       gml = cur.fetchall()
       for id,xml in gml:
-        ogpxml = '<?xml version="1.0" encoding="UTF-8"?>\n %s' % xml
+        ogpxml = '<?xml version="1.0" encoding="UTF-8"?>\n %s' % xml.decode("utf-8")
         # explicit coding of xml (gml) - https://epsg.io/2056
-        ogpxml = ogpxml.decode('utf-8')
+        ogpxml = ogpxml
         ogpxml_highlight = highlight(ogpxml, XmlLexer(), HtmlFormatter(cssclass='syntax',nobackground=True))
 
     if id and code_short[1] != "units":
@@ -1143,6 +1148,8 @@ def index3(id, code):
         for gcrs_item in gcrs_result[:5]:
           projcrs_by_gcrs.append({'result': gcrs_item})
 
+  print("showing details")
+  
   return render_template('detail.html', url_area=url_area, greenwich_longitude=greenwich_longitude, url_social=url_social, url_static_map=url_static_map, url_concatop=url_concatop, ogpxml_highlight=ogpxml_highlight, area_trans_item=area_trans_item, error_code=error_code, ogpxml=ogpxml, bbox_coords=bbox_coords,more_gcrs_result=more_gcrs_result, deprecated_available=deprecated_available, url_kind=url_kind, type_epsg=type_epsg, name=name, projcrs_by_gcrs=projcrs_by_gcrs, alt_title=alt_title, kind=kind, code_short=code_short,item=item, detail=detail, facets_list=facets_list, nadgrid=nadgrid, trans_lat=trans_lat, trans_lon=trans_lon, trans=trans, url_format=url_format, default_trans=default_trans, center=center,g_coords=g_coords,version=VERSION)
 
 # XXX this doesn't match - delete? - handled in crs_text
@@ -1167,10 +1174,11 @@ def index4(id, code, format):
   elif text.startswith("primem"):urn = "urn:ogc:def:meridian:EPSG::"+str(code)
 
   if urn != "" and format == "gml":
+    cur = con.cursor()
     cur.execute('SELECT id,xml FROM gml where urn = ?', (urn,))
     gml = cur.fetchall()
     for id,xml in gml:
-      response = make_response('<?xml version="1.0" encoding="UTF-8"?>\n %s' % xml)
+      response = make_response('<?xml version="1.0" encoding="UTF-8"?>\n %s' % xml.decode("utf-8"))
       response.headers['Content-Type'] = "text/xml"
       if request.args.get('download',1) == "":
         response.headers['Content-Disposition'] = "attachment; filename=%s.gml" % id
@@ -1234,12 +1242,14 @@ def crs_text(id, format='', code=''):
       xml = ""
       if r['kind'].startswith("CRS"):
         urn = "urn:ogc:def:crs:EPSG::"+code
+        cur = con.cursor()
         cur.execute('SELECT id,xml FROM gml where urn = ?', (urn,))
         gml = cur.fetchall()
         for id,xml in gml:
           pass
       elif r['kind'].startswith("COORDOP"):
         urn = "urn:ogc:def:coordinateOperation:EPSG::" + code
+        cur = con.cursor()
         cur.execute('SELECT id,xml FROM gml where urn = ?', (urn,))
         gml = cur.fetchall()
         for id,xml in gml:
@@ -1273,7 +1283,7 @@ def crs_text(id, format='', code=''):
           if (values != (0,0,0,0,0,0,0) and type(values) == tuple and values != (0,) and values != ()):
             ref.ImportFromEPSG(int(rcode))
             ref.SetTOWGS84(*values)
-            wkt = ref.ExportToWkt().decode('utf-8')
+            wkt = ref.ExportToWkt()
 
 
     ref.ImportFromWkt(wkt)
@@ -1390,8 +1400,8 @@ def trans():
   single_points = []
   ix = open_dir(INDEX, readonly=True)
 
-  query_string = request.query_string.replace(';', '%3B')
-  params = urlparse.parse_qs(query_string)
+  query_string = request.query_string.decode("utf-8").replace(';', '%3B')
+  params = urllib.parse.parse_qs(query_string)
 
   x = float(params.get('x',[0])[0])
   y = float(params.get('y',[0])[0])
@@ -1407,11 +1417,11 @@ def trans():
   ref = osr.SpatialReference()
 
   if 'data' in params:
-	single_points = params['data'][0].split(';')
-	one_point = False
+    single_points = params['data'][0].split(';')
+    one_point = False
   else:
-	one_point = True
-	single_points = [str(x) +","+ str(y)+","+str(z)]
+    one_point = True
+    single_points = [str(x) +","+ str(y)+","+str(z)]
 
   with ix.searcher(closereader=False) as searcher:
     parser = QueryParser("code", ix.schema)
@@ -1461,7 +1471,7 @@ def trans():
         ref = osr.SpatialReference()
         ref.ImportFromEPSG(int(scode))
         ref.SetTOWGS84(*values)
-        swkt = ref.ExportToWkt().decode('utf-8')
+        swkt = ref.ExportToWkt()
 
 
     if int(tcode_trans) != 0 and tcode_trans_values != None:
@@ -1475,11 +1485,11 @@ def trans():
         ref = osr.SpatialReference()
         ref.ImportFromEPSG(int(tcode))
         ref.SetTOWGS84(*values)
-        twkt = ref.ExportToWkt().decode('utf-8')
+        twkt = ref.ExportToWkt()
 
     if swkt:
       s_srs = osr.SpatialReference()
-      s_srs.ImportFromWkt(swkt.encode('utf-8'))
+      s_srs.ImportFromWkt(swkt)
     else:
      return jsonResponse(\
        "Not possible transform from source epsg",\
@@ -1487,7 +1497,7 @@ def trans():
        status = "error", error_type = "INVALID_SOURCE")
     if twkt:
       t_srs = osr.SpatialReference()
-      t_srs.ImportFromWkt(twkt.encode('utf-8'))
+      t_srs.ImportFromWkt(twkt)
     else:
       return jsonResponse(\
        "Not possible transform to target epsg", \
@@ -1497,39 +1507,40 @@ def trans():
     xform = osr.CoordinateTransformation(s_srs, t_srs)
 
     for points in single_points:
-		point_coords = points.split(',')
-		point_coords = [float(i) for i in point_coords] #from string to float
+      point_coords = points.split(',')
+      point_coords = [float(i) for i in point_coords] #from string to float
 
-		if len(point_coords) == 2:
-			point_coords.append(int(0))
-		elif len(point_coords) == 1:
-			point_coords.extend((0,0))
-		elif len(point_coords) == 0:
-			point_coords.extend((0,0,0))
+      if len(point_coords) == 2:
+        point_coords.append(int(0))
+      elif len(point_coords) == 1:
+        point_coords.extend((0,0))
+      elif len(point_coords) == 0:
+        point_coords.extend((0,0,0))
 
-		x,y,z = point_coords
+      x,y,z = point_coords
 
 
-		transformation = xform.TransformPoint(x, y, z)
-		if type(transformation[0]) != float:
-		  trans_lat = "%s" % transformation[0]
-		  trans_lon = "%s" % transformation[1]
-		  trans_h = "%s" % transformation[2]
-		else:
-		  trans_lat = "%.8f" % transformation[0]
-		  trans_lon = "%.8f" % transformation[1]
-		  trans_h = "%.8f" % transformation[2]
-		if t_srs.GetAuthorityCode('UNIT') == str(9001):
-		  trans_lat = "%.2f" % transformation[0]
-		  trans_lon = "%.2f" % transformation[1]
-		  trans_h = "%.2f" % transformation[2]
+      transformation = xform.TransformPoint(x, y, z)
 
-		export.append({'x':trans_lat, 'y':trans_lon, 'z':trans_h})
-		if one_point == True:
-			export = {}
-			export["x"] = trans_lat
-			export["y"] = trans_lon
-			export["z"] = trans_h
+      if type(transformation[0]) != float:
+        trans_lat = "%s" % transformation[0]
+        trans_lon = "%s" % transformation[1]
+        trans_h = "%s" % transformation[2]
+      else:
+        trans_lat = "%.8f" % transformation[0]
+        trans_lon = "%.8f" % transformation[1]
+        trans_h = "%.8f" % transformation[2]
+      if t_srs.GetAuthorityCode('UNIT') == str(9001):
+        trans_lat = "%.2f" % transformation[0]
+        trans_lon = "%.2f" % transformation[1]
+        trans_h = "%.2f" % transformation[2]
+
+      export.append({'x':trans_lat, 'y':trans_lon, 'z':trans_h})
+      if one_point == True:
+        export = {}
+        export["x"] = trans_lat
+        export["y"] = trans_lon
+        export["z"] = trans_h
 
     if callback != str(0):
       response = make_response(str(callback) + '(' + json.dumps(export) + ')')
@@ -1560,11 +1571,12 @@ def index6(id,format=''):
 
   # if i want gml
   if format == "gml":
+    cur = con.cursor()
     cur.execute('SELECT id,xml FROM gml where urn = ?', (id,))
     gml = cur.fetchall()
     if len(gml)!=0:
       for id,xml in gml:
-        response = make_response('<?xml version="1.0" encoding="UTF-8"?>\n %s' % xml)
+        response = make_response('<?xml version="1.0" encoding="UTF-8"?>\n %s' % xml.decode("utf-8"))
         response.headers['Content-Type'] = "text/xml"
         return response
     else:
@@ -1572,6 +1584,7 @@ def index6(id,format=''):
       try_url = ""
       return render_template('error.html',error=error, try_url=try_url, version=VERSION)
   # exist this urn?
+  cur = con.cursor()
   cur.execute('SELECT id,urn,xml,deprecated,name FROM gml where urn = ? or id = ?', (id,id,))
   gml = cur.fetchall()
   if len(gml) == 0:
@@ -1630,7 +1643,7 @@ def index6(id,format=''):
       url_concatop = []
       detail = []
       url_static = "http://epsg.io/img/epsg-banner-440x280-2.png"
-      url_static_map = urllib2.quote(url_static), url_static
+      url_static_map = urllib.parse.quote(url_static), url_static
 
       for id,urn,xml,deprecated,name in gml:
         if name == None: name = ""
@@ -1638,7 +1651,7 @@ def index6(id,format=''):
         ogpxml = '<?xml version="1.0" encoding="UTF-8"?> %s' % (xml,)
         ogpxml = ogpxml.strip()
         # explicit coding of xml(gml) - https://epsg.io/2056
-        ogpxml = ogpxml.decode('utf-8')
+        ogpxml = ogpxml
         ogpxml_highlight = highlight(ogpxml, XmlLexer(), HtmlFormatter(cssclass='syntax',nobackground=True))
       return render_template('detail.html',url_static_map=url_static_map, url_social=url_social, url_concatop=url_concatop, ogpxml_highlight=ogpxml_highlight, area_trans_item=area_trans_item, error_code=error_code, ogpxml=ogpxml, bbox_coords=bbox_coords, more_gcrs_result=more_gcrs_result, deprecated_available=deprecated_available, url_kind=url_kind, type_epsg=type_epsg, name=name, projcrs_by_gcrs=projcrs_by_gcrs, alt_title=alt_title, kind=kind, code_short=code_short, item=item, detail=detail, nadgrid=nadgrid, trans_lat=trans_lat, trans_lon=trans_lon, trans=trans, url_format=url_format, default_trans=default_trans, center=center,g_coords=g_coords, version=VERSION)
 
@@ -1683,6 +1696,7 @@ def index7(id):
 
   # find which prefix was catch by handler. If ogp or epsg or iogp (id field in sqlite).
   for prefix in ['ogp', 'epsg', 'iogp']:
+    cur = con.cursor()
     cur.execute('SELECT count(id) FROM gml where id = ?', (prefix + id,))
     #(1,)
     count = cur.fetchone()[0]
@@ -1692,12 +1706,14 @@ def index7(id):
       continue
 
   if format =="gml":
+    cur = con.cursor()
     cur.execute('SELECT id,xml FROM gml where id = ?', (id,))
     gml = cur.fetchall()
     for id,xml in gml:
       response = make_response('<?xml version="1.0" encoding="UTF-8"?>\n %s' % xml)
       response.headers['Content-Type'] = "text/xml"
       return response
+  cur = con.cursor()
   cur.execute('SELECT id,urn,xml,deprecated,name FROM gml where id = ?', (id,))
   gml = cur.fetchall()
   if len(gml) == 0:
@@ -1749,13 +1765,13 @@ def index7(id):
         url_concatop = []
         detail = []
         url_static = "http://epsg.io/img/epsg-banner-440x280-2.png"
-        url_static_map = urllib2.quote(url_static), url_static
+        url_static_map = urllib.parse.quote(url_static), url_static
         for id,urn,xml,deprecated,name in gml:
           if name == None: name = ""
           item = {'code':code,'area':"", 'remarks':"",'scope':"",'deprecated':deprecated,'target_uom':"",'files':"",'orientation':"",'abbreviation':"",'order':"",'bbox':"",'kind':subject}
           ogpxml = '<?xml version="1.0" encoding="UTF-8"?>\n %s' % (xml,)
           # explicit coding of xml(gml) - https://epsg.io/2056
-          ogpxml = ogpxml.decode('utf-8')
+          ogpxml = ogpxml
           ogpxml_highlight = highlight(ogpxml, XmlLexer(), HtmlFormatter(cssclass='syntax',nobackground=True))
         return render_template('detail.html',url_static_map=url_static_map, url_social=url_social, url_concatop=url_concatop, ogpxml_highlight=ogpxml_highlight, area_trans_item=area_trans_item, error_code=error_code, ogpxml=ogpxml, bbox_coords=bbox_coords, more_gcrs_result=more_gcrs_result, deprecated_available=deprecated_available, url_kind=url_kind, type_epsg=type_epsg, name=name, projcrs_by_gcrs=projcrs_by_gcrs, alt_title=alt_title, kind=kind, code_short=code_short, item=item, detail=detail, nadgrid=nadgrid, trans_lat=trans_lat, trans_lon=trans_lon, trans=trans, url_format=url_format, default_trans=default_trans, center=center,g_coords=g_coords, version=VERSION)
 
@@ -1785,3 +1801,4 @@ def favicon():
 @app.route('/opensearch.xml')
 def opensearch():
     return send_from_directory('.', 'opensearch.xml')
+

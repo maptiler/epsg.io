@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/python3 
 # -*- coding: utf-8 -*-
 
 DATABASE = 'gml.sqlite'
@@ -7,6 +7,8 @@ INDEX = 'index'
 CRS_EXCEPTIONS = 'CRS_exceptions.csv'
 FILES = ["extra_codes_proj4_4.8.0.2/esri.extra",
          "extra_codes_proj4_4.8.0.2/other.extra"]
+
+# TODO remake this script that is compatible with latest EPSG SQL scripts
 
 kind_list = {
     'vertical': "CRS-VERTCRS",
@@ -38,49 +40,49 @@ kind_list = {
     'AREA': "AREA"
 }
 dict_index = {
-    'code': u"",
+    'code': "",
     'code_trans': 0,
-    'name': u"",
-    'alt_name': u"",
-    'kind': u"",
-    'area': u"",
-    'area_trans': u"",
+    'name': "",
+    'alt_name': "",
+    'kind': "",
+    'area': "",
+    'area_trans': "",
     'deprecated': 0,
     'trans': [],
-    'trans_alt_name': u"",
-    'trans_remarks': u"",
-    'accuracy': u"",
-    'bbox': u"",
-    'scope': u"",
-    'remarks': u"",
-    'information_source': u"",
-    'revision_date': u"",
-    'datum': u"",
-    'geogcrs': u"",
-    'target_crs': u"",
-    'data_source': u"OGP",
-    'uom': u"",
-    'target_uom': u"",
-    'primem': u"",
+    'trans_alt_name': "",
+    'trans_remarks': "",
+    'accuracy': "",
+    'bbox': "",
+    'scope': "",
+    'remarks': "",
+    'information_source': "",
+    'revision_date': "",
+    'datum': "",
+    'geogcrs': "",
+    'target_crs': "",
+    'data_source': "OGP",
+    'uom': "",
+    'target_uom': "",
+    'primem': "",
     'greenwich_longitude': 0,
     'concatop': [],
-    'method': u"",
-    'files': u"",
+    'method': "",
+    'files': "",
     'reverse': 0,
-    'orientation': u"",
-    'abbreviation': u"",
-    'order': u"",
-    'description': u"",
+    'orientation': "",
+    'abbreviation': "",
+    'order': "",
+    'description': "",
     'primary': 0,
     'uom_code': 0,
     'area_code': 0,
     'area_trans_code': 0,
-    'alt_title': u"",
-    'code_id': u"",
-    'alt_description': u"",
-    'ellipsoid': u"",
-    'cs': u"",
-    'axis': u""
+    'alt_title': "",
+    'code_id': "",
+    'alt_description': "",
+    'ellipsoid': "",
+    'cs': "",
+    'axis': ""
 }
 
 dict_ellipsoid = {}
@@ -112,20 +114,20 @@ import csv
 
 
 ###############################################################################
-print "INITIALIZE OUTPUT"
+print("INITIALIZE OUTPUT")
 ###############################################################################
 
 con = sqlite3.connect(DATABASE)
 if not con:
-    print "Connection to sqlite FAILED"
+    print("Connection to sqlite FAILED")
 cur = con.cursor()
 cur.execute(
     'CREATE TABLE IF NOT EXISTS gml (urn VARCHAR, id VARCHAR, xml VARCHAR, deprecated BOOLEAN, name VARCHAR, PRIMARY KEY (urn))')
 cur.execute('DELETE FROM gml')
 ###############################################################################
-print "INITIALIZE INPUT"
+print("INITIALIZE INPUT")
 ###############################################################################
-print " - CRS_EXCEPTIONS"
+print(" - CRS_EXCEPTIONS")
 crs_ex_line = {}
 try:
     with open(CRS_EXCEPTIONS) as crs_ex:
@@ -137,9 +139,9 @@ try:
             # print crs_ex_line['4326'][2]
             # print crs_ex_line
 except:
-    print "!!! FAILED: NO CRS_EXCEPTIONS !!!"
+    print("!!! FAILED: NO CRS_EXCEPTIONS !!!")
 
-print " - WHOOSH!"
+print(" - WHOOSH!")
 
 
 class EPSGSchema(whoosh.fields.SchemaClass):
@@ -208,10 +210,10 @@ if not os.path.exists(INDEX):
 ix = whoosh.index.create_in(INDEX, EPSGSchema)
 
 ###############################################################################
-print "PARSING"
+print("PARSING")
 start_parse = time.clock()
 ###############################################################################
-print "start parsing"
+print("start parsing")
 parser = et.XMLParser(encoding='UTF-8')
 tree = et.parse(XML,parser)
 root = tree.getroot()
@@ -221,8 +223,8 @@ et.register_namespace("xlink", 'http://www.w3.org/1999/xlink')
 et.register_namespace("rim", 'urn:oasis:names:tc:ebxml-regrep:xsd:rim:3.0')
 et.register_namespace("gmd", 'http://www.isotc211.org/2005/gmd')
 et.register_namespace("gco", 'http://www.isotc211.org/2005/gco')
-print "stop parsing"
-print (time.clock() - start_parse), "s : parse time"
+print("stop parsing")
+print((time.clock() - start_parse), "s : parse time")
 
 start = time.clock()
 
@@ -455,7 +457,7 @@ for entry in root.findall('.//*[@{http://www.opengis.net/gml/3.2}id]'):
             v = parametr_list + [0.0] * 4
         else:
             v = [0]
-            parameters = u"0"
+            parameters = "0"
         if v == [0] and entry.find('.//*{http://www.opengis.net/gml/3.2}valueFile') is not None:
             parameters = entry.find('.//*{http://www.opengis.net/gml/3.2}valueFile').text
         else:
@@ -467,7 +469,7 @@ for entry in root.findall('.//*[@{http://www.opengis.net/gml/3.2}id]'):
                 '{http://www.opengis.net/gml/3.2}domainOfValidity').get('{http://www.w3.org/1999/xlink}href')
             area = area.split("::")[1]
 
-        accuracy = u"unknown"
+        accuracy = "unknown"
         if entry.find(".//*{http://www.isotc211.org/2005/gco}Decimal") is not None:
             accuracy = float(entry.find(
                 ".//*{http://www.isotc211.org/2005/gco}Decimal").text)
@@ -507,7 +509,7 @@ for entry in root.findall('.//*[@{http://www.opengis.net/gml/3.2}id]'):
 
         dict_method[int(code)] = name
 
-print time.clock() - time_saving_dict, "saving dictionaries"
+print(time.clock() - time_saving_dict, "saving dictionaries")
 # pprint.pprint(dict_crs)
 
 # Second cycle
@@ -524,9 +526,9 @@ for entry in root.findall('.//*[@{http://www.opengis.net/gml/3.2}id]'):
         doc = copy.deepcopy(dict_index)
         id = entry.attrib['{http://www.opengis.net/gml/3.2}id']
         code = id.split('-')[2]
-        doc['code'] = (code + u"-area").decode('utf-8')
+        doc['code'] = (code + "-area").decode('utf-8')
         doc['area_code'] = int(code)
-        doc['kind'] = u"AREA"
+        doc['kind'] = "AREA"
         doc['area'] = dict_area[int(code)][0].encode('UTF-8').decode('UTF-8')
         doc['bbox'] = dict_area[int(code)][1]
 
@@ -581,7 +583,7 @@ for entry in root.findall('.//*[@{http://www.opengis.net/gml/3.2}id]'):
         doc = copy.deepcopy(dict_index)
         id = entry.attrib['{http://www.opengis.net/gml/3.2}id']
         code = id.split('-')[2]
-        doc['code'] = code + u"-cs"
+        doc['code'] = code + "-cs"
 
         if entry.find('{http://www.opengis.net/gml/3.2}remarks') is not None:
             doc['remarks'] = entry.find('{http://www.opengis.net/gml/3.2}remarks').text
@@ -641,7 +643,7 @@ for entry in root.findall('.//*[@{http://www.opengis.net/gml/3.2}id]'):
         doc = copy.deepcopy(dict_index)
         id = entry.attrib['{http://www.opengis.net/gml/3.2}id']
         doc['code'] = (id.split('-')[2] + "-method").encode('UTF-8').decode('UTF-8')
-        doc['kind'] = u"METHOD"
+        doc['kind'] = "METHOD"
         
         if entry.find('{http://www.opengis.net/gml/3.2}remarks') is not None:
             doc['remarks'] = (entry.find('{http://www.opengis.net/gml/3.2}remarks').text).encode('UTF-8').decode('UTF-8')
@@ -693,7 +695,7 @@ for entry in root.findall('.//*[@{http://www.opengis.net/gml/3.2}id]'):
         code = id.split('-')[2]
         doc['code'] = (code + "-primem").decode('UTF-8')
 
-        doc['kind'] = u"PRIMEM"
+        doc['kind'] = "PRIMEM"
 
         if entry.find('{http://www.opengis.net/gml/3.2}remarks') is not None:
             doc['remarks'] = (entry.find('{http://www.opengis.net/gml/3.2}remarks').text).encode('UTF-8').decode('UTF-8')
@@ -747,7 +749,7 @@ for entry in root.findall('.//*[@{http://www.opengis.net/gml/3.2}id]'):
         doc = copy.deepcopy(dict_index)
         id = entry.attrib['{http://www.opengis.net/gml/3.2}id']
         doc['code'] = (id.split('-')[2] + "-ellipsoid").encode('UTF-8').decode('UTF-8')
-        doc['kind'] = u"ELLIPSOID"
+        doc['kind'] = "ELLIPSOID"
 
         if entry.find('{http://www.opengis.net/gml/3.2}remarks') is not None:
             doc['remarks'] = (entry.find('{http://www.opengis.net/gml/3.2}remarks').text).encode('UTF-8').decode('UTF-8')
@@ -802,7 +804,7 @@ for entry in root.findall('.//*[@{http://www.opengis.net/gml/3.2}id]'):
         doc['uom_code'] = int(uom.split("::")[1])
         doc['uom'] = dict_uom[doc['uom_code']].encode('UTF-8').decode('UTF-8')
         doc['code'] = (code + "-axis").encode('UTF-8').decode('UTF-8')
-        doc['kind'] = u"AXIS"
+        doc['kind'] = "AXIS"
         # dict_axisname[int(code)] = [name, information_source, rev_date, deprecated, description, remarks]
 
         doc['name'] = dict_axisname[dict_axis[int(code)]][0].encode('UTF-8').decode('UTF-8')
@@ -824,13 +826,13 @@ for entry in root.findall('.//*[@{http://www.opengis.net/gml/3.2}id]'):
         doc['cs'] = str(dict_axis_in_cs[int(code)]).encode('UTF-8').decode('UTF-8'), (dict_cs[dict_axis_in_cs[int(code)]][0]).encode('UTF-8').decode('UTF-8')
 
         if dict_cs[dict_axis_in_cs[int(code)]][1][0][0] == int(code):
-            doc['order'] = u"1."
+            doc['order'] = "1."
         if len(dict_cs[dict_axis_in_cs[int(code)]][1]) > 1:
             if dict_cs[dict_axis_in_cs[int(code)]][1][1][0] == int(code):
-                doc['order'] = u"2."
+                doc['order'] = "2."
         if len(dict_cs[dict_axis_in_cs[int(code)]][1]) > 2:
             if dict_cs[dict_axis_in_cs[int(code)]][1][2][0] == int(code):
-                doc['order'] = u"3."
+                doc['order'] = "3."
 
         if doc['deprecated'] == 1:
             deprecated = 'true'
@@ -1104,7 +1106,7 @@ for entry in root.findall('.//*[@{http://www.opengis.net/gml/3.2}id]'):
         importance = 0
         try:
             importance = crs_ex_line[code][1]
-            if importance == u"":
+            if importance == "":
                 importance = 0
         except:
             pass
@@ -1256,7 +1258,7 @@ for entry in root.findall('.//*[@{http://www.opengis.net/gml/3.2}id]'):
             writer.add_document(**doc)
 
 ###############################################################################
-print " - INSERT NEW EPSG CODES FROM EXTRA FILES(ESRI,OTHER)"
+print(" - INSERT NEW EPSG CODES FROM EXTRA FILES(ESRI,OTHER)")
 ###############################################################################
 ref = osr.SpatialReference()
 
@@ -1265,9 +1267,9 @@ for extra_file in FILES:
     f = open(extra_file)
     for line in f:
         doc = copy.deepcopy(dict_index)
-        code = u""
-        kind = u""
-        inf_source = u""
+        code = ""
+        kind = ""
+        inf_source = ""
         if line[0] == "#":
             sharp, name = line.split(" ", 1)
             name = name.strip()
@@ -1281,17 +1283,17 @@ for extra_file in FILES:
         boost = 0
         ref.ImportFromEPSG(int(code))
         if ref.GetAttrValue("PROJCS"):
-            kind = u"CRS-PROJCRS"
+            kind = "CRS-PROJCRS"
             boost = 0.2
 
         elif ref.GetAttrValue("GEOGCS"):
-            kind = u"CRS-GEOGCRS"
+            kind = "CRS-GEOGCRS"
             boost = 0.05
 
         importance = 0
         try:
             importance = crs_ex_line[code][1]
-            if importance == u"":
+            if importance == "":
                 importance = 0
         except:
             pass
@@ -1301,12 +1303,12 @@ for extra_file in FILES:
         inf_source = "other"
 
         if extra_file == FILES[0]:
-            name = u"ESRI: " + name
+            name = "ESRI: " + name
             inf_source = "ESRI"
 
         code = str(code).decode('utf-8')
         doc['description'] = str(proj).decode('utf-8')
-        doc['data_source'] = u"PROJ.4"
+        doc['data_source'] = "PROJ.4"
         doc['code'] = code
         doc['code_id'] = code
         doc['name'] = name
@@ -1319,3 +1321,4 @@ for extra_file in FILES:
             writer.add_document(**doc)
 # import CRS_exceptions immediately after index the EPSG gml and load ESRI codes
 import CRS_exceptions
+
