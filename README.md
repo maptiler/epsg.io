@@ -1,4 +1,5 @@
 # EPSG.io
+This service allows you to discover and transform coordinate systems from all over the world. Created and maintained by the [MapTiler team](https://www.maptiler.com/).
 
 ## Installation
 
