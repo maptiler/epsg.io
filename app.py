@@ -1260,8 +1260,14 @@ def crs_text(id, format='', code=''):
           mbbox.append(b)
 
     else:
-      trans_result = code_result
-      url_coords = rcode
+      if code_result:
+        trans_result = code_result
+        url_coords = rcode
+      else:
+        error = 404
+        try_url = ""
+        return render_template('error.html',error=error, try_url=try_url, version=VERSION)
+        
     if not re.findall(r'([a-df-zA-Z_])',values):
       if str(values) != "(0,)" and str(values) != "":
         values = str(values[1:-1]).split(', ')
