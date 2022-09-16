@@ -277,7 +277,11 @@ epsg.io.TransformPage.prototype.updateHash_ = function() {
     qd.set('x', x.toFixed(7));
     qd.set('y', y.toFixed(7));
   }
-  window.location.hash = qd.toString();
+  if (history && history.replaceState) {
+    history.replaceState('', '', qd.toString());
+  } else {
+    window.location.hash = qd.toString();
+  }
 };
 
 
