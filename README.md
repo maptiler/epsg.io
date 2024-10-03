@@ -1,76 +1,28 @@
-<p align="center">
-  <a href="https://epsg.io/api">official page →</a><br>
-  <img src="static/img/maptiler-logo.png" width="400px">
-</p>
+# EPSG.io ![EPSG logo](./static/img/epsg-logo-small.png)
 
-<p align="center" style="color: #AAA">
-  Search and transform coordinate systems from all over the world. Created and maintained by the <a href="https://www.maptiler.com/">MapTiler team</a>.
-</p>
+[EPSG.io](https://epsg.io/) is a tool for discovering and accessing global coordinate systems, finding their parameters, and selecting relevant transformations. Created and maintained by the [MapTiler team](https://www.maptiler.com/), it serves as an _unofficial_ interface to the [EPSG database](https://en.wikipedia.org/wiki/EPSG_Geodetic_Parameter_Dataset).
 
-<p align="center">
-  <img src="https://img.shields.io/twitter/follow/maptiler?style=social"></img>
-</p>
+The service offers a list of projections, coordinate systems, bounding boxes, and transformation options for improved precision in coordinate transformations.
 
-# What and why?
-The [EPSG.io](https://epsg.io/) service allows you to discover and transform coordinate systems from all over the world. 
+For detailed documentation, visit [epsg.io/docs](https://epsg.io/docs).
 
-To provide you with scalable, high-quality service for developers, we decided to build a dedicated API.
+## Discovering coordinate systems, ellipsoids, transformations, units
+Coordinate systems, ellipsoids, transformations, and units can be discovered directly via the search field at [EPSG.io](https://epsg.io/). The interface supports searching by EPSG codes (e.g., `3857`) or by part of the system's name (e.g., `pseudo-mercator`). Try [epsg.io/2056](https://epsg.io/2056) as an example.
 
-With the new MapTiler Cloud Coordinates API, you can **search for any coordinate system** and **transform coordinates** directly from your JavaScript application, software written in Python or any other modern language, or use the transformation in web map libraries like MapTiler SDK or OpenLayers. 
+## Export formats for all software
+[EPSG.io](https://epsg.io/) offers coordinate reference system definitions in formats compatible with a wide range of geospatial software, including PROJ, GeoServer, Proj4.js, PostGIS, ESRI ArcGIS, and OGC WKT. For example, see [epsg.io/2056-1676.wkt2](https://epsg.io/2056-1676.wkt2).
 
-For details on how to use it with various technologies, use the links below: 
+## EPSG.io endpoints
+Using [EPSG.io](https://epsg.io/) endpoints allows users to discover coordinate systems, ellipsoids, units, and other objects, and retrieve specific coordinate definitions in various formats. For more details, visit [epsg.io/docs](https://epsg.io/docs).
 
-* API Client JavaScript: https://docs.maptiler.com/client-js/coordinates/ 
-* OpenLayers: https://openlayers.org/en/latest/apidoc/module-ol_proj_proj4.html#.epsgLookupMapTiler 
+## Coordinates API ![MapTiler logo](./static/img/maptiler-logo-small.png) 
+[EPSG.io](https://epsg.io/) is an unofficial, open service provided by [MapTiler](https://www.maptiler.com/), free of charge. The **Coordinate transformation and search service** is powered by the [MapTiler Cloud Coordinates API](https://docs.maptiler.com/cloud/api/coordinates/). In addition to being compatible with [EPSG.io](https://epsg.io/), it introduces the [/transform](https://docs.maptiler.com/cloud/api/coordinates/#transform-coordinates) endpoint for coordinate transformations.
 
-# Install
-Use the command below to install the Coordinates API Clients JS.
+The **Coordinates API** from MapTiler offers:
+* API for **coordinate transformations**
+* API for **searching** and **discovering** coordinate reference systems
+* **Stable, reliable service** for integration into applications
+* Option to use a dedicated MapTiler API key, enabling cost management across **multiple apps**
+* **Batch transformations** for up to 50 points
 
-```shell
-npm install --save @maptiler/client
-```
-
-# API documentation
-For more details, additional examples, and a complete reference, visit the [Coordinates API documentation page](https://docs.maptiler.com/cloud/api/coordinates/) and [Coordinates Clients JS](https://docs.maptiler.com/client-js/coordinates/).
-
-## Search 
-The `search` lets you perform a free form query to find coordinate systems.
-
-```shell
-// in an async function, or as a 'thenable':
-const result = await maptilerClient.coordinates.search('mercator');
-```
-
-Search for coordinate reference systems (CRS) in the specified country:
-```shell
-// in an async function, or as a 'thenable':
-const result = await maptilerClient.coordinates.search('United Kingdom');
-```
-
-Search by EPSG code:
-```shell
-// in an async function, or as a 'thenable':
-const result = await maptilerClient.coordinates.search('code:4326');
-```
-
-## Transform
-The `transform` allows you to transform coordinates from one system to another.
-
-If not provided, both the source (`sourceCrs`) and the destination (`targetCrs`) are default to **EPSG:4326** (in other words, [WGS84](https://epsg.io/4326)). Here is how to use this feature:
-
-```shell
-// in an async function, or as a 'thenable'
-const result = await maptilerClient.coordinates.search('pseudo-mercator');
-
-// Providing one coordinate to transform, with a target CRS being EPSG:9793 (RGF93 v2 / Lambert-93, France official CRS)
-const resultA = await maptilerClient.coordinates.transform([1, 45], {targetCrs: 9793})
-
-// Using the same logic, we can pass up to 50 coordinates to be transformed
-const resultB = await maptilerClient.coordinates.transform([[10, 48], [1, 45]], {targetCrs: 9793})
-```
-
-Transforming from ED50 31N to ETRS89 31N:
-```shell
-// in an async function, or as a 'thenable':
-const results = await coordinates.transform({lng: 432648.873, lat: 4624697.432}, {sourceCrs: 23031, targetCrs: 25831});
- ```
+For detailed API documentation, visit [docs.maptiler.com/cloud/api/coordinates/](https://docs.maptiler.com/cloud/api/coordinates/).
