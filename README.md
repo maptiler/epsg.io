@@ -21,7 +21,7 @@ Using [EPSG.io](https://epsg.io/) endpoints allows users to discover coordinate 
 
 ![MapTiler logo](./static/img/maptiler-logo-small.png) 
 
-[EPSG.io](https://epsg.io/) is a custom, open service provided by [MapTiler](https://www.maptiler.com/), free of charge. The **Coordinate transformation and search service** is powered by the [MapTiler Cloud Coordinates API](https://docs.maptiler.com/cloud/api/coordinates/). In addition to being compatible with [EPSG.io](https://epsg.io/), it introduces the [/transform](https://docs.maptiler.com/cloud/api/coordinates/#transform-coordinates) endpoint for coordinate transformations and search.
+[EPSG.io](https://epsg.io/) is a custom, open service provided by [MapTiler](https://www.maptiler.com/), free of charge. The **Coordinate transformation and search service** is powered by the [MapTiler Cloud Coordinates API](https://docs.maptiler.com/cloud/api/coordinates/). In addition to being compatible with [EPSG.io](https://epsg.io/), it introduces the [/transform](https://docs.maptiler.com/cloud/api/coordinates/#transform-coordinates) endpoint for coordinate transformations and [/search](https://docs.maptiler.com/cloud/api/coordinates/#search-coordinate-systems) API endpoint for searching through coordinate systems and its components.
 
 The **Coordinates API** from MapTiler offers:
 * API for **coordinate transformations**
