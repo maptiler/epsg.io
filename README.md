@@ -21,7 +21,7 @@ Using [EPSG.io](https://epsg.io/) endpoints allows users to discover coordinate 
 
 ![MapTiler logo](./static/img/maptiler-logo-small.png) 
 
-[EPSG.io](https://epsg.io/) is a custom, open service provided by [MapTiler](https://www.maptiler.com/), free of charge. The **Coordinate transformation and search service** is powered by the [MapTiler Cloud Coordinates API](https://docs.maptiler.com/cloud/api/coordinates/). In addition to being compatible with [EPSG.io](https://epsg.io/), it introduces the [/transform](https://docs.maptiler.com/cloud/api/coordinates/#transform-coordinates) endpoint for coordinate transformations and [/search](https://docs.maptiler.com/cloud/api/coordinates/#search-coordinate-systems) API endpoint for searching through coordinate systems and its components.
+**EPSG.io** is a custom, open service provided by [MapTiler](https://www.maptiler.com/), free of charge. The **Coordinate transformation and search service** is powered by the [MapTiler Coordinates API](https://documentation.maptiler.com/hc/en-us/articles/16551987730193-Coordinates-API). In addition to being compatible with EPSG.io, it introduces the [/transform](https://docs.maptiler.com/cloud/api/coordinates/#transform-coordinates) endpoint for coordinate transformations and [/search](https://docs.maptiler.com/cloud/api/coordinates/#search-coordinate-systems) endpoint for searching through coordinate systems and its components.
 
 The **Coordinates API** from MapTiler offers:
 * API for **coordinate transformations**
@@ -31,3 +31,20 @@ The **Coordinates API** from MapTiler offers:
 * **Batch transformations** for up to 50 points
 
 For detailed API documentation, visit [docs.maptiler.com/cloud/api/coordinates/](https://docs.maptiler.com/cloud/api/coordinates/).
+
+## Migration endpoints from EPSG.io to MapTiler Coordinates API
+EPSG.io  is transitioning to the [MapTiler Coordinates API](https://documentation.maptiler.com/hc/en-us/articles/16551987730193-Coordinates-API) for `search` and `transform` services, providing a more secure, robust, and scalable solution.
+
+### Old endpoints:
+
+Search: `https://epsg.io/?q=swiss&format=json`
+
+Transform: `https://epsg.io/trans?data=7.457914,46.948563&s_srs=4326&t_srs=2056`
+
+### New endpoints:
+
+Search: `https://api.maptiler.com/coordinates/search/swiss.json?key=MapTiler-key`
+
+Transform: `https://api.maptiler.com/coordinates/transform/7.457914,46.948563.json?s_srs=4326&t_srs=2056&key=MapTiler-key`
+
+For more details on migration, including JSON response changes and how to get your MapTiler key, read the [migration guide](https://documentation.maptiler.com/hc/en-us/articles/360020950098-How-to-migrate-from-EPSG-io-to-MapTiler-Coordinates-API).
