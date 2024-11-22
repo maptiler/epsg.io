@@ -3,7 +3,7 @@
 >
 > Migrate your search & transform API calls before **1st of February 2025** to avoid interruption of your services. This change has no impact on epsg.io website.
 >
-> **[Read how to migrate](https://epsg.io/docs#migration)**
+> **[Read how to migrate](https://documentation.maptiler.com/hc/en-us/articles/360020950098-How-to-migrate-from-EPSG-io-to-MapTiler-Coordinates-API)**
 
 # EPSG.io 
 
