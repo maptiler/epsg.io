@@ -1,3 +1,10 @@
+> [!WARNING]
+> EPSG.io is transitioning to the [MapTiler Coordinates API](https://documentation.maptiler.com/hc/en-us/articles/16551987730193-Coordinates-API) for `search` and `transform` endpoints, providing a more secure, robust, and scalable solution.
+>
+> Migrate your search & transform API calls before **1st of February 2025** to avoid interruption of your services. This change has no impact on epsg.io website.
+>
+> **[Read how to migrate](https://documentation.maptiler.com/hc/en-us/articles/360020950098-How-to-migrate-from-EPSG-io-to-MapTiler-Coordinates-API)**
+
 # EPSG.io 
 
 ![EPSG logo](./static/img/epsg-logo-small.png)
