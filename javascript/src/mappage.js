@@ -491,7 +491,11 @@ epsg.io.MapPage.prototype.updateHash_ = function() {
     qd.set('layer', this.mapTypeElement_.value);
   }
 
-  window.location.hash = qd.toString();
+  if (history && history.replaceState) {
+    history.replaceState('', '', qd.toString());
+  } else {
+    window.location.hash = qd.toString();
+  }
 };
 
 
